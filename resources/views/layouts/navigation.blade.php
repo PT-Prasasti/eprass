@@ -99,6 +99,7 @@
                     </ul>
                 </li>
                 @endif
+
                 @if (auth()->user()->hasRole('purchasing') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('superadmin'))
                 <li>
                     <a href="{{ route('transaction.sales-order') }}"><i class="si si-docs"></i><span class="sidebar-mini-hide">List Sales Order</span></a>

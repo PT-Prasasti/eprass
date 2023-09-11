@@ -97,23 +97,15 @@
                         <div class="col-md-12 mt-3">
                             <h5>Invite Engineer :</h5>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group row">
                                 <label class="col-12">Staff Name</label>
                                 <div class="col-md-12">
-                                    <select class="form-control" name="engineer">
+                                    <select class="form-control" name="engineer[]" id="engineer" multiple="multiple">
                                         <option value="0">Please select</option>
                                         <option value="">Husen Fadilah</option>
                                         <option value="">Miswan Danu</option>
                                     </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label class="col-12">Note</label>
-                                <div class="col-12">
-                                    <textarea class="form-control" name="note" rows="6">{{ old('note') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -168,6 +160,7 @@
                     $('input[name=customer_email]').val(response.customer_email)
                 })
             }
+            $("#engineer").select2()
         </script>
     </x-slot>
 
