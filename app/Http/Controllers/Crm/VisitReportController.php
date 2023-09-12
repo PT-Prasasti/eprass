@@ -137,10 +137,11 @@ class VisitReportController extends Controller
     {
         try {
             DB::beginTransaction();
-    
+            $visitschedule = VisitSchedule::where('uuid', $request->visit)->first();
+
             $visitReport = new VisitReport();
             $visitReport->id = $request->id;
-            $visitReport->visit_schedule_id = VisitSchedule::where('uuid', $request->visit)->first()->id;
+            $visitReport->visit_schedule_id = $visitschedule->id;
             $visitReport->sales_id = Sales::where('username', auth()->user()->username)->first()->id;
             $visitReport->status = $request->status;
             $visitReport->note = $request->note;
@@ -157,10 +158,12 @@ class VisitReportController extends Controller
                 $visit = new VisitSchedule();
                 $visit->id = $generate_id;
                 $visit->customer_id = $visitReport->visit->customer_id;
+                $visit->visit_by    = $visitschedule->visit_by;
                 $visit->sales_id = Sales::where('username', auth()->user()->username)->first()->id;
                 $visit->devision = $visitReport->visit->devision;
                 $visit->date = $request->next_date_visit;
                 $visit->time = $request->next_time_visit;
+                $visit->enginer_email = json_encode($request->engineer);
                 $visit->note = null;
                 $visit->save();
         
@@ -196,34 +199,42 @@ class VisitReportController extends Controller
     {
         try {
             DB::beginTransaction();
-    
+            $visitschedule = VisitSchedule::where('uuid', $request->visit)->first();
+
             $visitReport = VisitReport::where('uuid', $request->uuid)->first();
-            $visitReport->visit_schedule_id = VisitSchedule::where('uuid', $request->visit)->first()->id;
+            $old_nextdate = $visitReport->next_date_visit;
+            $old_nexttime = $visitReport->next_time_visit;
+            $visitReport->visit_schedule_id = $visitschedule->id;
             $visitReport->status = $request->status;
             $visitReport->note = $request->note;
             $visitReport->planing = $request->planing;
             $visitReport->next_date_visit = $request->next_date_visit;
             $visitReport->next_time_visit = $request->next_time_visit;
             $visitReport->save();
-    
+            
             $usersToNotify = User::role('manager')->get(); 
             Notification::send($usersToNotify, new NewVisitReportNotification($visitReport));
     
-            if(($request->next_date_visit != null) && ($request->next_time_visit != null)) {
-                $generate_id = VisitScheduleController::generate_id_static();
-                $visit = new VisitSchedule();
-                $visit->id = $generate_id;
-                $visit->customer_id = $visitReport->visit->customer_id;
-                $visit->sales_id = Sales::where('username', auth()->user()->username)->first()->id;
-                $visit->devision = $visitReport->visit->devision;
-                $visit->date = $request->next_date_visit;
-                $visit->time = $request->next_time_visit;
-                $visit->note = null;
-                $visit->save();
-        
-                $usersToNotify = User::role('manager')->get();
-                Notification::send($usersToNotify, new NewVisitScheduleNotification($visit));
+            if(($old_nextdate == null) && ($old_nexttime == null)) {
+                if($request->next_date_visit != null && $request->next_time_visit != null) {
+                    $generate_id = VisitScheduleController::generate_id_static();
+                    $visit = new VisitSchedule();
+                    $visit->id = $generate_id;
+                    $visit->customer_id = $visitReport->visit->customer_id;
+                    $visit->visit_by    = $visitschedule->visit_by;
+                    $visit->sales_id = Sales::where('username', auth()->user()->username)->first()->id;
+                    $visit->devision = $visitReport->visit->devision;
+                    $visit->date = $request->next_date_visit;
+                    $visit->time = $request->next_time_visit;
+                    $visit->note = null;
+                    $visit->save();
+            
+                    $usersToNotify = User::role('manager')->get();
+                    Notification::send($usersToNotify, new NewVisitScheduleNotification($visit));
+                } 
 
+            }else{
+                
             }
     
             DB::commit();

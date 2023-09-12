@@ -113,6 +113,7 @@ Route::prefix('/crm')->name('crm')->group(function() {
         Route::get('/edit/{id}', [VisitScheduleController::class, 'edit'])->name('.edit');
         Route::get('/view/{id}', [VisitScheduleController::class, 'view'])->name('.view');
         Route::get('/delete/{id}', [VisitScheduleController::class, 'delete'])->name('.delete');
+        Route::get('/search_enginer', [VisitScheduleController::class, 'search_enginer'])->name('.search_enginer');
 
         Route::post('/data', [VisitScheduleController::class, 'data'])->name('.data');
         Route::post('/status', [VisitScheduleController::class, 'status'])->name('.status');

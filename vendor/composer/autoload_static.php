@@ -626,6 +626,7 @@ class ComposerStaticInit1fd42db4637a3459c0f750bf1f822c2f
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\EnginerDummy' => __DIR__ . '/../..' . '/app/Console/Commands/EnginerDummy.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Constants' => __DIR__ . '/../..' . '/app/Constants.php',
         'App\\Events\\InquiryExcelExport' => __DIR__ . '/../..' . '/app/Events/InquiryExcelExport.php',

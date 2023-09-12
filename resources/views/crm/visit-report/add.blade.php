@@ -101,22 +101,11 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-12">Staff Name</label>
+                                <label class="col-12">Staff Email</label>
                                 <div class="col-md-12">
-                                    <select class="form-control" name="engineer">
+                                    <select class="form-control" name="engineer[]" id="engineer" multiple="multiple">
                                         <option value="0">Please select</option>
-                                        <option value="">Husen Fadilah</option>
-                                        <option value="">Miswan Danu</option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-12">Note to Staff</label>
-                                <div class="col-12">
-                                    <textarea class="form-control @error('note_staff') is-invalid @enderror" name="note_staff" rows="6">{{ old('note_staff') }}</textarea>
-                                    @error('note_staff')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -198,6 +187,24 @@
                     $('input[name=email]').val(response.email)
                 })
             }
+            $("#engineer").select2({
+                ajax: {
+                    url: `{{ route('crm.visit-schedule.search_enginer') }}`,
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.email,
+                                    id: item.email,
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            })
         </script>
     </x-slot>
 

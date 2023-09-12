@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\EnginerDummy' => $baseDir . '/app/Console/Commands/EnginerDummy.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Constants' => $baseDir . '/app/Constants.php',
     'App\\Events\\InquiryExcelExport' => $baseDir . '/app/Events/InquiryExcelExport.php',

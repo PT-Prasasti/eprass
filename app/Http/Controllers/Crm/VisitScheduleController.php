@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Sales;
 use App\Models\Customer;
+use App\Models\Enginer;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\VisitSchedule;
@@ -178,7 +179,7 @@ class VisitScheduleController extends Controller
             $visit->date = $request->date;
             $visit->time = $request->time != null ? $request->time : Carbon::createFromTime(9, 0, 0);
             $visit->schedule = $request->schedule;
-            $visit->note = $request->note;
+            $visit->enginer_email = json_encode($request->engineer);
             $visit->save();
     
             $usersToNotify = User::role('manager')->get();
@@ -241,7 +242,7 @@ class VisitScheduleController extends Controller
             $visit->date = $request->date;
             $visit->time = $request->time;
             $visit->schedule = $request->schedule;
-            $visit->note = $request->note;
+            $visit->enginer_email = json_encode($request->engineer);
             $visit->save();
     
             DB::commit();
@@ -268,6 +269,19 @@ class VisitScheduleController extends Controller
 
         } catch(\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
+    }
+
+    public function search_enginer(Request $request) : JsonResponse
+    {
+        if($request->q) {
+            $data = Enginer::where('name', 'LIKE', "%{$request->q}%")->limit(10)->get(['email']);
+
+            return response()->json($data);
+        }else {
+            $data = Enginer::limit(10)->get(['email']);
+
+            return response()->json($data);
         }
     }
 }

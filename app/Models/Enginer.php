@@ -18,4 +18,9 @@ class Enginer extends Model
             $model->uuid = (string) Uuid::generate(4);
         });
     }
+
+    protected $fillable = [
+        'name',
+        'email',
+    ];
 }
