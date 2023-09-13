@@ -61,6 +61,7 @@ return array(
     'App\\Http\\Requests\\DataMaster\\Supplier\\EditSupplierRequest' => $baseDir . '/app/Http/Requests/DataMaster/Supplier/EditSupplierRequest.php',
     'App\\Http\\Requests\\Transaction\\AddSalesOrderRequest' => $baseDir . '/app/Http/Requests/Transaction/AddSalesOrderRequest.php',
     'App\\Http\\Requests\\Transaction\\EditSalesOrderRequest' => $baseDir . '/app/Http/Requests/Transaction/EditSalesOrderRequest.php',
+    'App\\Mail\\VisitMail' => $baseDir . '/app/Mail/VisitMail.php',
     'App\\Models\\Customer' => $baseDir . '/app/Models/Customer.php',
     'App\\Models\\Enginer' => $baseDir . '/app/Models/Enginer.php',
     'App\\Models\\Inquiry' => $baseDir . '/app/Models/Inquiry.php',

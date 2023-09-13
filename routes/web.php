@@ -13,6 +13,9 @@ use App\Http\Controllers\Helper\NotificationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
 
+use App\Mail\VisitMail;
+use Mail;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -335,6 +338,21 @@ Route::prefix('/exim')->name('exim')->group(function() {
 
     Route::post('/data', [EximController::class, 'data'])->name('.data');
     Route::post('/store', [EximController::class, 'store'])->name('.store');
+});
+
+Route::get('/test_mail', function() {
+    try {
+        $sendmail = 'coba.mail24@gmail.com';
+        
+        $email = new VisitMail();
+        
+        Mail::to($sendmail)->send($email);
+        // dispatch(new \App\Jobs\SendMailVisitJob($sendmail));
+        dd('Success');
+    } catch (\Throwable $th) {
+        dd($th);
+    }
+    
 });
 
 require __DIR__.'/auth.php';
