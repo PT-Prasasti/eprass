@@ -37,4 +37,9 @@ class VisitSchedule extends Model
     {
         return $this->belongsTo(Sales::class, 'sales_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_created');
+    }
 }

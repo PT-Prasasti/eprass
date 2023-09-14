@@ -37,6 +37,10 @@
             <td>Visit By</td>
             <td>{{ $data['visit_by'] }}</td>
         </tr>
+        <tr>
+            <td>Created By</td>
+            <td>{{ $data['user_created'] }}</td>
+        </tr>
     </table>
 </body>
 </html>

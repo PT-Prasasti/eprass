@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('visit_schedules', function (Blueprint $table) {
             $table->json('enginer_email')->nullable()->after('schedule');
+            $table->string('user_created')->nullable()->after('status');
         });
     }
 
@@ -27,6 +28,7 @@ return new class extends Migration
     {
         Schema::table('visit_schedules', function (Blueprint $table) {
             $table->json('enginer_email');
+            $table->string('user_created');
         });
     }
 };

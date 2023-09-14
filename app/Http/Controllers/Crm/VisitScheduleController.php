@@ -24,6 +24,7 @@ use App\Http\Requests\Crm\VisitSchedule\StatusVisitScheduleRequest;
 
 use App\Mail\VisitMail;
 use Mail;
+use Auth;
 
 class VisitScheduleController extends Controller
 {
@@ -183,6 +184,7 @@ class VisitScheduleController extends Controller
             $visit->time = $request->time != null ? $request->time : Carbon::createFromTime(9, 0, 0);
             $visit->schedule = $request->schedule;
             $visit->enginer_email = json_encode($request->engineer);
+            $visit->user_created    = Auth::user()->id;
             $visit->save();
     
             $usersToNotify = User::role('manager')->get();
@@ -195,7 +197,8 @@ class VisitScheduleController extends Controller
                 'customer_name'     => $visit->customer->name,
                 'customer_phone'     => $visit->customer->phone,
                 'customer_email'     => $visit->customer->email,
-                'visit_by'           => $visit->visit_by  
+                'visit_by'           => $visit->visit_by,
+                'user_created'        => $visit->user->name,
             ];
             $email = new VisitMail(collect($dataVisit));
             $sendmail = 'test@pt-prasasti.com';
