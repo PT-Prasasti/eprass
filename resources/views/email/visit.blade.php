@@ -8,38 +8,42 @@
 </head>
 <body>
     <h4>Visit Schedule</h4>
-    <table style="width: 50%">
+    <table style="width: 100%">
         <tr>
-            <td>ID Visit</td>
-            <td>{{ $data['id'] }}</td>
+            <td style="width: 20%">ID Visit</td>
+            <td>: {{ $data['id'] }}</td>
         </tr>
         <tr>
-            <td>Company</td>
-            <td>{{ $data['company'] }}</td>
+            <td style="width: 20%">Company</td>
+            <td>: {{ $data['company'] }}</td>
         </tr>
         <tr>
-            <td>Company Phone</td>
-            <td>{{ $data['company_phone'] }}</td>
+            <td style="width: 20%">Company Phone</td>
+            <td>: {{ $data['company_phone'] }}</td>
         </tr>
         <tr>
-            <td>Name</td>
-            <td>{{ $data['customer_name'] }}</td>
+            <td style="width: 20%">Name</td>
+            <td>: {{ $data['customer_name'] }}</td>
         </tr>
         <tr>
-            <td>Email</td>
-            <td>{{ $data['customer_email'] }}</td>
+            <td style="width: 20%" >Email</td>
+            <td>: {{ $data['customer_email'] }}</td>
         </tr>
         <tr>
-            <td>Phone</td>
-            <td>{{ $data['customer_phone'] }}</td>
+            <td style="width: 20%">Phone</td>
+            <td>: {{ $data['customer_phone'] }}</td>
         </tr>
         <tr>
-            <td>Visit By</td>
-            <td>{{ $data['visit_by'] }}</td>
+            <td style="width: 20%">Visit By</td>
+            <td>: {{ $data['visit_by'] }}</td>
         </tr>
         <tr>
-            <td>Created By</td>
-            <td>{{ $data['user_created'] }}</td>
+            <td style="width: 20%">Created By</td>
+            <td>: {{ $data['user_created'] }}</td>
+        </tr>
+        <tr>
+            <td style="width: 20%">Schedule</td>
+            <td>: {{ $data['schedule'] }}</td>
         </tr>
     </table>
 </body>

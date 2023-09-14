@@ -22,6 +22,10 @@ use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Requests\Crm\VisitReport\AddVisitReportRequest;
 use App\Http\Requests\Crm\VisitReport\EditVisitReportRequest;
 
+use App\Mail\VisitMail;
+use Mail;
+use Auth;
+
 class VisitReportController extends Controller
 {
     public function __construct()
@@ -170,6 +174,24 @@ class VisitReportController extends Controller
                 $usersToNotify = User::role('manager')->get();
                 Notification::send($usersToNotify, new NewVisitScheduleNotification($visit));
 
+                $dataVisit = [
+                    'id'                => $visit->id,
+                    'company'           => $visit->customer->company,
+                    'company_phone'     => $visit->customer->company_phone,
+                    'customer_name'     => $visit->customer->name,
+                    'customer_phone'    => $visit->customer->phone,
+                    'customer_email'    => $visit->customer->email,
+                    'visit_by'          => $visit->visit_by,
+                    'user_created'      => $visit->user->name,
+                    'schedule'          => $visit->schedule
+                ];
+                $email = new VisitMail(collect($dataVisit));
+                $sendmail = 'test@pt-prasasti.com';
+                Mail::to($sendmail)->send($email);
+    
+                foreach ($request->engineer as $enginer) {
+                    Mail::to($enginer)->send($email);
+                }
             }
     
             DB::commit();
