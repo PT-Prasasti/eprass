@@ -12,5 +12,15 @@
     <p>{{ $data->id }}</p>
     <label>Company</label>
     <p>{{ $data->company_name }}</p>
+    <label>Company Phone</label>
+    <p>{{ $data->company_phone }}</p>
+    <label>Name</label>
+    <p>{{ $data->customer_name }}</p>
+    <label>Email</label>
+    <p>{{ $data->customer_email }}</p>
+    <label>Phone</label>
+    <p>{{ $data->customer_phone }}</p>
+    <label>Visit By</label>
+    <p>{{ $data->visit_by }}</p>
 </body>
 </html>

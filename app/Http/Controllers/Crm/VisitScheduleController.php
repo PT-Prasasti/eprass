@@ -198,7 +198,7 @@ class VisitScheduleController extends Controller
                 'visit_by'           => $visit->visit_by  
             ];
             $email = new VisitMail(collect($visit));
-            $sendmail = 'rifan@gmail.com';
+            $sendmail = 'eprass@gmail.com';
             Mail::to($sendmail)->send($email);
     
             DB::commit();
