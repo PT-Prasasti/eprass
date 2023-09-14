@@ -13,8 +13,8 @@ use App\Http\Controllers\Helper\NotificationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
 
-use App\Mail\VisitMail;
-use Mail;
+// use App\Mail\VisitMail;
+// use Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -340,19 +340,27 @@ Route::prefix('/exim')->name('exim')->group(function() {
     Route::post('/store', [EximController::class, 'store'])->name('.store');
 });
 
-Route::get('/test_mail', function() {
-    try {
-        $sendmail = 'coba.mail24@gmail.com';
+// Route::get('/test_mail', function() {
+//     try {
+//         $sendmail = 'test@pt-prasasti.com';
+//         $dataVisit = [
+//             'id' => 'sadasd/asdasd',
+//             'company' => 'Perusahaan PT',
+//             'company_phone'     => '034234234',
+//             'customer_name'     => 'Rebecca',
+//             'customer_phone'     => '08842342343',
+//             'customer_email'     => 'rebecca@gmail.com',
+//             'visit_by'           => 'Phone' 
+//         ];
+//         $email = new VisitMail(collect($dataVisit));
         
-        $email = new VisitMail();
-        
-        Mail::to($sendmail)->send($email);
-        // dispatch(new \App\Jobs\SendMailVisitJob($sendmail));
-        dd('Success');
-    } catch (\Throwable $th) {
-        dd($th);
-    }
+//         Mail::to($sendmail)->send($email);
+//         // dispatch(new \App\Jobs\SendMailVisitJob($sendmail));
+//         dd('Success');
+//     } catch (\Throwable $th) {
+//         dd($th);
+//     }
     
-});
+// });
 
 require __DIR__.'/auth.php';
