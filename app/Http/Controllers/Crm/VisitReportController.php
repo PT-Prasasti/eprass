@@ -23,6 +23,7 @@ use App\Http\Requests\Crm\VisitReport\AddVisitReportRequest;
 use App\Http\Requests\Crm\VisitReport\EditVisitReportRequest;
 
 use App\Mail\VisitMail;
+use App\Mail\ReportMail;
 use Mail;
 use Auth;
 
@@ -156,8 +157,25 @@ class VisitReportController extends Controller
     
             $usersToNotify = User::role('manager')->get(); 
             Notification::send($usersToNotify, new NewVisitReportNotification($visitReport));
+            $sendmail = 'test@pt-prasasti.com';
+
+            $dataVisitReport = [
+                'id' => $visitReport->visit_schedule_id,
+                'date' => $visitReport->visit->date,
+                'time' => $visitReport->visit->time,
+                'customer_company' => $visitReport->visit->customer->name." - ".$visitReport->visit->customer->company,
+                'customer_phone'     => $visitReport->visit->customer->phone,
+                'customer_email'     => $visitReport->visit->customer->email,
+                'status'           => $visitReport->status,
+                'note'      => $visitReport->note,
+                'plan'      => $visitReport->planing,
+                'sales'     => $visitReport->sales->name
+            ];
+            $email_report = new ReportMail(collect($dataVisitReport));
+            Mail::to($sendmail)->send($email_report);
     
             if(($request->next_date_visit != null) && ($request->next_time_visit != null)) {
+                
                 $generate_id = VisitScheduleController::generate_id_static();
                 $visit = new VisitSchedule();
                 $visit->id = $generate_id;
@@ -170,10 +188,10 @@ class VisitReportController extends Controller
                 $visit->enginer_email = json_encode($request->engineer);
                 $visit->note = null;
                 $visit->save();
-        
+                
                 $usersToNotify = User::role('manager')->get();
                 Notification::send($usersToNotify, new NewVisitScheduleNotification($visit));
-
+                
                 $dataVisit = [
                     'id'                => $visit->id,
                     'company'           => $visit->customer->company,
@@ -182,11 +200,12 @@ class VisitReportController extends Controller
                     'customer_phone'    => $visit->customer->phone,
                     'customer_email'    => $visit->customer->email,
                     'visit_by'          => $visit->visit_by,
-                    'user_created'      => $visit->user->name,
-                    'schedule'          => $visit->schedule
+                    'user_created'      => $visit->sales->name,
+                    'schedule'          => $visitReport->planing
                 ];
+                
                 $email = new VisitMail(collect($dataVisit));
-                $sendmail = 'test@pt-prasasti.com';
+                
                 Mail::to($sendmail)->send($email);
     
                 foreach ($request->engineer as $enginer) {
@@ -199,6 +218,7 @@ class VisitReportController extends Controller
             return redirect()->route('crm.visit-report')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
 
         } catch(\Exception $e) {
+            // dd($e);
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }

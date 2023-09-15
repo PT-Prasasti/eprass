@@ -13,9 +13,6 @@ use App\Http\Controllers\Helper\NotificationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
 
-use App\Mail\VisitMail;
-use Mail;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -343,21 +340,23 @@ Route::prefix('/exim')->name('exim')->group(function() {
 Route::get('/test_mail', function() {
     try {
         $sendmail = 'test@pt-prasasti.com';
-        $dataVisit = [
-            'id' => 'sadasd/asdasd',
-            'company' => 'Perusahaan PT',
-            'company_phone'     => '034234234',
-            'customer_name'     => 'Rebecca',
-            'customer_phone'     => '08842342343',
-            'customer_email'     => 'rebecca@gmail.com',
-            'visit_by'           => 'Phone',
-            'user_created'      => 'Syaiful',
-            'schedule'          => 'Negara adalah organisasi masyarakat yang mempunyai daerah tertentu di mana kekuasaan negara berlaku sepenuhnya sebagai suatu kedaulatan.',
-            'enginer'           => ["sia@gmail.com", "sib@gmail.com"]
+        $data = \App\Models\VisitReport::with(['visit', 'visit.customer', 'sales'])->where('uuid', 'a876a5c6-59d8-4344-9b9c-abc2ebd299a1')->first();
+        // dd($data);
+        $dataVisitReport = [
+            'id' => $data->visit_schedule_id,
+            'date' => $data->visit->date,
+            'time' => $data->visit->time,
+            'customer_company' => $data->visit->customer->name." - ".$data->visit->customer->company,
+            'customer_phone'     => $data->visit->customer->phone,
+            'customer_email'     => $data->visit->customer->email,
+            'status'           => $data->status,
+            'note'      => $data->note,
+            'plan'      => $data->planing,
+            'sales'     => $data->sales->name
         ];
-        $email = new VisitMail(collect($dataVisit));
+        $email = new \App\Mail\ReportMail(collect($dataVisitReport));
         
-        Mail::to($sendmail)->send($email);
+        \Mail::to($sendmail)->send($email);
         // dispatch(new \App\Jobs\SendMailVisitJob($sendmail));
         dd('Success');
     } catch (\Throwable $th) {
