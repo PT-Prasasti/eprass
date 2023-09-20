@@ -724,7 +724,13 @@ class SalesOrderController extends Controller
 
         $name = str_replace('/', '_', $inquiry->id);
 
-        return Excel::download(new SalesOrderExcelExport($data), 'product_list' . $name . '.xlsx');
+        $export = new SalesOrderExcelExport($data);
+
+        $export->setSalesOrderNumber($inquiry->id);
+
+        return Excel::download($export, 'product_list_' . $name . '.xlsx');
+
+        // return Excel::download(new SalesOrderExcelExport($data), 'product_list' . $name . '.xlsx');
     }
 
     public function download_product_list_pdf($id)
