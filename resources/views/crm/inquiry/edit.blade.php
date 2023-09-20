@@ -377,17 +377,14 @@
 
                 function deleteButtonRenderer(instance, td, row, col, prop, value, cellProperties) {
                     td.innerHTML = '<button class="delete-button btn btn-sm btn-danger btn-block">Delete</button>';
-
-                    // Mengaktifkan event handler untuk tombol "Delete"
                     td.querySelector('.delete-button').addEventListener('click', () => {
-                        // Hapus baris yang sesuai dengan tombol "Delete" yang diklik
-                        // console.log('ID yang akan dihapus:', td);
                         const rowData = productListTable.getDataAtRow(row);
                         $.ajax({
                             url: "{{ route('crm.inquiry.delete-product') }}",
                             type: "POST",
                             data: {
                                 _token: "{{ csrf_token() }}",
+                                so: $('select[name=visit]').val(),
                                 item_name: rowData[0],
                                 description: rowData[1],
                                 size: rowData[2],
@@ -399,10 +396,8 @@
                             },
                             error: function(xhr, status, error) {
                                 console.log(error)
-                                alert(error)
                             }
                         })
-                        // removeRowFromTable(rowData);
                     });
 
                     return td;
@@ -414,17 +409,6 @@
                 const tableData = productListTable.getData()
                 tableData.push([])
                 initProductListTable(tableData)
-            }
-
-            function removeLastRow() {
-                const tableData = productListTable.getData();
-
-                if (tableData.length > 1) { // Pastikan ada baris yang bisa dihapus
-                    tableData.pop(); // Menghapus baris terakhir
-                    initProductListTable(tableData); // Memperbarui tabel dengan data yang diperbarui
-
-                    deleteProduct($('select[name=visit]').val(), productListTable.countsRow() - 1);
-                }
             }
 
             function uploadExcel() {

@@ -833,7 +833,8 @@ class InquiryController extends Controller
     public function delete_product(Request $request)
     {
         try {
-            InquiryProduct::where('item_name', $request->item_name)
+            InquiryProduct::where('inquiry_id', $request->so)
+                ->where('item_name', $request->item_name)
                 ->where('description', $request->description)
                 ->where('size', $request->size)
                 ->where('qty', $request->qty)
