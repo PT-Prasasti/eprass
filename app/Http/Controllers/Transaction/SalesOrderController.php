@@ -35,260 +35,260 @@ class SalesOrderController extends Controller
         $this->middleware('auth');
         $this->fileController = new FilesController();
         $this->redisController = new RedisController();
-        
-        if(env('HOSTING')) {
+
+        if (env('HOSTING')) {
             $this->hosting = env('HOSTING');
         } else {
             $this->hosting = false;
         }
     }
 
-    public function index() : View
+    public function index(): View
     {
         return view('transaction.sales-order.index');
     }
-    
-    public function data(Request $request) : JsonResponse 
+
+    public function data(Request $request): JsonResponse
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $data = SalesOrder::orderBy('created_at', 'DESC')->get();
 
             $result = DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('id_so', function($q) {
+                ->addColumn('id_so', function ($q) {
                     return $q->id;
                 })
-                ->addColumn('id_inquiry', function($q) {
+                ->addColumn('id_inquiry', function ($q) {
                     return $q->inquiry->id;
                 })
-                ->addColumn('customer', function($q) {
+                ->addColumn('customer', function ($q) {
                     return strtoupper($q->inquiry->visit->customer->name . ' - ' . $q->inquiry->visit->customer->company);
                 })
-                ->addColumn('due_date', function($q) {
+                ->addColumn('due_date', function ($q) {
                     $due_date = Carbon::parse($q->inquiry->due_date)->format('d M Y');
                     return $due_date;
                 })
-                ->addColumn('grade', function($q) {
+                ->addColumn('grade', function ($q) {
                     return $q->inquiry->grade . '%';
                 })
-                ->addColumn('sales', function($q) {
+                ->addColumn('sales', function ($q) {
                     return strtoupper($q->inquiry->sales->name);
                 })
-                ->editColumn('status', function($q) {
+                ->editColumn('status', function ($q) {
                     return strtoupper($q->status);
                 })
-                ->addColumn('warning', function($q) {
+                ->addColumn('warning', function ($q) {
                     $now = Carbon::now();
                     $date = Carbon::parse($q->due_date);
                     $daysDifference = $date->diffInDays($now);
-                    if($daysDifference <= 2) {
+                    if ($daysDifference <= 2) {
                         return true;
                     } else {
                         return false;
                     }
                 })
                 ->make(true);
-    
+
             return $result;
-        }    
+        }
     }
-    
-    public function data_grade(Request $request) : JsonResponse 
+
+    public function data_grade(Request $request): JsonResponse
     {
-        if($request->ajax()) {
-            $data = SalesOrder::whereHas('inquiry', function($q) use ($request) {
-                    $q->whereBetween('grade', [$request->value1, $request->value2]);
-                })
+        if ($request->ajax()) {
+            $data = SalesOrder::whereHas('inquiry', function ($q) use ($request) {
+                $q->whereBetween('grade', [$request->value1, $request->value2]);
+            })
                 ->orderBy('created_at', 'DESC')->get();
 
             $result = DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('id_so', function($q) {
+                ->addColumn('id_so', function ($q) {
                     return $q->id;
                 })
-                ->addColumn('id_inquiry', function($q) {
+                ->addColumn('id_inquiry', function ($q) {
                     return $q->inquiry->id;
                 })
-                ->addColumn('customer', function($q) {
+                ->addColumn('customer', function ($q) {
                     return strtoupper($q->inquiry->visit->customer->name . ' - ' . $q->inquiry->visit->customer->company);
                 })
-                ->addColumn('due_date', function($q) {
+                ->addColumn('due_date', function ($q) {
                     $due_date = Carbon::parse($q->inquiry->due_date)->format('d M Y');
                     return $due_date;
                 })
-                ->addColumn('grade', function($q) {
+                ->addColumn('grade', function ($q) {
                     return $q->inquiry->grade . '%';
                 })
-                ->addColumn('sales', function($q) {
+                ->addColumn('sales', function ($q) {
                     return strtoupper($q->inquiry->sales->name);
                 })
-                ->editColumn('status', function($q) {
+                ->editColumn('status', function ($q) {
                     return strtoupper($q->status);
                 })
-                ->addColumn('warning', function($q) {
+                ->addColumn('warning', function ($q) {
                     $now = Carbon::now();
                     $date = Carbon::parse($q->due_date);
                     $daysDifference = $date->diffInDays($now);
-                    if($daysDifference <= 2) {
+                    if ($daysDifference <= 2) {
                         return true;
                     } else {
                         return false;
                     }
                 })
                 ->make(true);
-    
+
             return $result;
         }
     }
-    
-    public function data_status(Request $request) : JsonResponse 
+
+    public function data_status(Request $request): JsonResponse
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $data = SalesOrder::where('status', $request->value)
                 ->orderBy('created_at', 'DESC')->get();
 
             $result = DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('id_so', function($q) {
+                ->addColumn('id_so', function ($q) {
                     return $q->id;
                 })
-                ->addColumn('id_inquiry', function($q) {
+                ->addColumn('id_inquiry', function ($q) {
                     return $q->inquiry->id;
                 })
-                ->addColumn('customer', function($q) {
+                ->addColumn('customer', function ($q) {
                     return strtoupper($q->inquiry->visit->customer->name . ' - ' . $q->inquiry->visit->customer->company);
                 })
-                ->addColumn('due_date', function($q) {
+                ->addColumn('due_date', function ($q) {
                     $due_date = Carbon::parse($q->inquiry->due_date)->format('d M Y');
                     return $due_date;
                 })
-                ->addColumn('grade', function($q) {
+                ->addColumn('grade', function ($q) {
                     return $q->inquiry->grade . '%';
                 })
-                ->addColumn('sales', function($q) {
+                ->addColumn('sales', function ($q) {
                     return strtoupper($q->inquiry->sales->name);
                 })
-                ->editColumn('status', function($q) {
+                ->editColumn('status', function ($q) {
                     return strtoupper($q->status);
                 })
-                ->addColumn('warning', function($q) {
+                ->addColumn('warning', function ($q) {
                     $now = Carbon::now();
                     $date = Carbon::parse($q->due_date);
                     $daysDifference = $date->diffInDays($now);
-                    if($daysDifference <= 2) {
+                    if ($daysDifference <= 2) {
                         return true;
                     } else {
                         return false;
                     }
                 })
                 ->make(true);
-    
+
             return $result;
         }
     }
-    
-    public function data_customer(Request $request) : JsonResponse 
+
+    public function data_customer(Request $request): JsonResponse
     {
-        if($request->ajax()) {
-            $data = SalesOrder::whereHas('inquiry.visit.customer', function($q) use ($request) {
-                    $q->where('name', 'like', '%' . $request->value . '%');
-                })
+        if ($request->ajax()) {
+            $data = SalesOrder::whereHas('inquiry.visit.customer', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->value . '%');
+            })
                 ->orderBy('created_at', 'DESC')->get();
 
             $result = DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('id_so', function($q) {
+                ->addColumn('id_so', function ($q) {
                     return $q->id;
                 })
-                ->addColumn('id_inquiry', function($q) {
+                ->addColumn('id_inquiry', function ($q) {
                     return $q->inquiry->id;
                 })
-                ->addColumn('customer', function($q) {
+                ->addColumn('customer', function ($q) {
                     return strtoupper($q->inquiry->visit->customer->name . ' - ' . $q->inquiry->visit->customer->company);
                 })
-                ->addColumn('due_date', function($q) {
+                ->addColumn('due_date', function ($q) {
                     $due_date = Carbon::parse($q->inquiry->due_date)->format('d M Y');
                     return $due_date;
                 })
-                ->addColumn('grade', function($q) {
+                ->addColumn('grade', function ($q) {
                     return $q->inquiry->grade . '%';
                 })
-                ->addColumn('sales', function($q) {
+                ->addColumn('sales', function ($q) {
                     return strtoupper($q->inquiry->sales->name);
                 })
-                ->editColumn('status', function($q) {
+                ->editColumn('status', function ($q) {
                     return strtoupper($q->status);
                 })
-                ->addColumn('warning', function($q) {
+                ->addColumn('warning', function ($q) {
                     $now = Carbon::now();
                     $date = Carbon::parse($q->due_date);
                     $daysDifference = $date->diffInDays($now);
-                    if($daysDifference <= 2) {
+                    if ($daysDifference <= 2) {
                         return true;
                     } else {
                         return false;
                     }
                 })
                 ->make(true);
-    
+
             return $result;
         }
     }
-    
-    public function data_sales(Request $request) : JsonResponse 
+
+    public function data_sales(Request $request): JsonResponse
     {
-        if($request->ajax()) {
-            $data = SalesOrder::whereHas('inquiry.sales', function($q) use ($request) {
-                    $q->where('name', 'like', '%' . $request->value . '%');
-                })
+        if ($request->ajax()) {
+            $data = SalesOrder::whereHas('inquiry.sales', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->value . '%');
+            })
                 ->orderBy('created_at', 'DESC')->get();
 
             $result = DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('id_so', function($q) {
+                ->addColumn('id_so', function ($q) {
                     return $q->id;
                 })
-                ->addColumn('id_inquiry', function($q) {
+                ->addColumn('id_inquiry', function ($q) {
                     return $q->inquiry->id;
                 })
-                ->addColumn('customer', function($q) {
+                ->addColumn('customer', function ($q) {
                     return strtoupper($q->inquiry->visit->customer->name . ' - ' . $q->inquiry->visit->customer->company);
                 })
-                ->addColumn('due_date', function($q) {
+                ->addColumn('due_date', function ($q) {
                     $due_date = Carbon::parse($q->inquiry->due_date)->format('d M Y');
                     return $due_date;
                 })
-                ->addColumn('grade', function($q) {
+                ->addColumn('grade', function ($q) {
                     return $q->inquiry->grade . '%';
                 })
-                ->addColumn('sales', function($q) {
+                ->addColumn('sales', function ($q) {
                     return strtoupper($q->inquiry->sales->name);
                 })
-                ->editColumn('status', function($q) {
+                ->editColumn('status', function ($q) {
                     return strtoupper($q->status);
                 })
-                ->addColumn('warning', function($q) {
+                ->addColumn('warning', function ($q) {
                     $now = Carbon::now();
                     $date = Carbon::parse($q->due_date);
                     $daysDifference = $date->diffInDays($now);
-                    if($daysDifference <= 2) {
+                    if ($daysDifference <= 2) {
                         return true;
                     } else {
                         return false;
                     }
                 })
                 ->make(true);
-    
+
             return $result;
         }
     }
-    
-    public function add($id = null) : View
+
+    public function add($id = null): View
     {
         $redis = Redis::keys('*');
-        foreach($redis as $item) {
-            if(str_contains($item, 'so_excel_')) {
-                if(str_contains($item, auth()->user()->uuid)) {
+        foreach ($redis as $item) {
+            if (str_contains($item, 'so_excel_')) {
+                if (str_contains($item, auth()->user()->uuid)) {
                     $item = explode('so_excel_', $item);
                     $item = 'so_excel_' . $item[1];
                     Redis::del($item);
@@ -296,14 +296,14 @@ class SalesOrderController extends Controller
             }
         }
 
-        if($id) {
+        if ($id) {
             $inquiry = Inquiry::where('uuid', $id)->first();
 
             return view('transaction.sales-order.add', compact('inquiry'));
         }
         return view('transaction.sales-order.add');
     }
-    
+
     public function download_template()
     {
         $data = array();
@@ -311,15 +311,15 @@ class SalesOrderController extends Controller
         return Excel::download(new SalesOrderExcelExport($data), 'template_so.xlsx');
     }
 
-    public function generate_id() : JsonResponse
+    public function generate_id(): JsonResponse
     {
         $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
         $code = 'SO';
         $month = (int) date('m');
         $year = date('y');
-        
+
         $last_data = SalesOrder::orderBy('created_at', 'DESC')->withTrashed()->first();
-        
+
         if ($last_data) {
             $last_id = $last_data->id;
             $id = explode("/", $last_id);
@@ -330,15 +330,15 @@ class SalesOrderController extends Controller
         }
 
         $generate_id = sprintf("%04s", $number) . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
-        
+
         return response()->json($generate_id);
     }
-    
-    public function inquiries() : JsonResponse
+
+    public function inquiries(): JsonResponse
     {
         $inquiries = Inquiry::whereNotIn('id', SalesOrder::select('inquiry_id')->get())
             ->get();
-        
+
         $result = array();
 
         foreach ($inquiries as $item) {
@@ -351,12 +351,12 @@ class SalesOrderController extends Controller
         return response()->json($result);
     }
 
-    public function inquiry_detail($id) : JsonResponse
+    public function inquiry_detail($id): JsonResponse
     {
         $redis = Redis::keys('*');
-        foreach($redis as $item) {
-            if(str_contains($item, auth()->user()->uuid)) {
-                if($this->hosting == false) {
+        foreach ($redis as $item) {
+            if (str_contains($item, auth()->user()->uuid)) {
+                if ($this->hosting == false) {
                     $item = explode('database_', $item);
                     $item = $item[1];
                 }
@@ -383,7 +383,7 @@ class SalesOrderController extends Controller
         $so = $inquiry->visit->uuid;
         $key = 'so_pdf_' . $so . '_' . auth()->user()->uuid;
         $redis = Redis::get($key);
-        if($redis) {
+        if ($redis) {
             Redis::del($key);
         }
         Redis::set($key, $inquiry->files);
@@ -391,13 +391,13 @@ class SalesOrderController extends Controller
         $so = $inquiry->visit->uuid;
         $key = 'so_product_' . $so . '_' . auth()->user()->uuid;
         $redis = Redis::get($key);
-        if($redis) {
+        if ($redis) {
             Redis::del($key);
         }
-        if(isset($inquiry->products)) {
+        if (isset($inquiry->products)) {
             $data = array();
-            
-            foreach($inquiry->products as $item) {
+
+            foreach ($inquiry->products as $item) {
                 $data[] = array(
                     $item->item_name,
                     $item->description,
@@ -410,10 +410,10 @@ class SalesOrderController extends Controller
             Redis::set($key, json_encode($data));
         }
 
-        return response()->json($result);  
+        return response()->json($result);
     }
-    
-    public function get_pdf(Request $request) : JsonResponse
+
+    public function get_pdf(Request $request): JsonResponse
     {
         $so = $request->so;
         $inquiry = Inquiry::where('uuid', $so)->first();
@@ -426,66 +426,25 @@ class SalesOrderController extends Controller
             'data' => $data
         ]);
     }
-    
-    public function upload_pdf(Request $request) : JsonResponse
+
+    public function upload_pdf(Request $request): JsonResponse
     {
         try {
-            if($request->hasFile('file')) {
+            if ($request->hasFile('file')) {
                 $so = $request->so;
                 $inquiry = Inquiry::where('uuid', $so)->first();
                 $so = $inquiry->visit->uuid;
                 $file = $request->file('file');
                 $path = $so;
                 $upload = $this->fileController->store_temp($file, $path);
-                if($upload->original['status'] == 200) {
+                if ($upload->original['status'] == 200) {
                     $key = 'so_pdf_' . $so . '_' . auth()->user()->uuid;
                     $data = $upload->original['data'];
                     $redis = $this->redisController->store($key, $data);
-    
-                    if($redis->original['status'] == 200) {
-                        $data = json_decode(Redis::get($key), true);
-    
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'success',
-                            'data' => $data
-                        ]);
-                    }
-                }       
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 400,
-                'message' => 'error'
-            ]);
-        }
-    }
-    
-    public function delete_pdf(Request $request) : JsonResponse
-    {
-        try {
-            $so = $request->so;
-            $so = str_replace('/', '_', $so);
-            $file = $request->file;
-            if($request->has('edit')) {
-                $path = 'public/so/' . $so . '/' . $file;
-            } else {
-                $path = 'temp/' . $so . '/' . $file;
-            }
-            $exist = Storage::exists($path);
-            if($exist) {
-                $delete = Storage::delete($path);
-    
-                if($delete) {
-                    $key = 'so_pdf_' . $so . '_' . auth()->user()->uuid;
-                    $redis = $this->redisController->delete_item($key, 'filename', $file);
-                    if($redis->original['status'] == 200) {
+
+                    if ($redis->original['status'] == 200) {
                         $data = json_decode(Redis::get($key), true);
 
-                        if(sizeof($data) == 0) {
-                            Redis::del($key);
-                        }
-        
                         return response()->json([
                             'status' => 200,
                             'message' => 'success',
@@ -501,8 +460,49 @@ class SalesOrderController extends Controller
             ]);
         }
     }
-    
-    public function get_product(Request $request) : JsonResponse
+
+    public function delete_pdf(Request $request): JsonResponse
+    {
+        try {
+            $so = $request->so;
+            $so = str_replace('/', '_', $so);
+            $file = $request->file;
+            if ($request->has('edit')) {
+                $path = 'public/so/' . $so . '/' . $file;
+            } else {
+                $path = 'temp/' . $so . '/' . $file;
+            }
+            $exist = Storage::exists($path);
+            if ($exist) {
+                $delete = Storage::delete($path);
+
+                if ($delete) {
+                    $key = 'so_pdf_' . $so . '_' . auth()->user()->uuid;
+                    $redis = $this->redisController->delete_item($key, 'filename', $file);
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        if (sizeof($data) == 0) {
+                            Redis::del($key);
+                        }
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
+    }
+
+    public function get_product(Request $request): JsonResponse
     {
         $so = $request->so;
         $inquiry = Inquiry::where('uuid', $request->so)->first();
@@ -518,13 +518,13 @@ class SalesOrderController extends Controller
         ]);
     }
 
-    public function upload_excel(Request $request) : JsonResponse
+    public function upload_excel(Request $request): JsonResponse
     {
         try {
-            if($request->hasFile('file')) {
+            if ($request->hasFile('file')) {
                 $so = $request->so;
                 $file = $request->file('file');
-                
+
                 $excel = Excel::toArray(null, $file, null, null, null, true, false, false)[0];
                 $excel = array_slice($excel, 1);
                 $data = array();
@@ -565,7 +565,7 @@ class SalesOrderController extends Controller
 
                 $data = Redis::get($key);
                 $data = json_decode($data, true);
-                
+
                 return response()->json([
                     'status' => 200,
                     'message' => 'success',
@@ -598,7 +598,7 @@ class SalesOrderController extends Controller
 
             $data = Redis::get($key);
             $data = json_decode($data, true);
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'success',
@@ -612,25 +612,26 @@ class SalesOrderController extends Controller
         }
     }
 
-    public function store(AddSalesOrderRequest $request) : RedirectResponse
+    public function store(AddSalesOrderRequest $request): RedirectResponse
     {
         try {
             DB::beginTransaction();
-    
+
             $so = new SalesOrder();
             $so->id = $request->id;
             $so->inquiry_id = Inquiry::where('uuid', $request->inquiry)->first()->id;
             $so->status = 'On Process';
+            $so->due_date = Inquiry::where('uuid', $request->inquiry)->first()->due_date;
             // $so->files = ($request->pdf == 'null') ? '' : $request->pdf;
             $so->save();
-    
+
             $inquiry = Inquiry::where('uuid', $request->inquiry)->first();
             $inquiry->files = $request->pdf;
             $inquiry->status = 'SO Ready';
             $inquiry->save();
-    
+
             if ($request->pdf != 'null' && !empty($request->pdf) && $request->pdf != null) {
-                
+
                 $inquiry = Inquiry::where('uuid', $request->inquiry)->first();
                 $inquiry->files = $request->pdf;
                 $inquiry->save();
@@ -639,27 +640,27 @@ class SalesOrderController extends Controller
                 foreach ($files as $item) {
                     $sourcePath = storage_path('app/temp/' . $inquiry->visit->uuid . '/' . $item['filename']);
                     $destinationPath = storage_path('app/public/inquiry/' . $inquiry->visit->uuid . '/' . $item['filename']);
-                    
+
                     if (!Storage::exists('public/inquiry/' . $inquiry->visit->uuid)) {
                         Storage::makeDirectory('public/inquiry/' . $inquiry->visit->uuid);
                     }
-            
+
                     if (file_exists($sourcePath)) {
                         rename($sourcePath, $destinationPath);
                     }
                 }
-    
+
                 Storage::deleteDirectory('temp/' . $inquiry->visit->uuid);
             }
 
             $key = 'so_product_' . $inquiry->visit->uuid . '_' . auth()->user()->uuid;
             $redis = Redis::get($key);
 
-            if($redis) {
+            if ($redis) {
                 $data = json_decode($redis, true);
 
-                foreach($data as $key => $value) {
-                    if(isset($inquiry->products[$key])) {
+                foreach ($data as $key => $value) {
+                    if (isset($inquiry->products[$key])) {
                         $product_id = $inquiry->products[$key]->id;
                         $product = InquiryProduct::find($product_id);
                         $product->item_name = $value[0];
@@ -680,23 +681,22 @@ class SalesOrderController extends Controller
                     }
                 }
             }
-            
+
             $key = 'so_product_' . $inquiry->visit->uuid . '_' . auth()->user()->uuid;
             Redis::del($key);
-            
+
             $key = 'so_pdf_' . $inquiry->visit->uuid . '_' . auth()->user()->uuid;
             Redis::del($key);
-            
-            DB::commit();
-    
-            return redirect()->route('transaction.sales-order')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
 
+            DB::commit();
+
+            return redirect()->route('transaction.sales-order')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
 
-    public function view($id) : View
+    public function view($id): View
     {
         $so = SalesOrder::where('uuid', $id)->first();
 
@@ -708,23 +708,23 @@ class SalesOrderController extends Controller
         $data = array();
 
         $inquiry = Inquiry::where('uuid', $id)->first();
-        if($inquiry->products) {
+        if ($inquiry->products) {
             $no = 1;
-            foreach($inquiry->products as $item) {
+            foreach ($inquiry->products as $item) {
                 $data[] = array(
-                    $no++, 
-                    $item->item_name, 
-                    $item->description, 
-                    $item->size, 
-                    $item->qty, 
-                    $item->remark, 
+                    $no++,
+                    $item->item_name,
+                    $item->description,
+                    $item->size,
+                    $item->qty,
+                    $item->remark,
                 );
             }
         }
 
         $name = str_replace('/', '_', $inquiry->id);
 
-        return Excel::download(new SalesOrderExcelExport($data), 'product_list'. $name .'.xlsx');
+        return Excel::download(new SalesOrderExcelExport($data), 'product_list' . $name . '.xlsx');
     }
 
     public function download_product_list_pdf($id)
@@ -732,16 +732,16 @@ class SalesOrderController extends Controller
         $data = array();
 
         $inquiry = Inquiry::where('uuid', $id)->first();
-        if($inquiry->products) {
+        if ($inquiry->products) {
             $no = 1;
-            foreach($inquiry->products as $item) {
+            foreach ($inquiry->products as $item) {
                 $data[] = array(
-                    $no++, 
-                    $item->item_name, 
-                    $item->description, 
-                    $item->size, 
-                    $item->qty, 
-                    $item->remark, 
+                    $no++,
+                    $item->item_name,
+                    $item->description,
+                    $item->size,
+                    $item->qty,
+                    $item->remark,
                 );
             }
         }
@@ -755,30 +755,30 @@ class SalesOrderController extends Controller
         return $pdf->download('product_list_' . $name . '.pdf');
     }
 
-    public function edit($id) : View
+    public function edit($id): View
     {
         $so = SalesOrder::where('uuid', $id)->first();
 
         return view('transaction.sales-order.edit', compact('so'));
     }
 
-    public function store_edit(EditSalesOrderRequest $request) : RedirectResponse
+    public function store_edit(EditSalesOrderRequest $request): RedirectResponse
     {
         try {
             DB::beginTransaction();
-    
+
             $so = SalesOrder::where('uuid', $request->uuid)->first();
             $so->inquiry_id = Inquiry::where('uuid', $request->inquiry)->first()->id;
             $so->status = 'On Process';
             // $so->files = ($request->pdf == 'null') ? '' : $request->pdf;
             $so->save();
-    
+
             $inquiry = Inquiry::where('uuid', $request->inquiry)->first();
             $inquiry->status = 'SO Ready';
             $inquiry->save();
-    
+
             if ($request->pdf != 'null' && !empty($request->pdf) && $request->pdf != null) {
-                
+
                 $inquiry = Inquiry::where('uuid', $request->inquiry)->first();
                 $inquiry->files = $request->pdf;
                 $inquiry->save();
@@ -787,27 +787,27 @@ class SalesOrderController extends Controller
                 foreach ($files as $item) {
                     $sourcePath = storage_path('app/temp/' . $inquiry->visit->uuid . '/' . $item['filename']);
                     $destinationPath = storage_path('app/public/inquiry/' . $inquiry->visit->uuid . '/' . $item['filename']);
-                    
+
                     if (!Storage::exists('public/inquiry/' . $inquiry->visit->uuid)) {
                         Storage::makeDirectory('public/inquiry/' . $inquiry->visit->uuid);
                     }
-            
+
                     if (file_exists($sourcePath)) {
                         rename($sourcePath, $destinationPath);
                     }
                 }
-    
+
                 Storage::deleteDirectory('temp/' . $inquiry->visit->uuid);
             }
 
             $key = 'so_product_' . $inquiry->visit->uuid . '_' . auth()->user()->uuid;
             $redis = Redis::get($key);
 
-            if($redis) {
+            if ($redis) {
                 $data = json_decode($redis, true);
 
-                foreach($data as $key => $value) {
-                    if(isset($inquiry->products[$key])) {
+                foreach ($data as $key => $value) {
+                    if (isset($inquiry->products[$key])) {
                         $product_id = $inquiry->products[$key]->id;
                         $product = InquiryProduct::find($product_id);
                         $product->item_name = $value[0];
@@ -828,22 +828,21 @@ class SalesOrderController extends Controller
                     }
                 }
             }
-            
+
             $key = 'so_product_' . $inquiry->visit->uuid . '_' . auth()->user()->uuid;
             Redis::del($key);
-            
+
             $key = 'so_pdf_' . $inquiry->visit->uuid . '_' . auth()->user()->uuid;
             Redis::del($key);
-            
-            DB::commit();
-    
-            return redirect()->route('transaction.sales-order')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
 
+            DB::commit();
+
+            return redirect()->route('transaction.sales-order')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
-    
+
     public function delete($id)
     {
         try {
@@ -855,17 +854,16 @@ class SalesOrderController extends Controller
             $inquiry->status = 'Loading';
             $inquiry->save();
 
-            foreach($so->products as $item) {
+            foreach ($so->products as $item) {
                 $item->delete();
             }
 
             $so->delete();
 
             DB::commit();
-    
-            return redirect()->back()->with('delete', Constants::STORE_DATA_DELETE_MSG);
 
-        } catch(\Exception $e) {
+            return redirect()->back()->with('delete', Constants::STORE_DATA_DELETE_MSG);
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
