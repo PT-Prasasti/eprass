@@ -212,6 +212,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::get('/', [SourcingItemController::class, 'index']);
         Route::get('/add/{id?}', [SourcingItemController::class, 'add'])->name('.add');
         Route::get('/id', [SourcingItemController::class, 'generate_id'])->name('.id');
+        Route::post('/reviews', [SourcingItemController::class, 'review_get_data'])->name('.review_get_data');
         Route::get('/download/excel/template', [SourcingItemController::class, 'download_template'])->name('.download-template');
         Route::get('/sales-order', [SourcingItemController::class, 'sales_order'])->name('.sales-order');
         Route::get('/so/{id}', [SourcingItemController::class, 'so_detail'])->name('.so-detail');

@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
+use App\Models\InquiryProduct;
 use Illuminate\Support\Facades\Redis;
+use Yajra\DataTables\DataTables;
 
 class SourcingItemController extends Controller
 {
@@ -17,21 +19,21 @@ class SourcingItemController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    public function index() : View
+
+    public function index(): View
     {
         return view('transaction.sourcing-item.index');
     }
-    
-    public function add() : View
+
+    public function add(): View
     {
         return view('transaction.sourcing-item.add');
     }
-        
-    public function sales_order() : JsonResponse
+
+    public function sales_order(): JsonResponse
     {
         $inquiries = SalesOrder::all();
-        
+
         $result = array();
 
         foreach ($inquiries as $item) {
@@ -43,8 +45,8 @@ class SourcingItemController extends Controller
 
         return response()->json($result);
     }
-    
-    public function so_detail($id) : JsonResponse
+
+    public function so_detail($id): JsonResponse
     {
         // $redis = Redis::keys('*');
         // foreach($redis as $item) {
@@ -76,20 +78,20 @@ class SourcingItemController extends Controller
         $id = $so->inquiry->visit->uuid;
         $key = 'so_pdf_' . $id . '_' . auth()->user()->uuid;
         $redis = Redis::get($key);
-        if($redis) {
+        if ($redis) {
             Redis::del($key);
         }
         Redis::set($key, $so->inquiry->files);
 
         $key = 'so_product_' . $id . '_' . auth()->user()->uuid;
         $redis = Redis::get($key);
-        if($redis) {
+        if ($redis) {
             Redis::del($key);
         }
-        if(isset($so->inquiry->products)) {
+        if (isset($so->inquiry->products)) {
             $data = array();
-            
-            foreach($so->inquiry->products as $item) {
+
+            foreach ($so->inquiry->products as $item) {
                 $data[] = array(
                     $item->item_name,
                     $item->description,
@@ -102,10 +104,10 @@ class SourcingItemController extends Controller
             Redis::set($key, json_encode($data));
         }
 
-        return response()->json($result);  
+        return response()->json($result);
     }
-    
-    public function get_pdf(Request $request) : JsonResponse
+
+    public function get_pdf(Request $request): JsonResponse
     {
         $so = SalesOrder::where('uuid', $request->so)->first();
         $key = 'so_pdf_' . $so->inquiry->visit->uuid . '_' . auth()->user()->uuid;
@@ -117,8 +119,8 @@ class SourcingItemController extends Controller
             'data' => $data
         ]);
     }
-    
-    public function get_product(Request $request) : JsonResponse
+
+    public function get_product(Request $request): JsonResponse
     {
         $so = SalesOrder::where('uuid', $request->so)->first();
         $uuid = $so->inquiry->uuid;
@@ -131,7 +133,32 @@ class SourcingItemController extends Controller
             'status' => 200,
             'message' => 'success',
             'data' => $data,
-            'uuid' =>$uuid
+            'uuid' => $uuid
         ]);
+    }
+
+    public function review_get_data(Request $request)
+    {
+        try {
+            $salesOrders = SalesOrder::where('uuid', $request->inquiry)->first();
+            $data = InquiryProduct::where('inquiry_id', $salesOrders->inquiry_id)->get();
+
+            $result = DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('item_desc', function ($q) {
+                    return $q->description;
+                })
+                ->addColumn('qty', function ($q) {
+                    return $q->qty;
+                })
+                ->make(true);
+
+            return $result;
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 }
