@@ -753,9 +753,13 @@ class SalesOrderController extends Controller
         }
 
         $name = str_replace('/', '_', $inquiry->id);
+        $so = $inquiry->id;
 
         // Generate a PDF using dompdf
-        $pdf = PDF::loadView('pdf.product_list', compact('data'))->setPaper('a4', 'landscape'); // Create a view for your PDF content
+        $pdf = PDF::loadView('pdf.product_list', [
+            'data' => $data,
+            'so' => $so
+        ])->setPaper('a4', 'landscape'); // Create a view for your PDF content
 
         // You can also customize the PDF options, such as filename and paper size
         return $pdf->download('product_list_' . $name . '.pdf');

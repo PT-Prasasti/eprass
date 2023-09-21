@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Product List</title>
     <style>
@@ -8,11 +9,15 @@
             border-collapse: collapse;
         }
 
-        table, th, td {
-            border: 1px solid #000; /* Thin black border */
+        table,
+        th,
+        td {
+            border: 1px solid #000;
+            /* Thin black border */
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: left;
         }
@@ -22,7 +27,9 @@
         }
     </style>
 </head>
+
 <body>
+    <h1 style="text-align: center;">SO : {{ $so }}</h1>
     <table>
         <thead>
             <tr>
@@ -35,7 +42,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($data as $item)
+            @foreach ($data as $item)
                 <tr>
                     <td style="text-align: center;">{{ $item[0] }}</td>
                     <td>{{ $item[1] }}</td>
@@ -48,4 +55,5 @@
         </tbody>
     </table>
 </body>
+
 </html>
