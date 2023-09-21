@@ -221,20 +221,38 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table id="viewTable"
-                                    class="table table-striped table-vcenter table-bordered js-dataTable-simple"
-                                    style="font-size:10px">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center">Item Desc</th>
-                                            <th class="text-center">Qty</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <div id="viewTable" class="table-responsive">
+                                    <table id="data_table"
+                                        class="table table-striped table-vcenter table-bordered js-dataTable-full"
+                                        style="font-size:10px">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2" class="text-center">No.</th>
+                                                <th rowspan="2" class="text-center">Item Desc</th>
+                                                <th rowspan="2" class="text-center">Qty</th>
+                                                <th colspan="4" class="text-center">
+                                                    <select name="supplier" id="supplier" class="form-control">
+                                                        <option value="0" selected disabled>-- Pilih salah satu --
+                                                        </option>
+                                                        @foreach (\App\Models\Supplier::all() as $item)
+                                                            <option value="{{ $item->uuid }}">{{ $item->company }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center">Description</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-center">Unit Price</th>
+                                                <th class="text-center">DT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
                                 <div class="row">
@@ -299,31 +317,54 @@
 
             $(document).ready(function() {
                 listSO()
-                dataTable(null)
-                console.log('{{ route('transaction.sourcing-item.review_get_data') }}')
+                dataTable()
                 $('select[name=so]').select2()
                 $('select[name=so]').change(function() {
                     getSODetail($(this).val())
                     dataTable($('select[name=so]').val())
+
+                    $('select[name=supplier]').select2()
+                    $('select[name=supplier]').change(function() {
+                        for (let i = 1; i <= totalRows; i++) {
+                            $('input[data-index="' + i + '"]').prop('disabled', false);
+                            $('select[data-index="' + i + '"]').prop('disabled', false);
+                        }
+                    })
                 })
             })
+
+            let totalRows = 0
 
             function dataTable(inquiry = null) {
                 $('#viewTable').html('')
                 $('#viewTable').html(`
                     <table id="data_table"
-                        class="table table-striped table-vcenter table-bordered js-dataTable-simple"
-                        style="font-size:10px">
+                        class="table table-striped table-vcenter table-bordered js-dataTable-full" style="font-size:10px; width: 100%;">
                         <thead>
                             <tr>
-                                <th class="text-center">No.</th>
-                                <th class="text-center">Item Desc</th>
+                                <th rowspan="2" class="text-center">No.</th>
+                                <th rowspan="2" class="text-center">Item Desc</th>
+                                <th rowspan="2" class="text-center">Qty</th>
+                                <th colspan="4" class="text-center">
+                                    <select name="supplier" id="supplier" class="form-control">
+                                        <option value="0" selected disabled>-- Pilih salah satu --</option>
+                                        @foreach (\App\Models\Supplier::all() as $item)
+                                            <option value="{{ $item->uuid }}">{{ $item->company }}
+                                            </option>
+                                        @endforeach
+                                    </select>   
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Description</th>
                                 <th class="text-center">Qty</th>
+                                <th class="text-center">Unit Price</th>
+                                <th class="text-center">DT</th>
                             </tr>
                         </thead>
                     </table>
                 `)
-                $('#data_table').DataTable({
+                const table = $('#data_table').DataTable({
                     processing: true,
                     serverSide: true,
                     responsive: true,
@@ -342,6 +383,7 @@
                     columns: [{
                             data: 'DT_RowIndex',
                             orderable: false,
+                            searchable: false,
                             width: '8%',
                             className: 'text-center'
                         },
@@ -352,21 +394,54 @@
                         {
                             data: 'qty',
                             className: 'text-center'
-                        }
+                        },
+                        {
+                            data: "description",
+                            className: 'text-center',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="description" disabled data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            }
+                        },
+                        {
+                            data: "quantity",
+                            className: 'text-center',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity" disabled data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            }
+                        },
+                        {
+                            data: "unit_price",
+                            className: 'text-center',
+                            render: function(data, type, row) {
+                                return `
+                                <select name="unitprice" id="unitprice" class="form-control" disabled data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
+                                    <option value="0" selected disabled>Please select</option> 
+                                    <option value="1">Rp</option> 
+                                    <option value="2">$</option> 
+                                </select > `
+                            }
+                        },
+                        {
+                            data: "dt",
+                            className: 'text-center',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="dt" disabled data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            }
+                        },
                     ],
                     "language": {
                         "paginate": {
                             "previous": '<i class="fa fa-angle-left"></i>',
                             "next": '<i class="fa fa-angle-right"></i>'
                         }
-                    },
-                    success: function(response) {
-                        console.log("Data dari server:", response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(error)
                     }
                 })
+                table.on('draw.dt', function() {
+                    totalRows = table.rows().count();
+                });
             }
 
             function listSO() {

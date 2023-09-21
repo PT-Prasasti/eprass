@@ -168,6 +168,8 @@ Route::prefix('/crm')->name('crm')->group(function () {
         Route::post('/delete-product', [InquiryController::class, 'delete_product'])->name('.delete-product');
         Route::post('/store', [InquiryController::class, 'store'])->name('.store');
         Route::post('/edit', [InquiryController::class, 'store_edit'])->name('.store-edit');
+
+        Route::post('/store-sourcing-suppliers', [InquiryController::class, 'store_sourcing_suppliers'])->name('.store-sourcing-suppliers');
     });
 });
 

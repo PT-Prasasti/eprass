@@ -140,25 +140,35 @@ class SourcingItemController extends Controller
     public function review_get_data(Request $request)
     {
         try {
-            $salesOrders = SalesOrder::where('uuid', $request->inquiry)->first();
-            $data = InquiryProduct::where('inquiry_id', $salesOrders->inquiry_id)->get();
+            if ($request->ajax()) {
+                $salesOrder = SalesOrder::where('uuid', $request->inquiry)->first();
+                $data = InquiryProduct::where('inquiry_id', $salesOrder->inquiry_id)->get();
 
-            $result = DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('item_desc', function ($q) {
-                    return $q->description;
-                })
-                ->addColumn('qty', function ($q) {
-                    return $q->qty;
-                })
-                ->make(true);
+                $result = DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('uuid', function ($q) {
+                        return $q->uuid;
+                    })
+                    ->addColumn('item_desc', function ($q) {
+                        return $q->description;
+                    })
+                    ->addColumn('qty', function ($q) {
+                        return $q->qty;
+                    })
+                    ->make(true);
 
-            return $result;
+                return $result;
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 500,
                 'message' => $th->getMessage()
             ]);
         }
+    }
+
+    public function store_sourcing_suppliers(Request $request)
+    {
+        // 
     }
 }
