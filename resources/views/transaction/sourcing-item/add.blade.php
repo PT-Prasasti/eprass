@@ -255,50 +255,9 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-3 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <input class="custom-control-input" type="checkbox" name=""
-                                                id="f1" value="">
-                                            <label class="custom-control-label" for="f1">Catalog</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <input class="custom-control-input" type="checkbox" name=""
-                                                id="f2" value="">
-                                            <label class="custom-control-label" for="f2">Drawing</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <input class="custom-control-input" type="checkbox" name=""
-                                                id="f3" value="">
-                                            <label class="custom-control-label" for="f3">Folder 1</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <input class="custom-control-input" type="checkbox" name=""
-                                                id="f4" value="">
-                                            <label class="custom-control-label" for="f4">Folder 2</label>
-                                        </div>
+                                <div class="row" id="file-manager">
+                                    <div class="col-md-12 py-5 text-center">
+                                        <p>File / Folder not Found!</p>
                                     </div>
                                 </div>
                             </div>
@@ -306,8 +265,9 @@
                     </div>
                 </div>
             </div>
+    </div>
 
-        </form>
+    </form>
 
     </div>
 
@@ -322,6 +282,7 @@
                 $('select[name=so]').change(function() {
                     getSODetail($(this).val())
                     dataTable($('select[name=so]').val())
+                    getStorage($('select[name=so]').val())
 
                     $('select[name=supplier]').select2()
                     $('select[name=supplier]').change(function() {
@@ -554,6 +515,103 @@
                     $('#tbody').html(``)
                     $('#tbody').html(element)
                 }
+            }
+
+            function getStorage(inquiry = null) {
+                $.ajax({
+                    url: "{{ route('transaction.sourcing-item.get-storage') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        inquiry: inquiry
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        $('#file-manager').html(``)
+                        $('#file-manager').html(`
+                            <div class="col-md-12 py-5 mb-5">
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newFolder"><i class="fa fa-plus"></i> New Folder</button>
+                            </div>
+
+                            <div class="modal fade" id="newFolder" tabindex="-1" aria-labelledby="newFolderLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="newFolderLabel">Create New Folder</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input name="nameFolder" id="nameFolder" type="text" class="form-control" placeholder="Folder Name">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="saveNewFolder()">Save changes</button>
+                                    </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        `)
+                        $.each(response.data, function(index, item) {
+                            let html = ''
+                            if (item.type == 'file') {
+                                html = `
+                                    <div class="col-md-3 text-center">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                            data-target="#modal-f${index + 1}">
+                                            <i class="fa fa-file" style="color:#2481b3; font-size: 130px;"></i>
+                                        </button>
+                                        <div class="custom-control custom-checkbox mb-5">
+                                            <input class="custom-control-input" type="checkbox" name="file"
+                                                id="file" data-file="${item.name}" value="">
+                                            <label class="custom-control-label" for="f${index + 1}">${item.name}</label>
+                                    </div>
+                                    `
+                            } else {
+                                html = `
+                                    <div class="col-md-3 text-center">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                            data-target="#modal-f${index + 1}">
+                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
+                                        </button>
+                                        <div class="custom-control custom-checkbox mb-5">
+                                            <input class="custom-control-input" type="checkbox" name="folder"
+                                                id="folder" data-file="${item.name}" value="">
+                                            <label class="custom-control-label" for="f${index + 1}">${item.name}</label>
+                                    </div>
+                                    `
+                            }
+                            $('#file-manager').append(html)
+
+                        })
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function saveNewFolder() {
+                let folderName = $('#nameFolder').val()
+                $.ajax({
+                    url: "{{ route('transaction.sourcing-item.save-folder') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        inquiry: $('select[name=so]').val(),
+                        folderName: folderName
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        $('#newFolder').val('')
+                        $('#newFolder').modal('hide')
+                        getStorage($('select[name=so]').val())
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
             }
         </script>
     </x-slot>

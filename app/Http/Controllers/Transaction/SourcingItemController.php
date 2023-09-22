@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
 use App\Models\InquiryProduct;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class SourcingItemController extends Controller
@@ -170,5 +171,57 @@ class SourcingItemController extends Controller
     public function store_sourcing_suppliers(Request $request)
     {
         // 
+    }
+
+    public function get_storage(Request $request)
+    {
+        if ($request->ajax()) {
+            $so = SalesOrder::where('uuid', $request->inquiry)->first();
+            $inquiry = Inquiry::where('id', $so->inquiry_id)->first();
+            $visitSchedule = $inquiry->visit->uuid;
+            $path = 'public/inquiry/' . $visitSchedule;
+            $data = array();
+
+            $directories = Storage::directories($path);
+            foreach ($directories as $dir) {
+                $data[] = array(
+                    'type' => 'folder',
+                    'name' => explode('/', $dir)[3],
+                    'url' => Storage::url($dir),
+                );
+            }
+
+            $files = Storage::files($path);
+            foreach ($files as $item) {
+                $data[] = array(
+                    'type' => 'file',
+                    'filename' => $item,
+                    'name' => explode('/', $item)[3],
+                    'size' => Storage::size($item),
+                    'url' => Storage::url($item),
+                );
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'success',
+                'data' => $data
+            ]);
+        }
+    }
+
+    public function save_folder(Request $request)
+    {
+        if ($request->ajax()) {
+            $so = SalesOrder::where('uuid', $request->inquiry)->first();
+            $inquiry = Inquiry::where('id', $so->inquiry_id)->first();
+            $visitSchedule = $inquiry->visit->uuid;
+            $path = 'public/inquiry/' . $visitSchedule . '/' . $request->folderName;
+            Storage::makeDirectory($path);
+            return response()->json([
+                'status' => 200,
+                'message' => 'success'
+            ]);
+        }
     }
 }

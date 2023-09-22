@@ -241,6 +241,9 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/store-product', [SourcingItemController::class, 'store_product'])->name('.store-product');
         Route::post('/store', [SourcingItemController::class, 'store'])->name('.store');
         Route::post('/edit', [SourcingItemController::class, 'store_edit'])->name('.store-edit');
+
+        Route::post('/get-storage', [SourcingItemController::class, 'get_storage'])->name('.get-storage');
+        Route::post('/save-folder', [SourcingItemController::class, 'save_folder'])->name('.save-folder');
     });
 });
 
