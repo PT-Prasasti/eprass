@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
 use App\Models\InquiryProduct;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
@@ -198,7 +199,7 @@ class SourcingItemController extends Controller
                     'filename' => $item,
                     'name' => explode('/', $item)[3],
                     'size' => Storage::size($item),
-                    'url' => Storage::url($item),
+                    'url' => url('file/show/inquiry/' . $visitSchedule . '/' . explode('/', $item)[3]),
                 );
             }
 
@@ -218,6 +219,31 @@ class SourcingItemController extends Controller
             $visitSchedule = $inquiry->visit->uuid;
             $path = 'public/inquiry/' . $visitSchedule . '/' . $request->folderName;
             Storage::makeDirectory($path);
+            return response()->json([
+                'status' => 200,
+                'message' => 'success'
+            ]);
+        }
+    }
+
+    public function delete_file_folder(Request $request)
+    {
+        if ($request->ajax()) {
+            $so = SalesOrder::where('uuid', $request->inquiry)->first();
+            $inquiry = Inquiry::where('id', $so->inquiry_id)->first();
+            $visitSchedule = $inquiry->visit->uuid;
+            $files = $request->file;
+            foreach ($files as $file) {
+                $path = storage_path('app/public/inquiry/' . $visitSchedule . '/' . $file);
+
+                if (File::exists($path)) {
+                    if (File::isDirectory($path)) {
+                        File::deleteDirectory($path);
+                    } else {
+                        File::delete($path);
+                    }
+                }
+            }
             return response()->json([
                 'status' => 200,
                 'message' => 'success'

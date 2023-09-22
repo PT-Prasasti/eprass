@@ -276,6 +276,7 @@
             var uuid = ''
 
             $(document).ready(function() {
+                let totalRows = 0
                 listSO()
                 dataTable()
                 $('select[name=so]').select2()
@@ -293,8 +294,6 @@
                     })
                 })
             })
-
-            let totalRows = 0
 
             function dataTable(inquiry = null) {
                 $('#viewTable').html('')
@@ -526,11 +525,11 @@
                         inquiry: inquiry
                     },
                     success: function(response) {
-                        console.log(response)
                         $('#file-manager').html(``)
                         $('#file-manager').html(`
                             <div class="col-md-12 py-5 mb-5">
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newFolder"><i class="fa fa-plus"></i> New Folder</button>
+                                <button type="button" id="deleteFileFolder" class="btn btn-danger" hidden><i class="fa fa-trash"></i> Delete</button>
                             </div>
 
                             <div class="modal fade" id="newFolder" tabindex="-1" aria-labelledby="newFolderLabel" aria-hidden="true">
@@ -558,13 +557,12 @@
                             if (item.type == 'file') {
                                 html = `
                                     <div class="col-md-3 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f${index + 1}">
+                                        <a href="${item.url}" target="_blank" class="btn">
                                             <i class="fa fa-file" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
+                                        </a>
                                         <div class="custom-control custom-checkbox mb-5">
-                                            <input class="custom-control-input" type="checkbox" name="file"
-                                                id="file" data-file="${item.name}" value="">
+                                            <input class="custom-control-input" type="checkbox" name="f${index + 1}"
+                                                id="f${index + 1}" data-file="${item.name}" value="">
                                             <label class="custom-control-label" for="f${index + 1}">${item.name}</label>
                                     </div>
                                     `
@@ -576,14 +574,29 @@
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
-                                            <input class="custom-control-input" type="checkbox" name="folder"
-                                                id="folder" data-file="${item.name}" value="">
+                                            <input class="custom-control-input" type="checkbox" name="f${index + 1}"
+                                                id="f${index + 1}" data-file="${item.name}" value="">
                                             <label class="custom-control-label" for="f${index + 1}">${item.name}</label>
                                     </div>
                                     `
                             }
-                            $('#file-manager').append(html)
+                            $(document).on('click', `#f${index + 1}`, function() {
+                                // console.log($(this).data('file'))
+                                if ($('input[name^=f]:checked').length > 0) {
+                                    $('#deleteFileFolder').removeAttr('hidden');
 
+                                    $('#deleteFileFolder').click(function() {
+                                        let file = []
+                                        $('input[name^=f]:checked').each(function() {
+                                            file.push($(this).data('file'))
+                                        })
+                                        deleteSelectedFileFolder(file)
+                                    })
+                                } else {
+                                    $('#deleteFileFolder').attr('hidden', true);
+                                }
+                            })
+                            $('#file-manager').append(html)
                         })
                     },
                     error: function(xhr, status, error) {
@@ -606,6 +619,25 @@
                         console.log(response)
                         $('#newFolder').val('')
                         $('#newFolder').modal('hide')
+                        getStorage($('select[name=so]').val())
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function deleteSelectedFileFolder(file) {
+                $.ajax({
+                    url: "{{ route('transaction.sourcing-item.delete-file-folder') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        inquiry: $('select[name=so]').val(),
+                        file: file
+                    },
+                    success: function(response) {
+                        console.log(response)
                         getStorage($('select[name=so]').val())
                     },
                     error: function(xhr, status, error) {
