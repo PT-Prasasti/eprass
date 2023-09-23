@@ -231,7 +231,6 @@
                                                 <th class="text-center">Item Desc</th>
                                                 <th class="text-center">Qty</th>
                                                 <th class="text-center">Supplier</th>
-                                                <th class="text-center"><i class="fa fa-gear"></i></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -263,7 +262,6 @@
 
             $(document).ready(function() {
                 let totalRows = 0
-                dataTable()
                 getSODetail('{{ $so->uuid }}')
                 dataTable($('select[name=so]').val())
                 getStorage($('select[name=so]').val())
@@ -288,7 +286,6 @@
                                 <th class="text-center">Item Desc</th>
                                 <th class="text-center">Qty</th>
                                 <th class="text-center">Supplier</th>
-                                <th class="text-center"><i class="fa fa-gear"></i></th>
                             </tr>
                         </thead>
                     </table>
@@ -300,27 +297,6 @@
                     "paging": true,
                     "order": [
                         [0, "asc"]
-                    ],
-                    columnDefs: [{
-                            targets: 0,
-                            width: '10%'
-                        }, // Kolom ke-0
-                        {
-                            targets: 1,
-                            width: '35%'
-                        }, // Kolom ke-1
-                        {
-                            targets: 2,
-                            width: '15%'
-                        }, // Kolom ke-2
-                        {
-                            targets: 3,
-                            width: '30%'
-                        }, // Kolom ke-3
-                        {
-                            targets: 4,
-                            width: '10%'
-                        } // Kolom ke-4
                     ],
                     ajax: {
                         "url": "{{ route('transaction.sales-order.review_get_data') }}",
@@ -350,8 +326,8 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 const selectElement = $(
-                                    '<select class="form-control" name="supplier" data-index="' + row
-                                    .DT_RowIndex + '">');
+                                    '<select class="form-control" name="supplierSelected" data-index="' +
+                                    row.DT_RowIndex + '">');
 
                                 // Ubah data supplier dari string JSON menjadi objek jika diperlukan
                                 let supplierData = data;
@@ -366,34 +342,42 @@
                                 // Pastikan supplierData adalah array objek dan memiliki properti yang benar
                                 if (Array.isArray(supplierData) && supplierData.length > 0 && supplierData[0]
                                     .hasOwnProperty('id') && supplierData[0].hasOwnProperty('company')) {
-                                    // Jika hanya ada satu supplier, set langsung nilainya
-                                    if (supplierData.length === 1) {
-                                        selectElement.append('<option value="' + supplierData[0].id +
-                                            '" selected>' + supplierData[0].company + '</option>');
-                                    } else {
-                                        // Jika ada lebih dari satu supplier, tambahkan opsi-opsi
-                                        selectElement.append(
-                                            '<option selected disabled>Please select</option>');
 
-                                        // Loop melalui setiap objek supplier dan tambahkan opsi
-                                        supplierData.forEach(function(supplier) {
-                                            selectElement.append('<option value="' + supplier.id +
-                                                '">' + supplier.company + '</option>');
-                                        });
+                                    let hasSelectedOption = false;
+
+                                    supplierData.forEach(function(supplier) {
+                                        const option = $('<option value="' + supplier.id + '">' +
+                                            supplier.company + '</option>');
+
+                                        if (supplier.selected) {
+                                            option.prop('selected', true);
+                                            hasSelectedOption = true;
+                                        }
+
+                                        selectElement.append(option);
+                                    });
+
+                                    // Jika tidak ada yang dipilih (selected = false), tambahkan "Please select"
+                                    if (!hasSelectedOption) {
+                                        selectElement.prepend(
+                                            '<option selected disabled>Please select</option>');
                                     }
                                 }
 
+                                $(document).on("change", 'select[name=supplierSelected]', function() {
+                                    const selectedOption = $(this).find("option:selected");
+                                    if (selectedOption.length > 0) {
+                                        const supplierId = selectedOption.val();
+                                        const supplierCompany = selectedOption.text();
+
+                                        // Panggil fungsi dengan ID supplier dan nama perusahaan
+                                        saveSupplier(supplierId, supplierCompany);
+                                    }
+                                });
+
                                 return selectElement.prop('outerHTML');
                             }
-                        },
-                        {
-                            data: null,
-                            className: 'text-center',
-                            render: function(data, type, row) {
-                                return `
-                                    <button id="btnSaveSupplier" class="btn btn-success btn-sm" onclick="saveSupplier('${row.uuid}', '${row.DT_RowIndex}')"><i class="fa fa-save"></i></button>
-                                `;
-                            }
+
                         }
                     ],
                     "language ": {
@@ -406,6 +390,24 @@
                 table.on('draw.dt', function() {
                     totalRows = table.rows().count();
                 });
+            }
+
+            function saveSupplier(supplierId = null, supplierCompany = null) {
+                $.ajax({
+                    url: "{{ route('transaction.sales-order.review_set_supplier') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        supplier_id: supplierId,
+                        supplier_company: supplierCompany
+                    },
+                    success: function(response) {
+                        console.log(response)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
             }
 
             function listSO() {

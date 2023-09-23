@@ -23,4 +23,9 @@ class Supplier extends Model
             $model->uuid = (string) Uuid::generate(4);
         });
     }
+
+    public function selected_sourcing_suppliers()
+    {
+        return $this->hasMany(SelectedSourcingSupplier::class, 'supplier_id');
+    }
 }

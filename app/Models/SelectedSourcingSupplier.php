@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
 
-class Sourcing extends Model
+class SelectedSourcingSupplier extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -21,18 +21,18 @@ class Sourcing extends Model
         });
     }
 
+    public function sourcing()
+    {
+        return $this->belongsTo(Sourcing::class, 'sourcing_id', 'id');
+    }
+
     public function sourcing_supplier()
     {
-        return $this->hasMany(SourcingSupplier::class, 'sourcing_id');
+        return $this->belongsTo(SourcingSupplier::class, 'sourcing_supplier_id', 'id');
     }
 
-    public function sales_order()
+    public function supplier()
     {
-        return $this->belongsTo(SalesOrder::class, 'so_id', 'id');
-    }
-
-    public function selected_sourcing_suppliers()
-    {
-        return $this->hasMany(SelectedSourcingSupplier::class, 'sourcing_id');
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
 }

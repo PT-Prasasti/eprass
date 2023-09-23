@@ -210,6 +210,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/edit', [SalesOrderController::class, 'store_edit'])->name('.store-edit');
 
         Route::post('/reviews', [SalesOrderController::class, 'review_get_data'])->name('.review_get_data');
+        Route::post('/review-set-supplier', [SalesOrderController::class, 'set_supplier'])->name('.review_set_supplier');
     });
 
     // route transaction sourcing item
