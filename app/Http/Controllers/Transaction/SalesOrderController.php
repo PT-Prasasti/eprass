@@ -25,6 +25,8 @@ use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Transaction\AddSalesOrderRequest;
 use App\Http\Requests\Transaction\EditSalesOrderRequest;
+use App\Models\SourcingItem;
+use App\Models\SourcingSupplier;
 
 class SalesOrderController extends Controller
 {
@@ -696,6 +698,12 @@ class SalesOrderController extends Controller
         }
     }
 
+    public function open($id)
+    {
+        $so = SalesOrder::where('uuid', $id)->first();
+        return view('transaction.sales-order.open', compact('so'));
+    }
+
     public function view($id): View
     {
         $so = SalesOrder::where('uuid', $id)->first();
@@ -875,6 +883,46 @@ class SalesOrderController extends Controller
             return redirect()->back()->with('delete', Constants::STORE_DATA_DELETE_MSG);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
+    }
+
+    public function review_get_data(Request $request)
+    {
+        try {
+            // if ($request->ajax()) {
+            $salesOrder = SalesOrder::where('uuid', $request->inquiry)->first();
+            $data = InquiryProduct::where('inquiry_id', $salesOrder->inquiry_id)->get();
+
+            $result = DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('uuid', function ($q) {
+                    return $q->uuid;
+                })
+                ->addColumn('item_desc', function ($q) {
+                    return $q->description;
+                })
+                ->addColumn('qty', function ($q) {
+                    return $q->qty;
+                })
+                ->addColumn('supplier', function ($q) {
+                    $suppliers = $q->sourcing_items->map(function ($item) {
+                        $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+                        return [
+                            'id' => $supplier->id,
+                            'company' => $supplier->company,
+                        ];
+                    });
+                    return $suppliers;
+                })
+                ->make(true);
+
+            return $result;
+            // }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }

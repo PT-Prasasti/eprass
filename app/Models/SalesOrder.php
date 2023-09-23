@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SalesOrder extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     public $incrementing = false;
 
     protected $primaryKey = 'id';
@@ -34,5 +34,10 @@ class SalesOrder extends Model
     public function products()
     {
         return $this->hasMany(SalesOrderProduct::class, 'so_id');
+    }
+
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class, 'so_id');
     }
 }
