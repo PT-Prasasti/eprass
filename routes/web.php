@@ -231,6 +231,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::get('/download/product-list/pdf/{id}', [SourcingItemController::class, 'download_product_list_pdf'])->name('.download-product-list-pdf');
         Route::get('/edit/{id}', [SourcingItemController::class, 'edit'])->name('.edit');
         Route::get('/delete/{id}', [SourcingItemController::class, 'delete'])->name('.delete');
+        Route::get('/search_supplier', [SourcingItemController::class, 'get_supplier'])->name('.get_supplier');
 
         Route::post('/data', [SourcingItemController::class, 'data'])->name('.data');
         Route::post('/data-grade', [SourcingItemController::class, 'data_grade'])->name('.data-grade');

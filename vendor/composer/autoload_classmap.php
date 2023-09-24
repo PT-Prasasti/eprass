@@ -62,6 +62,7 @@ return array(
     'App\\Http\\Requests\\Transaction\\AddSalesOrderRequest' => $baseDir . '/app/Http/Requests/Transaction/AddSalesOrderRequest.php',
     'App\\Http\\Requests\\Transaction\\EditSalesOrderRequest' => $baseDir . '/app/Http/Requests/Transaction/EditSalesOrderRequest.php',
     'App\\Jobs\\SendMailVisitJob' => $baseDir . '/app/Jobs/SendMailVisitJob.php',
+    'App\\Mail\\ReportMail' => $baseDir . '/app/Mail/ReportMail.php',
     'App\\Mail\\VisitMail' => $baseDir . '/app/Mail/VisitMail.php',
     'App\\Models\\Customer' => $baseDir . '/app/Models/Customer.php',
     'App\\Models\\Enginer' => $baseDir . '/app/Models/Enginer.php',
