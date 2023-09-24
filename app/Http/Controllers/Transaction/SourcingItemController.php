@@ -11,6 +11,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
 use App\Models\InquiryProduct;
 use App\Models\Supplier;
+use App\Models\Sourcing;
+use App\Models\SourcingItem;
+use App\Models\SourcingSupplier;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
@@ -177,7 +180,31 @@ class SourcingItemController extends Controller
 
     public function store(Request $request) 
     {
+        // foreach($request->description as $desc) {
+        //     dd($desc);
+        // }
         dd($request);
+        try {
+            $sourcing = new Sourcing();
+            $sourcing->so_id    = $request->so;
+            $sourcing->save();
+
+            foreach($request->description as $key => $desc) {
+                $sourSup = new SourcingSupplier();
+                $sourSup->sourcing_id   = $sourcing->id;
+                $sourSup->supplier_id   = 11;
+                $sourSup->company       = "-";
+                $sourSup->item_name     = "-";
+                $sourSup->description   = $desc;
+                $sourSup->qty           = $request->quantity[$key];
+                $sourSup->unitprice     = $request->unitprice[$key];
+                $sourSup->price         = $request->price[$key];
+                $sourSup->dt            = $request->dt[$key];
+                $sourSup->save();
+            }
+        } catch (\Throwable $th) {
+            
+        }
     }
 
     public function get_storage(Request $request)

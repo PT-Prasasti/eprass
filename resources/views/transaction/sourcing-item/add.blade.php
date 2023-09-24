@@ -307,7 +307,7 @@
                 $('#viewTable').html('')
                 $('#viewTable').html(`
                     <table id="data_table"
-                        class="table table-striped table-vcenter table-bordered js-dataTable-full" style="font-size:10px; width: 100%;">
+                        class="table table-striped table-vcenter table-bordered js-dataTable-full" style="font-size:10px;">
                         <thead>
                             <tr>
                                 <th class="text-center">No.</th>
@@ -390,7 +390,8 @@
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="description['+data+'_1]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
-                            }
+                            },
+                            width: "120px"
                         },
                         {
                             data: "id",
@@ -412,7 +413,7 @@
                             }
                         },
                         {
-                            data: "dt",
+                            data: "id",
                             className: 'text-center bg-primary text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="dt['+data+'_1]" data-uuid="' +
@@ -422,7 +423,7 @@
 
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-success text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="description['+data+'_2]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -430,7 +431,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-success text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="quantity['+data+'_2]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -438,7 +439,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-success text-white',
                             render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_2]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
@@ -449,7 +450,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-success text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="dt['+data+'_2]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -459,7 +460,7 @@
 
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-warning text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="description['+data+'_3]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -467,7 +468,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-warning text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="quantity['+data+'_3]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -475,7 +476,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-warning text-white',
                             render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_3]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
@@ -486,7 +487,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-warning text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="dt['+data+'_3]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -496,7 +497,7 @@
 
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-info text-dark',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="description['+data+'_4]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -504,7 +505,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-info text-dark',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="quantity['+data+'_4]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -512,7 +513,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-info text-dark',
                             render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_4]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
@@ -523,7 +524,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-info text-dark',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="dt['+data+'_4]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -533,7 +534,7 @@
 
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-secondary text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="description['+data+'_5]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -541,7 +542,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-secondary text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="quantity['+data+'_5]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
@@ -549,7 +550,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-secondary text-white',
                             render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_5]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
@@ -560,7 +561,7 @@
                         },
                         {
                             data: "id",
-                            className: 'text-center',
+                            className: 'text-center bg-secondary text-white',
                             render: function(data, type, row) {
                                 return '<input type="text" class="form-control" name="dt['+data+'_5]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
