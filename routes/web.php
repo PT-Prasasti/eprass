@@ -188,6 +188,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::get('/customer/{id}', [SalesOrderController::class, 'customer_detail'])->name('.customer-detail');
         Route::get('/sales', [SalesOrderController::class, 'sales'])->name('.sales');
         Route::get('/sales/{id}', [SalesOrderController::class, 'sales_detail'])->name('.sales-detail');
+        Route::get('/open/{id}', [SalesOrderController::class, 'open'])->name('.open');
         Route::get('/view/{id}', [SalesOrderController::class, 'view'])->name('.view');
         Route::get('/download/product-list/excel/{id}', [SalesOrderController::class, 'download_product_list_excel'])->name('.download-product-list-excel');
         Route::get('/download/product-list/pdf/{id}', [SalesOrderController::class, 'download_product_list_pdf'])->name('.download-product-list-pdf');
@@ -207,6 +208,9 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/store-product', [SalesOrderController::class, 'store_product'])->name('.store-product');
         Route::post('/store', [SalesOrderController::class, 'store'])->name('.store');
         Route::post('/edit', [SalesOrderController::class, 'store_edit'])->name('.store-edit');
+
+        Route::post('/reviews', [SalesOrderController::class, 'review_get_data'])->name('.review_get_data');
+        Route::post('/review-set-supplier', [SalesOrderController::class, 'set_supplier'])->name('.review_set_supplier');
     });
 
     // route transaction sourcing item

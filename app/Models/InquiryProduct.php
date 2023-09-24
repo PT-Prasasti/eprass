@@ -20,10 +20,15 @@ class InquiryProduct extends Model
         self::creating(function ($model) {
             $model->uuid = (string) Uuid::generate(4);
         });
-    } 
-    
+    }
+
     public function inquiry()
     {
         return $this->belongsTo(Inquiry::class, 'inquiry_id');
+    }
+
+    public function sourcing_items()
+    {
+        return $this->hasMany(SourcingItem::class, 'inquiry_product_id');
     }
 }

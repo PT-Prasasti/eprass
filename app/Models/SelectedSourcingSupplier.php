@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
 
-class SourcingItem extends Model
+class SelectedSourcingSupplier extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -22,13 +21,18 @@ class SourcingItem extends Model
         });
     }
 
-    public function inquiry_product()
+    public function sourcing()
     {
-        return $this->belongsTo(InquiryProduct::class, 'inquiry_product_id');
+        return $this->belongsTo(Sourcing::class, 'sourcing_id', 'id');
     }
 
     public function sourcing_supplier()
     {
-        return $this->hasMany(SourcingSupplier::class, 'sourcing_id');
+        return $this->belongsTo(SourcingSupplier::class, 'sourcing_supplier_id', 'id');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
 }

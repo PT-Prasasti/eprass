@@ -25,6 +25,11 @@ use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Transaction\AddSalesOrderRequest;
 use App\Http\Requests\Transaction\EditSalesOrderRequest;
+use App\Models\SelectedSourcingSupplier;
+use App\Models\SourcingItem;
+use App\Models\SourcingSupplier;
+use App\Models\Supplier;
+use Webpatser\Uuid\Uuid;
 
 class SalesOrderController extends Controller
 {
@@ -696,6 +701,12 @@ class SalesOrderController extends Controller
         }
     }
 
+    public function open($id)
+    {
+        $so = SalesOrder::where('uuid', $id)->first();
+        return view('transaction.sales-order.open', compact('so'));
+    }
+
     public function view($id): View
     {
         $so = SalesOrder::where('uuid', $id)->first();
@@ -875,6 +886,93 @@ class SalesOrderController extends Controller
             return redirect()->back()->with('delete', Constants::STORE_DATA_DELETE_MSG);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
+    }
+
+    public function review_get_data(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $salesOrder = SalesOrder::where('uuid', $request->inquiry)->first();
+                $data = InquiryProduct::where('inquiry_id', $salesOrder->inquiry_id)->get();
+
+                $result = DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('uuid', function ($q) {
+                        return $q->uuid;
+                    })
+                    ->addColumn('item_desc', function ($q) {
+                        return $q->description;
+                    })
+                    ->addColumn('qty', function ($q) {
+                        return $q->qty;
+                    })
+                    ->addColumn('supplier', function ($q) {
+                        $suppliers = $q->sourcing_items->map(function ($item) {
+                            $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+                            $selectedSourcingSupplier = SelectedSourcingSupplier::where('sourcing_supplier_id', $item->sourcing_supplier_id)
+                                ->where('supplier_id', $supplier->id)
+                                ->first();
+
+                            if ($selectedSourcingSupplier) {
+                                return [
+                                    'id' => $supplier->id,
+                                    'company' => $supplier->company,
+                                    'selected' => true,
+                                ];
+                            } else {
+                                return [
+                                    'id' => $supplier->id,
+                                    'company' => $supplier->company,
+                                    'selected' => false,
+                                ];
+                            }
+                        });
+                        return $suppliers;
+                    })
+                    ->make(true);
+
+                return $result;
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function set_supplier(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $sourcingSupplier = SourcingSupplier::where('id', $request->supplier_id)->where('company', $request->supplier_company)->first();
+                $supplier = Supplier::where('company', $request->supplier_company)->first();
+
+                $selectedSupplier = SelectedSourcingSupplier::where('sourcing_id', $sourcingSupplier->sourcing_id)
+                    ->where('sourcing_supplier_id', $sourcingSupplier->id)
+                    ->where('supplier_id', $supplier->id)
+                    ->first();
+
+                if (!$selectedSupplier) {
+                    SelectedSourcingSupplier::create([
+                        'sourcing_id' => $sourcingSupplier->sourcing_id,
+                        'sourcing_supplier_id' => $sourcingSupplier->id,
+                        'supplier_id' => $supplier->id,
+                    ]);
+                }
+
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'success',
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }

@@ -180,10 +180,6 @@ class SourcingItemController extends Controller
 
     public function store(Request $request) 
     {
-        // foreach($request->description as $desc) {
-        //     dd($desc);
-        // }
-        dd($request);
         try {
             $sourcing = new Sourcing();
             $sourcing->so_id    = $request->so;
