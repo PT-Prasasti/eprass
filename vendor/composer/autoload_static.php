@@ -682,6 +682,7 @@ class ComposerStaticInit1fd42db4637a3459c0f750bf1f822c2f
         'App\\Http\\Requests\\Transaction\\AddSalesOrderRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Transaction/AddSalesOrderRequest.php',
         'App\\Http\\Requests\\Transaction\\EditSalesOrderRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Transaction/EditSalesOrderRequest.php',
         'App\\Jobs\\SendMailVisitJob' => __DIR__ . '/../..' . '/app/Jobs/SendMailVisitJob.php',
+        'App\\Mail\\ReportMail' => __DIR__ . '/../..' . '/app/Mail/ReportMail.php',
         'App\\Mail\\VisitMail' => __DIR__ . '/../..' . '/app/Mail/VisitMail.php',
         'App\\Models\\Customer' => __DIR__ . '/../..' . '/app/Models/Customer.php',
         'App\\Models\\Enginer' => __DIR__ . '/../..' . '/app/Models/Enginer.php',

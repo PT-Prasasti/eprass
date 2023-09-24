@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Inquiry;
 use App\Models\InquiryProduct;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
@@ -174,6 +175,11 @@ class SourcingItemController extends Controller
         // 
     }
 
+    public function store(Request $request) 
+    {
+        dd($request);
+    }
+
     public function get_storage(Request $request)
     {
         if ($request->ajax()) {
@@ -249,5 +255,18 @@ class SourcingItemController extends Controller
                 'message' => 'success'
             ]);
         }
+    }
+
+    public function get_supplier(Request $request): JsonResponse
+    {
+        if($request->q) {
+            $data = Supplier::where('company', 'LIKE', "%{$request->q}%")->limit(10)->get();
+
+            return response()->json($data);
+        }else {
+            $data = Supplier::limit(10)->get();
+            return response()->json($data);
+        }
+
     }
 }
