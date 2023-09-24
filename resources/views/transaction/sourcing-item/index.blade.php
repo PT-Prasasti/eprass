@@ -230,7 +230,7 @@
                                     @endif
                                     @if (auth()->user()->hasRole('purchasing') ||
                                             auth()->user()->hasRole('superadmin'))
-                                    <a href="sales-order/view/${data}" class="btn btn-sm btn-success" data-toggle="tooltip" title="Price">
+                                    <a href="sales-order/price/${data}" class="btn btn-sm btn-success" data-toggle="tooltip" title="Price">
                                         <i class="fa fa-dollar"></i>
                                     </a>
                                     <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sourcing Item">
