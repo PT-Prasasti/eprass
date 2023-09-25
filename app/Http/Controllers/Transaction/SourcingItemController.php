@@ -182,10 +182,16 @@ class SourcingItemController extends Controller
     {
         try {
             $sourcing = new Sourcing();
-            $sourcing->so_id    = $request->so;
+            $sourcing->so_id = $request->so;
             $sourcing->save();
-
-            foreach($request->description as $key => $desc) {
+        
+            $atLeastOneInputFilled = false;
+    
+            foreach ($request->description as $key => $desc) {
+                if (!empty($desc)) {
+                    $atLeastOneInputFilled = true;
+                }
+                
                 $sourSup = new SourcingSupplier();
                 $sourSup->sourcing_id   = $sourcing->id;
                 $sourSup->supplier_id   = 11;
@@ -198,10 +204,18 @@ class SourcingItemController extends Controller
                 $sourSup->dt            = $request->dt[$key];
                 $sourSup->save();
             }
+
+            if ($atLeastOneInputFilled) {
+                // Proses berhasil
+            } else {
+
+            }
+            return view('transaction.sourcing-item.index');
         } catch (\Throwable $th) {
-            
+            dd($th);
         }
     }
+    
 
     public function get_storage(Request $request)
     {
@@ -290,6 +304,7 @@ class SourcingItemController extends Controller
             $data = Supplier::limit(10)->get();
             return response()->json($data);
         }
-
     }
+
+    
 }

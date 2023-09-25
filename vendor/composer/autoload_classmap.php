@@ -71,6 +71,7 @@ return array(
     'App\\Models\\Sales' => $baseDir . '/app/Models/Sales.php',
     'App\\Models\\SalesOrder' => $baseDir . '/app/Models/SalesOrder.php',
     'App\\Models\\SalesOrderProduct' => $baseDir . '/app/Models/SalesOrderProduct.php',
+    'App\\Models\\SelectedSourcingSupplier' => $baseDir . '/app/Models/SelectedSourcingSupplier.php',
     'App\\Models\\Sourcing' => $baseDir . '/app/Models/Sourcing.php',
     'App\\Models\\SourcingItem' => $baseDir . '/app/Models/SourcingItem.php',
     'App\\Models\\SourcingSupplier' => $baseDir . '/app/Models/SourcingSupplier.php',
