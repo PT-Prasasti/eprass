@@ -28,7 +28,7 @@ class Sourcing extends Model
 
     public function sales_order()
     {
-        return $this->belongsTo(SalesOrder::class, 'so_id', 'id');
+        return $this->belongsTo(SalesOrder::class, 'so_id', 'uuid');
     }
 
     public function selected_sourcing_suppliers()

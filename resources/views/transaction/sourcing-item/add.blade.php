@@ -52,7 +52,8 @@
                                                             <label class="col-lg-3 col-form-label">Sales Name</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control" name="sales" value="" disabled>
+                                                                <input type="text" class="form-control"
+                                                                    name="sales" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -60,48 +61,56 @@
                                                                 Name</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control" name="customer" value="" readonly>
+                                                                <input type="text" class="form-control"
+                                                                    name="customer" value="" readonly>
                                                             </div>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control" name="company" value="" readonly>
+                                                                <input type="text" class="form-control"
+                                                                    name="company" value="" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Phone & Email</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control" name="phone" value="" disabled>
+                                                                <input type="text" class="form-control"
+                                                                    name="phone" value="" disabled>
                                                             </div>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control" name="email" value="" disabled>
+                                                                <input type="text" class="form-control"
+                                                                    name="email" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Telp</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control" name="company_phone" value="" disabled>
+                                                                <input type="text" class="form-control"
+                                                                    name="company_phone" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Subject</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control" name="subject" value="" disabled>
+                                                                <input type="text" class="form-control"
+                                                                    name="subject" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Due Date</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control" name="due_date" value="" disabled>
+                                                                <input type="text" class="form-control"
+                                                                    name="due_date" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Grade</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control" name="grade" value="" disabled>
+                                                                <input type="text" class="form-control"
+                                                                    name="grade" value="" disabled>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -132,15 +141,23 @@
                                             </div>
                                             <div class="col-md-6 text-right">
                                                 <div class="push">
-                                                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                                    <div class="btn-group" role="group"
+                                                        aria-label="Button group with nested dropdown">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button" class="btn btn-primary dropdown-toggle" id="btnGroupDrop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download
+                                                            <button type="button"
+                                                                class="btn btn-primary dropdown-toggle"
+                                                                id="btnGroupDrop1" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">Download
                                                                 Product List</button>
-                                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                                <a class="dropdown-item" id="download-excel" href="javascript:void(0)">
+                                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"
+                                                                x-placement="bottom-start"
+                                                                style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                <a class="dropdown-item" id="download-excel"
+                                                                    href="javascript:void(0)">
                                                                     Excel
                                                                 </a>
-                                                                <a class="dropdown-item" id="download-pdf" href="javascript:void(0)">
+                                                                <a class="dropdown-item" id="download-pdf"
+                                                                    href="javascript:void(0)">
                                                                     PDF
                                                                 </a>
                                                             </div>
@@ -149,7 +166,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <table class="table table-bordered table-vcenter js-dataTable-simple" style="font-size:13px">
+                                        <table class="table table-bordered table-vcenter js-dataTable-simple"
+                                            style="font-size:13px">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">No.</th>
@@ -192,7 +210,8 @@
                             <div class="tab-pane" id="btabs-static-review" role="tabpanel">
                                 <div class="text-right">
                                     <div class="push">
-                                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                        <div class="btn-group" role="group"
+                                            aria-label="Button group with nested dropdown">
                                             {{-- <button type="button" class="btn btn-primary">Time</button>
                                         <button type="button" class="btn btn-primary">Price</button>
                                         <button type="button" class="btn btn-primary">Desc</button> --}}
@@ -203,7 +222,9 @@
                                     </div>
                                 </div>
                                 <div id="viewTable" class="table-responsive">
-                                    <table id="data_table" class="table table-striped table-vcenter table-bordered js-dataTable-full" style="font-size:10px">
+                                    <table id="data_table"
+                                        class="table table-striped table-vcenter table-bordered js-dataTable-full"
+                                        style="font-size:10px">
                                         <thead>
                                             <tr>
                                                 <th class="text-center" style="width: 100px">Description</th>
@@ -258,25 +279,25 @@
                     })
 
                     $('#supplier1_17').select2({
-                        placeholder: "-- Choose  --"
-                        , allowClear: true
-                        , selectOnClose: true
-                        , width: '100%'
-                        , ajax: {
-                            url: "{{ route('transaction.sourcing-item.get_supplier') }}"
-                            , dataType: 'json'
-                            , delay: 250
-                            , processResults: function(data) {
+                        placeholder: "-- Choose  --",
+                        allowClear: true,
+                        selectOnClose: true,
+                        width: '100%',
+                        ajax: {
+                            url: "{{ route('transaction.sourcing-item.get_supplier') }}",
+                            dataType: 'json',
+                            delay: 250,
+                            processResults: function(data) {
                                 return {
                                     results: $.map(data, function(item) {
                                         return {
-                                            text: item.id + " - " + item.company
-                                            , id: item.id
-                                        , }
+                                            text: item.id + " - " + item.company,
+                                            id: item.id,
+                                        }
                                     })
                                 };
-                            }
-                            , cache: true
+                            },
+                            cache: true
                         }
                     });
                 })
@@ -289,15 +310,52 @@
                         class="table table-striped table-vcenter table-bordered js-dataTable-full" style="font-size:10px;">
                         <thead>
                             <tr>
-                                <th class="text-center">No.</th>
-                                <th class="text-center" style="width: 100px">Item Desc</th>
-                                <th class="text-center">Qty</th>
+                                <th rowspan="2" class="text-center">No.</th>
+                                <th rowspan="2" class="text-center" style="width: 100px">Item Desc</th>
+                                <th rowspan="2" class="text-center">Qty</th>
 
+                                <th colspan="4" class="text-center bg-primary text-white">
+                                    <select name="supplier_1" id="supplier1" class="form-control" data-plugin-selectTwo>
+                                        <option value="0" selected disabled>Please select</option>
+                                    @foreach (\App\Models\Supplier::all() as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->company }}</option>
+                                    @endforeach    
+                                </th>
+                                <th colspan="4" class="text-center bg-success text-white">
+                                    <select name="supplier_2" id="supplier1" class="form-control" data-plugin-selectTwo>
+                                        <option value="0" selected disabled>Please select</option>
+                                    @foreach (\App\Models\Supplier::all() as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->company }}</option>
+                                    @endforeach    
+                                </th>
+                                <th colspan="4" class="text-center bg-warning text-white">
+                                    <select name="supplier_3" id="supplier1" class="form-control" data-plugin-selectTwo>
+                                        <option value="0" selected disabled>Please select</option>
+                                    @foreach (\App\Models\Supplier::all() as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->company }}</option>
+                                    @endforeach    
+                                </th>
+                                <th colspan="4" class="text-center bg-info text-white">
+                                    <select name="supplier_4" id="supplier1" class="form-control" data-plugin-selectTwo>
+                                        <option value="0" selected disabled>Please select</option>
+                                    @foreach (\App\Models\Supplier::all() as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->company }}</option>
+                                    @endforeach    
+                                </th>
+                                <th colspan="4" class="text-center bg-secondary text-white">
+                                    <select name="supplier_5" id="supplier1" class="form-control" data-plugin-selectTwo>
+                                        <option value="0" selected disabled>Please select</option>
+                                    @foreach (\App\Models\Supplier::all() as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->company }}</option>
+                                    @endforeach    
+                                </th>
+                            </tr>
+                            <tr>
                                 <th class="text-center bg-primary text-white">Description</th>
                                 <th class="text-center bg-primary text-white">Qty</th>
                                 <th class="text-center bg-primary text-white">Unit Price</th>
                                 <th class="text-center bg-primary text-white">DT</th>
-
+                                
                                 <th class="text-center bg-success text-white">Description</th>
                                 <th class="text-center bg-success text-white">Qty</th>
                                 <th class="text-center bg-success text-white">Unit Price</th>
@@ -322,235 +380,269 @@
                     </table>
                 `)
                 const table = $('#data_table').DataTable({
-                    processing: true
-                    , serverSide: true
-                    , responsive: true
-                    , scrollX: true
-                    , "paging": true
-                    , "order": [
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    scrollX: true,
+                    "paging": true,
+                    "order": [
                         [0, "asc"]
-                    ]
-                    , ajax: {
-                        "url": "{{ route('transaction.sourcing-item.review_get_data') }}"
-                        , "type": "POST"
-                        , "data": {
-                            "_token": "{{ csrf_token() }}"
-                            , "inquiry": inquiry
+                    ],
+                    ajax: {
+                        "url": "{{ route('transaction.sourcing-item.review_get_data') }}",
+                        "type": "POST",
+                        "data": {
+                            "_token": "{{ csrf_token() }}",
+                            "inquiry": inquiry
                         }
-                    }
-                    , columns: [{
-                            data: 'DT_RowIndex'
-                            , orderable: false
-                            , searchable: false
-                            , width: '5%'
-                            , className: 'text-center'
-                        }
-                        , {
-                            data: 'item_desc'
-                            , className: 'text-center'
-                        , }
-                        , {
-                            data: 'qty'
-                            , className: 'text-center'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false,
+                            width: '5%',
+                            className: 'text-center'
+                        }, {
+                            data: 'item_desc',
+                            className: 'text-center',
+                        }, {
+                            data: 'qty',
+                            className: 'text-center'
                         },
 
                         // {
                         //     data: "id",
                         //     className: 'text-center bg-primary text-white',
                         //     render: function(data, type, row) {
-                        //         return `<div><select class="form-control" name="suppiler['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
-                        //                     <option value="0" selected disabled>Please select</option>
-                        //                 </select></div>`
+                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
+                //     <option value="0" selected disabled>Please select</option>
+                // </select></div>`
                         //     }
                         // },
                         {
-                            data: "id"
-                            , className: 'text-center bg-primary text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data + '_1]" data-uuid="' +
+                            data: "id",
+                            className: 'text-center bg-primary text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="description[' + data +
+                                    '_1]" data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            },
+                            width: "120px"
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-primary text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity[' + data +
+                                    '_1]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                            , width: "120px"
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-primary text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data + '_1]" data-uuid="' +
-                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
-                            }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-primary text-white'
-                            , render: function(data, type, row) {
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-primary text-white',
+                            render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_1]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
                                     <option value="1">Rp</option> 
                                     <option value="2">$</option> 
                                 </select > <input type="text" class="form-control" name="price[${data}_1]" value="">`
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-primary text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data + '_1]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-primary text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="dt[' + data +
+                                    '_1]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
 
+                        // {
+                        //     data: "id",
+                        //     className: 'text-center bg-primary text-white',
+                        //     render: function(data, type, row) {
+                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
+                //     <option value="0" selected disabled>Please select</option>
+                // </select></div>`
+                        //     }
+                        // },
                         {
-                            data: "id"
-                            , className: 'text-center bg-success text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data + '_2]" data-uuid="' +
+                            data: "id",
+                            className: 'text-center bg-success text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="description[' + data +
+                                    '_2]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-success text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data + '_2]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-success text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity[' + data +
+                                    '_2]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-success text-white'
-                            , render: function(data, type, row) {
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-success text-white',
+                            render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_2]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
                                     <option value="1">Rp</option> 
                                     <option value="2">$</option> 
                                 </select > <input type="text" class="form-control" name="price[${data}_2]" >`
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-success text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data + '_2]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-success text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="dt[' + data +
+                                    '_2]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
 
 
+                        // {
+                        //     data: "id",
+                        //     className: 'text-center bg-primary text-white',
+                        //     render: function(data, type, row) {
+                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
+                //     <option value="0" selected disabled>Please select</option>
+                // </select></div>`
+                        //     }
+                        // },
                         {
-                            data: "id"
-                            , className: 'text-center bg-warning text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data + '_3]" data-uuid="' +
+                            data: "id",
+                            className: 'text-center bg-warning text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="description[' + data +
+                                    '_3]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-warning text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data + '_3]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-warning text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity[' + data +
+                                    '_3]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-warning text-white'
-                            , render: function(data, type, row) {
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-warning text-white',
+                            render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_3]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
                                     <option value="1">Rp</option> 
                                     <option value="2">$</option> 
                                 </select > <input type="text" class="form-control" name="price[${data}_3]" >`
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-warning text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data + '_3]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-warning text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="dt[' + data +
+                                    '_3]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
 
 
+                        // {
+                        //     data: "id",
+                        //     className: 'text-center bg-primary text-white',
+                        //     render: function(data, type, row) {
+                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
+                //     <option value="0" selected disabled>Please select</option>
+                // </select></div>`
+                        //     }
+                        // },
                         {
-                            data: "id"
-                            , className: 'text-center bg-info text-dark'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data + '_4]" data-uuid="' +
+                            data: "id",
+                            className: 'text-center bg-info text-dark',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="description[' + data +
+                                    '_4]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-info text-dark'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data + '_4]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-info text-dark',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity[' + data +
+                                    '_4]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-info text-dark'
-                            , render: function(data, type, row) {
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-info text-dark',
+                            render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_4]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
                                     <option value="1">Rp</option> 
                                     <option value="2">$</option> 
                                 </select > <input type="text" class="form-control" name="price[${data}_4]" >`
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-info text-dark'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data + '_4]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-info text-dark',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="dt[' + data +
+                                    '_4]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
 
 
+                        // {
+                        //     data: "id",
+                        //     className: 'text-center bg-primary text-white',
+                        //     render: function(data, type, row) {
+                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
+                //     <option value="0" selected disabled>Please select</option>
+                // </select></div>`
+                        //     }
+                        // },
                         {
-                            data: "id"
-                            , className: 'text-center bg-secondary text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data + '_5]" data-uuid="' +
+                            data: "id",
+                            className: 'text-center bg-secondary text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="description[' + data +
+                                    '_5]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-secondary text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data + '_5]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-secondary text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity[' + data +
+                                    '_5]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-secondary text-white'
-                            , render: function(data, type, row) {
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-secondary text-white',
+                            render: function(data, type, row) {
                                 return `
                                 <select name="unitprice[${data}_5]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
                                     <option value="1">Rp</option> 
                                     <option value="2">$</option> 
                                 </select > <input type="text" class="form-control" name="price[${data}_5]" >`
                             }
-                        }
-                        , {
-                            data: "id"
-                            , className: 'text-center bg-secondary text-white'
-                            , render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data + '_5]" data-uuid="' +
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-secondary text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="dt[' + data +
+                                    '_5]" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
-                        }
-                    , ]
-                    , "language": {
+                        },
+                    ],
+                    "language": {
                         "paginate": {
-                            "previous": '<i class="fa fa-angle-left"></i>'
-                            , "next": '<i class="fa fa-angle-right"></i>'
+                            "previous": '<i class="fa fa-angle-left"></i>',
+                            "next": '<i class="fa fa-angle-right"></i>'
                         }
                     }
                 })
@@ -596,16 +688,16 @@
 
             function getPdf(id) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.get-pdf') }}"
-                    , type: "POST"
-                    , data: {
-                        _token: "{{ csrf_token() }}"
-                        , so: id
-                    }
-                    , success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.get-pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        so: id
+                    },
+                    success: function(response) {
                         listItemPdf(response.status, response.data)
-                    }
-                    , error: function(xhr, status, error) {
+                    },
+                    error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -632,20 +724,20 @@
 
             function getProductList(id) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.get-product') }}"
-                    , type: "POST"
-                    , data: {
-                        _token: "{{ csrf_token() }}"
-                        , so: id
-                    }
-                    , success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.get-product') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        so: id
+                    },
+                    success: function(response) {
                         listItemTable(response.status, response.data)
                         $('#download-excel').attr('href', '/transaction/sales-order/download/product-list/excel/' +
                             response.uuid)
                         $('#download-pdf').attr('href', '/transaction/sales-order/download/product-list/pdf/' +
                             response.uuid)
-                    }
-                    , error: function(xhr, status, error) {
+                    },
+                    error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -673,13 +765,13 @@
 
             function getStorage(inquiry = null) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.get-storage') }}"
-                    , type: "POST"
-                    , data: {
-                        _token: "{{ csrf_token() }}"
-                        , inquiry: inquiry
-                    }
-                    , success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.get-storage') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        inquiry: inquiry
+                    },
+                    success: function(response) {
                         $('#file-manager').html(``)
                         $('#file-manager').html(`
                             <div class="col-md-12 py-5 mb-5">
@@ -795,8 +887,8 @@
                             })
                             $('#file-manager').append(html)
                         })
-                    }
-                    , error: function(xhr, status, error) {
+                    },
+                    error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -805,20 +897,20 @@
             function saveNewFolder() {
                 let folderName = $('#nameFolder').val()
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.save-folder') }}"
-                    , type: "POST"
-                    , data: {
-                        _token: "{{ csrf_token() }}"
-                        , inquiry: $('select[name=so]').val()
-                        , folderName: folderName
-                    }
-                    , success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.save-folder') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        inquiry: $('select[name=so]').val(),
+                        folderName: folderName
+                    },
+                    success: function(response) {
                         console.log(response)
                         $('#newFolder').val('')
                         $('#newFolder').modal('hide')
                         getStorage($('select[name=so]').val())
-                    }
-                    , error: function(xhr, status, error) {
+                    },
+                    error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -826,23 +918,22 @@
 
             function deleteSelectedFileFolder(file) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.delete-file-folder') }}"
-                    , type: "POST"
-                    , data: {
-                        _token: "{{ csrf_token() }}"
-                        , inquiry: $('select[name=so]').val()
-                        , file: file
-                    }
-                    , success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.delete-file-folder') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        inquiry: $('select[name=so]').val(),
+                        file: file
+                    },
+                    success: function(response) {
                         console.log(response)
                         getStorage($('select[name=so]').val())
-                    }
-                    , error: function(xhr, status, error) {
+                    },
+                    error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
             }
-
         </script>
     </x-slot>
 

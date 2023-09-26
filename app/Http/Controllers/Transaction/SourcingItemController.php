@@ -178,44 +178,49 @@ class SourcingItemController extends Controller
         // 
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         try {
             $sourcing = new Sourcing();
             $sourcing->so_id = $request->so;
             $sourcing->save();
-        
+
             $atLeastOneInputFilled = false;
-    
+
+            $counter = 1;
             foreach ($request->description as $key => $desc) {
                 if (!empty($desc)) {
                     $atLeastOneInputFilled = true;
                 }
-                
-                $sourSup = new SourcingSupplier();
-                $sourSup->sourcing_id   = $sourcing->id;
-                $sourSup->supplier_id   = 11;
-                $sourSup->company       = "-";
-                $sourSup->item_name     = "-";
-                $sourSup->description   = $desc;
-                $sourSup->qty           = $request->quantity[$key];
-                $sourSup->unitprice     = $request->unitprice[$key];
-                $sourSup->price         = $request->price[$key];
-                $sourSup->dt            = $request->dt[$key];
-                $sourSup->save();
+
+                $supplier = Supplier::where('id', $counter)->first();
+                if ($supplier) {
+                    $sourSup = new SourcingSupplier();
+                    $sourSup->sourcing_id = $sourcing->id;
+                    $sourSup->supplier_id = $supplier->id;
+                    $sourSup->company = $supplier->company;
+                    $sourSup->item_name = '-';
+                    $sourSup->description = $desc;
+                    $sourSup->qty = $request->quantity[$key];
+                    $sourSup->unitprice = $request->unitprice[$key];
+                    $sourSup->price = $request->price[$key];
+                    $sourSup->dt = $request->dt[$key];
+                    $sourSup->save();
+                }
+
+                $counter++;
             }
 
             if ($atLeastOneInputFilled) {
                 // Proses berhasil
             } else {
-
             }
             return view('transaction.sourcing-item.index');
         } catch (\Throwable $th) {
             dd($th);
         }
     }
-    
+
 
     public function get_storage(Request $request)
     {
@@ -296,15 +301,13 @@ class SourcingItemController extends Controller
 
     public function get_supplier(Request $request): JsonResponse
     {
-        if($request->q) {
+        if ($request->q) {
             $data = Supplier::where('company', 'LIKE', "%{$request->q}%")->limit(10)->get();
 
             return response()->json($data);
-        }else {
+        } else {
             $data = Supplier::limit(10)->get();
             return response()->json($data);
         }
     }
-
-    
 }
