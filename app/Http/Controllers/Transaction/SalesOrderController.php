@@ -1008,7 +1008,7 @@ class SalesOrderController extends Controller
                         if ($supplierData === null && isset($item->sourcing_supplier)) {
                             $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
                             $selectedSourcingSupplier = SelectedSourcingSupplier::where('sourcing_supplier_id', $item->sourcing_supplier_id)
-                                ->where('supplier_id', $supplier->id)
+                                // ->where('supplier_id', $supplier->id)
                                 ->take(1)
                                 ->first();
 
@@ -1083,7 +1083,7 @@ class SalesOrderController extends Controller
     {
         try {
             $apiUrl = 'https://openexchangerates.org/api/latest.json';
-            $api_key = config('app.currency_api_key');
+            $api_key = config('app.api_currency_convert');
             $base = 'USD';
             $target = 'IDR';
 
@@ -1096,16 +1096,17 @@ class SalesOrderController extends Controller
             if ($response->successful()) {
                 $data = $response->json();
 
-                if (isset($data['rates']) && is_array($data['rates'])) {
-                    $exchangeRate = $data['rates'][$target];
-                    $amountIdr = $request->usd * $exchangeRate;
+                $exchangeRate = $data['rates'][$target];
+                $amountIdr = $request->usd * ($exchangeRate + 2000);
 
-                    return response()->json([
-                        'status' => 200,
-                        'message' => 'success',
-                        'amount' => $amountIdr
-                    ]);
-                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'success',
+                    'amount' => $amountIdr
+                ]);
+                \dd('blok');
+            } else {
+                \dd('ppp');
             }
         } catch (\Throwable $th) {
             dd($th);

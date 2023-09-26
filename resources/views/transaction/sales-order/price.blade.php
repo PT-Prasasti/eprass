@@ -30,6 +30,7 @@
                                             <th class="text-center">Currency</th>
                                             <th class="text-center">Shipping Fee</th>
                                             <th class="text-center">Profit</th>
+                                            <th class="text-center">Unit Selling Price</th>
                                             <th class="text-center">Total</th>
                                         </tr>
                                     </thead>
@@ -50,39 +51,6 @@
         <script>
             $(document).ready(function() {
                 dataTable()
-
-                $('#data_table').on('change',
-                    'select[name="currency"], input[name="dt_production"], input[name="price"], select[name="shipping_fee"], select[name="profit"]',
-                    function() {
-                        var row = $(this).closest('tr')
-                        var currency = row.find('select[name="currency"]').val()
-                        var unitPrice = parseFloat(row.data().price)
-                        var shippingFee = parseFloat(row.find('select[name="shipping_fee"]').val())
-                        var profit = parseFloat(row.find('select[name="profit"]').val())
-                        var dtProduction = parseFloat(row.find('input[name="dt_production"]').val())
-
-                        // console.log(currency, unitPrice, shippingFee, profit, dtProduction)
-
-                        if (!isNaN(unitPrice) && !isNaN(shippingFee) && !isNaN(profit) && !isNaN(dtProduction)) {
-                            if (currency == 'USD') {
-                                currencyConverter(unitPrice, function(currencyData) {
-                                    if (currencyData) {
-                                        var total = ((currencyData.amount + 2000) * shippingFee / profit) *
-                                            dtProduction;
-                                        row.find('p.total-cell').html(total.toFixed(2))
-                                    } else {
-                                        row.find('p.total-cell').html('')
-                                    }
-                                })
-                            } else {
-                                var total = (unitPrice * shippingFee / profit) * dtProduction;
-                                row.find('p.total-cell').html(total.toFixed(2))
-                            }
-                            console.log(total);
-                        } else {
-                            row.find('p.total-cell').html('')
-                        }
-                    })
             })
 
             function dataTable() {
@@ -104,6 +72,7 @@
                                 <th class="text-center">Currency</th>
                                 <th class="text-center">Shipping Fee</th>
                                 <th class="text-center">Profit</th>
+                                <th class="text-center">Unit Selling Price</th>
                                 <th class="text-center">Total</th>
                             </tr>
                         </thead>
@@ -154,14 +123,14 @@
                         },
                         {
                             data: 'price',
-                            className: 'text-center'
+                            className: 'text-center unit-price'
                         },
                         {
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <input type="number" class="form-control" name="dt_production">
+                                    <input type="text" class="form-control" name="dt_production">
                                 `
                             }
                         },
@@ -170,7 +139,7 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <input type="number" class="form-control" name="delivery_time">
+                                    <input type="text" class="form-control" name="delivery_time">
                                 `
                             }
                         },
@@ -211,6 +180,7 @@
                         {
                             data: 'id',
                             className: 'text-center',
+                            width: '8%',
                             render: function(data, type, row) {
                                 return `
                                     <select class="form-control" name="profit">
@@ -233,10 +203,19 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <p class="total-cell p-0"></p>
+                                    <span class="unit-selling-price p-0"></span>
                                 `
                             }
-                        }
+                        },
+                        {
+                            data: 'id',
+                            className: 'text-center',
+                            render: function(data, type, row) {
+                                return `
+                                    <span class="total-cell p-0"></span>
+                                `
+                            }
+                        },
 
                     ],
                     "language ": {
@@ -246,9 +225,45 @@
                         }
                     }
                 })
-                table.on('draw.dt', function() {
-                    totalRows = table.rows().count();
-                });
+                $('#data_table').on('change',
+                    'select[name="currency"], input[name="dt_production"], input[name="price"], select[name="shipping_fee"], select[name="profit"]',
+                    function() {
+                        var row = $(this).closest('tr')
+                        var currency = row.find('select[name="currency"]').val()
+                        var unitPrice = parseFloat(row.find('td:nth-child(7)').html())
+                        var shippingFee = parseFloat(row.find('select[name="shipping_fee"]').val())
+                        var profit = parseFloat(row.find('select[name="profit"]').val())
+                        var dtProduction = parseFloat(row.find('input[name="dt_production"]').val())
+                        var qty = parseFloat(row.find('td:nth-child(3)').html())
+
+                        if (currency != null && !isNaN(shippingFee) && !isNaN(profit) && !isNaN(qty)) {
+                            if (currency == 'USD') {
+                                currencyConverter(unitPrice, function(currencyData) {
+                                    if (currencyData) {
+                                        var total = (currencyData.amount * shippingFee / profit) *
+                                            qty;
+                                        var unitSellingPrice = currencyData.amount * shippingFee /
+                                            profit;
+                                        row.find('td:nth-child(14)').html(formatCurrency(total))
+                                        row.find('td:nth-child(13)').html(formatCurrency(
+                                            unitSellingPrice))
+                                    } else {
+                                        row.find('td:nth-child(14)').html('')
+                                        row.find('td:nth-child(13)').html('')
+                                    }
+                                })
+                            } else {
+                                var total = (unitPrice * shippingFee / profit) * qty;
+                                var unitSellingPrice = unitPrice * shippingFee / profit;
+                                row.find('td:nth-child(14)').html(formatCurrency(total))
+                                row.find('td:nth-child(13)').html(formatCurrency(unitSellingPrice))
+                            }
+                            console.log(total);
+                        } else {
+                            row.find('td:nth-child(14)').html('')
+                            row.find('td:nth-child(13)').html('')
+                        }
+                    })
             }
 
             function currencyConverter(usd, callback) {
@@ -268,6 +283,13 @@
                         callback(null)
                     }
                 })
+            }
+
+            function formatCurrency(amount) {
+                return amount.toLocaleString('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR'
+                });
             }
         </script>
     </x-slot>
