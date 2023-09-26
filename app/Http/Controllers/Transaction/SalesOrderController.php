@@ -29,6 +29,7 @@ use App\Models\SelectedSourcingSupplier;
 use App\Models\SourcingItem;
 use App\Models\SourcingSupplier;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\Http;
 use Webpatser\Uuid\Uuid;
 
 class SalesOrderController extends Controller
@@ -984,90 +985,130 @@ class SalesOrderController extends Controller
 
     public function product_lists(Request $request)
     {
-        $so = SalesOrder::where('uuid', $request->so)->first();
-        $data = InquiryProduct::where('inquiry_id', $so->inquiry_id)->get();
+        try {
+            $so = SalesOrder::where('uuid', $request->so)->first();
+            $data = InquiryProduct::where('inquiry_id', $so->inquiry_id)->get();
 
-        $result = DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('uuid', function ($q) {
-                return $q->uuid;
-            })
-            ->addColumn('item_desc', function ($q) {
-                return $q->description;
-            })
-            ->addColumn('qty', function ($q) {
-                return $q->qty;
-            })
-            ->addColumn('supplier', function ($q) {
-                $supplierData = null; // Inisialisasi data supplier
+            $result = DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('uuid', function ($q) {
+                    return $q->uuid;
+                })
+                ->addColumn('item_desc', function ($q) {
+                    return $q->description;
+                })
+                ->addColumn('qty', function ($q) {
+                    return $q->qty;
+                })
+                ->addColumn('supplier', function ($q) {
+                    $supplierData = null; // Inisialisasi data supplier
 
-                $q->sourcing_items->each(function ($item) use (&$supplierData) {
-                    // Cek apakah $supplierData masih null dan $item memiliki sourcing_supplier
-                    if ($supplierData === null && isset($item->sourcing_supplier)) {
-                        $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
-                        $selectedSourcingSupplier = SelectedSourcingSupplier::where('sourcing_supplier_id', $item->sourcing_supplier_id)
-                            ->where('supplier_id', $supplier->id)
-                            ->take(1)
-                            ->first();
+                    $q->sourcing_items->each(function ($item) use (&$supplierData) {
+                        // Cek apakah $supplierData masih null dan $item memiliki sourcing_supplier
+                        if ($supplierData === null && isset($item->sourcing_supplier)) {
+                            $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+                            $selectedSourcingSupplier = SelectedSourcingSupplier::where('sourcing_supplier_id', $item->sourcing_supplier_id)
+                                ->where('supplier_id', $supplier->id)
+                                ->take(1)
+                                ->first();
 
-                        if ($selectedSourcingSupplier) {
-                            // Jika ditemukan supplier yang sesuai, simpan data dan hentikan iterasi
-                            $supplierData = [
-                                'id' => $selectedSourcingSupplier->id,
-                                'company' => $supplier->company
-                            ];
+                            if ($selectedSourcingSupplier) {
+                                // Jika ditemukan supplier yang sesuai, simpan data dan hentikan iterasi
+                                $supplierData = $supplier->company;
+                            }
                         }
+                    });
+
+                    // Jika $supplierData tidak null, Anda memiliki data supplier yang sesuai
+                    if ($supplierData !== null) {
+                        // Gunakan $supplierData untuk melakukan apa yang Anda butuhkan
+                        return $supplierData;
+                    } else {
+                        // Tidak ada supplier yang sesuai, atau semua supplier adalah null
+                        return null;
                     }
-                });
+                })
+                ->addColumn('description', function ($q) {
+                    $supplierDescription = null; // Inisialisasi deskripsi supplier
 
-                // Jika $supplierData tidak null, Anda memiliki data supplier yang sesuai
-                if ($supplierData !== null) {
-                    // Gunakan $supplierData untuk melakukan apa yang Anda butuhkan
-                    return $supplierData;
-                } else {
-                    // Tidak ada supplier yang sesuai, atau semua supplier adalah null
-                    return null;
-                }
-            })
-            ->addColumn('description', function ($q) {
-                $supplierDescription = null; // Inisialisasi deskripsi supplier
+                    $q->sourcing_items->each(function ($item) use (&$supplierDescription) {
+                        // Cek apakah $supplierDescription masih null dan $item memiliki sourcing_supplier
+                        if ($supplierDescription === null && isset($item->sourcing_supplier)) {
+                            $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+                            if ($supplier) {
+                                $supplierDescription = $supplier->description;
+                            }
+                        }
+                    });
 
-                $q->sourcing_items->each(function ($item) use (&$supplierDescription) {
-                    // Cek apakah $supplierDescription masih null dan $item memiliki sourcing_supplier
-                    if ($supplierDescription === null && isset($item->sourcing_supplier)) {
+                    // Jika $supplierDescription tidak null, Anda memiliki deskripsi supplier yang sesuai
+                    if ($supplierDescription !== null) {
+                        // Gunakan $supplierDescription untuk melakukan apa yang Anda butuhkan
+                        return $supplierDescription;
+                    } else {
+                        // Tidak ada deskripsi supplier yang sesuai, atau semua supplier adalah null
+                        return null;
+                    }
+                })
+                ->addColumn('qty_sourcing', function ($q) {
+                    $totalQty = 0;
+                    $q->sourcing_items->map(function ($item) use (&$totalQty) {
                         $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+
                         if ($supplier) {
-                            $supplierDescription = $supplier->description;
-                        }
-                    }
-                });
+                            return $totalQty += $supplier->qty;
+                        };
+                    });
+                    return $totalQty;
+                })
+                ->addColumn('price', function ($q) {
+                    $totalPrice = 0;
+                    $q->sourcing_items->map(function ($item) use (&$totalPrice) {
+                        $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
 
-                // Jika $supplierDescription tidak null, Anda memiliki deskripsi supplier yang sesuai
-                if ($supplierDescription !== null) {
-                    // Gunakan $supplierDescription untuk melakukan apa yang Anda butuhkan
-                    return $supplierDescription;
-                } else {
-                    // Tidak ada deskripsi supplier yang sesuai, atau semua supplier adalah null
-                    return null;
+                        if ($supplier) {
+                            return $totalPrice += $supplier->price;
+                        };
+                    });
+                    return $totalPrice;
+                })
+                ->make(true);
+            return $result;
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+    }
+
+    public function currency_converter(Request $request)
+    {
+        try {
+            $apiUrl = 'https://openexchangerates.org/api/latest.json';
+            $api_key = config('app.currency_api_key');
+            $base = 'USD';
+            $target = 'IDR';
+
+
+            $response = Http::get($apiUrl, [
+                'app_id' => $api_key,
+                'base' => $base,
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                if (isset($data['rates']) && is_array($data['rates'])) {
+                    $exchangeRate = $data['rates'][$target];
+                    $amountIdr = $request->usd * $exchangeRate;
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'success',
+                        'amount' => $amountIdr
+                    ]);
                 }
-            })
-            ->addColumn('qty_sourcing', function ($q) {
-                $suppliers = $q->sourcing_items->map(function ($item) {
-                    $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
-
-                    return $supplier->qty;
-                });
-                return $suppliers;
-            })
-            ->addColumn('price', function ($q) {
-                $suppliers = $q->sourcing_items->map(function ($item) {
-                    $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
-
-                    return $supplier->price;
-                });
-                return $suppliers;
-            })
-            ->make(true);
-        return $result;
+            }
+        } catch (\Throwable $th) {
+            dd($th);
+        }
     }
 }
