@@ -288,7 +288,7 @@
                         <thead>
                             <tr>
                                 <th rowspan="2" class="text-center">No.</th>
-                                <th rowspan="2" class="text-center">Item Desc</th>
+                                <th rowspan="2" class="text-center" style="width: 200px;">Item Desc</th>
                                 <th rowspan="2" class="text-center">Qty</th>
 
                                 <th colspan="4" class="text-center bg-primary text-white">
@@ -387,15 +387,6 @@
                             className: 'text-center'
                         },
 
-                        // {
-                        //     data: "id",
-                        //     className: 'text-center bg-primary text-white',
-                        //     render: function(data, type, row) {
-                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
-                //     <option value="0" selected disabled>Please select</option>
-                // </select></div>`
-                        //     }
-                        // },
                         {
                             data: "id",
                             className: 'text-center bg-primary text-white',
@@ -426,185 +417,122 @@
                             }
                         },
 
-                        // {
-                        //     data: "id",
-                        //     className: 'text-center bg-primary text-white',
-                        //     render: function(data, type, row) {
-                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
-                //     <option value="0" selected disabled>Please select</option>
-                // </select></div>`
-                        //     }
-                        // },
                         {
                             data: "id",
                             className: 'text-center bg-success text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data +
-                                    '_2]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="description_2" data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            },
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-success text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity_2" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-success text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data +
-                                    '_2]" data-uuid="' +
-                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                                return '<input type="text" class="form-control" name="price_2" data-index="' +
+                                    row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-success text-white',
                             render: function(data, type, row) {
-                                return `
-                                <select name="unitprice[${data}_2]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
-                                    <option value="1">Rp</option> 
-                                    <option value="2">$</option> 
-                                </select > <input type="text" class="form-control" name="price[${data}_2]" >`
-                            }
-                        }, {
-                            data: "id",
-                            className: 'text-center bg-success text-white',
-                            render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data +
-                                    '_2]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="dt_2" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
 
-
-                        // {
-                        //     data: "id",
-                        //     className: 'text-center bg-primary text-white',
-                        //     render: function(data, type, row) {
-                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
-                //     <option value="0" selected disabled>Please select</option>
-                // </select></div>`
-                        //     }
-                        // },
                         {
                             data: "id",
                             className: 'text-center bg-warning text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data +
-                                    '_3]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="description_3" data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            },
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-warning text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity_3" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-warning text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data +
-                                    '_3]" data-uuid="' +
-                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                                return '<input type="text" class="form-control" name="price_3" data-index="' +
+                                    row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-warning text-white',
                             render: function(data, type, row) {
-                                return `
-                                <select name="unitprice[${data}_3]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
-                                    <option value="1">Rp</option> 
-                                    <option value="2">$</option> 
-                                </select > <input type="text" class="form-control" name="price[${data}_3]" >`
-                            }
-                        }, {
-                            data: "id",
-                            className: 'text-center bg-warning text-white',
-                            render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data +
-                                    '_3]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="dt_3" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
 
-
-                        // {
-                        //     data: "id",
-                        //     className: 'text-center bg-primary text-white',
-                        //     render: function(data, type, row) {
-                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
-                //     <option value="0" selected disabled>Please select</option>
-                // </select></div>`
-                        //     }
-                        // },
                         {
                             data: "id",
-                            className: 'text-center bg-info text-dark',
+                            className: 'text-center bg-info text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data +
-                                    '_4]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="description_4" data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            },
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-info text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity_4" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
-                            className: 'text-center bg-info text-dark',
+                            className: 'text-center bg-info text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data +
-                                    '_4]" data-uuid="' +
-                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                                return '<input type="text" class="form-control" name="price_4" data-index="' +
+                                    row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
-                            className: 'text-center bg-info text-dark',
+                            className: 'text-center bg-info text-white',
                             render: function(data, type, row) {
-                                return `
-                                <select name="unitprice[${data}_4]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
-                                    <option value="1">Rp</option> 
-                                    <option value="2">$</option> 
-                                </select > <input type="text" class="form-control" name="price[${data}_4]" >`
-                            }
-                        }, {
-                            data: "id",
-                            className: 'text-center bg-info text-dark',
-                            render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data +
-                                    '_4]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="dt_4" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
 
-
-                        // {
-                        //     data: "id",
-                        //     className: 'text-center bg-primary text-white',
-                        //     render: function(data, type, row) {
-                        //         return `<div><select class="form-control" name="supplier['+data+'][]" data-plugin-selectTwo  id="supplier1_${data}">
-                //     <option value="0" selected disabled>Please select</option>
-                // </select></div>`
-                        //     }
-                        // },
                         {
                             data: "id",
                             className: 'text-center bg-secondary text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data +
-                                    '_5]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="description_5" data-uuid="' +
+                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                            },
+                        }, {
+                            data: "id",
+                            className: 'text-center bg-secondary text-white',
+                            render: function(data, type, row) {
+                                return '<input type="text" class="form-control" name="quantity_5" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-secondary text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data +
-                                    '_5]" data-uuid="' +
-                                    row.uuid + '" data-index="' + row.DT_RowIndex + '">'
+                                return '<input type="text" class="form-control" name="price_5" data-index="' +
+                                    row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-secondary text-white',
                             render: function(data, type, row) {
-                                return `
-                                <select name="unitprice[${data}_5]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
-                                    <option value="1">Rp</option> 
-                                    <option value="2">$</option> 
-                                </select > <input type="text" class="form-control" name="price[${data}_5]" >`
-                            }
-                        }, {
-                            data: "id",
-                            className: 'text-center bg-secondary text-white',
-                            render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data +
-                                    '_5]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="dt_5" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
@@ -616,36 +544,84 @@
                         }
                     }
                 })
-                $('#data_table').on('change',
-                    'input[name="description_1"][data-index="1"], input[name="quantity_1"][data-index="1"], input[name="price_1"][data-index="1"], input[name="dt_1"][data-index="1"]',
-                    function() {
-                        var row = $(this).closest('tr')
-                        var uuid_1 = row.find('input[name="description_1"][data-index="1"]').data('uuid')
-                        var description_1 = row.find('input[name="description_1"][data-index="1"]').val()
-                        var quantity_1 = row.find('input[name="quantity_1"][data-index="1"]').val()
-                        var price_1 = row.find('input[name="price_1"][data-index="1"]').val()
-                        var dt_1 = row.find('input[name="dt_1"][data-index="1"]').val()
-                        var supplier_1 = $('select[name=supplier_1]').val()
+                table.on('draw.dt', function() {
+                    let totalRows = table.rows().count()
 
-                        console.log(`
-                            uuid_1 : ${uuid_1}
-                            description_1 : ${description_1}
-                            quantity_1 : ${quantity_1}
-                            price_1 : ${price_1}
-                            dt_1 : ${dt_1}
-                            supplier_1 : ${supplier_1}
-                            so: ${$('select[name=so]').val()}
-                        `)
+                    console.log(totalRows)
 
-                        if (description_1 != '' && quantity_1 != '' && price_1 != '' && dt_1 != '' && supplier_1 !=
-                            null) {
-                            saveReviewProduct($('select[name=so]').val(), uuid_1, description_1, quantity_1, price_1, dt_1,
-                                supplier_1)
-                        } else {
-                            console.log('error')
+                    for (var rowIndex = 1; rowIndex <= totalRows; rowIndex++) {
+                        for (var columnIndex = 1; columnIndex <= 5; columnIndex++) {
+                            (function(rowIdx, colIdx) {
+                                $('#data_table').on('change',
+                                    'input[name="description_' + colIdx +
+                                    '"][data-index="' + rowIdx +
+                                    '"], input[name="quantity_' + colIdx +
+                                    '"][data-index="' + rowIdx +
+                                    '"], input[name="price_' + colIdx +
+                                    '"][data-index="' + rowIdx +
+                                    '"], input[name="dt_' + colIdx +
+                                    '"][data-index="' + rowIdx + '"], select[name="supplier_' + colIdx + '"]',
+                                    function() {
+                                        var row = $(this).closest('tr');
+                                        var uuid = row.find('input[name="description_' + colIdx +
+                                                '"][data-index="' + rowIdx + '"]')
+                                            .data('uuid');
+                                        var description = row.find('input[name="description_' + colIdx +
+                                                '"][data-index="' + rowIdx + '"]')
+                                            .val();
+                                        var quantity = row.find('input[name="quantity_' + colIdx +
+                                                '"][data-index="' + rowIdx + '"]')
+                                            .val();
+                                        var price = row.find('input[name="price_' + colIdx +
+                                                '"][data-index="' + rowIdx + '"]')
+                                            .val();
+                                        var dt = row.find('input[name="dt_' + colIdx +
+                                                '"][data-index="' + rowIdx + '"]')
+                                            .val();
+                                        var supplier = $('select[name=supplier_' + colIdx + ']').val();
+
+                                        // console.log(`
+                                //     SO: ${$('select[name=so]').val()}
+                                //     UUID: ${uuid}
+                                //     Description: ${description}
+                                //     Quantity: ${quantity}
+                                //     Price: ${price}
+                                //     DT: ${dt}
+                                //     Supplier: ${supplier}
+                                //     Row Index: ${rowIdx}
+                                //     Column Index: ${colIdx}
+                                // `);
+
+                                        if (description != '' && quantity != '' && price != '' && dt != '' &&
+                                            supplier !=
+                                            null) {
+
+                                            saveReviewProduct($('select[name=so]').val(), uuid, description,
+                                                quantity, price,
+                                                dt,
+                                                supplier)
+
+                                            console.log(`
+                                                SO: ${$('select[name=so]').val()}
+                                                UUID: ${uuid}
+                                                Description: ${description}
+                                                Quantity: ${quantity}
+                                                Price: ${price}
+                                                DT: ${dt}
+                                                Supplier: ${supplier}
+                                                Row Index: ${rowIdx}
+                                                Column Index: ${colIdx}
+                                            `);
+                                        } else {
+                                            console.log('error');
+                                        }
+                                    });
+                            })(rowIndex, columnIndex);
                         }
-                    })
+                    }
+                });
             }
+
 
             function saveReviewProduct(
                 so, uuid, description, quantity, price, dt, supplier
@@ -753,7 +729,8 @@
                     },
                     success: function(response) {
                         listItemTable(response.status, response.data)
-                        $('#download-excel').attr('href', '/transaction/sales-order/download/product-list/excel/' +
+                        $('#download-excel').attr('href',
+                            '/transaction/sales-order/download/product-list/excel/' +
                             response.uuid)
                         $('#download-pdf').attr('href', '/transaction/sales-order/download/product-list/pdf/' +
                             response.uuid)
