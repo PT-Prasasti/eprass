@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Logo
@@ -229,4 +229,5 @@ return [
 
     ])->toArray(),
 
+    'api_currency_convert' => env('API_CURRENCY_CONVERT', null),
 ];

@@ -28,6 +28,6 @@ class SourcingItem extends Model
 
     public function sourcing_supplier()
     {
-        return $this->hasMany(SourcingSupplier::class, 'sourcing_id');
+        return $this->belongsTo(SourcingSupplier::class, 'sourcing_supplier_id');
     }
 }

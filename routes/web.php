@@ -211,6 +211,10 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
 
         Route::post('/reviews', [SalesOrderController::class, 'review_get_data'])->name('.review_get_data');
         Route::post('/review-set-supplier', [SalesOrderController::class, 'set_supplier'])->name('.review_set_supplier');
+
+        Route::get('/price/{id}', [SalesOrderController::class, 'price'])->name('.price');
+        Route::post('/product-list', [SalesOrderController::class, 'product_lists'])->name('.product_lists');
+        Route::post('currency-converter', [SalesOrderController::class, 'currency_converter'])->name('.currency_converter');
     });
 
     // route transaction sourcing item
