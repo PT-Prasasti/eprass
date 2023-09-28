@@ -17,6 +17,7 @@ use App\Models\SourcingSupplier;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
+use Webpatser\Uuid\Uuid;
 use Yajra\DataTables\DataTables;
 
 class SourcingItemController extends Controller
@@ -308,6 +309,61 @@ class SourcingItemController extends Controller
         } else {
             $data = Supplier::limit(10)->get();
             return response()->json($data);
+        }
+    }
+
+    public function review_save_product(Request $request)
+    {
+        try {
+            $so = SalesOrder::where('uuid', $request->so)->first();
+            $product = InquiryProduct::where('uuid', $request->uuid)->first();
+            $sourcing = Sourcing::where('so_id', $so->id)->where('deleted_at', null)->first();
+
+            if (!$sourcing) {
+                $sourcing = Sourcing::create([
+                    'uuid' => Uuid::generate(4)->string,
+                    'so_id' => $so->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+            $sourSupp = SourcingSupplier::where('sourcing_id', $sourcing->id)->where('company', Supplier::where('id', $request->supplier)->first()->company)->where('item_name', $product->item_name)->where('description', $request->description)->where('qty', $request->qty)->where('price', $request->price)->where('dt', $request->dt)->where('deleted_at', null)->first();
+
+            if (!$sourSupp) {
+                $sourSupp = SourcingSupplier::create([
+                    'uuid' => Uuid::generate(4)->string,
+                    'sourcing_id' => $sourcing->id,
+                    'company' => Supplier::where('id', $request->supplier)->first()->company,
+                    'item_name' => $product->item_name,
+                    'description' => $request->description,
+                    'qty' => $request->qty,
+                    'price' => $request->price,
+                    'dt' => $request->dt,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+            $sourcingItem = SourcingItem::where('inquiry_product_id', $product->id)->where('sourcing_supplier_id', $sourSupp->id)->where('deleted_at', null)->first();
+
+            if (!$sourcingItem) {
+                SourcingItem::create([
+                    'uuid' => Uuid::generate(4)->string,
+                    'inquiry_product_id' => $product->id,
+                    'sourcing_supplier_id' => $sourSupp->first()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            dd($th);
         }
     }
 }

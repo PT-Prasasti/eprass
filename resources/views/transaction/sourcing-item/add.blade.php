@@ -221,13 +221,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="viewTable" class="table-responsive">
+                                <div id="viewTable">
                                     <table id="data_table"
                                         class="table table-striped table-vcenter table-bordered js-dataTable-full"
                                         style="font-size:10px">
                                         <thead>
                                             <tr>
-                                                <th class="text-center" style="width: 100px">Description</th>
+                                                <th class="text-center">Description</th>
                                                 <th class="text-center">Qty</th>
                                                 <th class="text-center">Unit Price</th>
                                                 <th class="text-center">DT</th>
@@ -277,29 +277,6 @@
                             $('select[data-index="' + i + '"]').prop('disabled', false);
                         }
                     })
-
-                    $('#supplier1_17').select2({
-                        placeholder: "-- Choose  --",
-                        allowClear: true,
-                        selectOnClose: true,
-                        width: '100%',
-                        ajax: {
-                            url: "{{ route('transaction.sourcing-item.get_supplier') }}",
-                            dataType: 'json',
-                            delay: 250,
-                            processResults: function(data) {
-                                return {
-                                    results: $.map(data, function(item) {
-                                        return {
-                                            text: item.id + " - " + item.company,
-                                            id: item.id,
-                                        }
-                                    })
-                                };
-                            },
-                            cache: true
-                        }
-                    });
                 })
             })
 
@@ -311,7 +288,7 @@
                         <thead>
                             <tr>
                                 <th rowspan="2" class="text-center">No.</th>
-                                <th rowspan="2" class="text-center" style="width: 100px">Item Desc</th>
+                                <th rowspan="2" class="text-center">Item Desc</th>
                                 <th rowspan="2" class="text-center">Qty</th>
 
                                 <th colspan="4" class="text-center bg-primary text-white">
@@ -400,11 +377,11 @@
                             data: 'DT_RowIndex',
                             orderable: false,
                             searchable: false,
-                            width: '5%',
                             className: 'text-center'
                         }, {
                             data: 'item_desc',
                             className: 'text-center',
+                            width: '20%'
                         }, {
                             data: 'qty',
                             className: 'text-center'
@@ -423,35 +400,28 @@
                             data: "id",
                             className: 'text-center bg-primary text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="description[' + data +
-                                    '_1]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="description_1" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             },
-                            width: "120px"
                         }, {
                             data: "id",
                             className: 'text-center bg-primary text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="quantity[' + data +
-                                    '_1]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="quantity_1" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-primary text-white',
                             render: function(data, type, row) {
-                                return `
-                                <select name="unitprice[${data}_1]" id="unitprice" class="form-control"  data-uuid="${row.uuid}" data-index="${row.DT_RowIndex}"> 
-                                    <option value="1">Rp</option> 
-                                    <option value="2">$</option> 
-                                </select > <input type="text" class="form-control" name="price[${data}_1]" value="">`
+                                return '<input type="text" class="form-control" name="price_1" data-index="' +
+                                    row.DT_RowIndex + '">'
                             }
                         }, {
                             data: "id",
                             className: 'text-center bg-primary text-white',
                             render: function(data, type, row) {
-                                return '<input type="text" class="form-control" name="dt[' + data +
-                                    '_1]" data-uuid="' +
+                                return '<input type="text" class="form-control" name="dt_1" data-uuid="' +
                                     row.uuid + '" data-index="' + row.DT_RowIndex + '">'
                             }
                         },
@@ -646,9 +616,60 @@
                         }
                     }
                 })
-                table.on('draw.dt', function() {
-                    totalRows = table.rows().count();
-                });
+                $('#data_table').on('change',
+                    'input[name="description_1"][data-index="1"], input[name="quantity_1"][data-index="1"], input[name="price_1"][data-index="1"], input[name="dt_1"][data-index="1"]',
+                    function() {
+                        var row = $(this).closest('tr')
+                        var uuid_1 = row.find('input[name="description_1"][data-index="1"]').data('uuid')
+                        var description_1 = row.find('input[name="description_1"][data-index="1"]').val()
+                        var quantity_1 = row.find('input[name="quantity_1"][data-index="1"]').val()
+                        var price_1 = row.find('input[name="price_1"][data-index="1"]').val()
+                        var dt_1 = row.find('input[name="dt_1"][data-index="1"]').val()
+                        var supplier_1 = $('select[name=supplier_1]').val()
+
+                        console.log(`
+                            uuid_1 : ${uuid_1}
+                            description_1 : ${description_1}
+                            quantity_1 : ${quantity_1}
+                            price_1 : ${price_1}
+                            dt_1 : ${dt_1}
+                            supplier_1 : ${supplier_1}
+                            so: ${$('select[name=so]').val()}
+                        `)
+
+                        if (description_1 != '' && quantity_1 != '' && price_1 != '' && dt_1 != '' && supplier_1 !=
+                            null) {
+                            saveReviewProduct($('select[name=so]').val(), uuid_1, description_1, quantity_1, price_1, dt_1,
+                                supplier_1)
+                        } else {
+                            console.log('error')
+                        }
+                    })
+            }
+
+            function saveReviewProduct(
+                so, uuid, description, quantity, price, dt, supplier
+            ) {
+                $.ajax({
+                    url: "{{ route('transaction.sourcing-item.review_save_product') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        so: so,
+                        uuid: uuid,
+                        description: description,
+                        qty: quantity,
+                        price: price,
+                        dt: dt,
+                        supplier: supplier,
+                    },
+                    success: function(response) {
+                        console.log(response)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
             }
 
             function listSO() {
