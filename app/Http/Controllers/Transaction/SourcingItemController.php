@@ -351,7 +351,7 @@ class SourcingItemController extends Controller
                 SourcingItem::create([
                     'uuid' => Uuid::generate(4)->string,
                     'inquiry_product_id' => $product->id,
-                    'sourcing_supplier_id' => $sourSupp->first()->id,
+                    'sourcing_supplier_id' => $sourSupp->id,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);

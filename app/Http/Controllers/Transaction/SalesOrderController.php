@@ -893,48 +893,48 @@ class SalesOrderController extends Controller
     public function review_get_data(Request $request)
     {
         try {
-            if ($request->ajax()) {
-                $salesOrder = SalesOrder::where('uuid', $request->inquiry)->first();
-                $data = InquiryProduct::where('inquiry_id', $salesOrder->inquiry_id)->get();
+            // if ($request->ajax()) {
+            $salesOrder = SalesOrder::where('uuid', $request->inquiry)->first();
+            $data = InquiryProduct::where('inquiry_id', $salesOrder->inquiry_id)->get();
 
-                $result = DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('uuid', function ($q) {
-                        return $q->uuid;
-                    })
-                    ->addColumn('item_desc', function ($q) {
-                        return $q->description;
-                    })
-                    ->addColumn('qty', function ($q) {
-                        return $q->qty;
-                    })
-                    ->addColumn('supplier', function ($q) {
-                        $suppliers = $q->sourcing_items->map(function ($item) {
-                            $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
-                            $selectedSourcingSupplier = SelectedSourcingSupplier::where('sourcing_supplier_id', $item->sourcing_supplier_id)
-                                ->where('supplier_id', $supplier->id)
-                                ->first();
+            $result = DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('uuid', function ($q) {
+                    return $q->uuid;
+                })
+                ->addColumn('item_desc', function ($q) {
+                    return $q->description;
+                })
+                ->addColumn('qty', function ($q) {
+                    return $q->qty;
+                })
+                ->addColumn('supplier', function ($q) {
+                    $suppliers = $q->sourcing_items->map(function ($item) {
+                        $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+                        $selectedSourcingSupplier = SelectedSourcingSupplier::where('sourcing_supplier_id', $item->sourcing_supplier_id)
+                            ->where('supplier_id', $supplier->id)
+                            ->first();
 
-                            if ($selectedSourcingSupplier) {
-                                return [
-                                    'id' => $supplier->id,
-                                    'company' => $supplier->company,
-                                    'selected' => true,
-                                ];
-                            } else {
-                                return [
-                                    'id' => $supplier->id,
-                                    'company' => $supplier->company,
-                                    'selected' => false,
-                                ];
-                            }
-                        });
-                        return $suppliers;
-                    })
-                    ->make(true);
+                        if ($selectedSourcingSupplier) {
+                            return [
+                                'id' => $supplier->id,
+                                'company' => $supplier->company,
+                                'selected' => true,
+                            ];
+                        } else {
+                            return [
+                                'id' => $supplier->id,
+                                'company' => $supplier->company,
+                                'selected' => false,
+                            ];
+                        }
+                    });
+                    return $suppliers;
+                })
+                ->make(true);
 
-                return $result;
-            }
+            return $result;
+            // }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 500,
@@ -956,6 +956,13 @@ class SalesOrderController extends Controller
                     ->first();
 
                 if (!$selectedSupplier) {
+                    $supplierThen = SelectedSourcingSupplier::where('sourcing_id', $sourcingSupplier->sourcing_id)
+                        ->where('sourcing_supplier_id', $sourcingSupplier->id)
+                        ->first();
+                    if ($supplierThen) {
+                        $supplierThen->delete();
+                    }
+
                     SelectedSourcingSupplier::create([
                         'sourcing_id' => $sourcingSupplier->sourcing_id,
                         'sourcing_supplier_id' => $sourcingSupplier->id,
