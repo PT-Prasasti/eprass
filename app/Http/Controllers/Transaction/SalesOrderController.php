@@ -753,14 +753,33 @@ class SalesOrderController extends Controller
         if ($inquiry->products) {
             $no = 1;
             foreach ($inquiry->products as $item) {
-                $data[] = array(
-                    $no++,
-                    $item->item_name,
-                    $item->description,
-                    $item->size,
-                    $item->qty,
-                    $item->remark,
-                );
+                $sourItem = SourcingItem::where('inquiry_product_id', $item->id)->first();
+                $sourSupp = null;
+                if ($sourItem) {
+                    $sourSupp = SourcingSupplier::where('id', $sourItem->sourcing_supplier_id)->first();
+                }
+
+                if ($sourSupp) {
+                    $data[] = array(
+                        $no++,
+                        $item->item_name,
+                        $item->description,
+                        $item->size,
+                        $item->qty,
+                        $item->remark,
+                        $sourSupp->price,
+                        $sourSupp->dt
+                    );
+                } else {
+                    $data[] = array(
+                        $no++,
+                        $item->item_name,
+                        $item->description,
+                        $item->size,
+                        $item->qty,
+                        $item->remark
+                    );
+                }
             }
         }
 
@@ -771,7 +790,7 @@ class SalesOrderController extends Controller
         $pdf = PDF::loadView('pdf.product_list', [
             'data' => $data,
             'so' => $so
-        ])->setPaper('a4', 'landscape'); // Create a view for your PDF content
+        ])->setPaper('a4', 'portrait'); // Create a view for your PDF content
 
         // You can also customize the PDF options, such as filename and paper size
         return $pdf->download('product_list_' . $name . '.pdf');

@@ -39,6 +39,8 @@
                 <th style="width: 20%">Size</th>
                 <th style="width: 10%">Quantity</th>
                 <th>Remark</th>
+                <th>Unit Price</th>
+                <th>Delivery Time</th>
             </tr>
         </thead>
         <tbody>
@@ -50,6 +52,8 @@
                     <td>{{ $item[3] }}</td>
                     <td style="text-align: right;">{{ $item[4] }}</td>
                     <td>{!! nl2br(e($item[5])) !!}</td>
+                    <td>{{ $item[6] ?? '' }}</td>
+                    <td>{{ $item[7] ?? '' }}</td>
                 </tr>
             @endforeach
         </tbody>
