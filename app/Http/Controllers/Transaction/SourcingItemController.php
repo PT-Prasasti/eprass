@@ -19,12 +19,19 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Webpatser\Uuid\Uuid;
 use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Helper\FilesController;
+use App\Http\Controllers\Helper\RedisController;
 
 class SourcingItemController extends Controller
 {
+
+    protected $fileController, $redisController;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->fileController = new FilesController();
+        $this->redisController = new RedisController();
     }
 
     public function index(): View
@@ -357,6 +364,43 @@ class SourcingItemController extends Controller
                 ]);
             }
 
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+    }
+
+
+    public function upload_file(Request $request)
+    {
+        try {
+            $so = SalesOrder::where('uuid', $request->input('so'))->first();
+            $inquiry = Inquiry::where('id', $so->inquiry_id)->first();
+            $visitSchedule = $inquiry->visit->uuid;
+            $path = 'public/inquiry/' . $visitSchedule . '/' . $request->input('folder');
+            $file = $request->file('file');
+            $filename = $file->getClientOriginalName();
+            $file->storeAs($path, $filename);
+
+            $filesJson = $inquiry->files;
+
+            $filesArray = json_decode($filesJson, true);
+
+            $newFile = [
+                'filename' => $request->input('folder') . '/' . $filename,
+                'aliases' => $file->getClientOriginalName(),
+            ];
+
+            $filesArray[] = $newFile;
+
+            $updatedFilesJson = json_encode($filesArray);
+
+            $inquiry->files = $updatedFilesJson;
+            $inquiry->save();
 
             return response()->json([
                 'status' => 200,

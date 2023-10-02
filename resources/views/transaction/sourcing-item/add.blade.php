@@ -822,7 +822,8 @@
                                                 <div class="form-group row">
                                                     <div class="col-12">
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="example-file-input-custom" name="upload_file">
+                                                            <input type="file" class="custom-file-input" id="example-file-input-custom" name="upload-file"
+                                                                data-toggle="custom-file-input" accept="application/pdf">
                                                             <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
                                                         </div>
                                                     </div>
@@ -885,6 +886,18 @@
                             })
                             $('#file-manager').append(html)
                         })
+                        $('#modalUpload').on('show.bs.modal', function() {
+                            console.log(response.data)
+                            $('select[name=select_folder]').html('')
+                            let element = ''
+                            element += `<option selected disabled>Please select</option>`
+                            $.each(response.data, function(index, item) {
+                                if (item.type == 'folder') {
+                                    element += `<option value="${item.name}">${item.name}</option>`
+                                }
+                            })
+                            $('select[name=select_folder]').append(element)
+                        })
                     },
                     error: function(xhr, status, error) {
                         console.log(error)
@@ -925,6 +938,30 @@
                     },
                     success: function(response) {
                         console.log(response)
+                        getStorage($('select[name=so]').val())
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function upload_files() {
+                let formData = new FormData()
+                formData.append('_token', "{{ csrf_token() }}")
+                formData.append('so', $('select[name=so]').val())
+                formData.append('folder', $('select[name=select_folder]').val())
+                formData.append('file', $('input[name=upload-file]')[0].files[0])
+
+                $.ajax({
+                    url: "{{ route('transaction.sourcing-item.upload-file') }}",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        console.log(response)
+                        $('#modalUpload').modal('hide')
                         getStorage($('select[name=so]').val())
                     },
                     error: function(xhr, status, error) {

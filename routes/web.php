@@ -254,6 +254,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/get-storage', [SourcingItemController::class, 'get_storage'])->name('.get-storage');
         Route::post('/save-folder', [SourcingItemController::class, 'save_folder'])->name('.save-folder');
         Route::post('/delete-file-folder', [SourcingItemController::class, 'delete_file_folder'])->name('.delete-file-folder');
+        Route::post('/upload-file', [SourcingItemController::class, 'upload_file'])->name('.upload-file');
 
         Route::post('/review-save-product', [SourcingItemController::class, 'review_save_product'])->name('.review_save_product');
     });
