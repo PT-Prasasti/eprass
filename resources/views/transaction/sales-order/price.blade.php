@@ -67,8 +67,8 @@
                                 <th class="text-center">Description</th>
                                 <th class="text-center">Qty</th>
                                 <th class="text-center">Unit Price</th>
-                                <th class="text-center">DT Production</th>
                                 <th class="text-center">Delivery Time</th>
+                                <th class="text-center">DT Production</th>
                                 <th class="text-center">Currency</th>
                                 <th class="text-center">Shipping Fee</th>
                                 <th class="text-center">Profit</th>
@@ -126,20 +126,15 @@
                             className: 'text-center unit-price'
                         },
                         {
-                            data: 'id',
+                            data: 'dt',
                             className: 'text-center',
-                            render: function(data, type, row) {
-                                return `
-                                    <input type="text" class="form-control" name="dt_production">
-                                `
-                            }
                         },
                         {
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <input type="text" class="form-control" name="delivery_time">
+                                    <input type="text" class="form-control" name="dt_production">
                                 `
                             }
                         },

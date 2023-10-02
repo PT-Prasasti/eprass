@@ -1119,6 +1119,17 @@ class SalesOrderController extends Controller
                     });
                     return $totalPrice;
                 })
+                ->addColumn('dt', function ($q) {
+                    $totalDt = 0;
+                    $q->sourcing_items->map(function ($item) use (&$totalDt) {
+                        $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+
+                        if ($supplier) {
+                            return $totalDt += $supplier->dt;
+                        };
+                    });
+                    return $totalDt;
+                })
                 ->make(true);
             return $result;
         } catch (\Throwable $th) {
