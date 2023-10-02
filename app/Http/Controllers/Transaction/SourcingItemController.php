@@ -164,7 +164,7 @@ class SourcingItemController extends Controller
                         return $q->uuid;
                     })
                     ->addColumn('item_desc', function ($q) {
-                        return $q->description;
+                        return $q->item_name;
                     })
                     ->addColumn('qty', function ($q) {
                         return $q->qty;
