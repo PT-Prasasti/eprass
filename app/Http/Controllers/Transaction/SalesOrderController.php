@@ -927,6 +927,27 @@ class SalesOrderController extends Controller
                 ->addColumn('qty', function ($q) {
                     return $q->qty;
                 })
+                ->addColumn('description', function ($q) {
+                    $sourItem = SourcingItem::where('inquiry_product_id', $q->id)->first();
+                    $sourSupp = SourcingSupplier::where('id', $sourItem->sourcing_supplier_id)->first();
+                    return $sourSupp->description;
+                })
+                ->addColumn('qty_item', function ($q) {
+                    $sourItem = SourcingItem::where('inquiry_product_id', $q->id)->first();
+                    $sourSupp = SourcingSupplier::where('id', $sourItem->sourcing_supplier_id)->first();
+                    return $sourSupp->qty;
+                })
+                ->addColumn('unit_price', function ($q) {
+                    $sourItem = SourcingItem::where('inquiry_product_id', $q->id)->first();
+                    $sourSupp = SourcingSupplier::where('id', $sourItem->sourcing_supplier_id)->first();
+                    return $sourSupp->price;
+                })
+                ->addColumn('dt', function ($q) {
+                    $sourItem = SourcingItem::where('inquiry_product_id', $q->id)->first();
+                    $sourSupp = SourcingSupplier::where('id', $sourItem->sourcing_supplier_id)->first();
+                    return $sourSupp->dt;
+                })
+
                 ->addColumn('supplier', function ($q) {
                     $suppliers = $q->sourcing_items->map(function ($item) {
                         $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();

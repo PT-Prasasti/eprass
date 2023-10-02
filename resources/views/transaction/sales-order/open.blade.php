@@ -215,9 +215,9 @@
                                             {{-- <button type="button" class="btn btn-primary">Time</button>
                                         <button type="button" class="btn btn-primary">Price</button>
                                         <button type="button" class="btn btn-primary">Desc</button> --}}
-                                            <a href="/" class="btn btn-primary">Add Supplier</a>
+                                            {{-- <a href="/" class="btn btn-primary">Add Supplier</a>
                                             <a href="/" class="btn btn-warning">Upload File Excel</a>
-                                            <a href="/" class="btn btn-info">Download Format Excel</a>
+                                            <a href="/" class="btn btn-info">Download Format Excel</a> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -285,6 +285,10 @@
                                 <th class="text-center">No.</th>
                                 <th class="text-center">Item Desc</th>
                                 <th class="text-center">Qty</th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-center">Unit Price</th>
+                                <th class="text-center">Delivery Time</th>
                                 <th class="text-center">Supplier</th>
                             </tr>
                         </thead>
@@ -319,6 +323,22 @@
                         },
                         {
                             data: 'qty',
+                            className: 'text-center'
+                        },
+                        {
+                            'data': 'description',
+                            className: 'text-center'
+                        },
+                        {
+                            'data': 'qty_item',
+                            className: 'text-center'
+                        },
+                        {
+                            'data': 'unit_price',
+                            className: 'text-center'
+                        },
+                        {
+                            'data': 'dt',
                             className: 'text-center'
                         },
                         {

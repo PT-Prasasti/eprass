@@ -30,4 +30,9 @@ class SourcingSupplier extends Model
     {
         return $this->hasMany(SelectedSourcingSupplier::class, 'sourcing_supplier_id');
     }
+
+    public function sourcing_items()
+    {
+        return $this->hasMany(SourcingItem::class, 'sourcing_supplier_id');
+    }
 }
