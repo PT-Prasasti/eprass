@@ -183,7 +183,7 @@ class VisitScheduleController extends Controller
             $visit->date = $request->date;
             $visit->time = $request->time != null ? $request->time : Carbon::createFromTime(9, 0, 0);
             $visit->schedule = $request->schedule;
-            $visit->enginer_email = json_encode($request->engineer);
+            $visit->enginer_email = $request->has('engineer') ? json_encode($request->engineer) : null;
             $visit->user_created    = Auth::user()->id;
             $visit->save();
 
@@ -205,8 +205,10 @@ class VisitScheduleController extends Controller
             $sendmail = 'test@pt-prasasti.com';
             Mail::to($sendmail)->send($email);
 
-            foreach ($request->engineer as $enginer) {
-                Mail::to($enginer)->send($email);
+            if ($request->has('engineer')) {
+                foreach ($request->engineer as $enginer) {
+                    Mail::to($enginer)->send($email);
+                }
             }
 
             DB::commit();
