@@ -2,37 +2,43 @@
 
     <div class="content">
         <h4><b>Add Supplier</b></h4>
-        
+
         <div class="block block-rounded">
             <div class="block-content block-content-full bg-pattern">
                 <form action="{{ route('data-master.supplier.store') }}" method="POST">
                     @csrf
+
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Company Name *</label>
-                                <input type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" value="{{ old('company_name') }}" required>
+                                <input type="text" class="form-control @error('company_name') is-invalid @enderror"
+                                    name="company_name" value="{{ old('company_name') }}" required>
                                 @error('company_name')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label>Company Telephone *</label>
-                                <input type="text" class="form-control @error('company_phone') is-invalid @enderror" name="company_phone" value="{{ old('company_phone') }}" required>
+                                <input type="text" class="form-control @error('company_phone') is-invalid @enderror"
+                                    name="company_phone" value="{{ old('company_phone') }}" required>
                                 @error('company_phone')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label>Company Email *</label>
-                                <input type="email" class="form-control @error('company_email') is-invalid @enderror" name="company_email" value="{{ old('company_email') }}" required>
+                                <input type="email" class="form-control @error('company_email') is-invalid @enderror"
+                                    name="company_email" value="{{ old('company_email') }}" required>
                                 @error('company_email')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label>Item Spesialization</label>
-                                <input type="text" class="form-control @error('item_spesialization') is-invalid @enderror" name="item_spesialization" value="{{ old('item_spesialization') }}">
+                                <input type="text"
+                                    class="form-control @error('item_spesialization') is-invalid @enderror"
+                                    name="item_spesialization" value="{{ old('item_spesialization') }}">
                                 @error('item_spesialization')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -41,21 +47,25 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Sales Representative *</label>
-                                <input type="text" class="form-control @error('sales_representative') is-invalid @enderror" name="sales_representative" value="{{ old('sales_representative') }}" required>
+                                <input type="text"
+                                    class="form-control @error('sales_representative') is-invalid @enderror"
+                                    name="sales_representative" value="{{ old('sales_representative') }}" required>
                                 @error('sales_representative')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label>Contact Number</label>
-                                <input type="text" class="form-control @error('contact_number') is-invalid @enderror" name="contact_number" value="{{ old('contact_number') }}">
+                                <label>Contact Number *</label>
+                                <input type="text" class="form-control @error('contact_number') is-invalid @enderror"
+                                    name="contact_number" value="{{ old('contact_number') }}">
                                 @error('contact_number')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label>Sales Email</label>
-                                <input type="email" class="form-control @error('sales_email') is-invalid @enderror" name="sales_email" value="{{ old('sales_email') }}">
+                                <label>Sales Email *</label>
+                                <input type="email" class="form-control @error('sales_email') is-invalid @enderror"
+                                    name="sales_email" value="{{ old('sales_email') }}">
                                 @error('sales_email')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -74,28 +84,32 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Bank Name</label>
-                                <input type="text" class="form-control @error('bank_name') is-invalid @enderror" name="bank_name" value="{{ old('bank_name') }}">
+                                <input type="text" class="form-control @error('bank_name') is-invalid @enderror"
+                                    name="bank_name" value="{{ old('bank_name') }}">
                                 @error('bank_name')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label>Bank Number</label>
-                                <input type="text" class="form-control @error('bank_number') is-invalid @enderror" name="bank_number" value="{{ old('bank_number') }}">
+                                <input type="text" class="form-control @error('bank_number') is-invalid @enderror"
+                                    name="bank_number" value="{{ old('bank_number') }}">
                                 @error('bank_number')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label>Bank Account</label>
-                                <input type="text" class="form-control @error('bank_account') is-invalid @enderror" name="bank_account" value="{{ old('bank_account') }}">
+                                <input type="text" class="form-control @error('bank_account') is-invalid @enderror"
+                                    name="bank_account" value="{{ old('bank_account') }}">
                                 @error('bank_account')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label>Bank Swift</label>
-                                <input type="text" class="form-control @error('bank_swift') is-invalid @enderror" name="bank_swift" value="{{ old('bank_swift') }}">
+                                <input type="text" class="form-control @error('bank_swift') is-invalid @enderror"
+                                    name="bank_swift" value="{{ old('bank_swift') }}">
                                 @error('bank_swift')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -113,7 +127,8 @@
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
-                            <button type="submit" class="btn btn-hero btn-alt-primary"><i class="fa fa-check mr-2"></i>ADD SUPPLIER</button>
+                            <button type="submit" class="btn btn-hero btn-alt-primary"><i
+                                    class="fa fa-check mr-2"></i>ADD SUPPLIER</button>
                         </div>
                     </div>
                 </form>
