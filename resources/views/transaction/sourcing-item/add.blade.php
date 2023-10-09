@@ -187,40 +187,10 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="btabs-static-review" role="tabpanel">
-                            <div class="table-responsive pb-4">
-                                @foreach ($datas as $no => $data)
-                                <div class="carl-long-row">
-                                    <div class="item-information">
-                                        {{-- <h5>Item Information</h5> --}}
-                                        <div class="row m-0">
-                                            <div class="col-2">
-                                                <small>No.</small>
-                                                <p>{{++$no}}.</p>
-                                            </div>
-                                            <div class="col-8">
-                                                <small>Item Description</small>
-                                                <p>
-                                                    <b>{{ $data->product_name }}</b></br>
-                                                    {!! $data->product_desc !!}
-                                                </p>
-                                                
-                                            </div>
-                                            <div class="col-2">
-                                                <small>Qty</small>
-                                                <p>{{ $data->qty }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    
-                                    <div class="supliyer-information-action">
-                                        <a class="btn btn-primary btn-sm text-white" id="add-suppliyer">
-                                            <i class="fa fa-plus"></i> Add More
-                                        </a>
-                                    </div>
-                                </div>
-                                @endforeach
+                            <div class="table-responsive pb-4" id="product-list">
+                                
+                                
+                                
                             </div>
                         </div>
                         <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
@@ -375,11 +345,60 @@
                         listItemTable(response.status, response.data)
                         $('#download-excel').attr('href', '/transaction/sales-order/download/product-list/excel/'+response.uuid)
                         $('#download-pdf').attr('href', '/transaction/sales-order/download/product-list/pdf/'+response.uuid)
+                        review_product_select(response.data)
                     },
                     error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
+            }
+
+            function review_product_select(datas)
+            {
+                $(datas).each(function(k,v){
+                    console.log('product detail', v)
+                    no = k + 1;
+                    html = `
+                        <div class="carl-long-row carl-long-row-`+k+`" data-rowid="`+k+`" data-prodinq="`+v[5]+`">
+                            <div class="item-information">
+                                <div class="row m-0">
+                                    <div class="col-2">
+                                        <small>No.</small>
+                                        <p>`+ no +`</p>
+                                        <input type="hidden" class="product_inquery_id" name="product_inquery_id[]" value="`+v[5]+`">
+                                        <input type="hidden" class="so_id" name="so_id[]" value="`+v[6]+`">
+                                    </div>
+                                    <div class="col-8">
+                                        <small>Item Description</small>
+                                        <p class="m-0">Item Name : `+ v[0] +`</p>
+                                        <p class="m-0">Material Description : `+ v[1] +`</p>
+                                        <p class="m-0">Size : `+ v[2] +`</p>
+                                        <p class="m-0">Remark : `+ v[4] +`</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <small>Qty</small>
+                                        <p>`+v[3]+`</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="supliyer-information-action supliyer-information-action-`+k+`">
+                                <a class="btn btn-primary btn-sm text-white" onclick="newform(`+k+`, `+v[5]+`)">
+                                    <i class="fa fa-plus"></i> Add More
+                                </a>
+                            </div>
+                        </div>
+                    `;
+
+                    $("#product-list").append(html);
+
+                })
+
+                setTimeout(() => {
+                        init() 
+                    }, 300);
             }
 
             function listItemTable(status, data)
@@ -418,22 +437,34 @@
                 return randomString;
             }
 
-            function calculate_long_row()
+            function calculate_long_row(rowid)
             {
-                var currect_long_row = $('.carl-long-row').width();
-                var info_width = $(".item-information").width();
-                var form_width = $(".supliyer-information").width();
-                var jumlah_form = 0;
-                $(".supliyer-information").each(function(k,v){
-                    jumlah_form++;
-                }) 
-
                 setTimeout(() => {
+                    var currect_long_row = 0;
+                    var info_width = $(".item-information").width();
+                    var form_width = 450
+                    var jumlah_form = 0;
+                    $(".supliyer-" + rowid).each(function(k,v){
+                        jumlah_form++;
+                    }) 
+                    $('.carl-long-row').each(function(){
+                        if (currect_long_row < $(this).width())  {
+                            currect_long_row = $(this).width();
+                        }
+                    })
+
+                    console.log({
+                        "currect_long_row" : currect_long_row,
+                        "info_width" : info_width,
+                        "form_width" : form_width,
+                        "jumlah_form" : jumlah_form
+                    })
+
                     total = info_width + ((form_width + 50 ) * jumlah_form) + 100;
                     if (total > currect_long_row) {
                         $(".carl-long-row").css("width", total + "px");
                     }        
-                }, 100);
+                }, 400);
             }
 
             function localset(key, val)
@@ -452,23 +483,33 @@
             }
 
             /* init */
-            init();
             function init() {
-                form = localget("form");
-                if (form) {
-                    for (var key in form) {
-                        if (form.hasOwnProperty(key)) {
-                            var obj = form[key];
-                            newform(key, obj);
+                
+                $(".carl-long-row").each(function(){
+                    so_id = $(".so_id").val()
+                    rowid = $(this).attr("data-rowid");
+                    product_inquiry = $(this).attr("data-prodinq");
+                    form = localget("form" + so_id);
+                    console.log("init", form);
+                    if (form) {
+                        console.log("form[rowid]", form[rowid]);
+                        if (form[rowid]) {
+                            for (var key in form[rowid]) {
+                                if (form[rowid].hasOwnProperty(key)) {
+                                    var obj = form[rowid][key];
+                                    console.log("init obj", obj);
+                                    newform(rowid, product_inquiry, key, obj);
+                                }
+                            }
                         }
-                    }
-                } else {
-                    newform();
-                }
+                    } else {
+                        newform(rowid, product_inquiry);
+                    } 
+                });
             }
 
             /* add new form */
-            function newform(rand_id, obj){
+            function newform(row_id, product_inquiry, rand_id, obj){
                 if (!rand_id) {
                     rand_id = randomstring();
                 }
@@ -484,47 +525,51 @@
                         }
                     } else {
                         supliyer_options = supliyer_options + `<option value="`+v.id+`">`+v.company+`</option>`;
+                        obj = {};
                     }
+
+                    console.log("final", obj);
                 });
                 var html = `
-                    <div class="supliyer-information supliyer-`+ rand_id +`">
+                    <div class="supliyer-information supliyer-`+ rand_id +` supliyer-`+row_id+`">
                         <div class="row m-0">
                             <div class="col-12">
+                                
                                 <div>
                                     <small>Supliyer</small>
-                                    <select name="supplier_id[]" class="form-control supliyer-form" data-formid="`+rand_id+`" onchange="supliyer_change($(this))">
+                                    <select name="supplier_id[`+product_inquiry+`][]" class="form-control supliyer-form" data-formid="`+rand_id+`" onchange="supliyer_change(`+row_id+`, $(this))">
                                         <option value="">-Select Suppliyer-</option>
                                         `+supliyer_options+`
                                     </select>
                                 </div>
                                 <div class="">
                                     <small>Item Description</small>
-                                    <textarea name="product_desc[]" cols="30" rows="4" placeholder="Product Description" class="form-control" onchange="form_change('product_desc', $(this))" data-formid="`+rand_id+`">`+ (obj.product_desc ?? '') +`</textarea>
+                                    <textarea name="product_desc[`+product_inquiry+`][]" cols="30" rows="4" placeholder="Product Description" class="form-control" onchange="form_change(`+row_id+`,'product_desc', $(this))" data-formid="`+rand_id+`">`+ (obj.product_desc ?? '') +`</textarea>
                                 </div>
                                 <div>
                                     <small>Qty</small>
-                                    <input type="number" placeholder="Qty" name="product_qty[]" class="form-control" onchange="form_change('product_qty', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_qty ?? '') +`">
+                                    <input type="number" placeholder="Qty" name="product_qty[`+product_inquiry+`][]" class="form-control" onchange="form_change(`+row_id+`,'product_qty', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_qty ?? '') +`">
                                 </div>
                                 <div>
                                     <small>Currency</small>
-                                    <select name="product_curentcy[]" class="form-control" onchange="form_change('product_curentcy', $(this))" data-formid="`+rand_id+`">
+                                    <select name="product_curentcy[`+product_inquiry+`][]" class="form-control" onchange="form_change(`+row_id+`,'product_curentcy', $(this))" data-formid="`+rand_id+`">
                                         <option value="">-Select Curency-</option>
-                                        <option value="idr" `+ ((obj.product_curentcy ?? '') == '' ? 'selected' : 'idr') +`>IDR</option>
-                                        <option value="usd" `+ ((obj.product_curentcy ?? '') == '' ? 'selected' : 'usd') +`>USD</option>
+                                        <option value="idr" `+ ((obj.product_curentcy ?? '') == 'idr' ? 'selected' : '') +`>IDR</option>
+                                        <option value="usd" `+ ((obj.product_curentcy ?? '') == 'usd' ? 'selected' : '') +`>USD</option>
                                     </select>
                                 </div>
                                 <div>
                                     <small>{{ '@Price' }}</small>
-                                    <input type="number" placeholder="Price" name="product_price[]" class="form-control" onchange="form_change('product_price', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_price ?? '') +`">
+                                    <input type="number" placeholder="Price" name="product_price[`+product_inquiry+`][]" class="form-control" onchange="form_change(`+row_id+`,'product_price', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_price ?? '') +`">
                                 </div>
                                 <div>
                                     <small>Production Time</small>
                                     <p>
-                                        <input type="text" placeholder="Production Time" name="production_time[]" class="form-control" onchange="form_change('production_time', $(this))" data-formid="`+rand_id+`" value="`+ (obj.production_time ?? '') +`">
+                                        <input type="text" placeholder="Production Time" name="production_time[`+product_inquiry+`][]" class="form-control" onchange="form_change(`+row_id+`,'production_time', $(this))" data-formid="`+rand_id+`" value="`+ (obj.production_time ?? '') +`">
                                     </p>
                                 </div>
                                 <div class="">
-                                    <a class="btn btn-danger btn-sm text-white" onclick="$('.supliyer-`+ rand_id +`').remove()">
+                                    <a class="btn btn-danger btn-sm text-white" onclick="removeform(`+row_id+`, '`+rand_id+`')">
                                         <i class="fa fa-trash"></i> Remove
                                     </a>
                                 </div>
@@ -533,58 +578,68 @@
                         </div>
                     </div>
                 `;
-                $(html).insertBefore(".supliyer-information-action");
+                $(html).insertBefore(".supliyer-information-action-" + row_id);
 
                 setTimeout(() => {
-                    calculate_long_row();
-                }, 100);
-            }
-            
-            $("#add-suppliyer").click(function(){
-                newform();
-            })
-
-
-            /* on select supliyer */
-            $(".supliyer-form").change(function(){
-                var form_id = $(this).attr("data-formid");
-                form = localget("form");
-                if (!form) {
-                    form = {};
-                }
-                if (!form[form_id]) {
-                    form[form_id] = {};
-                }
-                form[form_id]["supliyer_id"] = $(this).val();
-                localset("form", form);
-            });
-
-            function supliyer_change(input)
-            {
-                var form_id = input.attr("data-formid");
-                form = localget("form");
-                if (!form) {
-                    form = {};
-                }
-                if (!form[form_id]) {
-                    form[form_id] = {};
-                }
-                form[form_id]["supliyer_id"] = input.val();
-                localset("form", form);
+                    calculate_long_row(row_id);
+                }, 200);
             }
 
-            function form_change(formkey, input)
+            function supliyer_change(rowid, input)
             {
+                var so_id = $(".so_id").val()
                 var form_id = input.attr("data-formid");
+                form = localget("form" + so_id);
+                if (!form) {
+                    form = {};
+                }
+                if (!form[rowid]) {
+                    form[rowid] = {}
+                }
+                if (!form[rowid][form_id]) {
+                    form[rowid][form_id] = {};
+                }
+                form[rowid][form_id]["supliyer_id"] = input.val();
+                localset("form" + so_id, form);
+            }
+
+            function form_change(rowid, formkey, input)
+            {
+                var so_id = $(".so_id").val()
+                var form_id = input.attr("data-formid");
+                form = localget("form" + so_id);
+                if (!form) {
+                    form = {};
+                }
+                if (!form[rowid]) {
+                    form[rowid] = {}
+                }
+                if (!form[rowid][form_id]) {
+                    form[rowid][form_id] = {};
+                }
+                form[rowid][form_id][formkey] = input.val();
+                localset("form" + so_id, form);
+            }
+
+            function removeform(rowid, form_id)
+            {
+                var so_id = $(".so_id").val()
+                calculate_long_row(rowid);
+                $('.supliyer-' + form_id).remove()
+
                 form = localget("form");
                 if (!form) {
                     form = {};
                 }
-                if (!form[form_id]) {
-                    form[form_id] = {};
+                if (!form[rowid]) {
+                    form[rowid] = {}
                 }
-                form[form_id][formkey] = input.val();
-                localset("form", form);
+                if (!form[rowid][form_id]) {
+                    form[rowid][form_id] = {};
+                }
+                
+                delete form[rowid][form_id];
+                localset("form" + so_id, form);
             }
         </script>
         <style>

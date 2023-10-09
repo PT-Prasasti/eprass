@@ -25,21 +25,13 @@ class SourcingItemController extends Controller
     
     public function add() : View
     {
-        $data['datas'] = (object)[
-            (object)[
-                'product_name' => 'PRESSURE RELIEF VALVE',
-                'product_desc' => ' Brand : CLA-VAL or equivalent</br>
-                DN150 TYPE ANGLE 6” Flanged</br>
-                SIZE : INLET 6” & OUTLET 6”</br>
-                Pressure Gauge Size ½“ ;300 psi</br>
-                Material Accessories : Stainless Steel (Brass not approved = corrosive)</br>
-                Standard : NFPA20</br>
-                Certificated : Yes</br>',
-                'qty' => 23
-            ]
-        ];
         $data['suppliyers'] = \App\Models\Supplier::get();
         return view('transaction.sourcing-item.add', $data);
+    }
+
+    public function store(Request $re)
+    {
+        dd($re->all());
     }
         
     public function sales_order() : JsonResponse
@@ -110,6 +102,8 @@ class SourcingItemController extends Controller
                     $item->size,
                     $item->qty,
                     $item->remark,
+                    $item->id,
+                    $so->id
                 );
             }
 
