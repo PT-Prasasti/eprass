@@ -23,7 +23,7 @@
                             <a class="nav-link active" href="#btabs-static-home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#btabs-static-review">Review</a>
+                            <a class="nav-link review-link" href="#btabs-static-review">Review</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#btabs-static-doc">Document</a>
@@ -31,7 +31,7 @@
                     </ul>
             
                     <div class="block-content tab-content">
-                        <div class="tab-pane" id="btabs-static-home" role="tabpanel">
+                        <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="block block-rounded">
@@ -186,17 +186,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane active" id="btabs-static-review" role="tabpanel">
-                            <div class="text-right">
-                                <div class="push">
-                                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                                        <button type="button" class="btn btn-primary">Time</button>
-                                        <button type="button" class="btn btn-primary">Price</button>
-                                        <button type="button" class="btn btn-primary">Desc</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
+                        <div class="tab-pane" id="btabs-static-review" role="tabpanel">
+                            <div class="table-responsive pb-4">
                                 @foreach ($datas as $no => $data)
                                 <div class="carl-long-row">
                                     <div class="item-information">
@@ -230,72 +221,6 @@
                                     </div>
                                 </div>
                                 @endforeach
-                               
-                                {{-- <table class="table table-striped table-vcenter table-bordered js-dataTable-simple" style="font-size:10px">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2" class="text-center">No.</th>
-                                            <th rowspan="2" class="text-center">Item Desc</th>
-                                            <th rowspan="2" class="text-center">Qty</th>
-                                            <th rowspan="2" class="text-center">Supplier</th>
-                                            <th colspan="4" class="text-center">Input Nama PT 1<hr></th>
-                                            <th colspan="4" class="text-center">Input Nama PT 2<hr></th>
-                                        </tr>
-                                        <tr>                                  
-                                            <th class="text-center" style="width: 15%;">Description</th>
-                                            <th class="text-center" style="width: 2%;">QTY</th>
-                                            <th class="text-center" style="width: 5%;">Unit Price</th>
-                                            <th class="text-center">DT</th>
-                                            <th class="text-center" style="width: 15%;">Description</th>
-                                            <th class="text-center" style="width: 2%;">QTY</th>
-                                            <th class="text-center" style="width: 2%;">Unit Price</th>
-                                            <th class="text-center">DT</th>
-                                            <th class="text-center" style="width: 15%;">Description</th>
-                                            <th class="text-center" style="width: 2%;">QTY</th>
-                                            <th class="text-center" style="width: 2%;">Unit Price</th>
-                                            <th class="text-center">DT</th>
-                                        </tr>
-                                        
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td style="width:200px">
-                                                PRESSURE RELIEF VALVE</br>
-                                                Brand : CLA-VAL or equivalent</br>
-                                                DN150 TYPE ANGLE 6” Flanged</br>
-                                                SIZE : INLET 6” & OUTLET 6”</br>
-                                                Pressure Gauge Size ½“ ;300 psi</br>
-                                                Material Accessories : Stainless Steel (Brass not approved = corrosive)</br>
-                                                Standard : NFPA20</br>
-                                                Certificated : Yes</br>
-                                            </td>
-                                            <td class="text-center">2</td>
-                                            <td>
-                                                <select class="form-control" name="">
-                                                    <option value="0">Select</option>
-                                                    <option value="">Supp 1</option>
-                                                    <option value="">Supp 2</option>
-                                                </select>
-                                            </td>
-    
-                                            <td class="text-center"></td>
-                                            <td></td>
-                                            <td class="text-right"></td>
-                                            <td></td>
-    
-                                            <td></td>
-                                            <td> </td>
-                                            <td class="text-right"></td>
-                                            <td></td>
-    
-                                            <td></td>
-                                            <td> </td>
-                                            <td class="text-right"></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table> --}}
                             </div>
                         </div>
                         <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
@@ -393,6 +318,10 @@
                     uuid = response.uuid
                     getPdf(id)
                     getProductList(id)
+                    // reviewurl = '{{ route("transaction.sourcing-item.add", ["id", ":id"]) }}';
+                    // reviewurl = reviewurl.replace("id?:id", uuid);
+                    // reviewurl = reviewurl + '#btabs-static-review';
+                    // $('.review-link').attr("href", reviewurl);
                 })
             }
 
@@ -563,25 +492,35 @@
                             <div class="col-12">
                                 <div>
                                     <small>Supliyer</small>
-                                    <select name="supplier_id[]" class="form-control supliyer-form" data-formid="`+rand_id+`">
+                                    <select name="supplier_id[]" class="form-control supliyer-form" data-formid="`+rand_id+`" onchange="supliyer_change($(this))">
                                         <option value="">-Select Suppliyer-</option>
                                         `+supliyer_options+`
                                     </select>
                                 </div>
                                 <div class="">
-                                    <small>Item Name</small>
-                                    <input type="text" placeholder="Product name" name="product_name[]" class="form-control">
                                     <small>Item Description</small>
-                                    <textarea name="product_desc[]" cols="30" rows="10" placeholder="Product Description" class="form-control"></textarea>
+                                    <textarea name="product_desc[]" cols="30" rows="4" placeholder="Product Description" class="form-control" onchange="form_change('product_desc', $(this))" data-formid="`+rand_id+`">`+ (obj.product_desc ?? '') +`</textarea>
                                 </div>
                                 <div>
                                     <small>Qty</small>
-                                    <input type="number" placeholder="Qty" name="product_qty[]" class="form-control">
+                                    <input type="number" placeholder="Qty" name="product_qty[]" class="form-control" onchange="form_change('product_qty', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_qty ?? '') +`">
+                                </div>
+                                <div>
+                                    <small>Currency</small>
+                                    <select name="product_curentcy[]" class="form-control" onchange="form_change('product_curentcy', $(this))" data-formid="`+rand_id+`">
+                                        <option value="">-Select Curency-</option>
+                                        <option value="idr" `+ ((obj.product_curentcy ?? '') == '' ? 'selected' : 'idr') +`>IDR</option>
+                                        <option value="usd" `+ ((obj.product_curentcy ?? '') == '' ? 'selected' : 'usd') +`>USD</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <small>{{ '@Price' }}</small>
+                                    <input type="number" placeholder="Price" name="product_price[]" class="form-control" onchange="form_change('product_price', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_price ?? '') +`">
+                                </div>
+                                <div>
+                                    <small>Production Time</small>
                                     <p>
-                                        <input type="number" placeholder="Price" name="product_price[]" class="form-control">
+                                        <input type="text" placeholder="Production Time" name="production_time[]" class="form-control" onchange="form_change('production_time', $(this))" data-formid="`+rand_id+`" value="`+ (obj.production_time ?? '') +`">
                                     </p>
                                 </div>
                                 <div class="">
@@ -619,6 +558,34 @@
                 form[form_id]["supliyer_id"] = $(this).val();
                 localset("form", form);
             });
+
+            function supliyer_change(input)
+            {
+                var form_id = input.attr("data-formid");
+                form = localget("form");
+                if (!form) {
+                    form = {};
+                }
+                if (!form[form_id]) {
+                    form[form_id] = {};
+                }
+                form[form_id]["supliyer_id"] = input.val();
+                localset("form", form);
+            }
+
+            function form_change(formkey, input)
+            {
+                var form_id = input.attr("data-formid");
+                form = localget("form");
+                if (!form) {
+                    form = {};
+                }
+                if (!form[form_id]) {
+                    form[form_id] = {};
+                }
+                form[form_id][formkey] = input.val();
+                localset("form", form);
+            }
         </script>
         <style>
             .item-information {
