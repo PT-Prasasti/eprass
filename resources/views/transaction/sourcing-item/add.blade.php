@@ -31,7 +31,7 @@
                     </ul>
             
                     <div class="block-content tab-content">
-                        <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
+                        <div class="tab-pane" id="btabs-static-home" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="block block-rounded">
@@ -186,7 +186,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="btabs-static-review" role="tabpanel">
+                        <div class="tab-pane active" id="btabs-static-review" role="tabpanel">
                             <div class="text-right">
                                 <div class="push">
                                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -196,60 +196,107 @@
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-striped table-vcenter table-bordered js-dataTable-simple" style="font-size:10px">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2" class="text-center">No.</th>
-                                        <th rowspan="2" class="text-center">Item Desc</th>
-                                        <th rowspan="2" class="text-center">Qty</th>
-                                        <th rowspan="2" class="text-center">Supplier</th>
-                                        <th colspan="4" class="text-center">Input Nama PT 1<hr></th>
-                                        <th colspan="4" class="text-center">Input Nama PT 2<hr></th>
-                                    </tr>
-                                    <tr>                                  
-                                        <th class="text-center" style="width: 15%;">Description</th>
-                                        <th class="text-center" style="width: 2%;">QTY</th>
-                                        <th class="text-center" style="width: 5%;">Unit Price</th>
-                                        <th class="text-center">DT</th>
-                                        <th class="text-center" style="width: 15%;">Description</th>
-                                        <th class="text-center" style="width: 2%;">QTY</th>
-                                        <th class="text-center" style="width: 2%;">Unit Price</th>
-                                        <th class="text-center">DT</th>
-                                    </tr>
+                            <div class="table-responsive">
+                                @foreach ($datas as $no => $data)
+                                <div class="carl-long-row">
+                                    <div class="item-information">
+                                        {{-- <h5>Item Information</h5> --}}
+                                        <div class="row m-0">
+                                            <div class="col-2">
+                                                <small>No.</small>
+                                                <p>{{++$no}}.</p>
+                                            </div>
+                                            <div class="col-8">
+                                                <small>Item Description</small>
+                                                <p>
+                                                    <b>{{ $data->product_name }}</b></br>
+                                                    {!! $data->product_desc !!}
+                                                </p>
+                                                
+                                            </div>
+                                            <div class="col-2">
+                                                <small>Qty</small>
+                                                <p>{{ $data->qty }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>
-                                            PRESSURE RELIEF VALVE</br>
-                                            Brand : CLA-VAL or equivalent</br>
-                                            DN150 TYPE ANGLE 6” Flanged</br>
-                                            SIZE : INLET 6” & OUTLET 6”</br>
-                                            Pressure Gauge Size ½“ ;300 psi</br>
-                                            Material Accessories : Stainless Steel (Brass not approved = corrosive)</br>
-                                            Standard : NFPA20</br>
-                                            Certificated : Yes</br>
-                                        </td>
-                                        <td class="text-center">2</td>
-                                        <td>
-                                            <select class="form-control" name="">
-                                                <option value="0">Select</option>
-                                                <option value="">Supp 1</option>
-                                                <option value="">Supp 2</option>
-                                            </select>
-                                        </td>
-                                        <td class="text-center"></td>
-                                        <td></td>
-                                        <td class="text-right"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td> </td>
-                                        <td class="text-right"></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    
+                                    
+                                    <div class="supliyer-information-action">
+                                        <a class="btn btn-primary btn-sm text-white" id="add-suppliyer">
+                                            <i class="fa fa-plus"></i> Add More
+                                        </a>
+                                    </div>
+                                </div>
+                                @endforeach
+                               
+                                {{-- <table class="table table-striped table-vcenter table-bordered js-dataTable-simple" style="font-size:10px">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" class="text-center">No.</th>
+                                            <th rowspan="2" class="text-center">Item Desc</th>
+                                            <th rowspan="2" class="text-center">Qty</th>
+                                            <th rowspan="2" class="text-center">Supplier</th>
+                                            <th colspan="4" class="text-center">Input Nama PT 1<hr></th>
+                                            <th colspan="4" class="text-center">Input Nama PT 2<hr></th>
+                                        </tr>
+                                        <tr>                                  
+                                            <th class="text-center" style="width: 15%;">Description</th>
+                                            <th class="text-center" style="width: 2%;">QTY</th>
+                                            <th class="text-center" style="width: 5%;">Unit Price</th>
+                                            <th class="text-center">DT</th>
+                                            <th class="text-center" style="width: 15%;">Description</th>
+                                            <th class="text-center" style="width: 2%;">QTY</th>
+                                            <th class="text-center" style="width: 2%;">Unit Price</th>
+                                            <th class="text-center">DT</th>
+                                            <th class="text-center" style="width: 15%;">Description</th>
+                                            <th class="text-center" style="width: 2%;">QTY</th>
+                                            <th class="text-center" style="width: 2%;">Unit Price</th>
+                                            <th class="text-center">DT</th>
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td style="width:200px">
+                                                PRESSURE RELIEF VALVE</br>
+                                                Brand : CLA-VAL or equivalent</br>
+                                                DN150 TYPE ANGLE 6” Flanged</br>
+                                                SIZE : INLET 6” & OUTLET 6”</br>
+                                                Pressure Gauge Size ½“ ;300 psi</br>
+                                                Material Accessories : Stainless Steel (Brass not approved = corrosive)</br>
+                                                Standard : NFPA20</br>
+                                                Certificated : Yes</br>
+                                            </td>
+                                            <td class="text-center">2</td>
+                                            <td>
+                                                <select class="form-control" name="">
+                                                    <option value="0">Select</option>
+                                                    <option value="">Supp 1</option>
+                                                    <option value="">Supp 2</option>
+                                                </select>
+                                            </td>
+    
+                                            <td class="text-center"></td>
+                                            <td></td>
+                                            <td class="text-right"></td>
+                                            <td></td>
+    
+                                            <td></td>
+                                            <td> </td>
+                                            <td class="text-right"></td>
+                                            <td></td>
+    
+                                            <td></td>
+                                            <td> </td>
+                                            <td class="text-right"></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table> --}}
+                            </div>
                         </div>
                         <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
                             <div class="row">
@@ -428,6 +475,183 @@
             }
 
         </script>
+        <script>
+            var SUPLIYER_OPT = {!! json_encode($suppliyers) !!};
+            function randomstring(length = 6) {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let randomString = '';
+
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * characters.length);
+                    randomString += characters.charAt(randomIndex);
+                }
+
+                return randomString;
+            }
+
+            function calculate_long_row()
+            {
+                var currect_long_row = $('.carl-long-row').width();
+                var info_width = $(".item-information").width();
+                var form_width = $(".supliyer-information").width();
+                var jumlah_form = 0;
+                $(".supliyer-information").each(function(k,v){
+                    jumlah_form++;
+                }) 
+
+                setTimeout(() => {
+                    total = info_width + ((form_width + 50 ) * jumlah_form) + 100;
+                    if (total > currect_long_row) {
+                        $(".carl-long-row").css("width", total + "px");
+                    }        
+                }, 100);
+            }
+
+            function localset(key, val)
+            {
+                json = JSON.stringify(val);
+                console.log("local set " + key + " : ", val);
+                window.localStorage.setItem(key, json);
+            }
+
+            function localget(key)
+            {
+                obj = window.localStorage.getItem(key);
+                json = JSON.parse(obj);
+                console.log("local get " + key + " : ", json);
+                return json;
+            }
+
+            /* init */
+            init();
+            function init() {
+                form = localget("form");
+                if (form) {
+                    for (var key in form) {
+                        if (form.hasOwnProperty(key)) {
+                            var obj = form[key];
+                            newform(key, obj);
+                        }
+                    }
+                } else {
+                    newform();
+                }
+            }
+
+            /* add new form */
+            function newform(rand_id, obj){
+                if (!rand_id) {
+                    rand_id = randomstring();
+                }
+                
+                var supliyer_options = ``;
+                // var selected_supliyer = 
+                $(SUPLIYER_OPT).each(function(k,v){
+                    if (obj) {
+                        if (obj.supliyer_id == v.id) {
+                            supliyer_options = supliyer_options + `<option value="`+v.id+`" selected>`+v.company+`</option>`;
+                        } else {
+                            supliyer_options = supliyer_options + `<option value="`+v.id+`">`+v.company+`</option>`;
+                        }
+                    } else {
+                        supliyer_options = supliyer_options + `<option value="`+v.id+`">`+v.company+`</option>`;
+                    }
+                });
+                var html = `
+                    <div class="supliyer-information supliyer-`+ rand_id +`">
+                        <div class="row m-0">
+                            <div class="col-12">
+                                <div>
+                                    <small>Supliyer</small>
+                                    <select name="supplier_id[]" class="form-control supliyer-form" data-formid="`+rand_id+`">
+                                        <option value="">-Select Suppliyer-</option>
+                                        `+supliyer_options+`
+                                    </select>
+                                </div>
+                                <div class="">
+                                    <small>Item Name</small>
+                                    <input type="text" placeholder="Product name" name="product_name[]" class="form-control">
+                                    <small>Item Description</small>
+                                    <textarea name="product_desc[]" cols="30" rows="10" placeholder="Product Description" class="form-control"></textarea>
+                                </div>
+                                <div>
+                                    <small>Qty</small>
+                                    <input type="number" placeholder="Qty" name="product_qty[]" class="form-control">
+                                </div>
+                                <div>
+                                    <small>{{ '@Price' }}</small>
+                                    <p>
+                                        <input type="number" placeholder="Price" name="product_price[]" class="form-control">
+                                    </p>
+                                </div>
+                                <div class="">
+                                    <a class="btn btn-danger btn-sm text-white" onclick="$('.supliyer-`+ rand_id +`').remove()">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $(html).insertBefore(".supliyer-information-action");
+
+                setTimeout(() => {
+                    calculate_long_row();
+                }, 100);
+            }
+            
+            $("#add-suppliyer").click(function(){
+                newform();
+            })
+
+
+            /* on select supliyer */
+            $(".supliyer-form").change(function(){
+                var form_id = $(this).attr("data-formid");
+                form = localget("form");
+                if (!form) {
+                    form = {};
+                }
+                if (!form[form_id]) {
+                    form[form_id] = {};
+                }
+                form[form_id]["supliyer_id"] = $(this).val();
+                localset("form", form);
+            });
+        </script>
+        <style>
+            .item-information {
+                width:400px;
+                min-height: 250px;
+                display: inline-block;
+            }
+        
+            .supliyer-information {
+                width:400px;
+                min-height: 250px;
+                display: inline-block;
+                background-color: #efefef;
+                padding: 10px 5px;
+                border-radius: 7px;
+                margin-bottom: 5px;
+                margin-right: 5px;
+            }
+        
+            .supliyer-information-action {
+                width:100px;
+                min-height: 250px;
+                display: inline-block;
+            }
+
+            .carl-long-row {
+                min-width: 100%;
+            }
+        
+            small {
+                font-weight: bold;
+            }
+        </style>
     </x-slot>
 
 </x-app-layout>
