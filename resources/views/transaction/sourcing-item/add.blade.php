@@ -16,6 +16,18 @@
 
         
         <div class="row">
+            <div class="col-sm-12">
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+            </div>
             <div class="col-lg-12">
                 <div class="block">
                     <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
@@ -561,6 +573,10 @@
                                 <div>
                                     <small>{{ '@Price' }}</small>
                                     <input type="number" placeholder="Price" name="product_price[`+product_inquiry+`][]" class="form-control" onchange="form_change(`+row_id+`,'product_price', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_price ?? '') +`">
+                                </div>
+                                <div>
+                                    <small>Remark</small>
+                                    <input type="text" placeholder="Remark" name="remark[`+product_inquiry+`][]" class="form-control" onchange="form_change(`+row_id+`,'remark', $(this))" data-formid="`+rand_id+`" value="`+ (obj.remark ?? '') +`">
                                 </div>
                                 <div>
                                     <small>Production Time</small>
