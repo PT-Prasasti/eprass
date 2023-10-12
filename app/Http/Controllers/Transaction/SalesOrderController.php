@@ -704,8 +704,24 @@ class SalesOrderController extends Controller
 
     public function open($id)
     {
-        $so = SalesOrder::where('uuid', $id)->first();
-        return view('transaction.sales-order.open', compact('so'));
+        
+        $data['so'] = SalesOrder::where('uuid', $id)->first();
+        $sourcings = \App\Models\Sourcing::with("
+            sourcing_supplier.sourcing_items_single,
+            sourcing_supplier.sourcing_items
+        ")
+            ->where("so_id", $data['so']->id)
+            ->orderBy("created_at", "desc")
+            ->first()->toArray();
+
+        $suppliyers_products = [];
+        foreach ($sourcings['sourcing_supplier'] as $v) {
+
+        }
+
+        $data['suppliyers'] = \App\Models\Supplier::get();
+        $data['suppliyers_products'] = $suppliyers_products;
+        return view('transaction.sales-order.open', $data);
     }
 
     public function view($id): View

@@ -16,14 +16,26 @@
 
 
             <div class="row">
+                <div class="col-sm-12">
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                </div>
                 <div class="col-lg-12">
                     <div class="block">
                         <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#btabs-static-home">Home</a>
+                                <a class="nav-link" href="#btabs-static-home">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#btabs-static-review">Review</a>
+                                <a class="nav-link active" href="#btabs-static-review">Review</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#btabs-static-doc">Document</a>
@@ -31,7 +43,7 @@
                         </ul>
 
                         <div class="block-content tab-content">
-                            <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
+                            <div class="tab-pane" id="btabs-static-home" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-8">
                                         <div class="block block-rounded">
@@ -207,36 +219,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="btabs-static-review" role="tabpanel">
-                                <div class="text-right">
-                                    <div class="push">
-                                        <div class="btn-group" role="group"
-                                            aria-label="Button group with nested dropdown">
-                                            {{-- <button type="button" class="btn btn-primary">Time</button>
-                                        <button type="button" class="btn btn-primary">Price</button>
-                                        <button type="button" class="btn btn-primary">Desc</button> --}}
-                                            {{-- <a href="/" class="btn btn-primary">Add Supplier</a>
-                                            <a href="/" class="btn btn-warning">Upload File Excel</a>
-                                            <a href="/" class="btn btn-info">Download Format Excel</a> --}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="viewTable" class="table-responsive">
-                                    <table id="data_table"
-                                        class="table table-striped table-vcenter table-bordered js-dataTable-full"
-                                        style="font-size:10px">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">No.</th>
-                                                <th class="text-center">Item Desc</th>
-                                                <th class="text-center">Qty</th>
-                                                <th class="text-center">Supplier</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
+                            <div class="tab-pane active" id="btabs-static-review" role="tabpanel">
+                                <div class="table-responsive pb-4" id="product-list">
+                                
+                                
+                                
                                 </div>
                             </div>
                             <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
@@ -515,6 +502,7 @@
                             response.uuid)
                         $('#download-pdf').attr('href', '/transaction/sales-order/download/product-list/pdf/' +
                             response.uuid)
+                        review_product_select(response.data)
                     },
                     error: function(xhr, status, error) {
                         console.log(error)
@@ -672,6 +660,90 @@
                 })
             }
         </script>
+
+        <script>
+            var SUPLIYER_OPT = {!! json_encode($suppliyers) !!};
+            var SUPPLIYER_PRODUCT = {!! json_encode($suppliyers_product) !!};
+            var IS_READONLY = true;
+
+            function review_product_select(datas)
+            {
+                $(datas).each(function(k,v){
+                    console.log('product detail', v)
+                    no = k + 1;
+                    html = `
+                        <div class="carl-long-row carl-long-row-`+k+`" data-rowid="`+k+`" data-prodinq="`+v[5]+`">
+                            <div class="item-information">
+                                <div class="row m-0">
+                                    <div class="col-2">
+                                        <small>No.</small>
+                                        <p>`+ no +`</p>
+                                        <input type="hidden" class="product_inquery_id" name="product_inquery_id[]" value="`+v[5]+`">
+                                        <input type="hidden" class="so_id" name="so_id[]" value="`+v[6]+`">
+                                    </div>
+                                    <div class="col-8">
+                                        <small>Item Description</small>
+                                        <p class="m-0">Item Name : `+ v[0] +`</p>
+                                        <p class="m-0">Material Description : `+ v[1] +`</p>
+                                        <p class="m-0">Size : `+ v[2] +`</p>
+                                        <p class="m-0">Remark : `+ v[4] +`</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <small>Qty</small>
+                                        <p>`+v[3]+`</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="supliyer-information-action supliyer-information-action-`+k+`">
+                                
+                            </div>
+                        </div>
+                    `;
+
+                    $("#product-list").append(html);
+
+                })
+
+                setTimeout(() => {
+                    init_readonly() 
+                }, 300);
+            }
+        </script>
+        <script src="{{ asset('assets/js/suppliyer/form.js') }}"></script>
+        <script src="{{ asset('assets/js/suppliyer/function.js') }}"></script>
+       
+        <style>
+            .item-information {
+                width:400px;
+                min-height: 250px;
+                display: inline-block;
+            }
+
+            .supliyer-information {
+                width:400px;
+                min-height: 150px;
+                display: inline-block;
+                background-color: #efefef;
+                padding: 10px 5px;
+                border-radius: 7px;
+                margin-bottom: 5px;
+                margin-right: 5px;
+            }
+
+            .supliyer-information-action {
+                width:0px;
+                height: 0px;
+                display: inline-block;
+            }
+
+            .carl-long-row {
+                min-width: 100%;
+            }
+
+            small {
+                font-weight: bold;
+            }
+        </style>
     </x-slot>
 
 </x-app-layout>

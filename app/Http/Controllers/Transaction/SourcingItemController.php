@@ -49,6 +49,7 @@ class SourcingItemController extends Controller
     public function store(Request $re)
     {
         /* grouping param by product inquery id */
+        dd($re->all());
         $inquery_id = $re->so_id[0];
         $par = [];
         foreach ($re->product_inquery_id as $v) {
@@ -81,6 +82,8 @@ class SourcingItemController extends Controller
                 foreach($items as $item) {
                     $sourching_suppliyer = new \App\Models\SourcingSuppliers;
                     $sourching_suppliyer->sourcing_id = $sourching->id;
+                    $sourching_suppliyer->supliyer_id = $item['supliyer']->id;
+                    $sourching_suppliyer->inquiry_product_id = $item['inquery_products']->id;
                     $sourching_suppliyer->company = $item['supliyer']->company;
                     $sourching_suppliyer->item_name = $item['inquery_products']->item_name;;
                     $sourching_suppliyer->description = $item['product_desc'];
@@ -112,7 +115,7 @@ class SourcingItemController extends Controller
     public function sales_order(): JsonResponse
     {
         $inquiries = SalesOrder::whereRaw("
-            id NOT IN (SELECT so_id FROM `sourcings`)
+            id NOT IN (SELECT so_id FROM `sourcings` WHERE deleted_at IS NULL)
         ")->get();
         
         $result = array();

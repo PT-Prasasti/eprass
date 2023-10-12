@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sourcing_suppliers', function (Blueprint $table) {
-            $table->integer('unitprice')->after('qty');
+            $table->string('inquiry_product_id')->nullable()->after('currency');
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('sourcing_suppliers', function (Blueprint $table) {
-            $table->dropColumn('unitprice');
+            $table->dropColumn('inquiry_product_id');
         });
     }
 };

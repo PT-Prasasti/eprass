@@ -35,4 +35,9 @@ class SourcingSupplier extends Model
     {
         return $this->hasMany(SourcingItem::class, 'sourcing_supplier_id');
     }
+
+    public function sourcing_items_single()
+    {
+        return $this->hasOne(SourcingItem::class, 'sourcing_supplier_id');
+    }
 }
