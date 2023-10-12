@@ -208,6 +208,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/store-product', [SalesOrderController::class, 'store_product'])->name('.store-product');
         Route::post('/store', [SalesOrderController::class, 'store'])->name('.store');
         Route::post('/edit', [SalesOrderController::class, 'store_edit'])->name('.store-edit');
+        Route::post('/open', [SalesOrderController::class, 'openstore'])->name('.open-store');
 
         Route::post('/reviews', [SalesOrderController::class, 'review_get_data'])->name('.review_get_data');
         Route::post('/review-set-supplier', [SalesOrderController::class, 'set_supplier'])->name('.review_set_supplier');

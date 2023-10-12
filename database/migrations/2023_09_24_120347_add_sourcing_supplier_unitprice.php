@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sourcing_suppliers', function (Blueprint $table) {
-            $table->integer('unitprice')->after('qty');
+            $table->integer('unitprice')->nullable()->after('qty');
         });
     }
 

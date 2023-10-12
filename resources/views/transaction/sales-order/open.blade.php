@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <div class="content">
-        <form method="POST" action="{{ route('transaction.sourcing-item.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('transaction.sales-order.open-store') }}" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-md-6">
@@ -663,7 +663,7 @@
 
         <script>
             var SUPLIYER_OPT = {!! json_encode($suppliyers) !!};
-            var SUPPLIYER_PRODUCT = {!! json_encode($suppliyers_product) !!};
+            var SUPPLIYER_PRODUCT = {!! json_encode($suppliyers_products) !!};
             var IS_READONLY = true;
 
             function review_product_select(datas)

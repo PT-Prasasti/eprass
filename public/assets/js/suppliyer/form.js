@@ -65,20 +65,25 @@ function init_readonly() {
 
         // get product from the list
         from = SUPPLIYER_PRODUCT[product_inquiry];
-        if (form) {
-            console.log("form[rowid]", form[rowid]);
-            if (form[rowid]) {
-                for (var key in form[rowid]) {
-                    if (form[rowid].hasOwnProperty(key)) {
-                        var obj = form[rowid][key];
-                        console.log("init obj", obj);
-                        newform(rowid, product_inquiry, key, obj);
-                    }
-                }
-            }
-        } else {
-            newform(rowid, product_inquiry);
-        } 
+        
+        $(from).each(function(k,v){
+            console.log("form obj", v);
+            newform(rowid, product_inquiry, k, v);
+        })
+        // if (form) {
+        //     console.log("form[rowid]", form[rowid]);
+        //     if (form[rowid]) {
+        //         for (var key in form[rowid]) {
+        //             if (form[rowid].hasOwnProperty(key)) {
+        //                 var obj = form[rowid][key];
+        //                 console.log("init obj", obj);
+        //                 newform(rowid, product_inquiry, key, obj);
+        //             }
+        //         }
+        //     }
+        // } else {
+        //     newform(rowid, product_inquiry);
+        // } 
     });
 }
 
@@ -94,36 +99,32 @@ function newform(row_id, product_inquiry, rand_id, obj){
                 <div class="row m-0">
                     <div class="col-12">
                         <div class="remove-action" data-rowid="`+row_id+`" data-randid="`+rand_id+`">
-                            <input type="radio" name="product_`+product_inquiry+`" value="`+obj.suppliyer_id+`">
+                            <input type="radio" name="product_`+product_inquiry+`" value="`+obj.id+`" style="zoom:1.5">
                         </div>
                         <div>
                             <small>Supliyer</small>
-                            <p></p>
-                            
+                            <p class="mb-1">`+obj.company+`</p>
                         </div>
                         <div class="">
                             <small>Item Description</small>
-                            
+                            <p class="mb-1">`+obj.description+`</p>
                         </div>
                         <div>
                             <small>Qty</small>
-                            
+                            <p class="mb-1">`+obj.qty+`</p>
                         </div>
                         <div>
                             <small>Currency</small>
-                            
+                            <p class="mb-1">`+obj.currency.toUpperCase()+`</p>
                         </div>
                         <div>
                             <small>Harga Satuan</small>
-                            
+                            <p class="mb-1">`+obj.price+`</p>
                         </div>
-                        <div>
-                            <small>Remark</small>
-                            
-                        </div>
+                        
                         <div>
                             <small>Production Time</small>
-                            
+                            <p class="mb-1">`+obj.dt+`</p>
                         </div>
                         
                         

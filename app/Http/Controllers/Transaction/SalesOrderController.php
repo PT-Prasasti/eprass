@@ -620,6 +620,7 @@ class SalesOrderController extends Controller
 
     public function store(AddSalesOrderRequest $request): RedirectResponse
     {
+        
         try {
             DB::beginTransaction();
 
@@ -706,22 +707,55 @@ class SalesOrderController extends Controller
     {
         
         $data['so'] = SalesOrder::where('uuid', $id)->first();
-        $sourcings = \App\Models\Sourcing::with("
-            sourcing_supplier.sourcing_items_single,
-            sourcing_supplier.sourcing_items
-        ")
-            ->where("so_id", $data['so']->id)
+        $sourcings = \App\Models\Sourcing::where("so_id", $data['so']->id)
             ->orderBy("created_at", "desc")
-            ->first()->toArray();
+            ->first();
 
         $suppliyers_products = [];
-        foreach ($sourcings['sourcing_supplier'] as $v) {
-
+        foreach ($sourcings->sourcing_supplier as $v) {
+            $suppliyers_products[$v->inquiry_product_id][] = $v;
         }
 
         $data['suppliyers'] = \App\Models\Supplier::get();
         $data['suppliyers_products'] = $suppliyers_products;
         return view('transaction.sales-order.open', $data);
+    }
+
+    public function openstore(Request $request)
+    {
+        $so_id = $request->so_id[0];
+        $product_inquery_id = $request->product_inquery_id;
+        $sourcing_supplier_id = [];
+        foreach ($product_inquery_id as $prodid) {
+            $sourcing_supplier_id[] = $request->{"product_" . $prodid};
+        }
+        $sourcing_supplier = \App\Models\SourcingSupplier::whereIn("id", $sourcing_supplier_id)->get();
+
+        try {
+            DB::beginTransaction();
+
+            $so = \App\Models\SalesOrder::find($so_id);
+            $so->status = "Selection Done";
+            $so->save();
+    
+            foreach ($sourcing_supplier as $v) {
+                $selected_supliyer = new \App\Models\SelectedSourcingSupplier;
+                $selected_supliyer->sourcing_id = $v->sourcing_id;
+                $selected_supliyer->sourcing_supplier_id = $v->id;
+                $selected_supliyer->supplier_id = $v->supplier_id;
+                $selected_supliyer->save();
+            }
+
+            DB::commit();
+
+            return redirect(route('transaction.sourcing-item'))->with("success", "Data has beed successfuly submited");
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            return redirect(route('transaction.sourcing-item'))->with("error", "Database Error, please contact administrator!");
+        }
+        
     }
 
     public function view($id): View

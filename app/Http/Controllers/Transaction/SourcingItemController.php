@@ -49,7 +49,6 @@ class SourcingItemController extends Controller
     public function store(Request $re)
     {
         /* grouping param by product inquery id */
-        dd($re->all());
         $inquery_id = $re->so_id[0];
         $par = [];
         foreach ($re->product_inquery_id as $v) {
@@ -82,7 +81,7 @@ class SourcingItemController extends Controller
                 foreach($items as $item) {
                     $sourching_suppliyer = new \App\Models\SourcingSuppliers;
                     $sourching_suppliyer->sourcing_id = $sourching->id;
-                    $sourching_suppliyer->supliyer_id = $item['supliyer']->id;
+                    $sourching_suppliyer->supplier_id = $item['supliyer']->id;
                     $sourching_suppliyer->inquiry_product_id = $item['inquery_products']->id;
                     $sourching_suppliyer->company = $item['supliyer']->company;
                     $sourching_suppliyer->item_name = $item['inquery_products']->item_name;;
@@ -91,6 +90,7 @@ class SourcingItemController extends Controller
                     $sourching_suppliyer->price = $item['product_price'];
                     $sourching_suppliyer->dt = $item['production_time'];
                     $sourching_suppliyer->currency = $item['product_curentcy'];
+                    $sourching_suppliyer->unitprice = $item['product_price'];
                     $sourching_suppliyer->save();
 
                     $sourching_item = new \App\Models\SourchingItems;
@@ -107,7 +107,7 @@ class SourcingItemController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            dd($e);
+            
             return redirect(route('transaction.sourcing-item.add'))->with("error", "Database Error, please contact administrator!");
         }
     }

@@ -212,11 +212,14 @@
                             }
                         },
                         {
-                            data: "uuid",
+                            data: null,
                             className: "text-center",
-                            render: function(data) {
+                            render: function(r) {
+                                console.log('action data', r)
+                                data = r.uuid
+                                status = r.status
                                 return `@if (auth()->user()->hasRole('manager'))
-                                    <a href="sales-order/open/${data}" class="btn btn-sm btn-success" data-toggle="tooltip" title="Sourcing Item">
+                                    <a href="`+ (status == "ON PROCESS" ? "sales-order/open/" + data : "#") +`" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-file"></i>
                                     </a>
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Sourcing Item">
