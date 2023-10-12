@@ -1,4 +1,5 @@
 .env
-vendor/*
 node_modules
 dump.rdb
+/docker
+/vendor
