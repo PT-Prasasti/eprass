@@ -1082,9 +1082,65 @@ class SalesOrderController extends Controller
 
     public function product_lists(Request $request)
     {
+        $so = SalesOrder::where('uuid', $request->so)->first();
+        $data = InquiryProduct::where('inquiry_id', $so->inquiry_id)->get()->map(function($r){
+            $sourching_supplier = \App\Models\SourcingSupplier::where("inquiry_product_id", $r->id)
+            ->whereRaw("( id IN (
+                SELECT sourcing_supplier_id FROM selected_sourcing_suppliers WHERE deleted_at is NULL
+            ) )")
+            ->first();
+
+            $r->item_desc = $sourching_supplier->item_name;
+            $r->dt = $sourching_supplier->dt;
+            $r->price = $sourching_supplier->price;
+            $r->qty_sourcing = $sourching_supplier->qty;
+            $r->supplier = $sourching_supplier->company;
+            $r->description = $sourching_supplier->description;
+            $r->curency = $sourching_supplier->currency;
+            
+            return $r;
+        });
+
+        $result = DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('uuid', function($r){
+                return $r->uuid;
+            })
+            ->addColumn('item_desc', function($r){
+                return $r->item_desc;
+            })
+            ->addColumn('qty', function($r){
+                return $r->qty;
+            })
+            ->addColumn('supplier', function($r){
+                return $r->supplier;
+            })
+            ->addColumn('dt', function($r){
+                return $r->dt;
+            })
+            ->addColumn('price', function($r){
+                return $r->price;
+            })
+            ->addColumn('qty_sourcing', function($r){
+                return $r->qty_sourcing;
+            })
+            ->addColumn('description', function($r){
+                return $r->description;
+            })
+            ->addColumn('curency', function($r){
+                return $r->curency;
+            })
+            ->make(true);
+        
+        return $result;
+    }
+
+    public function ___product_lists(Request $request)
+    {
         try {
             $so = SalesOrder::where('uuid', $request->so)->first();
             $data = InquiryProduct::where('inquiry_id', $so->inquiry_id)->get();
+            // dd($data);
 
             $result = DataTables::of($data)
                 ->addIndexColumn()
@@ -1105,7 +1161,7 @@ class SalesOrderController extends Controller
                         if ($supplierData === null && isset($item->sourcing_supplier)) {
                             $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
                             $selectedSourcingSupplier = SelectedSourcingSupplier::where('sourcing_supplier_id', $item->sourcing_supplier_id)
-                                // ->where('supplier_id', $supplier->id)
+                                ->orderBy('created_at', "desc")
                                 ->take(1)
                                 ->first();
 
@@ -1212,12 +1268,12 @@ class SalesOrderController extends Controller
                     'message' => 'success',
                     'amount' => $amountIdr
                 ]);
-                \dd('blok');
+                
             } else {
-                \dd('ppp');
+                
             }
-        } catch (\Throwable $th) {
-            dd($th);
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 }

@@ -3,7 +3,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-6">
-                <h4><b>List Sales Order</b></h4>
+                <h4><b>List Sourching Items</b></h4>
             </div>
             <div class="col-md-6 text-right">
                 <div class="push">
@@ -51,7 +51,7 @@
 
 
         <div class="block block-rounded">
-            <div class="block-content block-content-full" id="viewTable">
+            <div class="block-content block-content-full table-responsive" id="viewTable">
                 <table class="table table-striped table-vcenter js-dataTable-simple" style="font-size:13px"
                     id="dataTable">
                     <thead>
@@ -219,7 +219,7 @@
                                 data = r.uuid
                                 status = r.status
                                 return `@if (auth()->user()->hasRole('manager'))
-                                    <a href="`+ (status == "ON PROCESS" ? "sales-order/open/" + data : "#") +`" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Sourcing Item">
+                                    <a href="`+ (status == "ON PROCESS" ? "sales-order/open/" + data : "#") +`" class="btn btn-sm btn-`+ (status == "ON PROCESS" ? "success" : "secondary") +`" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-file"></i>
                                     </a>
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Sourcing Item">
@@ -233,7 +233,7 @@
                                     @endif
                                     @if (auth()->user()->hasRole('purchasing') ||
                                             auth()->user()->hasRole('superadmin'))
-                                    <a href="sales-order/price/${data}" class="btn btn-sm btn-success" data-toggle="tooltip" title="Price">
+                                    <a href="` +  (status == "SELECTION DONE" ? "sales-order/price/" + data : "#")  +`" class="btn btn-sm btn-`+ (status == "SELECTION DONE" ? "success" : "secondary") +`" data-toggle="tooltip" title="Price">
                                         <i class="fa fa-dollar"></i>
                                     </a>
                                     <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sourcing Item">

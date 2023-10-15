@@ -133,8 +133,9 @@
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
+                                console.log("data on dt production", data, type, row)
                                 return `
-                                    <input type="text" class="form-control" name="dt_production">
+                                    <input type="text" class="simple-form-control" name="dt_production" value="`+row.dt+`">
                                 `
                             }
                         },
@@ -142,11 +143,12 @@
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
+                                CUR = row.curency.toUpperCase();
                                 return `
-                                    <select class="form-control" name="currency">
+                                    <select class="simple-form-control" name="currency">
                                         <option selected disabled>Choose Currency</option>
-                                        <option value="USD">USD</option>
-                                        <option value="IDR">IDR</option>
+                                        <option value="USD" `+(CUR == "USD" ? "selected" : "")+`>USD</option>
+                                        <option value="IDR" `+(CUR == "IDR" ? "selected" : "")+`>IDR</option>
                                     </select>
                                 `
                             }
@@ -156,7 +158,7 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <select class="form-control" name="shipping_fee">
+                                    <select class="simple-form-control" name="shipping_fee">
                                         <option selected disabled>Choose Shipping Fee</option>
                                         <option value="2.0">2,0</option>
                                         <option value="1.9">1,9</option>
@@ -178,7 +180,7 @@
                             width: '8%',
                             render: function(data, type, row) {
                                 return `
-                                    <select class="form-control" name="profit">
+                                    <select class="simple-form-control" name="profit">
                                         <option selected disabled>Choose Profit</option>
                                         <option value="0.9">0,9</option>
                                         <option value="0.8">0,8</option>
@@ -287,5 +289,15 @@
                 });
             }
         </script>
+        <style>
+            .simple-form-control {
+                height: 25px;
+                border-radius: 6px;
+                border: solid 1px #ccc;
+                padding: 5px 6px;
+                background-color: #fff;
+            }
+            
+        </style>
     </x-slot>
 </x-app-layout>
