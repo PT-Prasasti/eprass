@@ -1,50 +1,73 @@
 <x-app-layout>
 
     <div class="content">
-        <div class="row">
-            <div class="col-md-6">
-                <h4><b>Price List : {{ $so->id }}</b></h4>
+        <form method="POST" action="{{ route('transaction.sales-order.price.store', $so->uuid) }}"
+            enctype="multipart/form-data">
+            @csrf
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><b>Price List : {{ $so->id }}</b></h4>
+                </div>
+                <div class="col-md-6 text-right">
+                    <button type="submit" class="btn btn-success mr-5 mb-5">
+                        <i class="fa fa-save mr-5"></i>Save Price List
+                    </button>
+                </div>
             </div>
-        </div>
 
+            <div class="row">
+                <div class="col-sm-12">
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                </div>
+            </div>
 
-        <div class="block block-rounded">
-            <div class="block-content block-content-full">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="table-responsive" id="viewTable">
-                                <table class="table table-bordered table-vcenter js-dataTable-simple"
-                                    style="font-size:10px">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center">Item Description</th>
-                                            <th class="text-center">Qty</th>
-                                            <th class="text-center">Supplier</th>
-                                            <th class="text-center">Description</th>
-                                            <th class="text-center">Qty</th>
-                                            <th class="text-center">Unit Price</th>
-                                            <th class="text-center">DT Production</th>
-                                            <th class="text-center">Delivery Time</th>
-                                            <th class="text-center">Currency</th>
-                                            <th class="text-center">Shipping Fee</th>
-                                            <th class="text-center">Profit</th>
-                                            <th class="text-center">Unit Selling Price</th>
-                                            <th class="text-center">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+            <div class="block block-rounded">
+                <div class="block-content block-content-full">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="table-responsive" id="viewTable">
+                                    <table class="table table-bordered table-vcenter js-dataTable-simple"
+                                        style="font-size:10px">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">No.</th>
+                                                <th class="text-center">Item Description</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-center">Supplier</th>
+                                                <th class="text-center">Description</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-center">Unit Price</th>
+                                                <th class="text-center">DT Production</th>
+                                                <th class="text-center">Delivery Time</th>
+                                                <th class="text-center">Currency</th>
+                                                <th class="text-center">Shipping Fee</th>
+                                                <th class="text-center">Profit</th>
+                                                <th class="text-center">Unit Selling Price</th>
+                                                <th class="text-center">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </form>
     </div>
 
     <x-slot name="js">
@@ -67,8 +90,8 @@
                                 <th class="text-center">Description</th>
                                 <th class="text-center">Qty</th>
                                 <th class="text-center">Unit Price</th>
-                                <th class="text-center">Delivery Time</th>
                                 <th class="text-center">DT Production</th>
+                                <th class="text-center">Delivery Time</th>
                                 <th class="text-center">Currency</th>
                                 <th class="text-center">Shipping Fee</th>
                                 <th class="text-center">Profit</th>
@@ -133,9 +156,10 @@
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
-                                console.log("data on dt production", data, type, row)
                                 return `
-                                    <input type="text" class="simple-form-control" name="dt_production" value="`+row.dt+`">
+                                    <input type="text" class="simple-form-control" name="price_list[${row.uuid}][delivery_time]" value="` +
+                                    row
+                                    .dt + `">
                                 `
                             }
                         },
@@ -145,10 +169,10 @@
                             render: function(data, type, row) {
                                 CUR = row.curency.toUpperCase();
                                 return `
-                                    <select class="simple-form-control" name="currency">
+                                    <select class="simple-form-control" name="price_list[${row.uuid}][currency]" calculate>
                                         <option selected disabled>Choose Currency</option>
-                                        <option value="USD" `+(CUR == "USD" ? "selected" : "")+`>USD</option>
-                                        <option value="IDR" `+(CUR == "IDR" ? "selected" : "")+`>IDR</option>
+                                        <option value="USD" ` + (CUR == "USD" ? "selected" : "") + `>USD</option>
+                                        <option value="IDR" ` + (CUR == "IDR" ? "selected" : "") + `>IDR</option>
                                     </select>
                                 `
                             }
@@ -158,7 +182,7 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <select class="simple-form-control" name="shipping_fee">
+                                    <select class="simple-form-control" name="price_list[${row.uuid}][shipping_fee]" calculate>
                                         <option selected disabled>Choose Shipping Fee</option>
                                         <option value="2.0">2,0</option>
                                         <option value="1.9">1,9</option>
@@ -180,7 +204,7 @@
                             width: '8%',
                             render: function(data, type, row) {
                                 return `
-                                    <select class="simple-form-control" name="profit">
+                                    <select class="simple-form-control" name="price_list[${row.uuid}][profit]" calculate>
                                         <option selected disabled>Choose Profit</option>
                                         <option value="0.9">0,9</option>
                                         <option value="0.8">0,8</option>
@@ -192,6 +216,9 @@
                                         <option value="0.2">0,2</option>
                                         <option value="0.1">0,1</option>
                                     </select>
+
+                                    <input type="hidden" name="price_list[${row.uuid}][cost]" value="0">
+                                    <input type="hidden" name="price_list[${row.uuid}][total_cost]" value="0">
                                 `
                             }
                         },
@@ -220,18 +247,28 @@
                             "previous": '<i class="fa fa-angle-left"></i>',
                             "next": '<i class="fa fa-angle-right"></i>'
                         }
-                    }
-                })
+                    },
+                    "fnRowCallback": function(nRow, aData) {
+                        var $nRow = $(nRow);
+                        $nRow.attr("data-uuid", aData['uuid']);
+
+                        return nRow;
+                    },
+                });
+
                 $('#data_table').on('change',
-                    'select[name="currency"], input[name="dt_production"], input[name="price"], select[name="shipping_fee"], select[name="profit"]',
+                    '[calculate]',
                     function() {
                         var row = $(this).closest('tr')
-                        var currency = row.find('select[name="currency"]').val()
+                        var dataId = row.data('uuid')
+                        var currency = row.find(`select[name="price_list[${dataId}][currency]`).val()
                         var unitPrice = parseFloat(row.find('td:nth-child(7)').html())
-                        var shippingFee = parseFloat(row.find('select[name="shipping_fee"]').val())
-                        var profit = parseFloat(row.find('select[name="profit"]').val())
-                        var dtProduction = parseFloat(row.find('input[name="dt_production"]').val())
+                        var shippingFee = parseFloat(row.find(`select[name="price_list[${dataId}][shipping_fee]`).val())
+                        var profit = parseFloat(row.find(`select[name="price_list[${dataId}][profit]`).val())
                         var qty = parseFloat(row.find('td:nth-child(3)').html())
+
+                        row.find(`input[name="price_list[${dataId}][cost]`).val(0)
+                        row.find(`input[name="price_list[${dataId}][total_cost]`).val(0)
 
                         if (currency != null && !isNaN(shippingFee) && !isNaN(profit) && !isNaN(qty)) {
                             if (currency == 'USD') {
@@ -244,6 +281,11 @@
                                         row.find('td:nth-child(14)').html(formatCurrency(total))
                                         row.find('td:nth-child(13)').html(formatCurrency(
                                             unitSellingPrice))
+
+                                        row.find(`input[name="price_list[${dataId}][total_cost]`).val(
+                                            unitSellingPrice
+                                        )
+                                        row.find(`input[name="price_list[${dataId}][cost]`).val(total)
                                     } else {
                                         row.find('td:nth-child(14)').html('')
                                         row.find('td:nth-child(13)').html('')
@@ -254,8 +296,12 @@
                                 var unitSellingPrice = unitPrice * shippingFee / profit;
                                 row.find('td:nth-child(14)').html(formatCurrency(total))
                                 row.find('td:nth-child(13)').html(formatCurrency(unitSellingPrice))
+
+                                row.find(`input[name="price_list[${dataId}][total_cost]`).val(
+                                    unitSellingPrice
+                                )
+                                row.find(`input[name="price_list[${dataId}][cost]`).val(total)
                             }
-                            console.log(total);
                         } else {
                             row.find('td:nth-child(14)').html('')
                             row.find('td:nth-child(13)').html('')
@@ -272,7 +318,6 @@
                         "usd": usd
                     },
                     success: function(data) {
-                        console.log(data)
                         callback(data)
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
@@ -297,7 +342,6 @@
                 padding: 5px 6px;
                 background-color: #fff;
             }
-            
         </style>
     </x-slot>
 </x-app-layout>

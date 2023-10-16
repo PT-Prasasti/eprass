@@ -102,7 +102,7 @@ function newform(row_id, product_inquiry, rand_id, obj){
                             <input type="radio" name="product_`+product_inquiry+`" value="`+obj.id+`" style="zoom:1.5">
                         </div>
                         <div>
-                            <small>Supliyer</small>
+                            <small>Supplier</small>
                             <p class="mb-1">`+obj.company+`</p>
                         </div>
                         <div class="">
@@ -156,7 +156,7 @@ function newform(row_id, product_inquiry, rand_id, obj){
                     <div class="col-12">
                         
                         <div>
-                            <small>Supliyer</small>
+                            <small>Supplier</small>
                             <select name="supplier_id[`+product_inquiry+`][]" class="form-control supliyer-form" data-formid="`+rand_id+`" onchange="supliyer_change(`+row_id+`, $(this))">
                                 <option value="">-Select Suppliyer-</option>
                                 `+supliyer_options+`

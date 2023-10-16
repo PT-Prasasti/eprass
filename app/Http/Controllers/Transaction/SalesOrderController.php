@@ -25,6 +25,7 @@ use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Transaction\AddSalesOrderRequest;
 use App\Http\Requests\Transaction\EditSalesOrderRequest;
+use App\Http\Requests\Transaction\Price\AddPriceRequest;
 use App\Models\SelectedSourcingSupplier;
 use App\Models\SourcingItem;
 use App\Models\SourcingSupplier;
@@ -620,7 +621,7 @@ class SalesOrderController extends Controller
 
     public function store(AddSalesOrderRequest $request): RedirectResponse
     {
-        
+
         try {
             DB::beginTransaction();
 
@@ -705,7 +706,7 @@ class SalesOrderController extends Controller
 
     public function open($id)
     {
-        
+
         $data['so'] = SalesOrder::where('uuid', $id)->first();
         $sourcings = \App\Models\Sourcing::where("so_id", $data['so']->id)
             ->orderBy("created_at", "desc")
@@ -737,7 +738,7 @@ class SalesOrderController extends Controller
             $so = \App\Models\SalesOrder::find($so_id);
             $so->status = "Selection Done";
             $so->save();
-    
+
             foreach ($sourcing_supplier as $v) {
                 $selected_supliyer = new \App\Models\SelectedSourcingSupplier;
                 $selected_supliyer->sourcing_id = $v->sourcing_id;
@@ -749,13 +750,11 @@ class SalesOrderController extends Controller
             DB::commit();
 
             return redirect(route('transaction.sourcing-item'))->with("success", "Data has beed successfuly submited");
-
         } catch (\Exception $e) {
             DB::rollback();
             dd($e);
             return redirect(route('transaction.sourcing-item'))->with("error", "Database Error, please contact administrator!");
         }
-        
     }
 
     public function view($id): View
@@ -1080,15 +1079,55 @@ class SalesOrderController extends Controller
         return view('transaction.sales-order.price', compact('so'));
     }
 
+    public function store_price($id, AddPriceRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $so = SalesOrder::with(['products'])->where('uuid', $id)->first();
+            $priceList = $request->price_list;
+            InquiryProduct::query()->where('inquiry_id', $so->inquiry_id)->get()->map(function ($r) use ($priceList) {
+                $sourcing_supplier = \App\Models\SourcingSupplier::where("inquiry_product_id", $r->id)
+                    ->whereRaw("id IN (SELECT sourcing_supplier_id FROM selected_sourcing_suppliers WHERE deleted_at is NULL)")
+                    ->first();
+
+                if (isset($priceList[$r->uuid])) {
+                    $r->delivery_time = $priceList[$r->uuid]['delivery_time'];
+                    $r->sourcing_qty = $sourcing_supplier->qty;
+                    $r->currency = $priceList[$r->uuid]['currency'];
+                    $r->price = $sourcing_supplier->price;
+                    $r->shipping_fee = floatval($priceList[$r->uuid]['shipping_fee']);
+                    $r->profit = floatval($priceList[$r->uuid]['profit']);
+                    $r->cost = floatval($priceList[$r->uuid]['cost']);
+                    $r->total_cost = floatval($priceList[$r->uuid]['total_cost']);
+                    $r->save();
+                }
+
+                return $r;
+            });
+
+            $so->status = 'Price List Ready';
+            $so->save();
+
+            DB::commit();
+
+            return redirect()->route('transaction.sourcing-item')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            // dd($e);
+
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
+    }
+
     public function product_lists(Request $request)
     {
         $so = SalesOrder::where('uuid', $request->so)->first();
-        $data = InquiryProduct::where('inquiry_id', $so->inquiry_id)->get()->map(function($r){
+        $data = InquiryProduct::where('inquiry_id', $so->inquiry_id)->get()->map(function ($r) {
             $sourching_supplier = \App\Models\SourcingSupplier::where("inquiry_product_id", $r->id)
-            ->whereRaw("( id IN (
+                ->whereRaw("( id IN (
                 SELECT sourcing_supplier_id FROM selected_sourcing_suppliers WHERE deleted_at is NULL
             ) )")
-            ->first();
+                ->first();
 
             $r->item_desc = $sourching_supplier->item_name;
             $r->dt = $sourching_supplier->dt;
@@ -1097,41 +1136,41 @@ class SalesOrderController extends Controller
             $r->supplier = $sourching_supplier->company;
             $r->description = $sourching_supplier->description;
             $r->curency = $sourching_supplier->currency;
-            
+
             return $r;
         });
 
         $result = DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('uuid', function($r){
+            ->addColumn('uuid', function ($r) {
                 return $r->uuid;
             })
-            ->addColumn('item_desc', function($r){
+            ->addColumn('item_desc', function ($r) {
                 return $r->item_desc;
             })
-            ->addColumn('qty', function($r){
+            ->addColumn('qty', function ($r) {
                 return $r->qty;
             })
-            ->addColumn('supplier', function($r){
+            ->addColumn('supplier', function ($r) {
                 return $r->supplier;
             })
-            ->addColumn('dt', function($r){
+            ->addColumn('dt', function ($r) {
                 return $r->dt;
             })
-            ->addColumn('price', function($r){
+            ->addColumn('price', function ($r) {
                 return $r->price;
             })
-            ->addColumn('qty_sourcing', function($r){
+            ->addColumn('qty_sourcing', function ($r) {
                 return $r->qty_sourcing;
             })
-            ->addColumn('description', function($r){
+            ->addColumn('description', function ($r) {
                 return $r->description;
             })
-            ->addColumn('curency', function($r){
+            ->addColumn('curency', function ($r) {
                 return $r->curency;
             })
             ->make(true);
-        
+
         return $result;
     }
 
@@ -1268,9 +1307,7 @@ class SalesOrderController extends Controller
                     'message' => 'success',
                     'amount' => $amountIdr
                 ]);
-                
             } else {
-                
             }
         } catch (\Exception $e) {
             dd($e);
