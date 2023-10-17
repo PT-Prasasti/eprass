@@ -180,7 +180,7 @@ function newform(row_id, product_inquiry, rand_id, obj){
                         </div>
                         <div>
                             <small>Harga Satuan</small>
-                            <input type="number" placeholder="Price" name="product_price[`+product_inquiry+`][]" class="form-control" onchange="form_change(`+row_id+`,'product_price', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_price ?? '') +`">
+                            <input type="text" placeholder="Price" name="product_price[`+product_inquiry+`][]" class="form-control le-price" onchange="form_change(`+row_id+`,'product_price', $(this))" data-formid="`+rand_id+`" value="`+ (obj.product_price ?? '') +`">
                         </div>
                         <div>
                             <small>Remark</small>
@@ -210,6 +210,14 @@ function newform(row_id, product_inquiry, rand_id, obj){
         calculate_long_row(row_id);
     }, 200);
 }
+
+setInterval(() => {
+    $('.le-price').each(function(){
+        price = $(this).val();
+        price = toRupiah(price);
+        $(this).val(price);
+    })
+}, 1000);
 
 function supliyer_change(rowid, input)
 {

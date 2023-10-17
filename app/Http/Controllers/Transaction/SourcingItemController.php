@@ -62,7 +62,7 @@ class SourcingItemController extends Controller
                     'product_desc' => $re->product_desc[$v][$k],
                     'product_qty' => $re->product_qty[$v][$k],
                     'product_curentcy' => $re->product_curentcy[$v][$k],
-                    'product_price' => $re->product_price[$v][$k],
+                    'product_price' => str_replace(".", "", $re->product_price[$v][$k]),
                     'production_time' => $re->production_time[$v][$k],
                     'remark' => $re->remark[$v][$k],
                 ];
