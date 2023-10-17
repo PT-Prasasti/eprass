@@ -232,6 +232,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::get('/sales', [SourcingItemController::class, 'sales'])->name('.sales');
         Route::get('/sales/{id}', [SourcingItemController::class, 'sales_detail'])->name('.sales-detail');
         Route::get('/view/{id}', [SourcingItemController::class, 'view'])->name('.view');
+        Route::get('/selected/{id}', [SourcingItemController::class, 'selected'])->name('.selected');
         Route::get('/download/product-list/excel/{id}', [SourcingItemController::class, 'download_product_list_excel'])->name('.download-product-list-excel');
         Route::get('/download/product-list/pdf/{id}', [SourcingItemController::class, 'download_product_list_pdf'])->name('.download-product-list-pdf');
         Route::get('/edit/{id}', [SourcingItemController::class, 'edit'])->name('.edit');
