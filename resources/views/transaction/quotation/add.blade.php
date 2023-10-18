@@ -5,7 +5,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <h4><b>QUOTATION NUMBER : 001/Q/001/X/23</b></h4>
+                    <h4><b>Add Quotation</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
                     <button type="submit" class="btn btn-success mr-5 mb-5">
