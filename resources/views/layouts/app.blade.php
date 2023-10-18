@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/ion-rangeslider/css/ion.rangeSlider.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/dropzonejs/dist/dropzone.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/flatpickr/flatpickr.min.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 
@@ -104,6 +105,7 @@
     <script src="{{ asset('assets/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/moment/moment.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/be_comp_charts.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>jQuery(function(){ Codebase.helpers('easy-pie-chart'); });</script>
 

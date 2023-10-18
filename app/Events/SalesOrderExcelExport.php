@@ -28,6 +28,7 @@ class SalesOrderExcelExport implements WithHeadings, WithColumnWidths, WithStyle
      * @var array
      */
     public $data;
+    public $salesOrderNumber;
 
     /**
      * Create a new event instance.
@@ -39,12 +40,21 @@ class SalesOrderExcelExport implements WithHeadings, WithColumnWidths, WithStyle
         $this->data = $data;
     }
 
+    public function setSalesOrderNumber($salesOrderNumber)
+    {
+        $this->salesOrderNumber = $salesOrderNumber;
+    }
+
     /**
      * @return array
      */
     public function headings(): array
     {
-        return ['No', 'Item Name', 'Material Description', 'Size', 'Quantity', 'Remark'];
+        return [
+            // ['SO:', $this->salesOrderNumber, '', '', '', ''],
+            ['SO: ' . $this->salesOrderNumber],
+            ['No', 'Item Name', 'Material Description', 'Size', 'Quantity', 'Remark']
+        ];
     }
 
     /**
@@ -65,7 +75,7 @@ class SalesOrderExcelExport implements WithHeadings, WithColumnWidths, WithStyle
     public function styles(Worksheet $sheet)
     {
         $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-        
+
         // Get the row dimension object for the first row
         $rowDimension = $sheet->getRowDimension(1);
 
@@ -91,17 +101,19 @@ class SalesOrderExcelExport implements WithHeadings, WithColumnWidths, WithStyle
         ];
 
         $sheet->getStyle($range)->applyFromArray($styleArray);
-        
+
         $lastRow = $sheet->getHighestRow();
-        for($i = 2; $i <= $lastRow; $i++) {
+        for ($i = 2; $i <= $lastRow; $i++) {
             $range = 'A' . $i . ':' . $lastColumn . $i;
             $sheet->getStyle($range)->getAlignment()
                 ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
                 ->setWrapText(true);
             $sheet->getStyle($range)->applyFromArray($styleArray);
-            $sheet->getStyle('A'.$i)->getAlignment($styleArray)
+            $sheet->getStyle('A' . $i)->getAlignment($styleArray)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         }
+
+        $sheet->mergeCells('A1:F1');
 
         return [
             // Style the first row as bold text.

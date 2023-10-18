@@ -16,6 +16,18 @@
 
         
         <div class="row">
+            <div class="col-sm-12">
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+            </div>
             <div class="col-lg-12">
                 <div class="block">
                     <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
@@ -23,7 +35,7 @@
                             <a class="nav-link active" href="#btabs-static-home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#btabs-static-review">Review</a>
+                            <a class="nav-link review-link" href="#btabs-static-review">Review</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#btabs-static-doc">Document</a>
@@ -187,69 +199,11 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="btabs-static-review" role="tabpanel">
-                            <div class="text-right">
-                                <div class="push">
-                                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                                        <button type="button" class="btn btn-primary">Time</button>
-                                        <button type="button" class="btn btn-primary">Price</button>
-                                        <button type="button" class="btn btn-primary">Desc</button>
-                                    </div>
-                                </div>
+                            <div class="table-responsive pb-4" id="product-list">
+                                
+                                
+                                
                             </div>
-                            <table class="table table-striped table-vcenter table-bordered js-dataTable-simple" style="font-size:10px">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2" class="text-center">No.</th>
-                                        <th rowspan="2" class="text-center">Item Desc</th>
-                                        <th rowspan="2" class="text-center">Qty</th>
-                                        <th rowspan="2" class="text-center">Supplier</th>
-                                        <th colspan="4" class="text-center">Input Nama PT 1<hr></th>
-                                        <th colspan="4" class="text-center">Input Nama PT 2<hr></th>
-                                    </tr>
-                                    <tr>                                  
-                                        <th class="text-center" style="width: 15%;">Description</th>
-                                        <th class="text-center" style="width: 2%;">QTY</th>
-                                        <th class="text-center" style="width: 5%;">Unit Price</th>
-                                        <th class="text-center">DT</th>
-                                        <th class="text-center" style="width: 15%;">Description</th>
-                                        <th class="text-center" style="width: 2%;">QTY</th>
-                                        <th class="text-center" style="width: 2%;">Unit Price</th>
-                                        <th class="text-center">DT</th>
-                                    </tr>
-                                    
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>
-                                            PRESSURE RELIEF VALVE</br>
-                                            Brand : CLA-VAL or equivalent</br>
-                                            DN150 TYPE ANGLE 6” Flanged</br>
-                                            SIZE : INLET 6” & OUTLET 6”</br>
-                                            Pressure Gauge Size ½“ ;300 psi</br>
-                                            Material Accessories : Stainless Steel (Brass not approved = corrosive)</br>
-                                            Standard : NFPA20</br>
-                                            Certificated : Yes</br>
-                                        </td>
-                                        <td class="text-center">2</td>
-                                        <td>
-                                            <select class="form-control" name="">
-                                                <option value="0">Select</option>
-                                                <option value="">Supp 1</option>
-                                                <option value="">Supp 2</option>
-                                            </select>
-                                        </td>
-                                        <td class="text-center"></td>
-                                        <td></td>
-                                        <td class="text-right"></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td> </td>
-                                        <td class="text-right"></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                         <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
                             <div class="row">
@@ -346,6 +300,10 @@
                     uuid = response.uuid
                     getPdf(id)
                     getProductList(id)
+                    // reviewurl = '{{ route("transaction.sourcing-item.add", ["id", ":id"]) }}';
+                    // reviewurl = reviewurl.replace("id?:id", uuid);
+                    // reviewurl = reviewurl + '#btabs-static-review';
+                    // $('.review-link').attr("href", reviewurl);
                 })
             }
 
@@ -399,11 +357,60 @@
                         listItemTable(response.status, response.data)
                         $('#download-excel').attr('href', '/transaction/sales-order/download/product-list/excel/'+response.uuid)
                         $('#download-pdf').attr('href', '/transaction/sales-order/download/product-list/pdf/'+response.uuid)
+                        review_product_select(response.data)
                     },
                     error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
+            }
+
+            function review_product_select(datas)
+            {
+                $(datas).each(function(k,v){
+                    console.log('product detail', v)
+                    no = k + 1;
+                    html = `
+                        <div class="carl-long-row carl-long-row-`+k+`" data-rowid="`+k+`" data-prodinq="`+v[5]+`">
+                            <div class="item-information">
+                                <div class="row m-0">
+                                    <div class="col-2">
+                                        <small>No.</small>
+                                        <p>`+ no +`</p>
+                                        <input type="hidden" class="product_inquery_id" name="product_inquery_id[]" value="`+v[5]+`">
+                                        <input type="hidden" class="so_id" name="so_id[]" value="`+v[6]+`">
+                                    </div>
+                                    <div class="col-8">
+                                        <small>Item Description</small>
+                                        <p class="m-0">Item Name : `+ v[0] +`</p>
+                                        <p class="m-0">Material Description : `+ v[1] +`</p>
+                                        <p class="m-0">Size : `+ v[2] +`</p>
+                                        <p class="m-0">Remark : `+ v[4] +`</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <small>Qty</small>
+                                        <p>`+v[3]+`</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="supliyer-information-action supliyer-information-action-`+k+`">
+                                <a class="btn btn-primary btn-sm text-white" onclick="newform(`+k+`, `+v[5]+`)">
+                                    <i class="fa fa-plus"></i> Add More
+                                </a>
+                            </div>
+                        </div>
+                    `;
+
+                    $("#product-list").append(html);
+
+                })
+
+                setTimeout(() => {
+                        init() 
+                    }, 300);
             }
 
             function listItemTable(status, data)
@@ -428,6 +435,46 @@
             }
 
         </script>
+        <script>
+            var SUPLIYER_OPT = {!! json_encode($suppliyers) !!};
+            var IS_READONLY = false;
+
+            
+        </script>
+        <script src="{{ asset('assets/js/suppliyer/form.js') }}"></script>
+        <script src="{{ asset('assets/js/suppliyer/function.js') }}"></script>
+        <style>
+            .item-information {
+                width:400px;
+                min-height: 250px;
+                display: inline-block;
+            }
+        
+            .supliyer-information {
+                width:400px;
+                min-height: 250px;
+                display: inline-block;
+                background-color: #efefef;
+                padding: 10px 5px;
+                border-radius: 7px;
+                margin-bottom: 5px;
+                margin-right: 5px;
+            }
+        
+            .supliyer-information-action {
+                width:100px;
+                min-height: 250px;
+                display: inline-block;
+            }
+
+            .carl-long-row {
+                min-width: 100%;
+            }
+        
+            small {
+                font-weight: bold;
+            }
+        </style>
     </x-slot>
 
 </x-app-layout>

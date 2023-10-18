@@ -1,0 +1,6 @@
+.env
+node_modules
+dump.rdb
+/docker
+/vendor
+/public/storage

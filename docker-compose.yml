@@ -1,0 +1,37 @@
+version: '3'
+services:
+    db:
+        image: mariadb
+        environment:
+            - MYSQL_ROOT_PASSWORD=apple
+            - MYSQL_DATABASE=eprass
+        ports:
+            - 3306:3306
+        volumes:
+            - ./docker/mysql:/var/lib/mysql
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "8888:80"
+        depends_on:
+            - db
+    php:
+        image: akhyarmaulana/php82-redis-db
+        ports:
+            - "80:80"   
+        depends_on:
+            - db
+        tty: true
+        volumes:
+            - ./:/app
+        command: "sh /app/deploy.sh"
+    redis:
+        image: redis
+        ports:
+            - "6381:6379"
+networks:
+    default:
+        driver: bridge
+        ipam:
+          config:
+            - subnet: 172.16.22.0/24

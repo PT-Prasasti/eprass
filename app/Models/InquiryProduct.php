@@ -20,10 +20,33 @@ class InquiryProduct extends Model
         self::creating(function ($model) {
             $model->uuid = (string) Uuid::generate(4);
         });
-    } 
-    
+    }
+
+    protected $appends = [
+        'quantity'
+    ];
+
+    public function getQuantityAttribute(): int
+    {
+        $totalQty = 0;
+        $this->sourcing_items->map(function ($item) use ($totalQty) {
+            $supplier = SourcingSupplier::where('id', $item->sourcing_supplier_id)->first();
+
+            if ($supplier) {
+                return $totalQty += $supplier->qty;
+            };
+        });
+
+        return $totalQty;
+    }
+
     public function inquiry()
     {
         return $this->belongsTo(Inquiry::class, 'inquiry_id');
+    }
+
+    public function sourcing_items()
+    {
+        return $this->hasMany(SourcingItem::class, 'inquiry_product_id');
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
 use App\Http\Controllers\Helper\NotificationController;
+use App\Http\Controllers\Transaction\QuotationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
 
@@ -29,7 +30,7 @@ Route::get('/', function () {
 });
 
 // route dashboard
-Route::prefix('/dashboard')->name('dashboard')->group(function() {
+Route::prefix('/dashboard')->name('dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'dashboard']);
     Route::get('/event', [DashboardController::class, 'event'])->name('.event');
     Route::get('/visit/month', [DashboardController::class, 'visit_month'])->name('.visit-month');
@@ -40,13 +41,13 @@ Route::prefix('/dashboard')->name('dashboard')->group(function() {
     Route::get('/data/admin-sales', [DashboardController::class, 'data_admin_sales'])->name('.data-admin-sales');
     Route::get('/pipeline/admin-sales/month', [DashboardController::class, 'pipeline_month_admin_sales'])->name('.pipeline-admin-sales-month');
     Route::get('/pipeline/admin-sales/year', [DashboardController::class, 'pipeline_year_admin_sales'])->name('.pipeline-admin-sales-year');
-    
+
     Route::post('/visit-schedule', [DashboardController::class, 'visit_schedule'])->name('.visit-schedule');
     Route::post('/top-customer', [DashboardController::class, 'top_customer'])->name('.top-customer');
 });
 
 // route notification
-Route::prefix('/notification')->name('notification')->group(function() {
+Route::prefix('/notification')->name('notification')->group(function () {
     Route::get('/', [NotificationController::class, 'all_notification']);
     Route::get('/mark-as-read', [NotificationController::class, 'mark_as_read'])->name('.mark-as-read');
     Route::get('{id}/mark-as-read', [NotificationController::class, 'read_notification'])->name('.read-notification');
@@ -54,15 +55,15 @@ Route::prefix('/notification')->name('notification')->group(function() {
 });
 
 // route file 
-Route::prefix('/file')->name('file')->group(function() {
+Route::prefix('/file')->name('file')->group(function () {
     Route::get('/show/{folder1}/{folder2}/{file}', [FilesController::class, 'show'])->name('.show');
 });
 
 // route data master
-Route::prefix('/data-master')->name('data-master')->group(function() {
-    
+Route::prefix('/data-master')->name('data-master')->group(function () {
+
     // route data master customer
-    Route::prefix('/customer')->name('.customer')->group(function() {
+    Route::prefix('/customer')->name('.customer')->group(function () {
         Route::get('/', [CustomerController::class, 'index']);
         Route::get('/add', [CustomerController::class, 'add'])->name('.add');
         Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('.edit');
@@ -75,7 +76,7 @@ Route::prefix('/data-master')->name('data-master')->group(function() {
     });
 
     // route data master supplier
-    Route::prefix('/supplier')->name('.supplier')->group(function() {
+    Route::prefix('/supplier')->name('.supplier')->group(function () {
         Route::get('/', [SupplierController::class, 'index']);
         Route::get('/add', [SupplierController::class, 'add'])->name('.add');
         Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('.edit');
@@ -87,7 +88,7 @@ Route::prefix('/data-master')->name('data-master')->group(function() {
     });
 
     // route data master sales
-    Route::prefix('/sales')->name('.sales')->group(function() {
+    Route::prefix('/sales')->name('.sales')->group(function () {
         Route::get('/', [SalesController::class, 'index']);
         Route::get('/add', [SalesController::class, 'add'])->name('.add');
         Route::get('/edit/{id}', [SalesController::class, 'edit'])->name('.edit');
@@ -101,10 +102,10 @@ Route::prefix('/data-master')->name('data-master')->group(function() {
 });
 
 // route crm
-Route::prefix('/crm')->name('crm')->group(function() {
+Route::prefix('/crm')->name('crm')->group(function () {
 
     // route crm visit schedule
-    Route::prefix('/visit-schedule')->name('.visit-schedule')->group(function() {
+    Route::prefix('/visit-schedule')->name('.visit-schedule')->group(function () {
         Route::get('/', [VisitScheduleController::class, 'index']);
         Route::get('/add', [VisitScheduleController::class, 'add'])->name('.add');
         Route::get('/id', [VisitScheduleController::class, 'generate_id'])->name('.id');
@@ -113,6 +114,7 @@ Route::prefix('/crm')->name('crm')->group(function() {
         Route::get('/edit/{id}', [VisitScheduleController::class, 'edit'])->name('.edit');
         Route::get('/view/{id}', [VisitScheduleController::class, 'view'])->name('.view');
         Route::get('/delete/{id}', [VisitScheduleController::class, 'delete'])->name('.delete');
+        Route::get('/search_enginer', [VisitScheduleController::class, 'search_enginer'])->name('.search_enginer');
 
         Route::post('/data', [VisitScheduleController::class, 'data'])->name('.data');
         Route::post('/status', [VisitScheduleController::class, 'status'])->name('.status');
@@ -121,7 +123,7 @@ Route::prefix('/crm')->name('crm')->group(function() {
     });
 
     // route crm visit report
-    Route::prefix('/visit-report')->name('.visit-report')->group(function() {
+    Route::prefix('/visit-report')->name('.visit-report')->group(function () {
         Route::get('/', [VisitReportController::class, 'index']);
         Route::get('/report/{id?}', [VisitReportController::class, 'report'])->name('.report');
         Route::get('/add/{id?}', [VisitReportController::class, 'add'])->name('.add');
@@ -137,7 +139,7 @@ Route::prefix('/crm')->name('crm')->group(function() {
     });
 
     // route project inquiry
-    Route::prefix('/inquiry')->name('.inquiry')->group(function() {
+    Route::prefix('/inquiry')->name('.inquiry')->group(function () {
         Route::get('/', [InquiryController::class, 'index']);
         Route::get('/add/{id?}', [InquiryController::class, 'add'])->name('.add');
         Route::get('/id', [InquiryController::class, 'generate_id'])->name('.id');
@@ -151,7 +153,7 @@ Route::prefix('/crm')->name('crm')->group(function() {
         Route::get('/view/{id}', [InquiryController::class, 'view'])->name('.view');
         Route::get('/edit/{id}', [InquiryController::class, 'edit'])->name('.edit');
         Route::get('/delete/{id}', [InquiryController::class, 'delete'])->name('.delete');
-        
+
         Route::post('/data', [InquiryController::class, 'data'])->name('.data');
         Route::post('/data-grade', [InquiryController::class, 'data_grade'])->name('.data-grade');
         Route::post('/data-status', [InquiryController::class, 'data_status'])->name('.data-status');
@@ -164,16 +166,19 @@ Route::prefix('/crm')->name('crm')->group(function() {
         Route::post('/get-product', [InquiryController::class, 'get_product'])->name('.get-product');
         Route::post('/product-list', [InquiryController::class, 'product_list'])->name('.product-list');
         Route::post('/store-product', [InquiryController::class, 'store_product'])->name('.store-product');
+        Route::post('/delete-product', [InquiryController::class, 'delete_product'])->name('.delete-product');
         Route::post('/store', [InquiryController::class, 'store'])->name('.store');
         Route::post('/edit', [InquiryController::class, 'store_edit'])->name('.store-edit');
+
+        Route::post('/store-sourcing-suppliers', [InquiryController::class, 'store_sourcing_suppliers'])->name('.store-sourcing-suppliers');
     });
 });
 
 // route transaction
-Route::prefix('/transaction')->name('transaction')->group(function() {
+Route::prefix('/transaction')->name('transaction')->group(function () {
 
     // route transaction sales order
-    Route::prefix('/sales-order')->name('.sales-order')->group(function() {
+    Route::prefix('/sales-order')->name('.sales-order')->group(function () {
         Route::get('/', [SalesOrderController::class, 'index']);
         Route::get('/add/{id?}', [SalesOrderController::class, 'add'])->name('.add');
         Route::get('/id', [SalesOrderController::class, 'generate_id'])->name('.id');
@@ -184,12 +189,13 @@ Route::prefix('/transaction')->name('transaction')->group(function() {
         Route::get('/customer/{id}', [SalesOrderController::class, 'customer_detail'])->name('.customer-detail');
         Route::get('/sales', [SalesOrderController::class, 'sales'])->name('.sales');
         Route::get('/sales/{id}', [SalesOrderController::class, 'sales_detail'])->name('.sales-detail');
+        Route::get('/open/{id}', [SalesOrderController::class, 'open'])->name('.open');
         Route::get('/view/{id}', [SalesOrderController::class, 'view'])->name('.view');
         Route::get('/download/product-list/excel/{id}', [SalesOrderController::class, 'download_product_list_excel'])->name('.download-product-list-excel');
         Route::get('/download/product-list/pdf/{id}', [SalesOrderController::class, 'download_product_list_pdf'])->name('.download-product-list-pdf');
         Route::get('/edit/{id}', [SalesOrderController::class, 'edit'])->name('.edit');
         Route::get('/delete/{id}', [SalesOrderController::class, 'delete'])->name('.delete');
-        
+
         Route::post('/data', [SalesOrderController::class, 'data'])->name('.data');
         Route::post('/data-grade', [SalesOrderController::class, 'data_grade'])->name('.data-grade');
         Route::post('/data-status', [SalesOrderController::class, 'data_status'])->name('.data-status');
@@ -203,13 +209,23 @@ Route::prefix('/transaction')->name('transaction')->group(function() {
         Route::post('/store-product', [SalesOrderController::class, 'store_product'])->name('.store-product');
         Route::post('/store', [SalesOrderController::class, 'store'])->name('.store');
         Route::post('/edit', [SalesOrderController::class, 'store_edit'])->name('.store-edit');
+        Route::post('/open', [SalesOrderController::class, 'openstore'])->name('.open-store');
+
+        Route::post('/reviews', [SalesOrderController::class, 'review_get_data'])->name('.review_get_data');
+        Route::post('/review-set-supplier', [SalesOrderController::class, 'set_supplier'])->name('.review_set_supplier');
+
+        Route::get('/price/{id}', [SalesOrderController::class, 'price'])->name('.price');
+        Route::post('/price/{id}', [SalesOrderController::class, 'store_price'])->name('.price.store');
+        Route::post('/product-list', [SalesOrderController::class, 'product_lists'])->name('.product_lists');
+        Route::post('currency-converter', [SalesOrderController::class, 'currency_converter'])->name('.currency_converter');
     });
 
     // route transaction sourcing item
-    Route::prefix('/sourcing-item')->name('.sourcing-item')->group(function() {
+    Route::prefix('/sourcing-item')->name('.sourcing-item')->group(function () {
         Route::get('/', [SourcingItemController::class, 'index']);
         Route::get('/add/{id?}', [SourcingItemController::class, 'add'])->name('.add');
         Route::get('/id', [SourcingItemController::class, 'generate_id'])->name('.id');
+        Route::post('/reviews', [SourcingItemController::class, 'review_get_data'])->name('.review_get_data');
         Route::get('/download/excel/template', [SourcingItemController::class, 'download_template'])->name('.download-template');
         Route::get('/sales-order', [SourcingItemController::class, 'sales_order'])->name('.sales-order');
         Route::get('/so/{id}', [SourcingItemController::class, 'so_detail'])->name('.so-detail');
@@ -222,7 +238,8 @@ Route::prefix('/transaction')->name('transaction')->group(function() {
         Route::get('/download/product-list/pdf/{id}', [SourcingItemController::class, 'download_product_list_pdf'])->name('.download-product-list-pdf');
         Route::get('/edit/{id}', [SourcingItemController::class, 'edit'])->name('.edit');
         Route::get('/delete/{id}', [SourcingItemController::class, 'delete'])->name('.delete');
-        
+        Route::get('/search_supplier', [SourcingItemController::class, 'get_supplier'])->name('.get_supplier');
+
         Route::post('/data', [SourcingItemController::class, 'data'])->name('.data');
         Route::post('/data-grade', [SourcingItemController::class, 'data_grade'])->name('.data-grade');
         Route::post('/data-status', [SourcingItemController::class, 'data_status'])->name('.data-status');
@@ -236,14 +253,31 @@ Route::prefix('/transaction')->name('transaction')->group(function() {
         Route::post('/store-product', [SourcingItemController::class, 'store_product'])->name('.store-product');
         Route::post('/store', [SourcingItemController::class, 'store'])->name('.store');
         Route::post('/edit', [SourcingItemController::class, 'store_edit'])->name('.store-edit');
+
+        Route::post('/get-storage', [SourcingItemController::class, 'get_storage'])->name('.get-storage');
+        Route::post('/save-folder', [SourcingItemController::class, 'save_folder'])->name('.save-folder');
+        Route::post('/delete-file-folder', [SourcingItemController::class, 'delete_file_folder'])->name('.delete-file-folder');
+        Route::post('/upload-file', [SourcingItemController::class, 'upload_file'])->name('.upload-file');
+
+        Route::post('/review-save-product', [SourcingItemController::class, 'review_save_product'])->name('.review_save_product');
+    });
+
+    Route::prefix('/quotation')->name('.quotation')->group(function () {
+        Route::get('/', [QuotationController::class, 'index']);
+        Route::get('/data', [QuotationController::class, 'data'])->name('.data');
+        Route::get('/add', [QuotationController::class, 'add'])->name('.add');
+        Route::post('/store', [QuotationController::class, 'store'])->name('.store');
+        Route::get('/{id}', [QuotationController::class, 'view'])->name('.view');
+        Route::delete('/{id}', [QuotationController::class, 'delete'])->name('.delete');
+        Route::get('/search/sales-orders', [QuotationController::class, 'search_sales_orders'])->name('.search.sales-orders');
     });
 });
 
 // route project 
-Route::prefix('/project')->name('project')->group(function() {
+Route::prefix('/project')->name('project')->group(function () {
 
     // route project purchasing
-    Route::prefix('/purchasing')->name('.purchasing')->group(function() {
+    Route::prefix('/purchasing')->name('.purchasing')->group(function () {
         Route::get('/', [PurchasingController::class, 'index']);
         Route::get('/add', [PurchasingController::class, 'add'])->name('.add');
         Route::get('/id', [PurchasingController::class, 'generate_id'])->name('.id');
@@ -257,7 +291,7 @@ Route::prefix('/project')->name('project')->group(function() {
         Route::get('/edit/{id}', [PurchasingController::class, 'edit'])->name('.edit');
         Route::get('/estimate/{id}', [PurchasingController::class, 'estimate'])->name('.estimate');
         Route::get('/delete/{id}', [PurchasingController::class, 'delete'])->name('.delete');
-        
+
         Route::post('/data', [PurchasingController::class, 'data'])->name('.data');
         Route::post('/upload_excel', [PurchasingController::class, 'upload_excel'])->name('.upload-excel');
         Route::post('/delete_excel', [PurchasingController::class, 'delete_excel'])->name('.delete-excel');
@@ -274,9 +308,9 @@ Route::prefix('/project')->name('project')->group(function() {
         Route::post('/estimate/shipping', [PurchasingController::class, 'estimate_shipping'])->name('.estimate-shipping');
         Route::post('/estimate/estimate', [PurchasingController::class, 'estimate_estimate'])->name('.estimate-estimate');
     });
-    
+
     // route project quotation
-    Route::prefix('/quotation')->name('.quotation')->group(function() {
+    Route::prefix('/quotation')->name('.quotation')->group(function () {
         Route::get('/', [QuotationController::class, 'index']);
         Route::get('/add', [QuotationController::class, 'add'])->name('.add');
         Route::get('/price/{id}', [QuotationController::class, 'price'])->name('.price');
@@ -296,21 +330,21 @@ Route::prefix('/project')->name('project')->group(function() {
     });
 
     // route project preorder
-    Route::prefix('/pre-order')->name('.pre-order')->group(function() {
+    Route::prefix('/pre-order')->name('.pre-order')->group(function () {
         Route::get('/', [PreOrderCustomerController::class, 'index']);
         Route::get('/add', [PreOrderCustomerController::class, 'add'])->name('.add');
         Route::get('/quotation-list', [PreOrderCustomerController::class, 'quotation_list'])->name('.quotation-list');
         Route::get('/quotation-detail/{id}', [PreOrderCustomerController::class, 'quotation_detail'])->name('.quotation-detail');
         Route::get('/item-detail/{id}', [PreOrderCustomerController::class, 'item_detail'])->name('.item-detail');
         Route::get('/view/{id}', [PreOrderCustomerController::class, 'view'])->name('.view');
-        
+
         Route::post('/data', [PreOrderCustomerController::class, 'data'])->name('.data');
         Route::post('/store', [PreOrderCustomerController::class, 'store'])->name('.store');
     });
 });
 
 // route preorder 
-Route::prefix('/pre-order')->name('pre-order')->group(function() {
+Route::prefix('/pre-order')->name('pre-order')->group(function () {
     Route::get('/', [PreOrderSupplierController::class, 'index']);
     Route::get('/ready', [PreOrderSupplierController::class, 'ready'])->name('.ready');
     Route::get('/create-po/{id}', [PreOrderSupplierController::class, 'create_po'])->name('.create-po');
@@ -319,7 +353,7 @@ Route::prefix('/pre-order')->name('pre-order')->group(function() {
     Route::get('/document/{id}', [PreOrderSupplierController::class, 'document'])->name('.document');
     Route::get('/list/{id}', [PreOrderSupplierController::class, 'list'])->name('.list');
     Route::get('/print/{id}', [PreOrderSupplierController::class, 'print'])->name('.print');
-    
+
     Route::post('/data', [PreOrderSupplierController::class, 'data'])->name('.data');
     Route::post('/ready-data', [PreOrderSupplierController::class, 'ready_data'])->name('.ready-data');
     Route::post('/add', [PreOrderSupplierController::class, 'add'])->name('.add');
@@ -328,7 +362,7 @@ Route::prefix('/pre-order')->name('pre-order')->group(function() {
 });
 
 // route exim 
-Route::prefix('/exim')->name('exim')->group(function() {
+Route::prefix('/exim')->name('exim')->group(function () {
     Route::get('/', [EximController::class, 'index']);
     Route::get('/{id}', [EximController::class, 'add'])->name('.add');
 
@@ -336,4 +370,31 @@ Route::prefix('/exim')->name('exim')->group(function() {
     Route::post('/store', [EximController::class, 'store'])->name('.store');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/test_mail', function () {
+    try {
+        $sendmail = 'test@pt-prasasti.com';
+        $data = \App\Models\VisitReport::with(['visit', 'visit.customer', 'sales'])->where('uuid', 'a876a5c6-59d8-4344-9b9c-abc2ebd299a1')->first();
+        // dd($data);
+        $dataVisitReport = [
+            'id' => $data->visit_schedule_id,
+            'date' => $data->visit->date,
+            'time' => $data->visit->time,
+            'customer_company' => $data->visit->customer->name . " - " . $data->visit->customer->company,
+            'customer_phone'     => $data->visit->customer->phone,
+            'customer_email'     => $data->visit->customer->email,
+            'status'           => $data->status,
+            'note'      => $data->note,
+            'plan'      => $data->planing,
+            'sales'     => $data->sales->name
+        ];
+        $email = new \App\Mail\ReportMail(collect($dataVisitReport));
+
+        \Mail::to($sendmail)->send($email);
+        // dispatch(new \App\Jobs\SendMailVisitJob($sendmail));
+        dd('Success');
+    } catch (\Throwable $th) {
+        dd($th);
+    }
+});
+
+require __DIR__ . '/auth.php';

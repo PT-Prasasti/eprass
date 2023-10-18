@@ -11,6 +11,8 @@ class Supplier extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = ['id'];
+
     /**
      *  Setup model event hooks
      */
@@ -20,5 +22,10 @@ class Supplier extends Model
         self::creating(function ($model) {
             $model->uuid = (string) Uuid::generate(4);
         });
+    }
+
+    public function selected_sourcing_suppliers()
+    {
+        return $this->hasMany(SelectedSourcingSupplier::class, 'supplier_id');
     }
 }

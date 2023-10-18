@@ -98,26 +98,17 @@
                         <div class="col-md-12 mt-3">
                             <h5>Invite Engineer :</h5>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group row">
-                                <label class="col-12">Staff Name</label>
+                                <label class="col-12">Staff Email</label>
                                 <div class="col-md-12">
-                                    <select class="form-control" name="engineer">
+                                    <select class="form-control" name="engineer[]" id="engineer" multiple="multiple">
                                         <option value="0">Please select</option>
-                                        <option value="">Husen Fadilah</option>
-                                        <option value="">Miswan Danu</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label class="col-12">Note</label>
-                                <div class="col-12">
-                                    <textarea class="form-control" name="note" rows="6">{{ $visit->note }}</textarea>
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div class="col-md-12 text-center">
                             <a href="{{ route('crm.visit-schedule') }}" class="btn btn-hero btn-danger text-white mr-3"><i class="fa fa-arrow-circle-left mr-2"></i>BACK</a>
                             <button type="submit" class="btn btn-hero btn-alt-primary"><i class="fa fa-check mr-2"></i>SAVE VISIT</button>
@@ -166,6 +157,34 @@
                     $('input[name=customer_email]').val(response.customer_email)
                 })
             }
+            $("#engineer").select2({
+                ajax: {
+                    url: `{{ route('crm.visit-schedule.search_enginer') }}`,
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.email,
+                                    id: item.email,
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            })
+            let visitemail = `{{ $visit->enginer_email }}`
+            let dataenginerexisting = JSON.parse(visitemail.replace(/&quot;/g,'"'))
+            
+            dataenginerexisting.forEach(element => {
+                $('#engineer').append(
+                    `<option value="${element}" selected>${element}</option>`
+                );
+            });
+            
+
         </script>
     </x-slot>
 
