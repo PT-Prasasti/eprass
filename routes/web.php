@@ -268,6 +268,8 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::get('/add', [QuotationController::class, 'add'])->name('.add');
         Route::post('/store', [QuotationController::class, 'store'])->name('.store');
         Route::get('/{id}', [QuotationController::class, 'view'])->name('.view');
+        Route::get('/{id}/print', [QuotationController::class, 'print'])->name('.print');
+        Route::patch('/{id}', [QuotationController::class, 'update'])->name('.update');
         Route::delete('/{id}', [QuotationController::class, 'delete'])->name('.delete');
         Route::get('/search/sales-orders', [QuotationController::class, 'search_sales_orders'])->name('.search.sales-orders');
     });

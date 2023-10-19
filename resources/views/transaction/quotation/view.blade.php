@@ -2,12 +2,62 @@
     <div class="content">
         <div class="row">
             <div class="col-md-6">
-                <h4><b>Quotation Number : {{ $query->quotation_code }}</b></h4>
+                @if (auth()->user()->hasRole('sales'))
+                    <h4><b>SO NUMBER : {{ $query->sales_order->id }}</b></h4>
+                @else
+                    <h4><b>Quotation Number : {{ $query->quotation_code }}</b></h4>
+                @endif
             </div>
             <div class="col-md-6 text-right">
-                <button type="button" class="btn btn-primary mr-5 mb-5">
-                    <i class="fa fa-save mr-5"></i>Save Data
-                </button>
+                @if (auth()->user()->hasRole('sales') && $query->status === 'Waiting for Approval')
+                    <form method="post" action="{{ route('transaction.quotation.view', $query->id) }}">
+                        @method('patch')
+                        @csrf
+
+                        <input type="hidden" name="status" value="approve">
+
+                        <button type="submit" class="btn btn-primary mr-5 mb-5">
+                            <i class="fa fa-check mr-5"></i>
+                            Approval
+                        </button>
+
+                        <button type="button" class="btn btn-danger mr-5 mb-5" data-toggle="modal"
+                            data-target="#modal-reject">
+                            <i class="fa fa-ban mr-5"></i>
+                            Rejected
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('transaction.quotation') }}" class="btn btn-danger mr-5 mb-5">
+                        <i class="fa fa-arrow-circle-o-left mr-2"></i>Back
+                    </a>
+                @endif
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <span class="d-block">
+                                {{ $loop->iteration }}. {{ $error }}
+                            </span>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -153,7 +203,8 @@
                                                 <th class="text-center">Material Desc</th>
                                                 <th class="text-center">Size</th>
                                                 <th class="text-center" style="width: 10%;">QTY</th>
-                                                <th class="text-center" style="width: 10%;">DT Production</th>
+                                                <th class="text-center" style="width: 10%;">Remark</th>
+                                                <th class="text-center" style="width: 10%;">Delivery Time</th>
                                                 <th class="text-center" style="width: 8%;">Unit Price</th>
                                                 <th class="text-center" style="width: 12%;">UP Price</th>
                                                 <th class="text-center" style="width: 12%;">Total</th>
@@ -168,6 +219,9 @@
                                                     <td>{{ $item->inquiry_product->size }}</td>
                                                     <td class="text-right">
                                                         {{ $item->inquiry_product->sourcing_qty }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $item->inquiry_product->remark }}
                                                     </td>
                                                     <td>{{ $item->inquiry_product->delivery_time }}</td>
                                                     <td class="text-right text-nowrap">
@@ -236,18 +290,20 @@
                                                     value="{{ $vatTypes[$query->vat] }}" readonly>
                                             </div>
                                             <div class="form-group">
-                                                <label for="last-name-column">Attachment</label>
-                                                <div class="mt-2">
-                                                    @if ($query->attachment_url)
-                                                        <a href="{{ asset('storage/' . $query->attachment_url) }}"
-                                                            target="_blank" file="">
-                                                            <i class="fa fa-eye"></i>
-                                                            Show File
-                                                        </a>
-                                                    @endif
-                                                </div>
+                                                <label>Attachment</label>
+                                                <input type="text" class="form-control" name=""
+                                                    value="{{ $query->attachment }}" readonly>
                                             </div>
                                         </div>
+
+                                        @if ($query->status === 'Rejected')
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Rejecting Reason</label>
+                                                    <textarea class="form-control" disabled rows="5">{{ $query->reason_for_refusing }}</textarea>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -257,4 +313,47 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="modal-reject" tabindex="-1" role="dialog" aria-labelledby="modal-reject"
+        aria-hidden="true">
+        <form method="post" action="{{ route('transaction.quotation.view', $query->id) }}">
+            @method('patch')
+            @csrf
+
+            <input type="hidden" name="status" value="reject">
+
+            <div class="modal-dialog modal-dialog-reject" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <div class="block-header bg-primary-dark">
+                            <h3 class="block-title">Rejected</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <i class="si si-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <div class="form-group">
+                                <label>Reason</label>
+                                <textarea class="form-control" name="reason_for_refusing" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" onclick="searchCustomer()" class="btn btn-alt-primary">
+                            <i class="fa fa-check"></i>
+                            Sent
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if (auth()->user()->hasRole('sales'))
+    @endif
 </x-app-layout>
