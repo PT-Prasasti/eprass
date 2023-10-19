@@ -20,6 +20,10 @@ class Sourcings extends Model
         self::creating(function ($model) {
             $model->uuid = (string) Uuid::generate(4);
         });
+    }
 
+    public function selected_sourcing_suppliers()
+    {
+        return $this->hasMany(SelectedSourcingSupplier::class, 'sourcing_id', 'id');
     }
 }

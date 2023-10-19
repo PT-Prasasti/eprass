@@ -219,8 +219,9 @@
                                                                 <th class="text-center">Material Desc</th>
                                                                 <th class="text-center">Size</th>
                                                                 <th class="text-center" style="width: 2%;">QTY</th>
+                                                                <th class="text-center" style="width: 2%;">Remark</th>
                                                                 <th class="text-center" style="width: 12%;">
-                                                                    DT Production
+                                                                    Delivery Time
                                                                 </th>
                                                                 <th class="text-center" style="width: 8%;">Unit Price
                                                                 </th>
@@ -304,17 +305,8 @@
                                                         Attachment
                                                         <span class="text-danger">*</span>
                                                     </label>
-
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input"
-                                                            id="attachment" name="attachment"
-                                                            data-toggle="custom-file-input"
-                                                            accept="application/pdf,image/jpeg,image/jpg,image/png"
-                                                            required>
-                                                        <label class="custom-file-label" for="attachment">
-                                                            Choose file
-                                                        </label>
-                                                    </div>
+                                                    <input type="text" class="form-control" name="attachment"
+                                                        value="{{ old('attachment') }}" required="">
                                                 </div>
                                             </div>
                                         </div>
@@ -398,6 +390,10 @@
                         className: 'text-right align-top',
                     },
                     {
+                        data: 'remark',
+                        className: 'align-top',
+                    },
+                    {
                         data: 'delivery_time',
                         className: 'align-top',
                     },
@@ -405,13 +401,13 @@
                         data: 'cost',
                         className: 'text-right align-top',
                         render: function(data, type, row, meta) {
-                            return `<input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${row.cost}">${handleCurrencyFormat(row.cost)}`;
+                            return `<input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${row.cost.toFixed(2)}">${handleCurrencyFormat(row.cost)}`;
                         },
                     },
                     {
                         className: 'align-top p-2',
                         render: function(data, type, row, meta) {
-                            return `<input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${row.cost}" autocomplete="one-time-code" style="min-width: 125px;" number_format><span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>`;
+                            return `<input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${row.cost.toFixed(2) }" autocomplete="one-time-code" style="min-width: 125px;" number_format><span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>`;
                         }
                     },
                     {
@@ -501,8 +497,7 @@
                                     id: object.uuid,
                                     text: object.id,
                                     data: object,
-                                    disabled: object.quotation || object.status !== 'Price List Ready' ?
-                                        true : false,
+                                    disabled: !object.can_be_added_quotation,
                                 }
                             })
                         };

@@ -16,6 +16,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Transaction\Quotation\AddQuotationRequest;
+use App\Http\Requests\Transaction\Quotation\UpdateQuotationRequest;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
 
@@ -74,7 +75,7 @@ class QuotationController extends Controller
                 'inquiry.visit.customer',
                 'inquiry.sales',
                 'inquiry.products',
-                'quotation',
+                'quotations',
             ])
             ->where('sales_orders.id', 'like', '%' . $request->term . '%')
             ->take(20)
@@ -91,7 +92,7 @@ class QuotationController extends Controller
                 'inquiry.visit.customer',
                 'inquiry.sales',
                 'inquiry.products',
-                'quotation',
+                'quotations',
             ])
             ->where('sales_orders.uuid', $request->sales_order)
             ->first();
@@ -106,16 +107,15 @@ class QuotationController extends Controller
 
             DB::beginTransaction();
 
-            $filePath = null;
-            if ($request->hasFile('attachment')) {
-                $fileDirectory = 'quotations';
-                $file = $request->file('attachment');
-                $filePath = $this->fileController->store($fileDirectory, $file);
-            }
+            // $filePath = null;
+            // if ($request->hasFile('attachment')) {
+            //     $fileDirectory = 'quotations';
+            //     $file = $request->file('attachment');
+            //     $filePath = $this->fileController->store($fileDirectory, $file);
+            // }
 
-            $quotation = Quotation::query()->updateOrCreate([
+            $quotation = Quotation::query()->create([
                 'sales_order_id' => $request->sales_order,
-            ], [
                 'quotation_code' =>  $this->handleGenerateQuotationCode($request->sales_order),
                 'status' => 'Waiting for Approval',
                 'due_date' => $request->due_date,
@@ -123,7 +123,7 @@ class QuotationController extends Controller
                 'delivery_term' => $request->delivery_term,
                 'vat' => $request->vat,
                 'validity' => $request->validity,
-                'attachment_url' => $filePath,
+                'attachment' => $request->attachment,
             ]);
 
             $quotation->quotation_items()->delete();
@@ -167,6 +167,30 @@ class QuotationController extends Controller
         ]);
     }
 
+    public function update($id, UpdateQuotationRequest $request): RedirectResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            if ($request->status === 'approve') {
+                $query = Quotation::query()->findOrFail($id);
+                $query->status = 'Done';
+            } else {
+                $query = Quotation::query()->findOrFail($id);
+                $query->reason_for_refusing = $request->reason_for_refusing;
+                $query->status = 'Rejected';
+            }
+
+            $query->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
+        }
+    }
+
     public function delete($id)
     {
         try {
@@ -185,6 +209,27 @@ class QuotationController extends Controller
         }
     }
 
+    public function print($id)
+    {
+        $query = Quotation::query()
+            ->with([
+                'sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product.quotation_item',
+                'sales_order.inquiry.visit.customer',
+                'sales_order.inquiry.sales',
+                'sales_order.inquiry.products',
+            ])
+            ->findOrFail($id);
+
+        $paymentTerms = PaymentTermConstant::texts();
+        $vatTypes = VatTypeConstant::texts();
+
+        return view('transaction.quotation.print', [
+            'query' => $query,
+            'paymentTerms' => $paymentTerms,
+            'vatTypes' => $vatTypes,
+        ]);
+    }
+
     public function handleGenerateQuotationCode($salesOrderId): string
     {
         $salesOrder = SalesOrder::query()->whereUuid($salesOrderId)->first();
@@ -196,7 +241,7 @@ class QuotationController extends Controller
             $month = (int) date('m');
             $year = date('y');
 
-            $lastData = Quotation::orderBy('created_at', 'DESC')->withTrashed()->first();
+            $lastData = Quotation::query()->withTrashed()->where('quotation_code', 'like', '%/Q/' . $salesOrderCodes[0] .   '/%')->orderBy('created_at', 'DESC')->first();
             if ($lastData) {
                 $codes = explode("/", $lastData->quotation_code);
                 $number = (int) $codes[0];

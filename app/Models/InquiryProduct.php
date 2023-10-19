@@ -49,4 +49,9 @@ class InquiryProduct extends Model
     {
         return $this->hasMany(SourcingItem::class, 'inquiry_product_id');
     }
+
+    public function quotation_item()
+    {
+        return $this->hasOne(QuotationItem::class, 'inquiry_product_id', 'uuid');
+    }
 }
