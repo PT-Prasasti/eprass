@@ -160,10 +160,10 @@
             <?php
             $totalVat = 0;
             ?>
-            @if ($query->vat === \App\Constants\VatTypeConstant::EXCLUDE_11)
+            @if ($query->vat === \App\Constants\VatTypeConstant::INCLUDE_11)
                 <tr>
                     <td colspan="4" class="text-right">
-                        <p><b>{{ str_replace('Exclude ', '', $vatTypes[$query->vat]) }}</b></p>
+                        <p><b>{{ str_replace('Include ', '', $vatTypes[$query->vat]) }}</b></p>
                     </td>
                     <td class="text-right text-nowrap">
                         <p>
