@@ -359,6 +359,9 @@
                         data: 'remark',
                     }
                 ],
+                fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
+                },
             });
 
             const listPriceItemTable = $('[list_price_items]').DataTable({
@@ -421,6 +424,9 @@
                         }
                     },
                 ],
+                fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
+                },
                 fnCreatedRow: function(nRow, aData, iDataIndex) {
                     $(nRow).attr('data-uuid', aData.uuid);
                     $(nRow).attr('data-quantity', aData.qty);
