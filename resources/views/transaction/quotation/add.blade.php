@@ -401,13 +401,13 @@
                         data: 'cost',
                         className: 'text-right align-top',
                         render: function(data, type, row, meta) {
-                            return `<input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${row.cost.toFixed(2)}">${handleCurrencyFormat(row.cost)}`;
+                            return `<input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${Number(row.cost).toFixed(2)}">${handleCurrencyFormat(row.cost)}`;
                         },
                     },
                     {
                         className: 'align-top p-2',
                         render: function(data, type, row, meta) {
-                            return `<input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${row.cost.toFixed(2) }" autocomplete="one-time-code" style="min-width: 125px;" number_format><span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>`;
+                            return `<input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${Number(row.cost).toFixed(2)}" autocomplete="one-time-code" style="min-width: 125px;" number_format><span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>`;
                         }
                     },
                     {
@@ -517,7 +517,7 @@
             $(document).on("input", "[number_format]", function() {
                 const row = $(this).closest('tr');
 
-                this.value = this.value.replace(/\D/g, '');
+                this.value = Number(this.value.replace(/[^0-9.]/g, '')).toFixed(2);
                 if (this.value < row.data('cost')) {
                     row.find(`[number_format_validation]`).html(
                         `Nilai tidak boleh lebih kurang dari ${handleCurrencyFormat(row.data('cost'))}`);
