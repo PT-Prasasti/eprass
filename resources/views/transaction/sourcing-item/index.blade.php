@@ -49,6 +49,20 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-sm-12">
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+            </div>
+        </div>
 
         <div class="block block-rounded">
             <div class="block-content block-content-full table-responsive" id="viewTable">
@@ -219,7 +233,9 @@
                                 data = r.uuid
                                 status = r.status
                                 return `@if (auth()->user()->hasRole('manager'))
-                                    <a href="`+ (status == "ON PROCESS" ? "sales-order/open/" + data : "#") +`" class="btn btn-sm btn-`+ (status == "ON PROCESS" ? "success" : "secondary") +`" data-toggle="tooltip" title="Sourcing Item">
+                                    <a href="` + (status == "ON PROCESS" ? "sales-order/open/" + data : "#") +
+                                    `" class="btn btn-sm btn-` + (status == "ON PROCESS" ? "success" :
+                                        "secondary") + `" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-file"></i>
                                     </a>
                                     ` + (status == "SELECTION DONE" ? `
@@ -238,7 +254,9 @@
                                     @endif
                                     @if (auth()->user()->hasRole('purchasing') ||
                                             auth()->user()->hasRole('superadmin'))
-                                    <a href="` +  (status == "SELECTION DONE" ? "sales-order/price/" + data : "#")  +`" class="btn btn-sm btn-`+ (status == "SELECTION DONE" ? "success" : "secondary") +`" data-toggle="tooltip" title="Price">
+                                    <a href="` + (status == "SELECTION DONE" ? "sales-order/price/" + data : "#") +
+                                    `" class="btn btn-sm btn-` + (status == "SELECTION DONE" ? "success" :
+                                        "secondary") + `" data-toggle="tooltip" title="Price">
                                         <i class="fa fa-dollar"></i>
                                     </a>
                                     <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sourcing Item">
@@ -742,19 +760,6 @@
                 })
             }
         </script>
-
-        @if (Session::has('success'))
-            <script>
-                toastr.success("{{ Session::get('success') }}", 'Success')
-            </script>
-        @endif
-
-        @if (Session::has('delete'))
-            <script>
-                toastr.error("{{ Session::get('delete') }}", 'Success')
-            </script>
-        @endif
-
     </x-slot>
 
 </x-app-layout>

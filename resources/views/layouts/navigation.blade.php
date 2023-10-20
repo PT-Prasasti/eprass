@@ -114,6 +114,20 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a class="nav-submenu nav-link active" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-lock"></i>
+                            <span class="sidebar-mini-hide">Quotation</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('transaction.quotation.add') }}">Add Quotation</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('transaction.quotation') }}">List Quotation</a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
 
                 @if (auth()->user()->hasRole('purchasing') ||

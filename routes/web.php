@@ -10,6 +10,7 @@ use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
 use App\Http\Controllers\Helper\NotificationController;
+use App\Http\Controllers\Transaction\QuotationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
 
@@ -214,6 +215,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/review-set-supplier', [SalesOrderController::class, 'set_supplier'])->name('.review_set_supplier');
 
         Route::get('/price/{id}', [SalesOrderController::class, 'price'])->name('.price');
+        Route::post('/price/{id}', [SalesOrderController::class, 'store_price'])->name('.price.store');
         Route::post('/product-list', [SalesOrderController::class, 'product_lists'])->name('.product_lists');
         Route::post('currency-converter', [SalesOrderController::class, 'currency_converter'])->name('.currency_converter');
     });
@@ -259,6 +261,16 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/upload-file', [SourcingItemController::class, 'upload_file'])->name('.upload-file');
 
         Route::post('/review-save-product', [SourcingItemController::class, 'review_save_product'])->name('.review_save_product');
+    });
+
+    Route::prefix('/quotation')->name('.quotation')->group(function () {
+        Route::get('/', [QuotationController::class, 'index']);
+        Route::get('/data', [QuotationController::class, 'data'])->name('.data');
+        Route::get('/add', [QuotationController::class, 'add'])->name('.add');
+        Route::post('/store', [QuotationController::class, 'store'])->name('.store');
+        Route::get('/{id}', [QuotationController::class, 'view'])->name('.view');
+        Route::delete('/{id}', [QuotationController::class, 'delete'])->name('.delete');
+        Route::get('/search/sales-orders', [QuotationController::class, 'search_sales_orders'])->name('.search.sales-orders');
     });
 });
 

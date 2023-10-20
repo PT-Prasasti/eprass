@@ -40,4 +40,9 @@ class SalesOrder extends Model
     {
         return $this->hasMany(Supplier::class, 'so_id');
     }
+
+    public function quotation()
+    {
+        return $this->hasOne(Quotation::class, 'sales_order_id', 'uuid');
+    }
 }
