@@ -238,6 +238,11 @@
                                         "secondary") + `" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-file"></i>
                                     </a>
+                                    ` + (status == "SELECTION DONE" ? `
+                                    <a href="sourcing-item/selected/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Selected Supliyer">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    ` : '') +  `
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-pencil"></i>
                                     </a>

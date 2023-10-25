@@ -46,6 +46,40 @@ class SourcingItemController extends Controller
         return view('transaction.sourcing-item.add', $data);
     }
 
+    public function selected($id): View
+    {
+        $data = [];
+        $res = [];
+        $salesorder = \App\Models\SalesOrder::where("uuid", $id)->first();
+        if (!empty($salesorder)) {
+            $sourching = \App\Models\Sourcing::where("so_id", $salesorder->id)->with("selected_sourcing_suppliers.sourcing_supplier.inqueryproduct")->first();
+            foreach ($sourching->selected_sourcing_suppliers as $selected) {
+                if (!empty($selected->sourcing_supplier)) {
+                    $sourching_supliyer = $selected->sourcing_supplier;
+                    $inquery_product = $selected->sourcing_supplier->inqueryproduct;
+                    if (!empty($sourching_supliyer) && !empty($inquery_product)) {
+                        $res[] = [
+                            'inquery_item_name' => $inquery_product->item_name,
+                            'inquery_material_description' => $inquery_product->description,
+                            'inquery_size' => $inquery_product->size,
+                            'inquery_remark' => $inquery_product->remark,
+                            'inquery_qty' => $inquery_product->qty,
+                            'suppliyer_name' => $sourching_supliyer->company,
+                            'suppliyer_item_desc' => $sourching_supliyer->item_name,
+                            'suppliyer_qty' => $sourching_supliyer->qty,
+                            'suppliyer_currency' => strtoupper($sourching_supliyer->currency),
+                            'suppliyer_qty' => $sourching_supliyer->qty,
+                            'suppliyer_unit_price' => $sourching_supliyer->price,
+                            'suppliyer_production_time' => $sourching_supliyer->dt,
+                        ];
+                    }
+                }
+            }
+        }
+        $data['res'] = $res;
+        return view('transaction.sourcing-item.selected', $data);
+    }
+
     public function store(Request $re)
     {
         /* grouping param by product inquery id */
@@ -62,7 +96,7 @@ class SourcingItemController extends Controller
                     'product_desc' => $re->product_desc[$v][$k],
                     'product_qty' => $re->product_qty[$v][$k],
                     'product_curentcy' => $re->product_curentcy[$v][$k],
-                    'product_price' => $re->product_price[$v][$k],
+                    'product_price' => str_replace(".", "", $re->product_price[$v][$k]),
                     'production_time' => $re->production_time[$v][$k],
                     'remark' => $re->remark[$v][$k],
                 ];
