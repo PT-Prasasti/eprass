@@ -52,11 +52,11 @@ class SourcingItemController extends Controller
         $res = [];
         $salesorder = \App\Models\SalesOrder::where("uuid", $id)->first();
         if (!empty($salesorder)) {
-            $sourching = \App\Models\Sourcing::where("so_id", $salesorder->id)->with("selected_sourcing_suppliers.sourcing_supplier.inqueryproduct")->first();
+            $sourching = \App\Models\Sourcing::where("so_id", $salesorder->id)->with("selected_sourcing_suppliers.sourcing_supplier.inquery_product")->first();
             foreach ($sourching->selected_sourcing_suppliers as $selected) {
                 if (!empty($selected->sourcing_supplier)) {
                     $sourching_supliyer = $selected->sourcing_supplier;
-                    $inquery_product = $selected->sourcing_supplier->inqueryproduct;
+                    $inquery_product = $selected->sourcing_supplier->inquery_product;
                     if (!empty($sourching_supliyer) && !empty($inquery_product)) {
                         $res[] = [
                             'inquery_item_name' => $inquery_product->item_name,
@@ -111,8 +111,8 @@ class SourcingItemController extends Controller
             $sourching->save();
 
             /* sourching supliyer */
-            foreach($par as $product_inquery_id => $items) {
-                foreach($items as $item) {
+            foreach ($par as $product_inquery_id => $items) {
+                foreach ($items as $item) {
                     $sourching_suppliyer = new \App\Models\SourcingSuppliers;
                     $sourching_suppliyer->sourcing_id = $sourching->id;
                     $sourching_suppliyer->supplier_id = $item['supliyer']->id;
@@ -134,14 +134,13 @@ class SourcingItemController extends Controller
                 }
             }
 
-            
+
             DB::commit();
 
             return redirect(route('transaction.sourcing-item.add'))->with("success", "Data has beed successfuly submited");
-
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return redirect(route('transaction.sourcing-item.add'))->with("error", "Database Error, please contact administrator!");
         }
     }
@@ -151,7 +150,7 @@ class SourcingItemController extends Controller
         $inquiries = SalesOrder::whereRaw("
             id NOT IN (SELECT so_id FROM `sourcings` WHERE deleted_at IS NULL)
         ")->get();
-        
+
         $result = array();
 
         foreach ($inquiries as $item) {

@@ -41,7 +41,6 @@ class SourcingSupplier extends Model
         return $this->hasOne(SourcingItem::class, 'sourcing_supplier_id');
     }
 
-    // public function inqueryproduct()
     public function inquiry_product()
     {
         return $this->belongsTo(InquiryProduct::class, 'inquiry_product_id', 'id');
