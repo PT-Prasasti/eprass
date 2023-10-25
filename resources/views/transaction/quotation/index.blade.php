@@ -2,7 +2,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-6">
-                <h4><b>List Approval Sales Order</b></h4>
+                <h4><b>List Approval {{ auth()->user()->hasRole('sales')? 'Quotation': 'Sales Order' }}</b></h4>
             </div>
             {{-- <div class="col-md-6 text-right">
                 <div class="push">
@@ -99,6 +99,35 @@
         </form>
     </div>
 
+    <div class="modal fade" id="modal-reject" tabindex="-1" role="dialog" aria-labelledby="modal-reject"
+        aria-hidden="true">
+        <input type="hidden" name="status" value="reject">
+
+        <div class="modal-dialog modal-dialog-reject" role="document">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent mb-0">
+                    <div class="block-header bg-primary-dark">
+                        <h3 class="block-title">Rejected</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <i class="si si-close"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content">
+                        <div class="form-group">
+                            <label>Reason</label>
+                            <textarea class="form-control" name="reason_for_refusing" rows="5" disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <x-slot name="js">
         <script>
             const quotationTable = $('#table-quotation').DataTable({
@@ -151,20 +180,47 @@
                     },
                     {
                         data: 'status',
+                        // render: function(data, type, row, meta) {
+                        //     return `
+                //         <a href="{{ route('transaction.quotation') }}/${row.id}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
+                //             <i class="fa fa-file-text-o"></i>
+                //         </a> |
+                //         <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
+                //             <i class="fa fa-trash-o"></i>
+                //         </button>
+                //     `
+                        // },
+                        className: 'text-center text-nowrap',
                         render: function(data, type, row, meta) {
+                            var html = ``;
+
+                            if (row.status === 'Done') {
+                                html = `
+                                    <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
+                                        <i class="fa fa-print"></i>
+                                    </a> |
+                                `;
+                            }
+
+                            if (row.status === 'Rejected') {
+                                html = `
+                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Reason" button-reason>
+                                        <i class="fa fa-user"></i>
+                                    </button> |
+                                `;
+                            }
                             return `
+                                ${html}
                                 <a href="{{ route('transaction.quotation') }}/${row.id}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
-                                </a> |
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
+                                </a>
                             `
                         },
                     }
                 ],
                 fnCreatedRow: function(nRow, aData, iDataIndex) {
                     $(nRow).attr('data-id', aData.id);
+                    $(nRow).attr('data-reason-for-refusing', aData.reason_for_refusing);
                 },
                 rowCallback: function(row, data, index) {
                     if (data.is_warning === true) {
@@ -191,6 +247,13 @@
                         $(`#form-delete`).submit();
                     }
                 })
+            });
+
+            $(document).on('click', `[button-reason]`, function() {
+                const row = $(this).closest('tr');
+                $(`[name="reason_for_refusing"]`).html(row.data('reason-for-refusing'));
+
+                $('#modal-reject').modal('show');;
             });
         </script>
     </x-slot>

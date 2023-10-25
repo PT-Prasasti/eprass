@@ -5,7 +5,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <h4><b>QUOTATION NUMBER : 001/Q/001/X/23</b></h4>
+                    <h4><b>Add Quotation</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
                     <button type="submit" class="btn btn-success mr-5 mb-5">
@@ -219,8 +219,9 @@
                                                                 <th class="text-center">Material Desc</th>
                                                                 <th class="text-center">Size</th>
                                                                 <th class="text-center" style="width: 2%;">QTY</th>
+                                                                <th class="text-center" style="width: 2%;">Remark</th>
                                                                 <th class="text-center" style="width: 12%;">
-                                                                    DT Production
+                                                                    Delivery Time
                                                                 </th>
                                                                 <th class="text-center" style="width: 8%;">Unit Price
                                                                 </th>
@@ -304,17 +305,8 @@
                                                         Attachment
                                                         <span class="text-danger">*</span>
                                                     </label>
-
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input"
-                                                            id="attachment" name="attachment"
-                                                            data-toggle="custom-file-input"
-                                                            accept="application/pdf,image/jpeg,image/jpg,image/png"
-                                                            required>
-                                                        <label class="custom-file-label" for="attachment">
-                                                            Choose file
-                                                        </label>
-                                                    </div>
+                                                    <input type="text" class="form-control" name="attachment"
+                                                        value="{{ old('attachment') }}" required="">
                                                 </div>
                                             </div>
                                         </div>
@@ -367,6 +359,9 @@
                         data: 'remark',
                     }
                 ],
+                fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
+                },
             });
 
             const listPriceItemTable = $('[list_price_items]').DataTable({
@@ -398,6 +393,10 @@
                         className: 'text-right align-top',
                     },
                     {
+                        data: 'remark',
+                        className: 'align-top',
+                    },
+                    {
                         data: 'delivery_time',
                         className: 'align-top',
                     },
@@ -405,13 +404,17 @@
                         data: 'cost',
                         className: 'text-right align-top',
                         render: function(data, type, row, meta) {
-                            return `<input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${row.cost}">${handleCurrencyFormat(row.cost)}`;
+                            return handleCurrencyFormat(Number(row.cost));
                         },
                     },
                     {
                         className: 'align-top p-2',
                         render: function(data, type, row, meta) {
-                            return `<input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${row.cost}" autocomplete="one-time-code" style="min-width: 125px;" number_format><span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>`;
+                            return `
+                                <input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${Number(row.cost).toFixed(2)}">
+                                <input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${Number(row.cost).toFixed(2)}" autocomplete="one-time-code" style="min-width: 125px;" number_format>
+                                <span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>
+                            `;
                         }
                     },
                     {
@@ -421,6 +424,9 @@
                         }
                     },
                 ],
+                fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
+                },
                 fnCreatedRow: function(nRow, aData, iDataIndex) {
                     $(nRow).attr('data-uuid', aData.uuid);
                     $(nRow).attr('data-quantity', aData.qty);
@@ -501,8 +507,7 @@
                                     id: object.uuid,
                                     text: object.id,
                                     data: object,
-                                    disabled: object.quotation || object.status !== 'Price List Ready' ?
-                                        true : false,
+                                    disabled: !object.can_be_added_quotation,
                                 }
                             })
                         };
@@ -522,7 +527,7 @@
             $(document).on("input", "[number_format]", function() {
                 const row = $(this).closest('tr');
 
-                this.value = this.value.replace(/\D/g, '');
+                this.value = Number(this.value.replace(/[^0-9.]/g, '')).toFixed(2);
                 if (this.value < row.data('cost')) {
                     row.find(`[number_format_validation]`).html(
                         `Nilai tidak boleh lebih kurang dari ${handleCurrencyFormat(row.data('cost'))}`);

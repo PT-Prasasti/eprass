@@ -343,7 +343,7 @@ class SalesOrderController extends Controller
 
     public function inquiries(): JsonResponse
     {
-        $inquiries = Inquiry::whereNotIn('id', SalesOrder::select('inquiry_id')->get())
+        $inquiries = Inquiry::whereNotIn('id', SalesOrder::select('inquiry_id')->pluck('inquiry_id')->toArray())
             ->get();
 
         $result = array();

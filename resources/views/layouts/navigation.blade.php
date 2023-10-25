@@ -86,6 +86,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="{{ route('transaction.quotation') }}">
+                            <i class="fa fa-lock"></i>
+                            <span class="sidebar-mini-hide">Quotation</span>
+                        </a>
+                    </li>
                 @endif
 
                 @if (auth()->user()->hasRole('admin_sales') ||
@@ -115,7 +121,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a class="nav-submenu nav-link active" data-toggle="nav-submenu" href="#">
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                             <i class="fa fa-lock"></i>
                             <span class="sidebar-mini-hide">Quotation</span>
                         </a>

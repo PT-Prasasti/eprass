@@ -31,6 +31,10 @@ class Quotation extends Model
 
     public function getIsWarningAttribute(): bool
     {
+        if ($this->status != 'Waiting for Approval') {
+            return false;
+        }
+
         $dueDate = new DateTime($this->due_date);
         $today = new DateTime(date('Y-m-d'));
         $diff = $today->diff($dueDate);
