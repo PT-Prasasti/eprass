@@ -178,8 +178,6 @@ class QuotationController extends Controller
             ])
             ->findOrFail($id);
 
-        return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
-
         try {
             $cost = [];
             foreach ($request->item as $key => $item) {
