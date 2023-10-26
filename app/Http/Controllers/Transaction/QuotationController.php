@@ -187,7 +187,6 @@ class QuotationController extends Controller
                     return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
                 }
             }
-            dd('asw');
 
             DB::beginTransaction();
 
