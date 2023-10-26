@@ -491,7 +491,7 @@
                         render: function(data, type, row, meta) {
                             return `
                                 <input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${Number(row.original_cost).toFixed(2)}">
-                                <input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${handleRupiahFormat(Number(row.cost).toFixed(2).toString().replace(/\./g, ','))}" autocomplete="one-time-code" style="min-width: 125px;" number_format>
+                                <input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${handleRupiahFormat(Number(row.cost).toString().replace(/\./g, ','))}" autocomplete="one-time-code" style="min-width: 125px;" number_format>
                                 <span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>
                             `;
                         }
