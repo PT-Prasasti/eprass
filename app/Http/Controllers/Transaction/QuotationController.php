@@ -178,15 +178,18 @@ class QuotationController extends Controller
             ])
             ->findOrFail($id);
 
+        return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
+
         try {
             $cost = [];
             foreach ($request->item as $key => $item) {
                 $cost[$key] = str_replace(',', '.', str_replace('.', '', $item['cost']));
                 if ($item['original_cost'] > $cost[$key]) {
 
-                    return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
+                    return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
                 }
             }
+            dd('asw');
 
             DB::beginTransaction();
 
@@ -219,7 +222,7 @@ class QuotationController extends Controller
 
             return redirect()->route('transaction.quotation')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
-            return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
+            return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
         }
     }
 

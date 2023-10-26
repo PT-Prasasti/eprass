@@ -442,7 +442,7 @@
                             remark: "{{ $item->inquiry_product->remark }}",
                             delivery_time: "{{ $item->inquiry_product->delivery_time }}",
                             original_cost: "{{ $item->inquiry_product->cost }}",
-                            cost: "{{ $item->cost }}",
+                            cost: "{{ is_array(old('item')) ? str_replace(',', '.', str_replace('.', '', old('item')[$item->inquiry_product->uuid]['cost'])) : $item->cost }}",
                         },
                     @endforeach
                 ],
