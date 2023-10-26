@@ -16,7 +16,7 @@ class PaymentTermConstant extends BaseConstant
     public static function texts(): array
     {
         return [
-            self::COD => '100% after delivery, 30 Days After Invoice Received',
+            self::COD => '100%, 30 Days After Invoice Received',
             self::ADVANCED_PAYMENT_100 => '100% Advance Payment',
             self::DP_30_CBD_70 => '30% DP, 70% Before Delivery',
             self::DP_30_COD_70 => '30% DP, 70% COD',

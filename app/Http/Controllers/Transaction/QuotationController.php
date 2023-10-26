@@ -98,8 +98,10 @@ class QuotationController extends Controller
             ->first();
 
         try {
-            foreach ($request->item as $item) {
-                if ($item['original_cost'] > $item['cost']) {
+            $cost = [];
+            foreach ($request->item as $key => $item) {
+                $cost[$key] = str_replace(',', '.', str_replace('.', '', $item['cost']));
+                if ($item['original_cost'] > $cost[$key]) {
 
                     return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
                 }
@@ -132,7 +134,7 @@ class QuotationController extends Controller
                     'quotation_id' => $quotation->id,
                     'inquiry_product_id' => $inquiryProductId,
                 ], [
-                    'cost' => $item['cost']
+                    'cost' =>  $cost[$inquiryProductId],
                 ]);
 
                 $quotationItem->total_cost = number_format($quotationItem->inquiry_product->sourcing_qty * $quotationItem->cost, 2, '.', '');
@@ -243,6 +245,8 @@ class QuotationController extends Controller
 
             $lastData = Quotation::query()->withTrashed()->where('quotation_code', 'like', '%/Q/' . $salesOrderCodes[0] .   '/%')->orderBy('created_at', 'DESC')->first();
             if ($lastData) {
+                return $lastData->quotation_code;
+
                 $codes = explode("/", $lastData->quotation_code);
                 $number = (int) $codes[0];
                 $number++;

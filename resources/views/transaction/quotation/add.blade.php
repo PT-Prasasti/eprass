@@ -302,7 +302,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">
-                                                        Attachment
+                                                        Document
                                                         <span class="text-danger">*</span>
                                                     </label>
                                                     <input type="text" class="form-control" name="attachment"
@@ -325,8 +325,31 @@
             const handleCurrencyFormat = (value) => {
                 return value.toLocaleString('id-ID', {
                     style: 'currency',
-                    currency: 'IDR'
+                    currency: 'IDR',
+                    maximumFractionDigits: 2,
                 });
+            }
+
+            function handleRupiahFormat(number, prefix) {
+                let numberToString = number.toString().replace(/[^,\d]/g, ''),
+                    split = numberToString.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+                if (ribuan) {
+                    separator = sisa ? '.' : '';
+                    rupiah += separator + ribuan.join('.');
+                }
+
+                rupiah = split[1] != undefined ? rupiah + ',' + split[1].slice(0, 2) : rupiah;
+                return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+            }
+
+            const handleSetNumber = (number) => {
+                let numberToString = number.toString().replace(/[^,\d]/g, '').replace(/,/g, '.');
+
+                return Number(numberToString) ? Number(numberToString) : 0;
             }
 
             const salesOrderProductTable = $('[sales_order_products]').DataTable({
@@ -412,7 +435,7 @@
                         render: function(data, type, row, meta) {
                             return `
                                 <input type="hidden" name="item[${row.uuid}][original_cost]" placeholder="" value="${Number(row.cost).toFixed(2)}">
-                                <input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${Number(row.cost).toFixed(2)}" autocomplete="one-time-code" style="min-width: 125px;" number_format>
+                                <input type="text" class="form-control form-control-sm w-100" name="item[${row.uuid}][cost]" placeholder="" value="${handleRupiahFormat(Number(row.cost).toFixed(2).toString().replace(/\./g, ','))}" autocomplete="one-time-code" style="min-width: 125px;" number_format>
                                 <span class="d-block small text-left text-danger mt-1" style="line-height: 1.25em;" number_format_validation></span>
                             `;
                         }
@@ -527,10 +550,11 @@
             $(document).on("input", "[number_format]", function() {
                 const row = $(this).closest('tr');
 
-                this.value = Number(this.value.replace(/[^0-9.]/g, '')).toFixed(2);
-                if (this.value < row.data('cost')) {
+                this.value = handleRupiahFormat(this.value);
+                if (handleSetNumber(this.value) < row.data('cost')) {
                     row.find(`[number_format_validation]`).html(
-                        `Nilai tidak boleh lebih kurang dari ${handleCurrencyFormat(row.data('cost'))}`);
+                        `Nilai tidak boleh lebih kurang dari <span class="text-nowrap">${handleCurrencyFormat(row.data('cost'))}</span>`
+                    );
                 } else {
                     row.find(`[number_format_validation]`).html('');
                 }
@@ -538,7 +562,7 @@
                 row.find(`[total_cost]`).html(
                     handleCurrencyFormat(
                         row.data('quantity') *
-                        this.value
+                        handleSetNumber(this.value)
                     )
                 );
             });

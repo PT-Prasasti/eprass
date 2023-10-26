@@ -194,13 +194,15 @@
                         render: function(data, type, row, meta) {
                             var html = ``;
 
-                            if (row.status === 'Done') {
-                                html = `
+                            @if (auth()->user()->hasRole('admin_sales'))
+                                if (row.status === 'Done') {
+                                    html = `
                                     <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;
-                            }
+                                }
+                            @endif
 
                             if (row.status === 'Rejected') {
                                 html = `

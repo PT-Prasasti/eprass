@@ -31,7 +31,7 @@ class AddQuotationRequest extends FormRequest
             "vat"  => "required|string",
             "validity"  => "required|string",
             "attachment"  => "required|string",
-            "item.*.cost"  => "required|regex:/^\d+(\.\d{1,2})?$/",
+            "item.*.cost"  => "required|string",
         ];
     }
 
