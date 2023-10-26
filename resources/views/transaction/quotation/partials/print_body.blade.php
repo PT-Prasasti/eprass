@@ -95,43 +95,45 @@
         <?php
         $totalCost = 0;
         ?>
-        @foreach ($query->sales_order->sourcing->selected_sourcing_suppliers as $item)
+        @foreach ($query->quotation_items as $item)
             <tr>
                 <td class="text-center">
                     <p>{{ $loop->iteration }}</p>
                 </td>
                 <td>
                     <p class="m-0">
-                        {{ $item->sourcing_supplier->inquiry_product->item_name }}
+                        {{ $item->inquiry_product->item_name }}
                     </p>
                     <p class="m-0">
-                        {{ $item->sourcing_supplier->inquiry_product->description }}
+                        {{ $item->inquiry_product->description }}
                     </p>
                     <p class="m-0">
-                        {{ $item->sourcing_supplier->inquiry_product->size }}
+                        {{ $item->inquiry_product->size }}
                     </p>
                     <p class="m-0">
-                        {{ $item->sourcing_supplier->inquiry_product->remark }}
+                        {{ $item->inquiry_product->remark }}
                     </p>
                 </td>
                 <td class="text-right">
-                    <p>{{ $item->sourcing_supplier->inquiry_product->sourcing_qty }}
+                    <p>
+                        {{ $item->inquiry_product->sourcing_qty }}
                     </p>
                 </td>
                 <td class="text-right text-nowrap">
                     <p>
                         Rp
-                        {{ number_format($item->sourcing_supplier->inquiry_product->quotation_item->cost, 2, ',', '.') }}
+                        {{ number_format($item->cost, 2, ',', '.') }}
                     </p>
                 </td>
                 <td class="text-right text-nowrap">
                     <p>
                         Rp
-                        {{ number_format($totalCost += $item->sourcing_supplier->inquiry_product->quotation_item->total_cost, 2, ',', '.') }}
+                        {{ number_format($item->total_cost, 2, ',', '.') }}
                     </p>
                 </td>
                 <td>
-                    <p>{{ $item->sourcing_supplier->inquiry_product->delivery_time }}
+                    <p>
+                        {{ $item->inquiry_product->delivery_time }}
                     </p>
                 </td>
             </tr>
@@ -141,6 +143,7 @@
             <td colspan="3"></td>
         </tr>
         <?php
+        $totalCost = $query->quotation_items->sum('total_cost');
         $totalVat = 0;
         ?>
         @if ($query->vat === \App\Constants\VatTypeConstant::INCLUDE_11)

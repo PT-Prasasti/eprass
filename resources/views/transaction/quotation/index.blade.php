@@ -196,21 +196,30 @@
 
                             @if (auth()->user()->hasRole('admin_sales'))
                                 if (row.status === 'Done') {
-                                    html = `
+                                    html += `
                                     <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;
                                 }
+
+                                if (row.can_be_recreated == true) {
+                                    html += `
+                                        <a class="btn btn-sm btn-success" data-toggle="tooltip" title="Revision" href="{{ route('transaction.quotation') }}/${row.id}/re-create">
+                                            <i class="fa fa-mail-forward"></i>
+                                        </a> |
+                                    `;
+                                }
                             @endif
 
                             if (row.status === 'Rejected') {
-                                html = `
+                                html += `
                                     <button type="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Reason" button-reason>
                                         <i class="fa fa-user"></i>
                                     </button> |
                                 `;
                             }
+
                             return `
                                 ${html}
                                 <a href="{{ route('transaction.quotation') }}/${row.id}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">

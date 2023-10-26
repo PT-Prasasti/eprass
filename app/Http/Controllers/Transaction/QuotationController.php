@@ -149,6 +149,80 @@ class QuotationController extends Controller
         }
     }
 
+    public function reCreate($id): View
+    {
+        $query = Quotation::query()
+            ->with([
+                'sales_order.inquiry.visit.customer',
+                'sales_order.inquiry.sales',
+                'sales_order.inquiry.products',
+            ])
+            ->findOrFail($id);
+        $paymentTerms = PaymentTermConstant::texts();
+        $vatTypes = VatTypeConstant::texts();
+
+        return view('transaction.quotation.re_create', [
+            'query' => $query,
+            'paymentTerms' => $paymentTerms,
+            'vatTypes' => $vatTypes
+        ]);
+    }
+
+    public function reCreateStore($id, AddQuotationRequest $request): RedirectResponse
+    {
+        $quotation = Quotation::query()
+            ->with([
+                'sales_order.inquiry.visit.customer',
+                'sales_order.inquiry.sales',
+                'sales_order.inquiry.products',
+            ])
+            ->findOrFail($id);
+
+        try {
+            $cost = [];
+            foreach ($request->item as $key => $item) {
+                $cost[$key] = str_replace(',', '.', str_replace('.', '', $item['cost']));
+                if ($item['original_cost'] > $cost[$key]) {
+
+                    return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
+                }
+            }
+
+            DB::beginTransaction();
+
+            $quotation = Quotation::query()->create([
+                'sales_order_id' => $quotation->sales_order_id,
+                'quotation_code' =>  $this->handleGenerateQuotationCode($quotation->sales_order_id),
+                'status' => 'Waiting for Approval',
+                'due_date' => $request->due_date,
+                'payment_term' => $request->payment_term,
+                'delivery_term' => $request->delivery_term,
+                'vat' => $request->vat,
+                'validity' => $request->validity,
+                'attachment' => $request->attachment,
+            ]);
+
+            $quotation->quotation_items()->delete();
+            foreach ($request->item as $inquiryProductId => $item) {
+                $quotationItem = QuotationItem::query()->updateOrCreate([
+                    'quotation_id' => $quotation->id,
+                    'inquiry_product_id' => $inquiryProductId,
+                ], [
+                    'cost' =>  $cost[$inquiryProductId],
+                ]);
+
+                $quotationItem->total_cost = number_format($quotationItem->inquiry_product->sourcing_qty * $quotationItem->cost, 2, '.', '');
+                $quotationItem->save();
+            }
+
+            DB::commit();
+
+            return redirect()->route('transaction.quotation')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
+        }
+    }
+
     public function view($id): View
     {
         $query = Quotation::query()

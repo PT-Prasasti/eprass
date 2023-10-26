@@ -18,7 +18,8 @@ class Quotation extends Model
     protected $guarded = [];
 
     protected $appends = [
-        'is_warning'
+        'is_warning',
+        'can_be_recreated',
     ];
 
     public static function boot()
@@ -46,6 +47,19 @@ class Quotation extends Model
         return false;
     }
 
+    public function getCanBeRecreatedAttribute(): bool
+    {
+        $lastQuotation = Quotation::query()->whereSalesOrderId($this->sales_order_id)->latest('created_at')->first();
+        if ($lastQuotation->id === $this->id) {
+            if ($this->status === 'Done' || $this->status === 'Waiting for Approval') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public function sales_order()
     {

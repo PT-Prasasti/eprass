@@ -135,6 +135,45 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="modal-reject" tabindex="-1" role="dialog" aria-labelledby="modal-reject"
+            aria-hidden="true">
+            <form method="post" action="{{ route('transaction.quotation.view', $query->id) }}">
+                @method('patch')
+                @csrf
+
+                <input type="hidden" name="status" value="reject">
+
+                <div class="modal-dialog modal-dialog-reject" role="document">
+                    <div class="modal-content">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Rejected</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal"
+                                        aria-label="Close">
+                                        <i class="si si-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <div class="form-group">
+                                    <label>Reason</label>
+                                    <textarea class="form-control" name="reason_for_refusing" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" onclick="searchCustomer()" class="btn btn-alt-primary">
+                                <i class="fa fa-check"></i>
+                                Sent
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     @else
         <div class="content">
             <div class="row">
@@ -321,50 +360,53 @@
                                                 <h5>Product List</h5>
                                             </div>
                                         </div>
-                                        <table class="table table-bordered table-vcenter js-dataTable-simple"
-                                            style="font-size:13px">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="width: 2%;">No.</th>
-                                                    <th class="text-center">Item Name</th>
-                                                    <th class="text-center">Material Desc</th>
-                                                    <th class="text-center">Size</th>
-                                                    <th class="text-center" style="width: 10%;">QTY</th>
-                                                    <th class="text-center" style="width: 10%;">Remark</th>
-                                                    <th class="text-center" style="width: 10%;">Delivery Time</th>
-                                                    <th class="text-center" style="width: 8%;">Unit Price</th>
-                                                    <th class="text-center" style="width: 12%;">UP Price</th>
-                                                    <th class="text-center" style="width: 12%;">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($query->quotation_items as $item)
+                                        <div class="table-responsive">
+                                            <table
+                                                class="table table-bordered table-vcenter table-bordered w-100 js-dataTable-simple"
+                                                style="font-size:13px" list_products>
+                                                <thead>
                                                     <tr>
-                                                        <td class="text-center">{{ $loop->iteration }}</td>
-                                                        <td>{{ $item->inquiry_product->item_name }}</td>
-                                                        <td>{{ $item->inquiry_product->description }}</td>
-                                                        <td>{{ $item->inquiry_product->size }}</td>
-                                                        <td class="text-right">
-                                                            {{ $item->inquiry_product->sourcing_qty }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->inquiry_product->remark }}
-                                                        </td>
-                                                        <td>{{ $item->inquiry_product->delivery_time }}</td>
-                                                        <td class="text-right text-nowrap">
-                                                            Rp
-                                                            {{ number_format($item->inquiry_product->cost, 2, ',', '.') }}
-                                                        </td>
-                                                        <td class="text-right text-nowrap">
-                                                            Rp {{ number_format($item->cost, 2, ',', '.') }}
-                                                        </td>
-                                                        <td class="text-right text-nowrap">
-                                                            Rp {{ number_format($item->total_cost, 2, ',', '.') }}
-                                                        </td>
+                                                        <th class="text-center" style="width: 2%;">No.</th>
+                                                        <th class="text-center">Item Name</th>
+                                                        <th class="text-center">Material Desc</th>
+                                                        <th class="text-center">Size</th>
+                                                        <th class="text-center" style="width: 10%;">QTY</th>
+                                                        <th class="text-center" style="width: 10%;">Remark</th>
+                                                        <th class="text-center" style="width: 10%;">Delivery Time</th>
+                                                        <th class="text-center" style="width: 8%;">Unit Price</th>
+                                                        <th class="text-center" style="width: 12%;">UP Price</th>
+                                                        <th class="text-center" style="width: 12%;">Total</th>
                                                     </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($query->quotation_items as $item)
+                                                        <tr>
+                                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                                            <td>{{ $item->inquiry_product->item_name }}</td>
+                                                            <td>{{ $item->inquiry_product->description }}</td>
+                                                            <td>{{ $item->inquiry_product->size }}</td>
+                                                            <td class="text-right">
+                                                                {{ $item->inquiry_product->sourcing_qty }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->inquiry_product->remark }}
+                                                            </td>
+                                                            <td>{{ $item->inquiry_product->delivery_time }}</td>
+                                                            <td class="text-right text-nowrap">
+                                                                Rp
+                                                                {{ number_format($item->inquiry_product->cost, 2, ',', '.') }}
+                                                            </td>
+                                                            <td class="text-right text-nowrap">
+                                                                Rp {{ number_format($item->cost, 2, ',', '.') }}
+                                                            </td>
+                                                            <td class="text-right text-nowrap">
+                                                                Rp {{ number_format($item->total_cost, 2, ',', '.') }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -439,45 +481,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="modal fade" id="modal-reject" tabindex="-1" role="dialog" aria-labelledby="modal-reject"
-            aria-hidden="true">
-            <form method="post" action="{{ route('transaction.quotation.view', $query->id) }}">
-                @method('patch')
-                @csrf
-
-                <input type="hidden" name="status" value="reject">
-
-                <div class="modal-dialog modal-dialog-reject" role="document">
-                    <div class="modal-content">
-                        <div class="block block-themed block-transparent mb-0">
-                            <div class="block-header bg-primary-dark">
-                                <h3 class="block-title">Rejected</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-dismiss="modal"
-                                        aria-label="Close">
-                                        <i class="si si-close"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="block-content">
-                                <div class="form-group">
-                                    <label>Reason</label>
-                                    <textarea class="form-control" name="reason_for_refusing" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" onclick="searchCustomer()" class="btn btn-alt-primary">
-                                <i class="fa fa-check"></i>
-                                Sent
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
         </div>
     @endif
 </x-app-layout>
