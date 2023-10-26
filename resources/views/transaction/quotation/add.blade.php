@@ -553,7 +553,7 @@
                 this.value = handleRupiahFormat(this.value);
                 if (handleSetNumber(this.value) < row.data('cost')) {
                     row.find(`[number_format_validation]`).html(
-                        `Nilai tidak boleh lebih kurang dari <span class="text-nowrap">${handleCurrencyFormat(row.data('cost'))}</span>`
+                        `Nilai tidak boleh lebih kurang dari <span class="text-nowrap">${handleCurrencyFormat(Number(row.data('cost')))}</span>`
                     );
                 } else {
                     row.find(`[number_format_validation]`).html('');
