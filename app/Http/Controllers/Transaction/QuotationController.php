@@ -184,7 +184,7 @@ class QuotationController extends Controller
                 $cost[$key] = str_replace(',', '.', str_replace('.', '', $item['cost']));
                 if ($item['original_cost'] > $cost[$key]) {
 
-                    return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
+                    return redirect()->back()->withInput($request->input())->with('error', 'Nilai up price tidak boleh kurang dari unit price yang sudah ditentukan');
                 }
             }
 
