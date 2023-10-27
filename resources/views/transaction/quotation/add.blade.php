@@ -483,16 +483,17 @@
                 gradeElement.val(data.inquiry?.grade ? `${data.inquiry?.grade} %` : '');
                 noteElement.html(data.inquiry?.description ?? '');
 
+                fileElement.attr('href', '#');
+                fileElement.prop('hidden', true);
                 if (data.inquiry?.files) {
                     files = JSON.parse(data.inquiry?.files);
 
-                    fileElement.attr('href',
-                        `{{ url('') }}/file/show/inquiry/${data.inquiry.visit.uuid}/${files[0].filename}`);
+                    if (files.length) {
+                        fileElement.attr('href',
+                            `{{ url('') }}/file/show/inquiry/${data.inquiry.visit.uuid}/${files[0].filename}`);
 
-                    fileElement.prop('hidden', false);
-                } else {
-                    fileElement.attr('href', '#');
-                    fileElement.prop('hidden', true);
+                        fileElement.prop('hidden', false);
+                    }
                 }
 
                 salesOrderProductTable.clear().draw();
