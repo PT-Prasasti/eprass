@@ -486,9 +486,8 @@
                 fileElement.attr('href', '#');
                 fileElement.prop('hidden', true);
                 if (data.inquiry?.files) {
-                    files = JSON.parse(data.inquiry?.files);
-
-                    if (files.length) {
+                    files = JSON.parse(data.inquiry.files);
+                    if (files) {
                         fileElement.attr('href',
                             `{{ url('') }}/file/show/inquiry/${data.inquiry.visit.uuid}/${files[0].filename}`);
 
