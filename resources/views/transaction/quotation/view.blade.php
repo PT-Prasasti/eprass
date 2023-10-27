@@ -340,6 +340,7 @@
                                                 @if ($query->sales_order->inquiry->files)
                                                     <?php
                                                     $files = json_decode($query->sales_order->inquiry->files);
+                                                    if ($files) {
                                                     $fileName = $files[0]->filename;
                                                     ?>
                                                     <a href="{{ url('') }}/file/show/inquiry/{{ $query->sales_order->inquiry->visit->uuid }}/{{ $fileName }}"
@@ -347,6 +348,9 @@
                                                         <i class="fa fa-eye"></i>
                                                         Show File
                                                     </a>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 @endif
                                             </div>
                                         </div>

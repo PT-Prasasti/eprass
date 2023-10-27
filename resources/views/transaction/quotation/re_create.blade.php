@@ -169,7 +169,6 @@
                                         <div class="block block-rounded">
                                             <div class="block-content block-content-full bg-pattern">
                                                 <h5>Document List</h5>
-                                                {{ dd($query->sales_order->inquiry) }}
                                                 @if ($query->sales_order->inquiry->files)
                                                     <?php
                                                     $files = json_decode($query->sales_order->inquiry->files);
