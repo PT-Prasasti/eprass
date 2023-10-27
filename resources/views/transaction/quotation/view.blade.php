@@ -459,7 +459,7 @@
                                                         value="{{ $vatTypes[$query->vat] }}" readonly>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Attachment</label>
+                                                    <label>Documents</label>
                                                     <input type="text" class="form-control" name=""
                                                         value="{{ $query->attachment }}" readonly>
                                                 </div>

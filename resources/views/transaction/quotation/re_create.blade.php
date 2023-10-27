@@ -338,6 +338,17 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        @if ($query->status === 'Rejected')
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Rejecting Reason</label>
+                                                        <textarea class="form-control" disabled rows="5">{{ $query->reason_for_refusing }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
