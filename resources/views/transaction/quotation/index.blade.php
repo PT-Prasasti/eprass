@@ -178,6 +178,22 @@
                     },
                     {
                         data: 'status',
+                        className: 'text-left',
+                        render: function(data, type, row, meta) {
+                            var badgeColor = ``;
+                            switch (row.status) {
+                                case 'Waiting for Approval':
+                                    badgeColor = `primary`;
+                                    break;
+                                case 'Done':
+                                    badgeColor = `success`;
+                                    break;
+                                default:
+                                    badgeColor = `secondary`;
+                            }
+
+                            return `<span class="badge badge-${badgeColor}">${row.status}</span>`;
+                        },
                     },
                     {
                         data: 'due_date',

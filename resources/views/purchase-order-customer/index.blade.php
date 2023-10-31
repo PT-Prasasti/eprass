@@ -135,7 +135,7 @@
                     },
                     {
                         data: 'status',
-                        className: 'text-center',
+                        className: 'text-left',
                         render: function(data, type, row, meta) {
                             var badgeColor = ``;
                             switch (row.status) {
@@ -158,7 +158,7 @@
                                 ${html}
                                 <a href="{{ route('purchase-order-customer') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
-                                </a> | 
+                                </a> |
                                 <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                     <i class="fa fa-trash-o"></i>
                                 </button>
