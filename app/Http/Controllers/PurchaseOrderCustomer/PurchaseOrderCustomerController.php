@@ -78,6 +78,7 @@ class PurchaseOrderCustomerController extends Controller
                 'purchase_order_customer',
             ])
             ->where('quotation_code', 'like', '%' . $request->term . '%')
+            ->where('status', 'Done')
             ->take(20)
             ->orderBy('quotation_code')
             ->get();
