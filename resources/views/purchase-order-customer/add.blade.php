@@ -590,7 +590,7 @@
                     $(`[span-quotation-vat-total]`).html(handleCurrencyFormat(Number(totalVat = (subtotal * 11) / 100)));
                 } else {
                     $(`[tr-is-visible-subtotal]`).prop('hidden', true);
-                    $(`[tr-is-visible-vat]`).html('hidden', true);
+                    $(`[tr-is-visible-vat]`).prop('hidden', true);
                 }
 
                 $(`[span-quotation-total]`).html(handleCurrencyFormat(Number(subtotal += totalVat)));
