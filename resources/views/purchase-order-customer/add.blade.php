@@ -578,11 +578,11 @@
                             </tr>
                         `);
 
-                        subtotal += data.total_cost;
+                        subtotal += Number(data.total_cost);
                     });
                 }
 
-                totalVat = 0;
+                var totalVat = 0;
                 if (data.vat == `<?= \App\Constants\VatTypeConstant::INCLUDE_11 ?>`) {
                     $(`[tr-is-visible-subtotal]`).prop('hidden', false);
                     $(`[tr-is-visible-vat]`).prop('hidden', false);
