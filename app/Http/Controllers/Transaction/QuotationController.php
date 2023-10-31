@@ -51,6 +51,12 @@ class QuotationController extends Controller
                     'sales_order.inquiry.visit.customer',
                 ]);
 
+            if ($request->filter === 'reject') {
+                $data->whereIn('status', ['Rejected']);
+            } else {
+                $data->whereIn('status', ['Waiting for Approval', 'Done']);
+            }
+
             return DataTables::eloquent($data)
                 ->addIndexColumn()
                 ->toJson();

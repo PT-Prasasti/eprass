@@ -131,7 +131,7 @@
     <x-slot name="js">
         <script>
             const quotationTable = $('#table-quotation').DataTable({
-                ajax: `{{ route('transaction.quotation.data') }}`,
+                ajax: `{{ route('transaction.quotation.data') . (request()->query('filter') === 'reject' ? '?filter=reject' : '') }}`,
                 processing: true,
                 serverSide: true,
                 responsive: true,
@@ -194,15 +194,15 @@
                         render: function(data, type, row, meta) {
                             var html = ``;
 
-                            @if (auth()->user()->hasRole('admin_sales'))
-                                if (row.status === 'Done') {
-                                    html += `
+                            if (row.status === 'Done') {
+                                html += `
                                     <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;
-                                }
+                            }
 
+                            @if (auth()->user()->hasRole('admin_sales'))
                                 if (row.can_be_recreated == true) {
                                     html += `
                                         <a class="btn btn-sm btn-success" data-toggle="tooltip" title="Revision" href="{{ route('transaction.quotation') }}/${row.id}/re-create">
