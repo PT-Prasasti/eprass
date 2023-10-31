@@ -120,7 +120,9 @@
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control"
-                                                            name="purchase_order_number" autocomplete="one-time-code">
+                                                            name="purchase_order_number"
+                                                            value="{{ old('purchase_order_number') }}"
+                                                            autocomplete="one-time-code" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,7 +144,7 @@
                                                 <ul class="list-group" {{ old('document') ? '' : 'hidden' }}
                                                     document-show>
                                                     <input type="hidden" name="document"
-                                                        value="{{ old('document') }}">
+                                                        value="{{ old('document') }}" required>
 
                                                     <li class="list-group-item">
                                                         <div class="d-flex justify-content-between align-items-center">

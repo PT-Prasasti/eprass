@@ -131,7 +131,7 @@
                                                         <input type="text" class="form-control"
                                                             name="purchase_order_number"
                                                             value="{{ old('purchase_order_number', $query->purchase_order_number) }}"
-                                                            autocomplete="one-time-code">
+                                                            autocomplete="one-time-code" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -153,7 +153,7 @@
                                                     {{ old('document', $query->document_url) ? '' : 'hidden' }}
                                                     document-show>
                                                     <input type="hidden" name="document"
-                                                        value="{{ old('document', $query->document_url) }}">
+                                                        value="{{ old('document', $query->document_url) }}" required>
 
                                                     <li class="list-group-item">
                                                         <div class="d-flex justify-content-between align-items-center">
