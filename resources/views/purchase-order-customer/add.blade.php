@@ -533,6 +533,7 @@
                 }
 
                 var subtotal = 0;
+                $(`[tbody-quotation-items]`).html('');
                 if (data.quotation_items.length > 0) {
                     data.quotation_items.map((data, index) => {
                         $(`[tbody-quotation-items]`).append(`
@@ -579,8 +580,6 @@
 
                         subtotal += data.total_cost;
                     });
-                } else {
-                    $(`[tbody-quotation-items]`).html('');
                 }
 
                 totalVat = 0;
