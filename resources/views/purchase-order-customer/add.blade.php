@@ -623,7 +623,7 @@
                                     id: object.id,
                                     text: object.quotation_code,
                                     data: object,
-                                    disabled: object.status != 'Done',
+                                    disabled: object.status != 'Done' || object.purchase_order_customer,
                                 }
                             })
                         };

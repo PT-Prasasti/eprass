@@ -86,4 +86,10 @@ class Quotation extends Model
     {
         return $this->hasMany(QuotationItem::class);
     }
+
+
+    public function purchase_order_customer()
+    {
+        return $this->hasOne(PurchaseOrderCustomer::class);
+    }
 }
