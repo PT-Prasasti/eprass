@@ -75,6 +75,9 @@ class PurchaseOrderCustomerController extends Controller
     {
         $query = Quotation::query()
             ->with([
+                'sales_order.inquiry.visit.customer',
+                'sales_order.inquiry.sales',
+                'quotation_items.inquiry_product',
                 'purchase_order_customer',
             ])
             ->where('quotation_code', 'like', '%' . $request->term . '%')
