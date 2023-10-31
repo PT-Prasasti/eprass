@@ -1,11 +1,13 @@
 <header id="page-header">
     <div class="content-header">
         <div class="content-header-section">
-            <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout" data-action="sidebar_toggle">
+            <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout"
+                data-action="sidebar_toggle">
                 <i class="fa fa-navicon"></i>
             </button>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-circle btn-dual-secondary" id="page-header-options-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-circle btn-dual-secondary" id="page-header-options-dropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu min-width-300" aria-labelledby="page-header-options-dropdown">
@@ -13,22 +15,25 @@
                     <h6 class="dropdown-header">Sidebar</h6>
                     <div class="row gutters-tiny text-center mb-5">
                         <div class="col-6">
-                            <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10" data-toggle="layout" data-action="sidebar_style_inverse_off">Light</button>
+                            <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10"
+                                data-toggle="layout" data-action="sidebar_style_inverse_off">Light</button>
                         </div>
                         <div class="col-6">
-                            <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10" data-toggle="layout" data-action="sidebar_style_inverse_on">Dark</button>
+                            <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10"
+                                data-toggle="layout" data-action="sidebar_style_inverse_on">Dark</button>
                         </div>
                     </div>
                     <div class="d-none d-xl-block">
                         <h6 class="dropdown-header">Main Content</h6>
-                        <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10" data-toggle="layout" data-action="content_layout_toggle">Toggle Layout</button>
+                        <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10" data-toggle="layout"
+                            data-action="content_layout_toggle">Toggle Layout</button>
                     </div>
                     <div class="dropdown-divider"></div>
                 </div>
             </div>
         </div>
         <div class="content-header-section">
-            <div class="btn-group" role="group">
+            {{-- <div class="btn-group" role="group">
                 <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-notifications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-bell"></i>
                     @if (auth()->user()->unreadNotifications->count() > 0)
@@ -42,7 +47,7 @@
                         <li>
                             <a class="d-flex align-items-center text-body-color-dark media mb-15" href="javascript:void(0)">
                                 <div class="ml-5 mr-15">
-                                    @if ($item->read_at == NULL)
+                                    @if ($item->read_at == null)
                                     <i class="fa fa-fw fa-circle text-primary"></i>
                                     @else 
                                     <i class="fa fa-fw fa-circle text-white"></i>
@@ -98,14 +103,16 @@
                         <i class="fa fa-flag mr-5"></i> View All
                     </a>
                 </div>
-            </div>
+            </div> --}}
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-user d-sm-none"></i>
                     <span class="d-none d-sm-inline-block">{{ strtoupper(auth()->user()->name) }}</span>
                     <i class="fa fa-angle-down ml-5"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
+                <div class="dropdown-menu dropdown-menu-right min-width-200"
+                    aria-labelledby="page-header-user-dropdown">
                     <a class="dropdown-item" href="">
                         <i class="si si-user mr-5"></i> Profile
                     </a>
@@ -113,7 +120,8 @@
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
 
-                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();this.closest('form').submit();">
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();this.closest('form').submit();">
                             <i class="si si-logout mr-5"></i> Sign Out
                         </a>
                     </form>
@@ -126,11 +134,13 @@
             <form action="be_pages_generic_search.html" method="post">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <button type="button" class="btn btn-secondary" data-toggle="layout" data-action="header_search_off">
+                        <button type="button" class="btn btn-secondary" data-toggle="layout"
+                            data-action="header_search_off">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
-                    <input type="text" class="form-control" placeholder="Search or hit ESC.." id="page-header-search-input" name="page-header-search-input">
+                    <input type="text" class="form-control" placeholder="Search or hit ESC.."
+                        id="page-header-search-input" name="page-header-search-input">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-secondary">
                             <i class="fa fa-search"></i>
