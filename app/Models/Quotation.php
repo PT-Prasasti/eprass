@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Constants\PaymentTermConstant;
+use App\Constants\VatTypeConstant;
 use DateTime;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +22,8 @@ class Quotation extends Model
     protected $appends = [
         'is_warning',
         'can_be_recreated',
+        'vat_string',
+        'payment_term_string',
     ];
 
     public static function boot()
@@ -59,6 +63,18 @@ class Quotation extends Model
         }
 
         return false;
+    }
+
+    public function getVatStringAttribute(): string
+    {
+        $constant = VatTypeConstant::texts();
+        return @$constant[$this->vat] ?? '';
+    }
+
+    public function getPaymentTermStringAttribute(): string
+    {
+        $constant = PaymentTermConstant::texts();
+        return @$constant[$this->payment_term] ?? '';
     }
 
     public function sales_order()

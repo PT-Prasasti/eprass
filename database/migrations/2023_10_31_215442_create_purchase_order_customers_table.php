@@ -13,17 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('quotations', function (Blueprint $table) {
+        Schema::create('purchase_order_customers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('sales_order_id');
-            $table->uuid('quotation_code');
+            $table->uuid('quotation_id');
+            $table->date('transaction_date');
+            $table->string('purchase_order_number')->nullable();
             $table->string('status');
-            $table->date('due_date');
-            $table->string('payment_term');
-            $table->string('delivery_term');
-            $table->string('vat');
-            $table->string('validity');
-            $table->string('attachment_url');
+            $table->string('document_url')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quotations');
+        Schema::dropIfExists('purchase_order_customers');
     }
 };

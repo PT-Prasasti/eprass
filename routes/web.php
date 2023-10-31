@@ -10,6 +10,7 @@ use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
 use App\Http\Controllers\Helper\NotificationController;
+use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
 use App\Http\Controllers\Transaction\QuotationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
@@ -276,6 +277,16 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::delete('/{id}', [QuotationController::class, 'delete'])->name('.delete');
         Route::get('/search/sales-orders', [QuotationController::class, 'search_sales_orders'])->name('.search.sales-orders');
     });
+});
+
+Route::prefix('/purchase-order-customer')->name('purchase-order-customer')->group(function () {
+    Route::get('/', [PurchaseOrderCustomerController::class, 'index']);
+    Route::get('/add', [PurchaseOrderCustomerController::class, 'add'])->name('.add');
+    Route::post('/store', [PurchaseOrderCustomerController::class, 'store'])->name('.store');
+    Route::get('/{id}/edit', [PurchaseOrderCustomerController::class, 'edit'])->name('.edit');
+    Route::put('/{id}', [PurchaseOrderCustomerController::class, 'update'])->name('.update');
+    Route::delete('/{id}', [PurchaseOrderCustomerController::class, 'delete'])->name('.delete');
+    Route::get('/search/quotation', [PurchaseOrderCustomerController::class, 'search_quotation'])->name('.search.quotation');
 });
 
 // route project 

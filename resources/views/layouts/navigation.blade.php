@@ -92,6 +92,21 @@
                             <span class="sidebar-mini-hide">Quotation</span>
                         </a>
                     </li>
+
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-dollar"></i>
+                            <span class="sidebar-mini-hide">PO Customer</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('purchase-order-customer.add') }}">Add PO Customer</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
 
                 @if (auth()->user()->hasRole('admin_sales') ||
@@ -171,8 +186,8 @@
                         <span class="sidebar-mini-hidden">Data Master</span>
                     </li>
                     <li>
-                        <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-group"></i><span
-                                class="sidebar-mini-hide">Customer</span></a>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i
+                                class="fa fa-group"></i><span class="sidebar-mini-hide">Customer</span></a>
                         <ul>
                             <li>
                                 <a href="{{ route('data-master.customer.add') }}">Add Customer</a>
