@@ -314,19 +314,18 @@
                     contentType: false,
                     processData: false,
                     success: function(res) {
-                        $(`[document-show]`).prop('hidden', true);
-                        $(`[document-show]`).find('a').attr('href', '');
-                        $(`[name="document"]`).val('');
-
                         if (res != '') {
                             $(`[document-show]`).prop('hidden', false);
                             $(`[document-show]`).find('a').attr('href', `{{ asset('storage') }}/${res}`);
                             $(`[name="document"]`).val(res);
                         } else {
-                            alert('file not uploaded');
+                            alert(res.message);
                         }
                     },
-                });
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('File not uploaded');
+                    }
+                })
             });
         </script>
     </x-slot>

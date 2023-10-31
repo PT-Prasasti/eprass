@@ -17,6 +17,7 @@ use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\PurchaseOrderCustomer\AddPurchaseOrderCustomerRequest;
 use App\Http\Requests\PurchaseOrderCustomer\UpdatePurchaseOrderCustomerRequest;
+use App\Http\Requests\PurchaseOrderCustomer\UploadPurchaseOrderCustomerRequest;
 use App\Http\Requests\Transaction\Quotation\AddQuotationRequest;
 use App\Http\Requests\Transaction\Quotation\UpdateQuotationRequest;
 use App\Models\PurchaseOrderCustomer;
@@ -193,7 +194,7 @@ class PurchaseOrderCustomerController extends Controller
         }
     }
 
-    public function uploadDocument(Request $request)
+    public function uploadDocument(UploadPurchaseOrderCustomerRequest $request)
     {
         $filePath = null;
         if ($request->hasFile('file')) {

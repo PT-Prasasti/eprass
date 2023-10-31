@@ -651,10 +651,6 @@
                     contentType: false,
                     processData: false,
                     success: function(res) {
-                        $(`[document-show]`).prop('hidden', true);
-                        $(`[document-show]`).find('a').attr('href', '');
-                        $(`[name="document"]`).val('');
-
                         if (res != '') {
                             $(`[document-show]`).prop('hidden', false);
                             $(`[document-show]`).find('a').attr('href', `{{ asset('storage') }}/${res}`);
@@ -663,6 +659,9 @@
                             alert('file not uploaded');
                         }
                     },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('File not uploaded');
+                    }
                 });
             });
 
