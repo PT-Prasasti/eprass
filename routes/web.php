@@ -287,6 +287,7 @@ Route::prefix('/purchase-order-customer')->name('purchase-order-customer')->grou
     Route::put('/{id}', [PurchaseOrderCustomerController::class, 'update'])->name('.update');
     Route::delete('/{id}', [PurchaseOrderCustomerController::class, 'delete'])->name('.delete');
     Route::get('/search/quotation', [PurchaseOrderCustomerController::class, 'search_quotation'])->name('.search.quotation');
+    Route::post('upload-document', [PurchaseOrderCustomerController::class, 'uploadDocument'])->name('.upload-document');
 });
 
 // route project 

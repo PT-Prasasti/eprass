@@ -67,13 +67,7 @@ class PurchaseOrderCustomerController extends Controller
 
     public function add(): View
     {
-        $paymentTerms = PaymentTermConstant::texts();
-        $vatTypes = VatTypeConstant::texts();
-
-        return view('purchase-order-customer.add', [
-            'paymentTerms' => $paymentTerms,
-            'vatTypes' => $vatTypes
-        ]);
+        return view('purchase-order-customer.add');
     }
 
     public function search_quotation(Request $request): JsonResponse
@@ -156,7 +150,7 @@ class PurchaseOrderCustomerController extends Controller
 
             $query = PurchaseOrderCustomer::query()->findOrFail($id);
             $query->purchase_order_number = $request->purchase_order_number;
-            if (isset($query->document_url)) {
+            if (isset($request->document)) {
                 $query->document_url = $request->document;
             }
 
@@ -197,5 +191,17 @@ class PurchaseOrderCustomerController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
+    }
+
+    public function uploadDocument(Request $request)
+    {
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $fileDirectory = 'purchase-order-customers';
+            $file = $request->file('file');
+            $filePath = $this->fileController->store($fileDirectory, $file);
+        }
+
+        return $filePath;
     }
 }

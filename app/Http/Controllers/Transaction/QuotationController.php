@@ -115,13 +115,6 @@ class QuotationController extends Controller
 
             DB::beginTransaction();
 
-            // $filePath = null;
-            // if ($request->hasFile('attachment')) {
-            //     $fileDirectory = 'quotations';
-            //     $file = $request->file('attachment');
-            //     $filePath = $this->fileController->store($fileDirectory, $file);
-            // }
-
             $quotation = Quotation::query()->create([
                 'sales_order_id' => $request->sales_order,
                 'quotation_code' =>  $this->handleGenerateQuotationCode($request->sales_order),

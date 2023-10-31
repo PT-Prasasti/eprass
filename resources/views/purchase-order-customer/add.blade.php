@@ -132,12 +132,26 @@
                                                 class="custom-file-input js-custom-file-input-enabled"
                                                 id="example-file-input-custom" name="example-file-input-custom"
                                                 data-toggle="custom-file-input">
-                                            <label class="custom-file-label" for="example-file-input-custom">Choose
-                                                file</label>
+                                            <label class="custom-file-label" for="example-file-input-custom">
+                                                Choose file
+                                            </label>
                                         </div>
                                         <div class="block block-rounded">
                                             <div class="block-content block-content-full bg-pattern">
                                                 <h5>Document List</h5>
+                                                <ul class="list-group" {{ old('document') ? '' : 'hidden' }}
+                                                    document-show>
+                                                    <input type="hidden" name="document"
+                                                        value="{{ old('document') }}">
+
+                                                    <li class="list-group-item">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <a href="" target="_blank">
+                                                                Show Document
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -622,6 +636,34 @@
             $(document).on('select2:selecting', `[name="quotation"]`, function(e) {
                 const data = e.params.args.data.data;
                 handleSetQuotation(data);
+            });
+
+            $("#example-file-input-custom").change(function() {
+                var formData = new FormData();
+                var files = $(this)[0].files[0];
+                formData.append('file', files);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                $.ajax({
+                    url: `{{ route('purchase-order-customer.upload-document') }}`,
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        $(`[document-show]`).prop('hidden', true);
+                        $(`[document-show]`).find('a').attr('href', '');
+                        $(`[name="document"]`).val('');
+
+                        if (res != '') {
+                            $(`[document-show]`).prop('hidden', false);
+                            $(`[document-show]`).find('a').attr('href', `{{ asset('storage') }}/${res}`);
+                            $(`[name="document"]`).val(res);
+                        } else {
+                            alert('file not uploaded');
+                        }
+                    },
+                });
             });
 
             @if (session('quotation'))

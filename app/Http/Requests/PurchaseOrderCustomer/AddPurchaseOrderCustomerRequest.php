@@ -26,7 +26,7 @@ class AddPurchaseOrderCustomerRequest extends FormRequest
         return [
             "quotation"  => "required|exists:App\Models\Quotation,id",
             "purchase_order_number"  => "required|string",
-            // "document"  => "required|string",
+            "document"  => "required|string",
             "item.*.delivery_time"  => "required|string",
         ];
     }

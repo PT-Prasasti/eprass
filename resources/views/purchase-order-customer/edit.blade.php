@@ -149,6 +149,21 @@
                                         <div class="block block-rounded">
                                             <div class="block-content block-content-full bg-pattern">
                                                 <h5>Document List</h5>
+                                                <ul class="list-group"
+                                                    {{ old('document', $query->document_url) ? '' : 'hidden' }}
+                                                    document-show>
+                                                    <input type="hidden" name="document"
+                                                        value="{{ old('document', $query->document_url) }}">
+
+                                                    <li class="list-group-item">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <a href="{{ asset('storage/' . $query->document_url) }}"
+                                                                target="_blank">
+                                                                Show Document
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -284,6 +299,34 @@
                 fnCreatedRow: function(nRow, aData, iDataIndex) {
                     $(nRow).attr('data-id', aData.id);
                 },
+            });
+
+            $("#example-file-input-custom").change(function() {
+                var formData = new FormData();
+                var files = $(this)[0].files[0];
+                formData.append('file', files);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                $.ajax({
+                    url: `{{ route('purchase-order-customer.upload-document') }}`,
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        $(`[document-show]`).prop('hidden', true);
+                        $(`[document-show]`).find('a').attr('href', '');
+                        $(`[name="document"]`).val('');
+
+                        if (res != '') {
+                            $(`[document-show]`).prop('hidden', false);
+                            $(`[document-show]`).find('a').attr('href', `{{ asset('storage') }}/${res}`);
+                            $(`[name="document"]`).val(res);
+                        } else {
+                            alert('file not uploaded');
+                        }
+                    },
+                });
             });
         </script>
     </x-slot>
