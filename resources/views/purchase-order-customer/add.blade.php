@@ -452,7 +452,7 @@
                         },
                     },
                     {
-                        className: 'align-top p-2',
+                        className: 'text-right align-top',
                         render: function(data, type, row, meta) {
                             return `<span total_cost>${handleCurrencyFormat(Number(row.total_cost))}</span>`;
                         }
