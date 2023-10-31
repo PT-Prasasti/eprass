@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Sales;
 use App\Models\Inquiry;
+use App\Models\PurchaseOrderCustomer;
+use App\Models\Quotation;
 use App\Models\SalesOrder;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -19,20 +21,20 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        
-        if(env('HOSTING')) {
+
+        if (env('HOSTING')) {
             $this->hosting = env('HOSTING');
         } else {
             $this->hosting = false;
         }
     }
 
-    public function dashboard() : View
+    public function dashboard(): View
     {
         $redis = Redis::keys('*');
-        foreach($redis as $item) {
-            if(str_contains($item, auth()->user()->uuid)) {
-                if($this->hosting == false) {
+        foreach ($redis as $item) {
+            if (str_contains($item, auth()->user()->uuid)) {
+                if ($this->hosting == false) {
                     $item = explode('database_', $item);
                     $item = $item[1];
                 }
@@ -40,34 +42,45 @@ class DashboardController extends Controller
             }
         }
 
-        if(auth()->user()->hasRole('sales')) {
+        $quotation = Quotation::query();
+        $purchaseOrderCustomer = PurchaseOrderCustomer::query();
+        if (auth()->user()->hasRole('sales')) {
             $sales = Sales::where('username', auth()->user()->username)
                 ->first();
             $visit = VisitSchedule::where('sales_id', $sales->id)
                 ->count();
             $inquiry = Inquiry::where('sales_id', $sales->id)
                 ->count();
+            $quotation = $quotation->whereHas('sales_order.inquiry', function ($query) use ($sales) {
+                $query->where('sales_id', $sales->id);
+            });
+            $purchaseOrderCustomer = $purchaseOrderCustomer->whereHas('quotation.sales_order.inquiry', function ($query) use ($sales) {
+                $query->where('sales_id', $sales->id);
+            });
         } else {
             $visit = VisitSchedule::count();
             $inquiry = Inquiry::count();
             $sales = SalesOrder::count();
         }
 
-        return view('dashboard', compact('visit', 'inquiry', 'sales'));
+        $quotationCount = $quotation->count();
+        $purchaseOrderCustomerCount = $purchaseOrderCustomer->count();
+
+        return view('dashboard', compact('visit', 'inquiry', 'sales', 'quotationCount', 'purchaseOrderCustomerCount'));
     }
 
-    public function event() : JsonResponse
+    public function event(): JsonResponse
     {
-        if(auth()->user()->hasRole('sales')) {
+        if (auth()->user()->hasRole('sales')) {
             $sales = Sales::where('username', auth()->user()->username)->first();
             $visit = VisitSchedule::where('sales_id', $sales->id)->get();
         } else {
             $visit = VisitSchedule::all();
         }
-        
+
         $data = array();
 
-        foreach($visit as $item) {
+        foreach ($visit as $item) {
             $dateTimeString = Carbon::parse($item->date . ' ' . $item->time)->format('Y-m-d\TH:i:s');
 
             $data[] = array(
@@ -77,21 +90,21 @@ class DashboardController extends Controller
                 'color' => '#3D7FB5',
             );
         }
-    
+
         return response()->json($data);
     }
 
-    public function data(Request $request) : JsonResponse
+    public function data(Request $request): JsonResponse
     {
         $data = $this->event();
 
-        if($request->visit == 'month') {
+        if ($request->visit == 'month') {
             $visit = $this->visit_month();
         } else {
             $visit = $this->visit_year();
         }
 
-        if($request->crm == 'month') {
+        if ($request->crm == 'month') {
             $crm = $this->crm_month();
         } else {
             $crm = $this->crm_year();
@@ -104,9 +117,9 @@ class DashboardController extends Controller
         ));
     }
 
-    public function visit_month() : JsonResponse
+    public function visit_month(): JsonResponse
     {
-        if(auth()->user()->hasRole('sales')) {
+        if (auth()->user()->hasRole('sales')) {
             $sales = Sales::where('username', auth()->user()->username)->first();
             $visit = VisitSchedule::where('sales_id', $sales->id)
                 ->whereYear('created_at', Carbon::now()->format('Y'))
@@ -115,8 +128,8 @@ class DashboardController extends Controller
             $visit = VisitSchedule::whereYear('created_at', Carbon::now()->format('Y'))
                 ->get();
         }
-    
-        foreach($visit as $item) {
+
+        foreach ($visit as $item) {
 
             $createdAtMonth = (int) Carbon::parse($item->created_at)->format('m');
 
@@ -143,14 +156,14 @@ class DashboardController extends Controller
 
         $visitData = array();
 
-        for($i = 1; $i <= 12; $i++) {
-            if($i < 10) {
-                $month = Carbon::parse('01-0'.$i.'-'.Carbon::now()->year())->format('M');
+        for ($i = 1; $i <= 12; $i++) {
+            if ($i < 10) {
+                $month = Carbon::parse('01-0' . $i . '-' . Carbon::now()->year())->format('M');
             } else {
-                $month = Carbon::parse('01-'.$i.'-'.Carbon::now()->year())->format('M');
+                $month = Carbon::parse('01-' . $i . '-' . Carbon::now()->year())->format('M');
             }
 
-            if(isset($groupedData[$i])) {
+            if (isset($groupedData[$i])) {
                 $visitData[] = array(
                     'month' => $month,
                     'phone' => $groupedData[$i]['phone'],
@@ -164,13 +177,13 @@ class DashboardController extends Controller
             'total' => $visit->count(),
             'data' => $visitData
         );
-    
+
         return response()->json($visitSchedule);
     }
 
-    public function visit_year() : JsonResponse
+    public function visit_year(): JsonResponse
     {
-        if(auth()->user()->hasRole('sales')) {
+        if (auth()->user()->hasRole('sales')) {
             $sales = Sales::where('username', auth()->user()->username)->first();
             $visit = VisitSchedule::where('sales_id', $sales->id)
                 ->whereYear('created_at', Carbon::now()->format('Y'))
@@ -179,8 +192,8 @@ class DashboardController extends Controller
             $visit = VisitSchedule::whereYear('created_at', Carbon::now()->format('Y'))
                 ->get();
         }
-    
-        foreach($visit as $item) {
+
+        foreach ($visit as $item) {
 
             $createdAtMonth = (int) Carbon::parse($item->created_at)->format('m');
 
@@ -207,14 +220,14 @@ class DashboardController extends Controller
 
         $visitData = array();
 
-        for($i = 1; $i <= 12; $i++) {
-            if($i < 10) {
-                $month = Carbon::parse('01-0'.$i.'-'.Carbon::now()->year())->format('M');
+        for ($i = 1; $i <= 12; $i++) {
+            if ($i < 10) {
+                $month = Carbon::parse('01-0' . $i . '-' . Carbon::now()->year())->format('M');
             } else {
-                $month = Carbon::parse('01-'.$i.'-'.Carbon::now()->year())->format('M');
+                $month = Carbon::parse('01-' . $i . '-' . Carbon::now()->year())->format('M');
             }
 
-            if(isset($groupedData[$i])) {
+            if (isset($groupedData[$i])) {
                 $visitData[] = array(
                     'month' => $month,
                     'phone' => $groupedData[$i]['phone'],
@@ -235,12 +248,14 @@ class DashboardController extends Controller
             'total' => $visit->count(),
             'data' => $visitData
         );
-    
+
         return response()->json($visitSchedule);
     }
 
-    public function crm_month() : JsonResponse
+    public function crm_month(): JsonResponse
     {
+        $quotation = Quotation::query();
+        $purchaseOrderCustomer = PurchaseOrderCustomer::query();
         if (auth()->user()->hasRole('sales')) {
             $sales = Sales::where('username', auth()->user()->username)->first();
             $visit = VisitSchedule::where('sales_id', $sales->id)
@@ -251,6 +266,12 @@ class DashboardController extends Controller
                 ->whereYear('created_at', Carbon::now()->format('Y'))
                 ->whereMonth('created_at', Carbon::now()->format('m'))
                 ->get();
+            $quotation = $quotation->whereHas('sales_order.inquiry', function ($query) use ($sales) {
+                $query->where('sales_id', $sales->id);
+            });
+            $purchaseOrderCustomer = $purchaseOrderCustomer->whereHas('quotation.sales_order.inquiry', function ($query) use ($sales) {
+                $query->where('sales_id', $sales->id);
+            });
         } else {
             $visit = VisitSchedule::whereYear('created_at', Carbon::now()->format('Y'))
                 ->whereMonth('created_at', Carbon::now()->format('m'))
@@ -259,18 +280,29 @@ class DashboardController extends Controller
                 ->whereMonth('created_at', Carbon::now()->format('m'))
                 ->get();
         }
+
+        $quotation = $quotation->whereYear('created_at', Carbon::now()->format('Y'))
+            ->whereMonth('created_at', Carbon::now()->format('m'))
+            ->get();
+        $purchaseOrderCustomer = $purchaseOrderCustomer->whereYear('created_at', Carbon::now()->format('Y'))
+            ->whereMonth('created_at', Carbon::now()->format('m'))
+            ->get();
 
         $data = array(array(
             'month' => Carbon::now()->format('M'),
             'visit' => $visit->count(),
             'inquiry' => $inquiry->count(),
+            'quotation' => $quotation->count(),
+            'purchase_order_customer' => $purchaseOrderCustomer->count(),
         ));
 
         return response()->json($data);
     }
 
-    public function crm_year() : JsonResponse
+    public function crm_year(): JsonResponse
     {
+        $quotation = Quotation::query();
+        $purchaseOrderCustomer = PurchaseOrderCustomer::query();
         if (auth()->user()->hasRole('sales')) {
             $sales = Sales::where('username', auth()->user()->username)->first();
             $visit = VisitSchedule::where('sales_id', $sales->id)
@@ -279,35 +311,50 @@ class DashboardController extends Controller
             $inquiry = Inquiry::where('sales_id', $sales->id)
                 ->whereYear('created_at', Carbon::now()->format('Y'))
                 ->get();
+            $quotation = $quotation->whereHas('sales_order.inquiry', function ($query) use ($sales) {
+                $query->where('sales_id', $sales->id);
+            });
+            $purchaseOrderCustomer = $purchaseOrderCustomer->whereHas('quotation.sales_order.inquiry', function ($query) use ($sales) {
+                $query->where('sales_id', $sales->id);
+            });
         } else {
             $visit = VisitSchedule::whereYear('created_at', Carbon::now()->format('Y'))
                 ->get();
             $inquiry = Inquiry::whereYear('created_at', Carbon::now()->format('Y'))
                 ->get();
         }
+
+        $quotation = $quotation->get();
+        $purchaseOrderCustomer = $purchaseOrderCustomer->get();
 
         $data = array();
 
         for ($i = 1; $i <= 12; $i++) {
             $monthFormatted = str_pad($i, 2, '0', STR_PAD_LEFT);
             $startOfMonth = Carbon::now()->year . '-' . $monthFormatted . '-01';
+            $endOfMonth = Carbon::parse($startOfMonth)->endOfMonth();
+
             $visitsCount = $visit->whereBetween('created_at', [$startOfMonth, Carbon::parse($startOfMonth)->endOfMonth()])->count();
             $inquiriesCount = $inquiry->whereBetween('created_at', [$startOfMonth, Carbon::parse($startOfMonth)->endOfMonth()])->count();
+            $quotationsCount = $quotation->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
+            $purchaseOrderCustomersCount = $purchaseOrderCustomer->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
             $data[] = array(
                 'month' => Carbon::parse($startOfMonth)->format('M'),
                 'visit' => $visitsCount,
                 'inquiry' => $inquiriesCount,
+                'quotation' => $quotationsCount,
+                'purchase_order_customer' => $purchaseOrderCustomersCount,
             );
         }
 
         return response()->json($data);
     }
 
-    public function data_admin_sales(Request $request) : JsonResponse
+    public function data_admin_sales(Request $request): JsonResponse
     {
         $event = $this->event_admin_sales();
 
-        if($request->pipeline == 'month') {
+        if ($request->pipeline == 'month') {
             $pipeline = $this->pipeline_month_admin_sales();
         } else {
             $pipeline = $this->pipeline_year_admin_sales();
@@ -319,13 +366,13 @@ class DashboardController extends Controller
         ));
     }
 
-    public function event_admin_sales() : JsonResponse
+    public function event_admin_sales(): JsonResponse
     {
         $so = SalesOrder::all();
 
         $data = array();
 
-        foreach($so as $item) {
+        foreach ($so as $item) {
             $data[] = array(
                 'title' => $item->id,
                 'uuid' => $item->uuid,
@@ -333,11 +380,11 @@ class DashboardController extends Controller
                 'color' => '#3D7FB5',
             );
         }
-    
+
         return response()->json($data);
     }
 
-    public function pipeline_month_admin_sales() : JsonResponse
+    public function pipeline_month_admin_sales(): JsonResponse
     {
         $inquiry = Inquiry::whereYear('created_at', Carbon::now()->format('Y'))
             ->whereMonth('created_at', Carbon::now()->format('m'))
@@ -355,7 +402,7 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
-    public function pipeline_year_admin_sales() : JsonResponse
+    public function pipeline_year_admin_sales(): JsonResponse
     {
         $inquiry = Inquiry::whereYear('created_at', Carbon::now()->format('Y'))
             ->get();
