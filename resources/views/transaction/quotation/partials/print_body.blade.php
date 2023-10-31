@@ -52,7 +52,7 @@
         </div>
         <div class="col-md-6">
             <label> : {{ $query->quotation_code }}<br>
-                : {{ date('Y-m-d') }}<br>
+                : {{ isset($printDate) ? date('Y-m-d', strtotime($printDate)) : date('Y-m-d') }}<br>
                 : {{ date('Y-m-d', strtotime($query->due_date)) }}<br>
                 : {{ $query->sales_order->inquiry->sales->name }}<br>
                 : {{ $query->sales_order->inquiry->sales->name }}<br>
@@ -95,7 +95,7 @@
         <?php
         $totalCost = 0;
         ?>
-        @foreach ($query->quotation_items as $item)
+        @foreach ($query->quotation_items->sortBy('inquiry_product.item_name') as $item)
             <tr>
                 <td class="text-center">
                     <p>{{ $loop->iteration }}</p>
@@ -225,9 +225,9 @@
             <label>
                 : IDR Basis <br>
                 : {{ $query->delivery_term }} <br>
-                : {{ $paymentTerms[$query->payment_term] }} <br>
+                : {{ $query->payment_term_string }} <br>
                 : {{ $query->validity }} <br>
-                : {{ $vatTypes[$query->vat] }} <br>
+                : {{ $query->vat_string }} <br>
             </label>
         </div>
     </div>

@@ -120,7 +120,7 @@
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control"
-                                                            name="purchase_order_number">
+                                                            name="purchase_order_number" autocomplete="one-time-code">
                                                     </div>
                                                 </div>
                                             </div>
@@ -540,7 +540,7 @@
                                 </td>
                                 <td class="text-right">
                                     <p>
-                                        ${data.inquiry_product.sourching_qty}
+                                        ${data.inquiry_product.qty}
                                     </p>
                                 </td>
                                 <td class="text-right text-nowrap">

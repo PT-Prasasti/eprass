@@ -16,6 +16,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\PurchaseOrderCustomer\AddPurchaseOrderCustomerRequest;
+use App\Http\Requests\PurchaseOrderCustomer\UpdatePurchaseOrderCustomerRequest;
 use App\Http\Requests\Transaction\Quotation\AddQuotationRequest;
 use App\Http\Requests\Transaction\Quotation\UpdateQuotationRequest;
 use App\Models\PurchaseOrderCustomer;
@@ -133,23 +134,18 @@ class PurchaseOrderCustomerController extends Controller
         }
     }
 
-    public function edit($id): View
+    public function edit($id, Request $request): View
     {
-        $query = Quotation::query()
+        $query = PurchaseOrderCustomer::query()
             ->with([
-                'sales_order.inquiry.visit.customer',
-                'sales_order.inquiry.sales',
-                'sales_order.inquiry.products',
+                'quotation.sales_order.inquiry.visit.customer',
+                'quotation.sales_order.inquiry.sales',
+                'quotation.quotation_items',
             ])
             ->findOrFail($id);
 
-        $paymentTerms = PaymentTermConstant::texts();
-        $vatTypes = VatTypeConstant::texts();
-
-        return view('transaction.quotation.view', [
+        return view('purchase-order-customer.edit', [
             'query' => $query,
-            'paymentTerms' => $paymentTerms,
-            'vatTypes' => $vatTypes,
         ]);
     }
 
@@ -160,12 +156,16 @@ class PurchaseOrderCustomerController extends Controller
 
             $query = PurchaseOrderCustomer::query()->findOrFail($id);
             $query->purchase_order_number = $request->purchase_order_number;
-            $query->document_url = $request->document;
+            if (isset($query->document_url)) {
+                $query->document_url = $request->document;
+            }
 
-            foreach ($query->quotation->quotation_items as $quotationItem) {
-                if (isset($request->items[$quotationItem->id])) {
-                    $quotationItem->delivery_time_of_purchase_order_customer = $request->items[$quotationItem->id]['delivery_time'];
-                    $quotationItem->save();
+            if ($query->quotation->quotation_items->count() > 0) {
+                foreach ($query->quotation->quotation_items as $quotationItem) {
+                    if (isset($request->item[$quotationItem->id])) {
+                        $quotationItem->delivery_time_of_purchase_order_customer = $request->item[$quotationItem->id]['delivery_time'];
+                        $quotationItem->save();
+                    }
                 }
             }
 
