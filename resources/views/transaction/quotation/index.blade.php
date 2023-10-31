@@ -188,6 +188,9 @@
                                 case 'Done':
                                     badgeColor = `success`;
                                     break;
+                                case 'Rejected':
+                                    badgeColor = `danger`;
+                                    break;
                                 default:
                                     badgeColor = `secondary`;
                             }
