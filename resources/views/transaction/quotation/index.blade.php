@@ -2,7 +2,12 @@
     <div class="content">
         <div class="row">
             <div class="col-md-6">
-                <h4><b>List Approval {{ auth()->user()->hasRole('sales')? 'Quotation': 'Sales Order' }}</b></h4>
+                <h4>
+                    <b>
+                        List
+                        {{ (request()->query('filter') === 'reject' ? 'Rejected' : 'Approval') .' ' .(auth()->user()->hasRole('sales')? 'Quotation': 'Sales Order') }}
+                    </b>
+                </h4>
             </div>
             {{-- <div class="col-md-6 text-right">
                 <div class="push">
