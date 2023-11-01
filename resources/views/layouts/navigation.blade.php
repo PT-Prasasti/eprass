@@ -92,21 +92,6 @@
                             <span class="sidebar-mini-hide">Quotation</span>
                         </a>
                     </li>
-
-                    <li>
-                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                            <i class="fa fa-dollar"></i>
-                            <span class="sidebar-mini-hide">PO Customer</span>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="{{ route('purchase-order-customer.add') }}">Add PO Customer</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
-                            </li>
-                        </ul>
-                    </li>
                 @endif
 
                 @if (auth()->user()->hasRole('admin_sales') ||
@@ -149,6 +134,20 @@
                             </li>
                             <li>
                                 <a href="{{ route('transaction.quotation') }}?filter=reject">Rejected Quotation</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-dollar"></i>
+                            <span class="sidebar-mini-hide">PO Customer</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('purchase-order-customer.add') }}">Add PO Customer</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
                             </li>
                         </ul>
                     </li>
