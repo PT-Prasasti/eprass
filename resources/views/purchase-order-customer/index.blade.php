@@ -123,11 +123,13 @@
                         data: 'purchase_order_number',
                     },
                     {
-                        data: 'quotation.sales_order.inquiry.visit.customer.company',
+                        data: 'sales_order.inquiry.visit.customer.name',
+                        render: function(data, type, row, meta) {
+                            return `${row.sales_order.inquiry.visit.customer.name} - ${row.sales_order.inquiry.visit.customer.company}`;
+                        },
                     },
                     {
                         data: 'quotation.sales_order.inquiry.sales.name',
-                        className: 'text-center',
                     },
                     {
                         data: 'transaction_date',

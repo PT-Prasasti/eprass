@@ -47,8 +47,8 @@ class QuotationController extends Controller
         if ($request->ajax()) {
             $data = Quotation::query()
                 ->with([
-                    'sales_order',
                     'sales_order.inquiry.visit.customer',
+                    'sales_order.inquiry.sales'
                 ]);
 
             if ($request->filter === 'reject') {

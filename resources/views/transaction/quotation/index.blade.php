@@ -84,6 +84,7 @@
                             <th class="text-center">Quotation Number</th>
                             <th class="text-center">SO Number</th>
                             <th class="text-center">Customer - Company Name</th>
+                            <th class="text-center">Sales Name</th>
                             <th class="text-center">Date</th>
                             <th class="text-center">Grade</th>
                             <th class="text-center">Status</th>
@@ -163,7 +164,13 @@
                         data: 'sales_order.id',
                     },
                     {
-                        data: 'sales_order.inquiry.visit.customer.company',
+                        data: 'sales_order.inquiry.visit.customer.name',
+                        render: function(data, type, row, meta) {
+                            return `${row.sales_order.inquiry.visit.customer.name} - ${row.sales_order.inquiry.visit.customer.company}`;
+                        },
+                    },
+                    {
+                        data: 'sales_order.inquiry.sales.name',
                     },
                     {
                         data: 'sales_order.due_date',
