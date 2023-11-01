@@ -84,10 +84,10 @@ class QuotationController extends Controller
                 'quotations',
             ])
             ->where('sales_orders.id', 'like', '%' . $request->term . '%')
-            ->take(20)
             ->orderBy('sales_orders.id')
             ->get()
-            ->where('can_be_added_quotation', true);
+            ->where('can_be_added_quotation', true)
+            ->take(20);
 
         return response()->json($data);
     }

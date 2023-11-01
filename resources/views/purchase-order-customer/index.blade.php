@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                        List Approval Sales Order
+                        List PO Customer
                     </b>
                 </h4>
             </div>
@@ -123,9 +123,9 @@
                         data: 'purchase_order_number',
                     },
                     {
-                        data: 'sales_order.inquiry.visit.customer.name',
+                        data: 'quotation.sales_order.inquiry.visit.customer.name',
                         render: function(data, type, row, meta) {
-                            return `${row.sales_order.inquiry.visit.customer.name} - ${row.sales_order.inquiry.visit.customer.company}`;
+                            return `${row.quotation.sales_order.inquiry.visit.customer.name} - ${row.quotation.sales_order.inquiry.visit.customer.company}`;
                         },
                     },
                     {

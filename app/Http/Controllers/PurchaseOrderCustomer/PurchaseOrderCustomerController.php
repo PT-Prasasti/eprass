@@ -78,13 +78,14 @@ class PurchaseOrderCustomerController extends Controller
                 'sales_order.inquiry.visit.customer',
                 'sales_order.inquiry.sales',
                 'quotation_items.inquiry_product',
-                'purchase_order_customer',
+                // 'purchase_order_customer',
             ])
+            ->doesntHave('purchase_order_customer')
             ->where('quotation_code', 'like', '%' . $request->term . '%')
             ->where('status', 'Done')
-            ->take(20)
             ->orderBy('quotation_code')
-            ->get();
+            ->get()
+            ->take(20);
 
         return response()->json($query);
     }
