@@ -5,7 +5,7 @@
                 <h4>
                     <b>
                         List
-                        {{ (request()->query('filter') === 'reject' ? 'Rejected' : 'Approval') .' ' .(auth()->user()->hasRole('sales')? 'Quotation': 'Sales Order') }}
+                        {{ (request()->query('filter') === 'reject' ? 'Rejected' : '') . ' Quotation' }}
                     </b>
                 </h4>
             </div>
