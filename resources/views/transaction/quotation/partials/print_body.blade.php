@@ -165,7 +165,7 @@
             <tr>
                 <td colspan="3"></td>
                 <td class="text-right">
-                    <p><b>{{ str_replace('Include ', '', $vatTypes[$query->vat]) }}</b>
+                    <p><b>{{ str_replace('Include ', '', $query->vat_string) }}</b>
                     </p>
                 </td>
                 <td class="text-right text-nowrap">
