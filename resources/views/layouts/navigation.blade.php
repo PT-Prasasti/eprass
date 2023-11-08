@@ -178,6 +178,9 @@
                             </ul>
                         @endif
                     </li>
+                    <li class="nav-main-heading">
+                        <span class="sidebar-mini-hidden">Order Supplier</span>
+                    </li>
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                             <i class="fa fa-dollar"></i>
@@ -191,7 +194,7 @@
                                 <a href="#">Add PO Supplier</a>
                             </li>
                             <li>
-                                <a href="#">Add PO Supplier</a>
+                                <a href="#">List PO Supplier</a>
                             </li>
                         </ul>
                     </li>

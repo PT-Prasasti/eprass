@@ -43,10 +43,15 @@
                         <tr>
                             <th class="text-center">No.</th>
                             <th class="text-center">Quotation Number</th>
-                            <th class="text-center">PO Number</th>
+                            @if (auth()->user()->hasRole('sales_order'))
+                                <th class="text-center">PO Number</th>
+                            @else
+                                <th class="text-center">SO Number</th>
+                            @endif
                             <th class="text-center">Customer - Company Name</th>
                             <th class="text-center">Sales Name</th>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Due Date</th>
                             <th class="text-center">Status</th>
                             <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                         </tr>
@@ -119,10 +124,15 @@
                     {
                         data: 'quotation.quotation_code',
                     },
-                    {
-                        data: 'purchase_order_number',
-                    },
-                    {
+                    @if (auth()->user()->hasRole('sales_order'))
+                        {
+                            data: 'purchase_order_number',
+                        },
+                    @else
+                        {
+                            data: 'quotation.sales_order.id',
+                        },
+                    @endif {
                         data: 'quotation.sales_order.inquiry.visit.customer.name',
                         render: function(data, type, row, meta) {
                             return `${row.quotation.sales_order.inquiry.visit.customer.name} - ${row.quotation.sales_order.inquiry.visit.customer.company}`;
@@ -133,6 +143,12 @@
                     },
                     {
                         data: 'transaction_date',
+                        className: 'text-center',
+                    },
+                    {
+                        orderable: false,
+                        searchable: false,
+                        data: 'transaction_due_date',
                         className: 'text-center',
                     },
                     {
@@ -154,16 +170,22 @@
                     {
                         className: 'text-center text-nowrap',
                         render: function(data, type, row, meta) {
-                            var html = ``;
+                            var html = `
+                                <a href="{{ route('purchase-order-customer') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
+                                    <i class="fa fa-file-text-o"></i>
+                                </a>
+                            `;
+
+                            @if (auth()->user()->hasRole('sales_order'))
+                                html = `
+                                    | <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                `;
+                            @endif
 
                             return `
                                 ${html}
-                                <a href="{{ route('purchase-order-customer') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
-                                    <i class="fa fa-file-text-o"></i>
-                                </a> |
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
                             `
                         },
                     }
