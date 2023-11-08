@@ -43,10 +43,10 @@
                         <tr>
                             <th class="text-center">No.</th>
                             <th class="text-center">Quotation Number</th>
-                            @if (auth()->user()->hasRole('sales_order'))
-                                <th class="text-center">PO Number</th>
-                            @else
+                            @if (auth()->user()->hasRole('purchasing'))
                                 <th class="text-center">SO Number</th>
+                            @else
+                                <th class="text-center">PO Number</th>
                             @endif
                             <th class="text-center">Customer - Company Name</th>
                             <th class="text-center">Sales Name</th>
@@ -124,13 +124,13 @@
                     {
                         data: 'quotation.quotation_code',
                     },
-                    @if (auth()->user()->hasRole('sales_order'))
+                    @if (auth()->user()->hasRole('purchasing'))
                         {
-                            data: 'purchase_order_number',
+                            data: 'quotation.sales_order.id',
                         },
                     @else
                         {
-                            data: 'quotation.sales_order.id',
+                            data: 'purchase_order_number',
                         },
                     @endif {
                         data: 'quotation.sales_order.inquiry.visit.customer.name',
@@ -176,7 +176,7 @@
                                 </a>
                             `;
 
-                            @if (auth()->user()->hasRole('sales_order'))
+                            @if (!auth()->user()->hasRole('purchasing'))
                                 html = `
                                     | <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                         <i class="fa fa-trash-o"></i>
