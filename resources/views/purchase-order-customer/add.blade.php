@@ -66,6 +66,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">SO Number</label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly sales_order_number>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Sales Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
@@ -433,10 +441,7 @@
                         className: 'align-top',
                         render: function(data, type, row, meta) {
                             return `
-                                ${row.inquiry_product.item_name}
-                                </br>${row.inquiry_product.description}
-                                </br>${row.inquiry_product.size}
-                                </br>${row.inquiry_product.remark}
+                                <textarea name="item[${row.id}][item_name]" class="form-control" rows="4">${row.inquiry_product.item_name}\n${row.inquiry_product.description}\n${row.inquiry_product.size}\n${row.inquiry_product.remark}</textarea>
                             `;
                         },
                     },
@@ -463,7 +468,7 @@
                         className: 'align-top',
                         render: function(data, type, row, meta) {
                             return `
-                                <input type="text" class="form-control form-control-sm w-100" name="item[${row.id}][delivery_time]" placeholder="" value="${row.inquiry_product.delivery_time}" autocomplete="one-time-code" style="min-width: 100px;">
+                                <input type="date" class="form-control form-control-sm w-100" name="item[${row.id}][max_delivery_time]" placeholder="" value="" autocomplete="one-time-code" style="min-width: 100px;">
                             `;
                         }
                     },
@@ -477,6 +482,7 @@
             });
 
             const handleSetQuotation = (data) => {
+                const salesOrderNumberElement = $(`[sales_order_number]`);
                 const salesNameElement = $(`[sales_name]`);
                 const customerNameElement = $(`[customer_name]`);
                 const companyNameElement = $(`[company_name]`);
@@ -485,6 +491,7 @@
                 const phoneElement = $(`[phone]`);
                 const subjectElement = $(`[subject]`);
 
+                salesOrderNumberElement.val(data.sales_order.id);
                 salesNameElement.val(data.sales_order?.inquiry?.sales?.name ?? '');
                 customerNameElement.val(data.sales_order?.inquiry?.visit.customer?.name ?? '');
                 companyNameElement.val(data.sales_order?.inquiry?.visit.customer?.company ?? '');

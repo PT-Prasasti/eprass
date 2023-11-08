@@ -118,7 +118,8 @@ class PurchaseOrderCustomerController extends Controller
             if ($query->quotation->quotation_items->count() > 0) {
                 foreach ($query->quotation->quotation_items as $quotationItem) {
                     if (isset($request->item[$quotationItem->id])) {
-                        $quotationItem->delivery_time_of_purchase_order_customer = $request->item[$quotationItem->id]['delivery_time'];
+                        $quotationItem->item_name_of_purchase_order_customer = $request->item[$quotationItem->id]['item_name'];
+                        $quotationItem->max_delivery_time_of_purchase_order_customer = $request->item[$quotationItem->id]['max_delivery_time'];
                         $quotationItem->save();
                     }
                 }
@@ -161,7 +162,8 @@ class PurchaseOrderCustomerController extends Controller
             if ($query->quotation->quotation_items->count() > 0) {
                 foreach ($query->quotation->quotation_items as $quotationItem) {
                     if (isset($request->item[$quotationItem->id])) {
-                        $quotationItem->delivery_time_of_purchase_order_customer = $request->item[$quotationItem->id]['delivery_time'];
+                        $quotationItem->item_name_of_purchase_order_customer = $request->item[$quotationItem->id]['item_name'];
+                        $quotationItem->max_delivery_time_of_purchase_order_customer = $request->item[$quotationItem->id]['max_delivery_time'];
                         $quotationItem->save();
                     }
                 }
@@ -173,7 +175,8 @@ class PurchaseOrderCustomerController extends Controller
 
             return redirect()->back()->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
-            return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
+            dd($e);
+            return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
         }
     }
 

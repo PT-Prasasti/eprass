@@ -102,6 +102,7 @@
                         <span class="sidebar-mini-hidden">Transaction</span>
                     </li>
                 @endif
+
                 @if (auth()->user()->hasRole('admin_sales') ||
                         auth()->user()->hasRole('superadmin'))
                     <li>
@@ -177,6 +178,23 @@
                             </ul>
                         @endif
                     </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-dollar"></i>
+                            <span class="sidebar-mini-hide">PO Supplier</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
+                            </li>
+                            <li>
+                                <a href="#">Add PO Supplier</a>
+                            </li>
+                            <li>
+                                <a href="#">Add PO Supplier</a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
 
                 @if (auth()->user()->hasRole('sales') ||
@@ -197,6 +215,7 @@
                         </ul>
                     </li>
                 @endif
+
                 @if (auth()->user()->hasRole('superadmin'))
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i

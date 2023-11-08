@@ -26,7 +26,8 @@ class UpdatePurchaseOrderCustomerRequest extends FormRequest
         return [
             "purchase_order_number"  => "required|string",
             "document"  => "nullable|string",
-            "item.*.delivery_time"  => "required|string",
+            "item.*.item_name"  => "required|string",
+            "item.*.max_delivery_time"  => "required|date",
         ];
     }
 

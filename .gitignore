@@ -4,3 +4,4 @@ dump.rdb
 /docker
 /vendor
 /public/storage
+*temp.*

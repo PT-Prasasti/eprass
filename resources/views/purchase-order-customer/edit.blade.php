@@ -68,6 +68,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">SO Number</label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" name=""
+                                                            value="{{ $query->quotation->sales_order->id }}" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Sales Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
@@ -258,10 +266,7 @@
                         className: 'align-top',
                         render: function(data, type, row, meta) {
                             return `
-                                ${row.inquiry_product.item_name}
-                                </br>${row.inquiry_product.description}
-                                </br>${row.inquiry_product.size}
-                                </br>${row.inquiry_product.remark}
+                                <textarea name="item[${row.id}][item_name]" class="form-control" rows="4">${row.item_name_of_purchase_order_customer}</textarea>
                             `;
                         },
                     },
@@ -288,7 +293,7 @@
                         className: 'align-top',
                         render: function(data, type, row, meta) {
                             return `
-                                <input type="text" class="form-control form-control-sm w-100" name="item[${row.id}][delivery_time]" placeholder="" value="${row.delivery_time_of_purchase_order_customer ?? ''}" autocomplete="one-time-code" style="min-width: 100px;">
+                                <input type="date" class="form-control form-control-sm w-100" name="item[${row.id}][max_delivery_time]" placeholder="" value="${row.max_delivery_time_of_purchase_order_customer ?? ''}" autocomplete="one-time-code" style="min-width: 100px;">
                             `;
                         }
                     },

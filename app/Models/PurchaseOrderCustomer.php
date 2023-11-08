@@ -16,6 +16,10 @@ class PurchaseOrderCustomer extends Model
 
     protected $guarded = [];
 
+    protected $appends = [
+        'transaction_due_date'
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -27,5 +31,19 @@ class PurchaseOrderCustomer extends Model
     public function quotation()
     {
         return $this->belongsTo(Quotation::class);
+    }
+
+    public function getTransactionDueDateAttribute(): string
+    {
+        $dueDate = '';
+        if ($this->quotation && $this->quotation->quotation_items->count() > 0) {
+            foreach ($this->quotation->quotation_items as $item) {
+                if ($dueDate === '' || $dueDate > $item->max_delivery_time_of_purchase_order_customer) {
+                    $dueDate = $item->max_delivery_time_of_purchase_order_customer;
+                }
+            }
+        }
+
+        return $dueDate;
     }
 }
