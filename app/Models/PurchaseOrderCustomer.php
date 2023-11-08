@@ -38,7 +38,7 @@ class PurchaseOrderCustomer extends Model
         $dueDate = '';
         if ($this->quotation && $this->quotation->quotation_items->count() > 0) {
             foreach ($this->quotation->quotation_items as $item) {
-                if ($dueDate === '' || $dueDate > $item->max_delivery_time_of_purchase_order_customer) {
+                if ($item->max_delivery_time_of_purchase_order_customer && ($dueDate === '' || $dueDate > $item->max_delivery_time_of_purchase_order_customer)) {
                     $dueDate = $item->max_delivery_time_of_purchase_order_customer;
                 }
             }
