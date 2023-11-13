@@ -71,7 +71,7 @@ class PurchaseOrderSupplierController extends Controller
         return view('purchase-order-supplier.add', [
             'transactionCode' => $transactionCode,
             'paymentTerms' => $paymentTerms,
-            'vatTypes' => $vatTypes
+            'vatTypes' => $vatTypes,
         ]);
     }
 
@@ -162,14 +162,18 @@ class PurchaseOrderSupplierController extends Controller
     {
         $query = PurchaseOrderSupplier::query()
             ->with([
-                'quotation.sales_order.inquiry.visit.customer',
-                'quotation.sales_order.inquiry.sales',
-                'quotation.quotation_items',
+                'sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
+                'supplier',
+                'purchase_order_supplier_items',
             ])
             ->findOrFail($id);
+        $paymentTerms = PaymentTermConstant::texts();
+        $vatTypes = VatTypeConstant::texts();
 
         return view('purchase-order-supplier.edit', [
             'query' => $query,
+            'paymentTerms' => $paymentTerms,
+            'vatTypes' => $vatTypes,
         ]);
     }
 
@@ -178,23 +182,71 @@ class PurchaseOrderSupplierController extends Controller
         try {
             DB::beginTransaction();
 
-            $query = PurchaseOrderSupplier::query()->findOrFail($id);
-            $query->purchase_order_number = $request->purchase_order_number;
-            if (isset($request->document)) {
-                $query->document_url = $request->document;
+            $query = PurchaseOrderSupplier::query()
+                ->with([
+                    'sales_order',
+                    'supplier',
+                    'purchase_order_supplier_items',
+                ])
+                ->findOrFail($id);
+
+            if ($request->hasFile('invoice')) {
+                $fileDirectory = 'invoices-of-purchase-order-supplier';
+                $file = $request->file('invoice');
+                $filePath = $this->fileController->store($fileDirectory, $file);
+
+                $query->invoice_url = $filePath;
             }
 
-            if ($query->quotation->quotation_items->count() > 0) {
-                foreach ($query->quotation->quotation_items as $quotationItem) {
-                    if (isset($request->item[$quotationItem->id])) {
-                        $quotationItem->item_name_of_purchase_order_customer = $request->item[$quotationItem->id]['item_name'];
-                        $quotationItem->max_delivery_time_of_purchase_order_customer = $request->item[$quotationItem->id]['max_delivery_time'];
-                        $quotationItem->save();
+            $query->term = $request->term;
+            $query->payment_term = $request->payment_term;
+            $query->delivery = $request->delivery;
+            $query->vat = $request->vat;
+            $query->note = $request->note;
+            $query->attachment = $request->attachment;
+
+            $query->bank_name = $request->bank_name;
+            $query->bank_swift = $request->bank_swift;
+            $query->bank_account = $request->bank_account;
+            $query->bank_number = $request->bank_number;
+
+            $query->total_shipping_note = $request->total_shipping_note;
+            $query->total_shipping_value = str_replace(',', '.', str_replace('.', '', $request->total_shipping_value));
+
+            $query->document_list = $request->document_list;
+
+            $query->save();
+
+            $purchaseOrderSupplierItemIds = $query->purchase_order_supplier_items->pluck('id', 'id');
+            foreach ($request->item as $selectedSourcingSupplierId => $item) {
+                $selectedSourcingSupplier = SelectedSourcingSupplier::query()->whereUuid($selectedSourcingSupplierId)->first();
+                if ($selectedSourcingSupplier) {
+                    $purchaseOrderSupplierItem = PurchaseOrderSupplierItem::query()
+                        ->updateOrCreate([
+                            'purchase_order_supplier_id' => $query->id,
+                            'selected_sourcing_supplier_id' =>  $selectedSourcingSupplier->uuid,
+                        ], [
+                            'quantity' => str_replace(',', '.', str_replace('.', '', $item['quantity'])),
+                            'cost' => str_replace(',', '.', str_replace('.', '', $item['cost'])),
+                            'delivery_time' => $item['delivery_time'],
+                        ]);
+
+                    $purchaseOrderSupplierItem->price = $purchaseOrderSupplierItem->quantity * $purchaseOrderSupplierItem->price;
+                    $purchaseOrderSupplierItem->save();
+
+
+                    if ($purchaseOrderSupplierItemIds->contains($purchaseOrderSupplierItem->id)) {
+                        $purchaseOrderSupplierItemIds->forget($purchaseOrderSupplierItem->id);
                     }
                 }
             }
 
+            $query->supplier_id = $selectedSourcingSupplier->supplier->uuid;
             $query->save();
+
+            if ($purchaseOrderSupplierItemIds->count()) {
+                $query->purchase_order_supplier_items()->whereIn('id', $purchaseOrderSupplierItemIds->toArray())->delete();
+            }
 
             DB::commit();
 

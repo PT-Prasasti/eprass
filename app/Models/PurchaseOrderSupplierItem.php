@@ -31,6 +31,6 @@ class PurchaseOrderSupplierItem extends Model
 
     public function selected_sourcing_supplier()
     {
-        return $this->belongsTo(PurchaseOrderSupplier::class, 'selected_sourcing_supplier_id', 'uuid');
+        return $this->belongsTo(SelectedSourcingSupplier::class, 'selected_sourcing_supplier_id', 'uuid');
     }
 }
