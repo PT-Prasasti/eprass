@@ -71,4 +71,9 @@ class SalesOrder extends Model
     {
         return $this->hasOne(Sourcing::class, 'so_id', 'id');
     }
+
+    public function purchase_order_suppliers()
+    {
+        return $this->hasMany(PurchaseOrderSupplier::class, 'sales_order_id', 'uuid');
+    }
 }

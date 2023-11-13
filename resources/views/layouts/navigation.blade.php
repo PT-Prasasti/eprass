@@ -191,10 +191,10 @@
                                 <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
                             </li>
                             <li>
-                                <a href="#">Add PO Supplier</a>
+                                <a href="{{ route('purchase-order-supplier.add') }}">Add PO Supplier</a>
                             </li>
                             <li>
-                                <a href="#">List PO Supplier</a>
+                                <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
                             </li>
                         </ul>
                     </li>

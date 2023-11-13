@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Models;
+
+use Webpatser\Uuid\Uuid;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class PurchaseOrderSupplier extends Model
+{
+    use SoftDeletes;
+
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $guarded = [];
+
+    protected $casts = [
+        'document_list' => 'array'
+    ];
+
+    protected $appends = [
+        'vat_to_text',
+        'payment_term_to_text',
+    ];
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->id = (string) Uuid::generate(4);
+        });
+    }
+
+    public function getVatToTextAttribute(): string
+    {
+        $constant = VatTypeConstant::texts();
+        return @$constant[$this->vat] ?? '';
+    }
+
+    public function getPaymentTermToTextAttribute(): string
+    {
+        $constant = PaymentTermConstant::texts();
+        return @$constant[$this->payment_term] ?? '';
+    }
+
+    public function sales_order()
+    {
+        return $this->belongsTo(SalesOrder::class, 'sales_order_id', 'uuid');
+    }
+}

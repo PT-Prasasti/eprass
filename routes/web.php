@@ -11,6 +11,7 @@ use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
 use App\Http\Controllers\Helper\NotificationController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
+use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
 use App\Http\Controllers\Transaction\QuotationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
@@ -290,7 +291,30 @@ Route::prefix('/purchase-order-customer')->name('purchase-order-customer')->grou
     Route::post('upload-document', [PurchaseOrderCustomerController::class, 'uploadDocument'])->name('.upload-document');
 });
 
-// route project 
+Route::prefix('/purchase-order-supplier')->name('purchase-order-supplier')->group(function () {
+    Route::get('/', [PurchaseOrderSupplierController::class, 'index']);
+    Route::get('/add', [PurchaseOrderSupplierController::class, 'add'])->name('.add');
+    Route::post('/store', [PurchaseOrderSupplierController::class, 'store'])->name('.store');
+    Route::get('/{id}/edit', [PurchaseOrderSupplierController::class, 'edit'])->name('.edit');
+    Route::put('/{id}', [PurchaseOrderSupplierController::class, 'update'])->name('.update');
+    Route::delete('/{id}', [PurchaseOrderSupplierController::class, 'delete'])->name('.delete');
+    Route::get('/search/sales-order', [PurchaseOrderSupplierController::class, 'search_sales_order'])->name('.search.sales-order');
+    Route::post('upload-document', [PurchaseOrderSupplierController::class, 'upload_document'])->name('.upload-document');
+});
+
+Route::any('/files/{any}', function ($filePath) {
+    if (Storage::exists('public/' . $filePath)) {
+        $storageType = 'public';
+    } elseif (Storage::exists('temp/' . $filePath)) {
+        $storageType = 'temp';
+    } else {
+        abort(404);
+    }
+
+    return response()->file(storage_path('app/' . $storageType . '/' . $filePath));
+})->where('any', '.*');
+
+// route project
 Route::prefix('/project')->name('project')->group(function () {
 
     // route project purchasing
