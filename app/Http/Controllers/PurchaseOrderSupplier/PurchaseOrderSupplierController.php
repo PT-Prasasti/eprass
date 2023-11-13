@@ -17,6 +17,7 @@ use App\Http\Controllers\Helper\RedisController;
 use App\Models\PurchaseOrderSupplier;
 use App\Models\PurchaseOrderSupplierItem;
 use App\Models\SalesOrder;
+use App\Models\SelectedSourcingSupplier;
 
 class PurchaseOrderSupplierController extends Controller
 {
@@ -40,12 +41,14 @@ class PurchaseOrderSupplierController extends Controller
         $query = PurchaseOrderSupplier::query()
             ->with([
                 'sales_order',
+                'supplier',
             ])
             ->select([
                 'purchase_order_suppliers.id AS id',
                 'purchase_order_suppliers.sales_order_id AS sales_order_id',
+                'purchase_order_suppliers.supplier_id AS supplier_id',
                 'purchase_order_suppliers.transaction_date AS transaction_date',
-                'purchase_order_suppliers.purchase_order_number AS purchase_order_number',
+                'purchase_order_suppliers.transaction_code AS transaction_code',
                 'purchase_order_suppliers.status AS status',
             ]);
 
@@ -129,15 +132,21 @@ class PurchaseOrderSupplierController extends Controller
             $query->save();
 
             foreach ($request->item as $selectedSourcingSupplierId => $item) {
-                $purchaseOrderSupplierItem = new PurchaseOrderSupplierItem();
-                $purchaseOrderSupplierItem->purchase_order_supplier_id = $query->id;
-                $purchaseOrderSupplierItem->selected_sourcing_supplier_id = $selectedSourcingSupplierId;
-                $purchaseOrderSupplierItem->quantity = str_replace(',', '.', str_replace('.', '', $item['quantity']));
-                $purchaseOrderSupplierItem->cost = str_replace(',', '.', str_replace('.', '', $item['cost']));
-                $purchaseOrderSupplierItem->price = $purchaseOrderSupplierItem->quantity * $purchaseOrderSupplierItem->price;
-                $purchaseOrderSupplierItem->delivery_time = $item['delivery_time'];
-                $purchaseOrderSupplierItem->save();
+                $selectedSourcingSupplier = SelectedSourcingSupplier::query()->whereUuid($selectedSourcingSupplierId)->first();
+                if ($selectedSourcingSupplier) {
+                    $purchaseOrderSupplierItem = new PurchaseOrderSupplierItem();
+                    $purchaseOrderSupplierItem->purchase_order_supplier_id = $query->id;
+                    $purchaseOrderSupplierItem->selected_sourcing_supplier_id = $selectedSourcingSupplier->uuid;
+                    $purchaseOrderSupplierItem->quantity = str_replace(',', '.', str_replace('.', '', $item['quantity']));
+                    $purchaseOrderSupplierItem->cost = str_replace(',', '.', str_replace('.', '', $item['cost']));
+                    $purchaseOrderSupplierItem->price = $purchaseOrderSupplierItem->quantity * $purchaseOrderSupplierItem->price;
+                    $purchaseOrderSupplierItem->delivery_time = $item['delivery_time'];
+                    $purchaseOrderSupplierItem->save();
+                }
             }
+
+            $query->supplier_id = $selectedSourcingSupplier->supplier->uuid;
+            $query->save();
 
             DB::commit();
 
@@ -202,6 +211,7 @@ class PurchaseOrderSupplierController extends Controller
 
             DB::beginTransaction();
 
+            $query->purchase_order_supplier_items()->delete();
             $query->delete();
 
             DB::commit();

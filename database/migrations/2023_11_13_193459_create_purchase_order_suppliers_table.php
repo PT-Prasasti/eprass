@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('purchase_order_suppliers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('sales_order_id');
+            $table->uuid('supplier_id')->nullable();
             $table->date('transaction_date');
             $table->string('transaction_code')->nullable();
 

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Constants\PaymentTermConstant;
+use App\Constants\VatTypeConstant;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -48,5 +50,15 @@ class PurchaseOrderSupplier extends Model
     public function sales_order()
     {
         return $this->belongsTo(SalesOrder::class, 'sales_order_id', 'uuid');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'uuid');
+    }
+
+    public function purchase_order_supplier_items()
+    {
+        return $this->hasMany(PurchaseOrderSupplierItem::class);
     }
 }
