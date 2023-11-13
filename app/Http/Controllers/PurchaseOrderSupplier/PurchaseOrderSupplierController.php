@@ -125,7 +125,7 @@ class PurchaseOrderSupplierController extends Controller
             $query->invoice_url = $filePath;
 
             $query->total_shipping_note = $request->total_shipping_note;
-            $query->total_shipping_value = str_replace(',', '.', str_replace('.', '', $request->total_shipping_value));
+            $query->total_shipping_value = $request->total_shipping_value ? str_replace(',', '.', str_replace('.', '', $request->total_shipping_value)) : 0;
 
             $query->document_list = $request->document_list;
             $query->status = 'Waiting For Payment';
@@ -148,6 +148,23 @@ class PurchaseOrderSupplierController extends Controller
 
             $query->supplier_id = $selectedSourcingSupplier->supplier->uuid;
             $query->save();
+
+            if ($request->document_list) {
+                $files = json_decode($request->document_list, true);
+                $fileDirectory = 'purchase-order-suppliers';
+                foreach ($files as $item) {
+                    $sourceFilePath = storage_path('app/temp/' . $fileDirectory . '/' . $item['filename']);
+                    $destinationFilePath = storage_path('app/public/' . $fileDirectory . '/' . $item['filename']);
+
+                    if (!Storage::exists('public/' . $fileDirectory)) {
+                        Storage::makeDirectory('public/' . $fileDirectory);
+                    }
+
+                    if (file_exists($sourceFilePath)) {
+                        rename($sourceFilePath, $destinationFilePath);
+                    }
+                }
+            }
 
             DB::commit();
 
@@ -248,6 +265,23 @@ class PurchaseOrderSupplierController extends Controller
                 $query->purchase_order_supplier_items()->whereIn('id', $purchaseOrderSupplierItemIds->toArray())->delete();
             }
 
+            if ($request->document_list) {
+                $files = json_decode($request->document_list, true);
+                $fileDirectory = 'purchase-order-suppliers';
+                foreach ($files as $item) {
+                    $sourceFilePath = storage_path('app/temp/' . $fileDirectory . '/' . $item['filename']);
+                    $destinationFilePath = storage_path('app/public/' . $fileDirectory . '/' . $item['filename']);
+
+                    if (!Storage::exists('public/' . $fileDirectory)) {
+                        Storage::makeDirectory('public/' . $fileDirectory);
+                    }
+
+                    if (file_exists($sourceFilePath)) {
+                        rename($sourceFilePath, $destinationFilePath);
+                    }
+                }
+            }
+
             DB::commit();
 
             return redirect()->back()->with('success', Constants::STORE_DATA_SUCCESS_MSG);
@@ -278,12 +312,12 @@ class PurchaseOrderSupplierController extends Controller
     public function upload_document(Request $request)
     {
         try {
+            $fileDirectory = 'purchase-order-suppliers';
             $data = $request->other_files ? json_decode($request->other_files) : [];
 
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                $filePath = 'purchase-order-suppliers';
-                $upload = $this->fileController->store_temp($file, $filePath);
+                $upload = $this->fileController->store_temp($file, $fileDirectory);
                 if ($upload->original['status'] == 200) {
                     $fileUploaded = $upload->original['data'];
 
@@ -297,22 +331,23 @@ class PurchaseOrderSupplierController extends Controller
                 }
             } elseif ($request->method === "DELETE" && $request->file_name) {
                 $fileName = $request->file_name;
-                if ($request->has('edit')) {
-                    $filePath = 'public/purchase-order-suppliers/' . $fileName;
-                } else {
-                    $filePath = 'temp/purchase-order-suppliers/' . $fileName;
-                }
+                $filePath = $fileDirectory . '/' . $fileName;
+                if (Storage::exists('public/' . $filePath) || Storage::exists('temp/' . $filePath)) {
+                    if (Storage::exists('public/' . $filePath)) {
+                        Storage::delete('public/' . $filePath);
+                    } elseif (Storage::exists('temp/' . $filePath)) {
+                        Storage::delete('temp/' . $filePath);
+                    }
 
-                if (Storage::exists($filePath) && Storage::delete($filePath)) {
                     if ($data) {
                         foreach ($data as $key => $file) {
                             if ($file->filename === $fileName) {
                                 unset($data[$key]);
                             }
                         }
-                    }
 
-                    $data = array_values($data);
+                        $data = array_values($data);
+                    }
 
                     return response()->json([
                         'status' => 200,
@@ -325,13 +360,13 @@ class PurchaseOrderSupplierController extends Controller
             return response()->json([
                 'status' => 409,
                 'message' => 'failed',
-                'data' => null,
+                'data' => [],
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 400,
                 'message' => 'error',
-                'data' => null,
+                'data' => [],
             ]);
         }
     }
