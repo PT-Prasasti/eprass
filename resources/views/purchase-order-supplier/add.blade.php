@@ -547,10 +547,10 @@
                 var iteration = 1;
                 $.each(data, function(index, value) {
                     element += `
-                        <li class="list-group-item">
+                        <li class="list-group-item" data-id="${value.filename}">
                             <div class="d-flex justify-content-between align-items-center">
                                 <a href="/files/purchase-order-suppliers/${value.filename}" target="_blank">${iteration + '. ' + value.aliases}</a>
-                                <button type="button" onclick="handleDeleteDocument(${value.filename})" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
+                                <button type="button" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;" remove_document>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                                         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -594,25 +594,6 @@
                 });
 
                 await $(`#upload-document-label`).html('Choose file');
-            }
-
-            const handleDeleteDocument = (fileName) => {
-                $.ajax({
-                    url: "{{ route('purchase-order-supplier.upload-document') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        file_name: fileName,
-                    },
-                    success: function(res) {
-                        if (res.status === 200) {
-                            handleListDocument(res.data);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(error);
-                    }
-                })
             }
 
             $(`[name="selected_sales_order"]`).select2({
@@ -666,8 +647,8 @@
 
                 var selectedSalesOrderItems = [];
                 if (selectedSalesOrderItemsElement.children().length > 0) {
-                    selectedSalesOrderItemsElement.children().map((index, data) => {
-                        selectedSalesOrderItems.push($(data).data('id'));
+                    selectedSalesOrderItemsElement.children().map((index, row) => {
+                        selectedSalesOrderItems.push($(row).data('id'));
                     });
                 }
 
@@ -678,7 +659,7 @@
                             if (!selectedSalesOrderItems.includes(data.uuid)) {
                                 selectedSalesOrderItemsElement.append(`
                                     <tr data-id="${data.uuid}">
-                                        <td class="align-top text-center pt-3">
+                                        <td class="align-top text-center pt-3" iteration>
                                             <p>${iteration+=1}</p>
                                         </td>
                                         <td class="align-top pt-3">
@@ -708,6 +689,10 @@
                         }
                     });
                 }
+
+                $(`[iteration]`).map((index, row) => {
+                    $(row).html(index + 1)
+                });
             });
 
             $(document).on("input", "[number_format]", function() {
@@ -716,12 +701,34 @@
                 handleCalculate();
             });
 
-            $(`input[name=upload_document]`).change(function() {
+            $(document).on('change', `input[name=upload_document]`, function() {
                 $(`#upload-document-loading`).removeClass('d-none');
                 $(`#upload-document-loading`).addClass('d-flex');
 
                 handleUploadDocument($(this).prop('files')[0]);
-            })
+            });
+
+            $(document).on('click', `[remove_document]`, function() {
+                const thisList = $(this).closest('li');
+                $.ajax({
+                    url: "{{ route('purchase-order-supplier.upload-document') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        method: 'DELETE',
+                        file_name: thisList.data('id'),
+                        other_files: $(`input[name="document_list"]`).val(),
+                    },
+                    success: function(res) {
+                        if (res.status === 200) {
+                            handleListDocument(res.data);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
 
             handleCalculate();
 

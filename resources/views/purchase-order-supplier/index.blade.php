@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                        List PO Customer
+                        List PO Supplier
                     </b>
                 </h4>
             </div>
