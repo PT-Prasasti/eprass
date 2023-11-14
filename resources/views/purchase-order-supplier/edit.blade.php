@@ -148,7 +148,7 @@
                                                     <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->size }}
                                                     <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->remark }}
                                                 </td>
-                                                <td class="align-top pt-3 text-right" style="width: 150px;">
+                                                <td class="align-top pt-3 pr-4 text-right" style="width: 150px;">
                                                     {{ number_format($item->quantity, 0, ',', '.') }}
                                                     <input type="hidden" class="form-control text-right"
                                                         name="item[{{ $item->selected_sourcing_supplier_id }}][quantity]"
@@ -627,7 +627,7 @@
                                             <br/>${data.sourcing_supplier.inquiry_product.size}
                                             <br/>${data.sourcing_supplier.inquiry_product.remark}
                                         </td>
-                                        <td class="align-top pt-3 text-right" style="width: 150px;">
+                                        <td class="align-top pt-3 pr-4 text-right" style="width: 150px;">
                                             ${handleRupiahFormat(data.sourcing_supplier.qty)}
                                             <input type="hidden" class="form-control text-right" name="item[${data.uuid}][quantity]" value="${handleRupiahFormat(data.sourcing_supplier.qty)}" autocomplete="one-time-code" required="" number_format>
                                         </td>

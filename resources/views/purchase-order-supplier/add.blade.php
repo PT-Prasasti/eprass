@@ -671,8 +671,9 @@
                                             <br/>${data.sourcing_supplier.inquiry_product.size}
                                             <br/>${data.sourcing_supplier.inquiry_product.remark}
                                         </td>
-                                        <td class="align-top" style="width: 150px;">
-                                            <input type="text" class="form-control text-right" name="item[${data.uuid}][quantity]" value="${handleRupiahFormat(data.sourcing_supplier.qty)}" autocomplete="one-time-code" required="" number_format>
+                                        <td class="align-top pt-3 pr-4 text-right" style="width: 150px;">
+                                            ${handleRupiahFormat(data.sourcing_supplier.qty)}
+                                            <input type="hidden" class="form-control text-right" name="item[${data.uuid}][quantity]" value="${handleRupiahFormat(data.sourcing_supplier.qty)}" autocomplete="one-time-code" required="" number_format>
                                         </td>
                                         <td class="align-top">
                                             <input type="text" class="form-control text-right" name="item[${data.uuid}][cost]" value="${handleRupiahFormat(data.sourcing_supplier.unitprice)}" autocomplete="one-time-code" required="" number_format>
