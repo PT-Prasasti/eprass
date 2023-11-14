@@ -35,4 +35,9 @@ class SelectedSourcingSupplier extends Model
     {
         return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
+
+    public function purchase_order_supplier_item()
+    {
+        return $this->hasOne(PurchaseOrderSupplierItem::class, 'selected_sourcing_supplier_id', 'uuid');
+    }
 }

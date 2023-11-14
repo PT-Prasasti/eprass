@@ -79,10 +79,16 @@ class PurchaseOrderSupplierController extends Controller
     {
         $query = SalesOrder::query()
             ->with([
+                'sourcing.selected_sourcing_suppliers' => function ($query) {
+                    $query->doesntHave('purchase_order_supplier_item');
+                },
                 'sourcing.selected_sourcing_suppliers.supplier',
                 'sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
-                'inquiry'
+                'inquiry',
             ])
+            ->whereHas('sourcing.selected_sourcing_suppliers', function ($query) {
+                $query->doesntHave('purchase_order_supplier_item');
+            })
             ->whereHas('sourcing.selected_sourcing_suppliers.supplier')
             ->whereHas('sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product')
             ->where('id', 'like', '%' . $request->term . '%')
@@ -179,6 +185,9 @@ class PurchaseOrderSupplierController extends Controller
     {
         $query = PurchaseOrderSupplier::query()
             ->with([
+                'sales_order.sourcing.selected_sourcing_suppliers' => function ($query) {
+                    $query->doesntHave('purchase_order_supplier_item');
+                },
                 'sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
                 'supplier',
                 'purchase_order_supplier_items',
