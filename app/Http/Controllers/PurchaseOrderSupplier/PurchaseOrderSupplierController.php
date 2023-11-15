@@ -277,16 +277,18 @@ class PurchaseOrderSupplierController extends Controller
             if ($request->document_list) {
                 $files = json_decode($request->document_list, true);
                 $fileDirectory = 'purchase-order-suppliers';
-                foreach ($files as $item) {
-                    $sourceFilePath = storage_path('app/temp/' . $fileDirectory . '/' . $item['filename']);
-                    $destinationFilePath = storage_path('app/public/' . $fileDirectory . '/' . $item['filename']);
+                if ($files) {
+                    foreach ($files as $item) {
+                        $sourceFilePath = storage_path('app/temp/' . $fileDirectory . '/' . $item['filename']);
+                        $destinationFilePath = storage_path('app/public/' . $fileDirectory . '/' . $item['filename']);
 
-                    if (!Storage::exists('public/' . $fileDirectory)) {
-                        Storage::makeDirectory('public/' . $fileDirectory);
-                    }
+                        if (!Storage::exists('public/' . $fileDirectory)) {
+                            Storage::makeDirectory('public/' . $fileDirectory);
+                        }
 
-                    if (file_exists($sourceFilePath)) {
-                        rename($sourceFilePath, $destinationFilePath);
+                        if (file_exists($sourceFilePath)) {
+                            rename($sourceFilePath, $destinationFilePath);
+                        }
                     }
                 }
             }
