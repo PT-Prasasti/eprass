@@ -146,7 +146,7 @@ class PurchaseOrderSupplierController extends Controller
                     $purchaseOrderSupplierItem->selected_sourcing_supplier_id = $selectedSourcingSupplier->uuid;
                     $purchaseOrderSupplierItem->quantity = str_replace(',', '.', str_replace('.', '', $item['quantity']));
                     $purchaseOrderSupplierItem->cost = str_replace(',', '.', str_replace('.', '', $item['cost']));
-                    $purchaseOrderSupplierItem->price = $purchaseOrderSupplierItem->quantity * $purchaseOrderSupplierItem->price;
+                    $purchaseOrderSupplierItem->price = $purchaseOrderSupplierItem->quantity * $purchaseOrderSupplierItem->cost;
                     $purchaseOrderSupplierItem->delivery_time = $item['delivery_time'];
                     $purchaseOrderSupplierItem->save();
                 }
@@ -257,7 +257,7 @@ class PurchaseOrderSupplierController extends Controller
                             'delivery_time' => $item['delivery_time'],
                         ]);
 
-                    $purchaseOrderSupplierItem->price = $purchaseOrderSupplierItem->quantity * $purchaseOrderSupplierItem->price;
+                    $purchaseOrderSupplierItem->price = $purchaseOrderSupplierItem->quantity * $purchaseOrderSupplierItem->cost;
                     $purchaseOrderSupplierItem->save();
 
 
@@ -316,6 +316,24 @@ class PurchaseOrderSupplierController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
+    }
+
+    public function print($id)
+    {
+        $query = PurchaseOrderSupplier::query()
+            ->with([
+                'sales_order.sourcing.selected_sourcing_suppliers' => function ($query) {
+                    $query->doesntHave('purchase_order_supplier_item');
+                },
+                'sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
+                'supplier',
+                'purchase_order_supplier_items.selected_sourcing_supplier.sourcing_supplier.inquiry_product',
+            ])
+            ->findOrFail($id);
+
+        return view('purchase-order-supplier.print', [
+            'query' => $query,
+        ]);
     }
 
     public function upload_document(Request $request)

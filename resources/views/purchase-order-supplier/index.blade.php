@@ -147,14 +147,22 @@
                     {
                         className: 'text-center text-nowrap',
                         render: function(data, type, row, meta) {
-                            var html = `
+                            var html = ``;
+
+                            html += `
+                                    <a href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
+                                        <i class="fa fa-print"></i>
+                                    </a> |
+                                `;
+
+                            html += `
                                 <a href="{{ route('purchase-order-supplier') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
-                                </a>
+                                </a> |
                             `;
 
                             html += `
-                                | <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
+                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                     <i class="fa fa-trash-o"></i>
                                 </button>
                             `;

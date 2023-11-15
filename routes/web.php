@@ -296,6 +296,7 @@ Route::prefix('/purchase-order-supplier')->name('purchase-order-supplier')->grou
     Route::get('/add', [PurchaseOrderSupplierController::class, 'add'])->name('.add');
     Route::post('/store', [PurchaseOrderSupplierController::class, 'store'])->name('.store');
     Route::get('/{id}/edit', [PurchaseOrderSupplierController::class, 'edit'])->name('.edit');
+    Route::get('/{id}/print', [PurchaseOrderSupplierController::class, 'print'])->name('.print');
     Route::put('/{id}', [PurchaseOrderSupplierController::class, 'update'])->name('.update');
     Route::delete('/{id}', [PurchaseOrderSupplierController::class, 'delete'])->name('.delete');
     Route::get('/search/sales-order', [PurchaseOrderSupplierController::class, 'search_sales_order'])->name('.search.sales-order');
