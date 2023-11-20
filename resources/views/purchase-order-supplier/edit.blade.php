@@ -56,9 +56,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#term_con">Term &amp; Condition</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="#bank">Bank Information</a>
-                            </li>
+                            </li> --}}
                         </ul>
                         <div class="block-content tab-content">
                             <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
@@ -272,7 +272,7 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane" id="bank" role="tabpanel">
+                            {{-- <div class="tab-pane" id="bank" role="tabpanel">
                                 <div class="block block-rounded">
                                     <div class="block-content block-content-full">
                                         <div class="row">
@@ -345,7 +345,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

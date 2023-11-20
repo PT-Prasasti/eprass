@@ -179,22 +179,42 @@
                         @endif
                     </li>
                     <li class="nav-main-heading">
+                        <span class="sidebar-mini-hidden">Order Customer</span>
+                    </li>
+                    <li>
+                        <a href="{{ route('purchase-order-customer') }}">
+                            <i class="fa fa-file"></i>
+                            <span class="sidebar-mini-hide">List PO Customer</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">Order Supplier</span>
                     </li>
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                            <i class="fa fa-dollar"></i>
+                            <i class="fa fa-book"></i>
                             <span class="sidebar-mini-hide">PO Supplier</span>
                         </a>
                         <ul>
-                            <li>
-                                <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
-                            </li>
                             <li>
                                 <a href="{{ route('purchase-order-supplier.add') }}">Add PO Supplier</a>
                             </li>
                             <li>
                                 <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-book"></i>
+                            <span class="sidebar-mini-hide">Payment Request</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('payment-request.add') }}">Add Payment Request</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('payment-request') }}">List Payment Request</a>
                             </li>
                         </ul>
                     </li>

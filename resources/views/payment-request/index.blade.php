@@ -43,9 +43,10 @@
                         <tr>
                             <th class="text-center">No.</th>
                             <th class="text-center">PO Number</th>
-                            <th class="text-center">SO Number</th>
+                            <th class="text-center">Payment Request</th>
                             <th class="text-center">Supplier Name</th>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Due Date</th>
                             <th class="text-center">Status</th>
                             <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                         </tr>
@@ -87,16 +88,20 @@
                         className: "text-center"
                     },
                     {
+                        data: 'purchase_order_supplier.transaction_code',
+                    },
+                    {
                         data: 'transaction_code',
                     },
                     {
-                        data: 'sales_order.id',
-                    },
-                    {
-                        data: 'supplier.company',
+                        data: 'purchase_order_supplier.supplier.company',
                     },
                     {
                         data: 'transaction_date',
+                        className: 'text-center',
+                    },
+                    {
+                        data: 'transaction_due_date',
                         className: 'text-center',
                     },
                     {
@@ -121,13 +126,7 @@
                             var html = ``;
 
                             html += `
-                                    <a href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
-                                        <i class="fa fa-print"></i>
-                                    </a> |
-                                `;
-
-                            html += `
-                                <a href="{{ route('purchase-order-supplier') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
+                                <a href="{{ route('payment-request') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
                                 </a> |
                             `;
@@ -162,7 +161,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $(`#form-delete`).attr('action',
-                            `{{ route('purchase-order-supplier') }}/${row.data('id')}`);
+                            `{{ route('payment-request') }}/${row.data('id')}`);
 
                         $(`#form-delete`).submit();
                     }

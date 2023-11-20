@@ -10,6 +10,7 @@ use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
 use App\Http\Controllers\Helper\NotificationController;
+use App\Http\Controllers\PaymentRequest\PaymentRequestController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
 use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
 use App\Http\Controllers\Transaction\QuotationController;
@@ -301,6 +302,18 @@ Route::prefix('/purchase-order-supplier')->name('purchase-order-supplier')->grou
     Route::delete('/{id}', [PurchaseOrderSupplierController::class, 'delete'])->name('.delete');
     Route::get('/search/sales-order', [PurchaseOrderSupplierController::class, 'search_sales_order'])->name('.search.sales-order');
     Route::post('upload-document', [PurchaseOrderSupplierController::class, 'upload_document'])->name('.upload-document');
+});
+
+Route::prefix('/payment-request')->name('payment-request')->group(function () {
+    Route::get('/', [PaymentRequestController::class, 'index']);
+    Route::get('/add', [PaymentRequestController::class, 'add'])->name('.add');
+    Route::post('/store', [PaymentRequestController::class, 'store'])->name('.store');
+    Route::get('/{id}/edit', [PaymentRequestController::class, 'edit'])->name('.edit');
+    Route::get('/{id}/print', [PaymentRequestController::class, 'print'])->name('.print');
+    Route::put('/{id}', [PaymentRequestController::class, 'update'])->name('.update');
+    Route::delete('/{id}', [PaymentRequestController::class, 'delete'])->name('.delete');
+    Route::get('/search/purchase-order-supplier', [PaymentRequestController::class, 'search_purchase_order_supplier'])->name('.search.purchase-order-supplier');
+    Route::post('upload-document', [PaymentRequestController::class, 'upload_document'])->name('.upload-document');
 });
 
 Route::any('/files/{any}', function ($filePath) {

@@ -134,7 +134,7 @@ class PurchaseOrderSupplierController extends Controller
             $query->total_shipping_value = $request->total_shipping_value ? str_replace(',', '.', str_replace('.', '', $request->total_shipping_value)) : 0;
 
             $query->document_list = $request->document_list;
-            $query->status = 'Waiting For Payment';
+            $query->status = 'Waiting for Approval';
 
             $query->save();
 
