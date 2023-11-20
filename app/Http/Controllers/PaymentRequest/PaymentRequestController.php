@@ -124,6 +124,65 @@ class PaymentRequestController extends Controller
         }
     }
 
+    public function edit($id): View
+    {
+        $query = PaymentRequest::query()
+            ->with([
+                'purchase_order_supplier.supplier',
+                'purchase_order_supplier.purchase_order_supplier_items.selected_sourcing_supplier.sourcing_supplier.inquiry_product',
+                'purchase_order_supplier.sales_order.inquiry',
+            ])
+            ->select([
+                'payment_requests.id AS id',
+                'payment_requests.purchase_order_supplier_id AS purchase_order_supplier_id',
+                'payment_requests.transaction_date AS transaction_date',
+                'payment_requests.transaction_due_date AS transaction_due_date',
+                'payment_requests.transaction_code AS transaction_code',
+                'payment_requests.value AS value',
+                'payment_requests.note AS note',
+                'payment_requests.pick_up_information_name AS pick_up_information_name',
+                'payment_requests.pick_up_information_email AS pick_up_information_email',
+                'payment_requests.pick_up_information_phone_number AS pick_up_information_phone_number',
+                'payment_requests.pick_up_information_mobile_number AS pick_up_information_mobile_number',
+                'payment_requests.pick_up_information_pick_up_address AS pick_up_information_pick_up_address',
+                'payment_requests.status AS status',
+            ])
+            ->findOrFail($id);
+
+        return view('payment-request.edit', [
+            'query' => $query,
+        ]);
+    }
+
+
+    public function update($id, Request $request): RedirectResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $query = PaymentRequest::query()->findOrFail($id);
+            $query->transaction_due_date = date('Y-m-d', strtotime($request->due_date));
+            $query->transaction_code = $this->handle_generate_transaction_code($query->transaction_date);
+            $query->value = str_replace(',', '', str_replace('.', '', $request->nominal));
+            $query->note = $request->note;
+
+            $query->pick_up_information_name = $request->pick_up_information_name;
+            $query->pick_up_information_email = $request->pick_up_information_email;
+            $query->pick_up_information_phone_number = $request->pick_up_information_phone_number;
+            $query->pick_up_information_mobile_number = $request->pick_up_information_mobile_number;
+            $query->pick_up_information_pick_up_address = $request->pick_up_information_pick_up_address;
+
+            $query->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            dd($e);
+            return redirect()->back()->withInput($request->input())->with('quotation', $quotation)->with('error', Constants::ERROR_MSG);
+        }
+    }
+
     public function delete($id)
     {
         try {
