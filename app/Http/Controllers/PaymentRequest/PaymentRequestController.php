@@ -114,7 +114,6 @@ class PaymentRequestController extends Controller
 
             $query->save();
 
-
             DB::commit();
 
             return redirect()->route('payment-request')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
@@ -162,7 +161,6 @@ class PaymentRequestController extends Controller
 
             $query = PaymentRequest::query()->findOrFail($id);
             $query->transaction_due_date = date('Y-m-d', strtotime($request->due_date));
-            $query->transaction_code = $this->handle_generate_transaction_code($query->transaction_date);
             $query->value = str_replace(',', '', str_replace('.', '', $request->nominal));
             $query->note = $request->note;
 
