@@ -109,7 +109,7 @@
                                     badgeColor = `danger`;
                                     break;
                                 default:
-                                    badgeColor = `secondary`;
+                                    badgeColor = `warning`;
                             }
 
                             return `<span class="badge badge-${badgeColor}">${row.status}</span>`;
@@ -121,7 +121,7 @@
                             var html = ``;
 
                             html += `
-                                    <a href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
+                                    <a href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-success" target="_blank" data-toggle="tooltip" title="Print">
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;

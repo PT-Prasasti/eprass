@@ -1,7 +1,6 @@
 <x-app-layout>
     <div class="content">
-        <form method="POST" action="{{ route('purchase-order-supplier.update', $query->id) }}"
-            enctype="multipart/form-data">
+        <form method="POST" action="{{ route('purchase-order-supplier.update', $query->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -10,8 +9,7 @@
                     <h4><b>{{ $query->transaction_code }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <button type="button" class="btn btn-primary mr-5 mb-5" data-toggle="modal"
-                        data-target="#modal-slideup">
+                    <button type="button" class="btn btn-primary mr-5 mb-5" data-toggle="modal" data-target="#modal-slideup">
                         <i class="fa fa-plus mr-5"></i>Edit SO
                     </button>
                     <button type="submit" class="btn btn-success mr-5 mb-5">
@@ -23,25 +21,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
                     @endif
 
                     @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                <span class="d-block">
-                                    {{ $loop->iteration }}. {{ $error }}
-                                </span>
-                            @endforeach
-                        </div>
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                        <span class="d-block">
+                            {{ $loop->iteration }}. {{ $error }}
+                        </span>
+                        @endforeach
+                    </div>
                     @endif
                 </div>
             </div>
@@ -56,9 +54,15 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#term_con">Term &amp; Condition</a>
                             </li>
-                            {{-- <li class="nav-item">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#document">Document</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="#bank">Bank Information</a>
-                            </li> --}}
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#pickup">Pick Up Information</a>
+                            </li>
                         </ul>
                         <div class="block-content tab-content">
                             <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
@@ -70,17 +74,14 @@
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control"
-                                                            value="{{ $query->sales_order->id }}" disabled>
+                                                        <input type="text" class="form-control" value="{{ $query->sales_order->id }}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control"
-                                                            value="{{ $query->sales_order->inquiry->subject }}"
-                                                            disabled>
+                                                        <input type="text" class="form-control" value="{{ $query->sales_order->inquiry->subject }}" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,11 +90,8 @@
                                     <div class="col-md-4">
                                         <div class="custom-file">
                                             <input type="hidden" name="document_list" value="">
-                                            <input type="file" id="upload-document" name="upload_document"
-                                                class="custom-file-input" data-toggle="custom-file-input"
-                                                accept="application/pdf">
-                                            <label id="upload-document-label" for="upload-document"
-                                                class="custom-file-label">
+                                            <input type="file" id="upload-document" name="upload_document" class="custom-file-input" data-toggle="custom-file-input" accept="application/pdf">
+                                            <label id="upload-document-label" for="upload-document" class="custom-file-label">
                                                 Choose file
                                             </label>
                                         </div>
@@ -105,8 +103,7 @@
                                                     <div class="mr-2">
                                                         <span>Uploading file</span>
                                                     </div>
-                                                    <div class="spinner-border spinner-border-sm text-info"
-                                                        role="status">
+                                                    <div class="spinner-border spinner-border-sm text-info" role="status">
                                                         <span class="sr-only">Loading...</span>
                                                     </div>
                                                 </div>
@@ -135,40 +132,31 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($query->purchase_order_supplier_items as $item)
-                                            <tr data-id="{{ $item->selected_sourcing_supplier_id }}">
-                                                <td class="align-top text-center pt-3" iteration>
-                                                    <p>{{ $loop->iteration }}</p>
-                                                </td>
-                                                <td class="align-top pt-3">
-                                                    {{ $item->selected_sourcing_supplier->supplier->company }}
-                                                </td>
-                                                <td class="align-top pt-3 pb-3" style="min-width: 250px;">
-                                                    {{ $item->selected_sourcing_supplier->sourcing_supplier->item_name }}
-                                                    <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->description }}
-                                                    <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->size }}
-                                                    <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->remark }}
-                                                </td>
-                                                <td class="align-top pt-3 pr-4 text-right" style="width: 150px;">
-                                                    {{ number_format($item->quantity, 0, ',', '.') }}
-                                                    <input type="hidden" class="form-control text-right"
-                                                        name="item[{{ $item->selected_sourcing_supplier_id }}][quantity]"
-                                                        value="{{ number_format($item->quantity, 0, ',', '.') }}"
-                                                        autocomplete="one-time-code" required="" number_format>
-                                                </td>
-                                                <td class="align-top">
-                                                    <input type="text" class="form-control text-right"
-                                                        name="item[{{ $item->selected_sourcing_supplier_id }}][cost]"
-                                                        value="{{ number_format($item->cost, 0, ',', '.') }}"
-                                                        autocomplete="one-time-code" required="" number_format>
-                                                </td>
-                                                <td class="align-top text-right text-nowrap pt-3" price></td>
-                                                <td class="align-top">
-                                                    <input type="text" class="form-control"
-                                                        name="item[{{ $item->selected_sourcing_supplier_id }}][delivery_time]"
-                                                        value="{{ $item->delivery_time }}"
-                                                        autocomplete="one-time-code" required="">
-                                                </td>
-                                            </tr>
+                                        <tr data-id="{{ $item->selected_sourcing_supplier_id }}">
+                                            <td class="align-top text-center pt-3" iteration>
+                                                <p>{{ $loop->iteration }}</p>
+                                            </td>
+                                            <td class="align-top pt-3">
+                                                {{ $item->selected_sourcing_supplier->supplier->company }}
+                                            </td>
+                                            <td class="align-top pt-3 pb-3" style="min-width: 250px;">
+                                                {{ $item->selected_sourcing_supplier->sourcing_supplier->item_name }}
+                                                <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->description }}
+                                                <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->size }}
+                                                <br />{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->remark }}
+                                            </td>
+                                            <td class="align-top pt-3 pr-4 text-right" style="width: 150px;">
+                                                {{ number_format($item->quantity, 0, ',', '.') }}
+                                                <input type="hidden" class="form-control text-right" name="item[{{ $item->selected_sourcing_supplier_id }}][quantity]" value="{{ number_format($item->quantity, 0, ',', '.') }}" autocomplete="one-time-code" required="" number_format>
+                                            </td>
+                                            <td class="align-top">
+                                                <input type="text" class="form-control text-right" name="item[{{ $item->selected_sourcing_supplier_id }}][cost]" value="{{ number_format($item->cost, 0, ',', '.') }}" autocomplete="one-time-code" required="" number_format>
+                                            </td>
+                                            <td class="align-top text-right text-nowrap pt-3" price></td>
+                                            <td class="align-top">
+                                                <input type="text" class="form-control" name="item[{{ $item->selected_sourcing_supplier_id }}][delivery_time]" value="{{ $item->delivery_time }}" autocomplete="one-time-code" required="">
+                                            </td>
+                                        </tr>
                                         @empty
                                         @endforelse
                                     </tbody>
@@ -176,16 +164,11 @@
                                         <th class="text-center"></th>
                                         <th class="text-center"></th>
                                         <th class="text-center">
-                                            <input type="text" class="form-control" name="total_shipping_note"
-                                                value="{{ $query->total_shipping_note }}"
-                                                autocomplete="one-time-code">
+                                            <input type="text" class="form-control" name="total_shipping_note" value="{{ $query->total_shipping_note }}" autocomplete="one-time-code">
                                         </th>
                                         <th class="text-right pr-4">1</th>
                                         <th class="text-right">
-                                            <input type="text" class="form-control text-right"
-                                                name="total_shipping_value"
-                                                value="{{ old('total_shipping_value', number_format($query->total_shipping_value, 0, ',', '.')) }}"
-                                                autocomplete="one-time-code" number_format>
+                                            <input type="text" class="form-control text-right" name="total_shipping_value" value="{{ old('total_shipping_value', number_format($query->total_shipping_value, 0, ',', '.')) }}" autocomplete="one-time-code" number_format>
                                         </th>
                                         <th class="text-right text-nowrap pt-3" total_shipping_total></th>
                                         <th class="text-center"></th>
@@ -203,27 +186,21 @@
                                                         Term
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="term" class="form-control"
-                                                        value="{{ old('term', $query->term) }}" required=""
-                                                        autocomplete="one-time-code">
+                                                    <input type="text" name="term" class="form-control" value="{{ old('term', $query->term) }}" required="" autocomplete="one-time-code">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Delivery
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="delivery" class="form-control"
-                                                        value="{{ old('delivery', $query->delivery) }}"
-                                                        required="" autocomplete="one-time-code">
+                                                    <input type="text" name="delivery" class="form-control" value="{{ old('delivery', $query->delivery) }}" required="" autocomplete="one-time-code">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Note
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="note" class="form-control"
-                                                        value="{{ old('note', $query->note) }}" required=""
-                                                        autocomplete="one-time-code">
+                                                    <input type="text" name="note" class="form-control" value="{{ old('note', $query->note) }}" required="" autocomplete="one-time-code">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -235,10 +212,9 @@
                                                     <select class="form-control" name="payment_term" required="">
                                                         <option value="">Select one</option>
                                                         @foreach ($paymentTerms as $itemKey => $itemValue)
-                                                            <option value="{{ $itemKey }}"
-                                                                {{ $itemKey === old('payment_term', $query->payment_term) ? 'selected' : '' }}>
-                                                                {{ $itemValue }}
-                                                            </option>
+                                                        <option value="{{ $itemKey }}" {{ $itemKey === old('payment_term', $query->payment_term) ? 'selected' : '' }}>
+                                                            {{ $itemValue }}
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -250,10 +226,9 @@
                                                     <select class="form-control" name="vat" required="">
                                                         <option value="">Select one</option>
                                                         @foreach ($vatTypes as $itemKey => $itemValue)
-                                                            <option value="{{ $itemKey }}"
-                                                                {{ $itemKey === old('vat', $query->vat) ? 'selected' : '' }}>
-                                                                {{ $itemValue }}
-                                                            </option>
+                                                        <option value="{{ $itemKey }}" {{ $itemKey === old('vat', $query->vat) ? 'selected' : '' }}>
+                                                            {{ $itemValue }}
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -262,9 +237,7 @@
                                                         Attachment
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" name="attachment"
-                                                        value="{{ old('attachment', $query->attachment) }}"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input type="text" class="form-control" name="attachment" value="{{ old('attachment', $query->attachment) }}" autocomplete="one-time-code" required="">
                                                 </div>
                                             </div>
                                         </div>
@@ -272,80 +245,130 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="tab-pane" id="bank" role="tabpanel">
+                            <div class="tab-pane" id="document" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
+                                        </button>
+                                        <div class="custom-control custom-checkbox mb-5">
+                                            <label class="custom-control-label" for="f1">INQUIRY</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
+                                        </button>
+                                        <div class="custom-control custom-checkbox mb-5">
+                                            <label class="custom-control-label" for="f2">SALES ORDER</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
+                                        </button>
+                                        <div class="custom-control custom-checkbox mb-5">
+                                            <label class="custom-control-label" for="f3">SOURCING ITEM</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
+                                        </button>
+                                        <div class="custom-control custom-checkbox mb-5">
+                                            <label class="custom-control-label" for="f4">PO CUSTOMER</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
+                                        </button>
+                                        <div class="custom-control custom-checkbox mb-5">
+                                            <label class="custom-control-label" for="f4">PO SUPPLIER</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="bank" role="tabpanel">
                                 <div class="block block-rounded">
                                     <div class="block-content block-content-full">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <div class="form-group">
-                                                    <label>
-                                                        Bank Name
-                                                        <span class="text-danger">*</span>
-                                                    </label>
-                                                    <input type="text" name="bank_name" class="form-control"
-                                                        value="{{ old('bank_name', $query->bank_name) }}"
-                                                        required="">
+                                                    <label for="last-name-column">Bank Name</label>
+                                                    <input type="text" class="form-control" name="delivery_term" required="">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>
-                                                        Bank Account
-                                                        <span class="text-danger">*</span>
-                                                    </label>
-                                                    <input type="text" name="bank_account" class="form-control"
-                                                        value="{{ old('bank_account', $query->bank_account) }}"
-                                                        autocomplete="one-time-code" required="">
+                                                    <label for="last-name-column">Bank Swift / Code</label>
+                                                    <input type="text" class="form-control" name="delivery_term" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Bank Account</label>
+                                                    <input type="text" class="form-control" name="delivery_term" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Bank Number</label>
+                                                    <input type="text" class="form-control" name="delivery_term" required="">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>
-                                                        Bank Swift / Code
-                                                        <span class="text-danger">*</span>
-                                                    </label>
-                                                    <input type="text" name="bank_swift" class="form-control"
-                                                        value="{{ old('bank_swift', $query->bank_swift) }}"
-                                                        required="">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>
-                                                        Bank Number
-                                                        <span class="text-danger">*</span>
-                                                    </label>
-                                                    <input type="text" name="bank_number" class="form-control"
-                                                        value="{{ old('bank_number', $query->bank_number) }}"
-                                                        autocomplete="one-time-code" required="">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-4">
                                                 <div class="form-group row">
-                                                    <label class="col-12">
-                                                        Upload Invoice
-                                                    </label>
+                                                    <label class="col-12">Upload Invoice</label>
                                                     <div class="col-12">
                                                         <div class="custom-file">
-                                                            <input type="file"
-                                                                class="custom-file-input js-custom-file-input-enabled"
-                                                                id="invoice" name="invoice">
-                                                            <label class="custom-file-label" for="invoice">
-                                                                Choose file
-                                                            </label>
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
+                                                            <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
                                                         </div>
                                                     </div>
-                                                    @if ($query->invoice_url)
-                                                        <div class="col-12 mt-2">
-                                                            <a class="ml-3" target="_blank"
-                                                                href="{{ asset('storage/' . $query->invoice_url) }}">
-                                                                <i class="fa fa-file mr-1"></i>
-                                                                See invoice document
-                                                            </a>
-                                                        </div>
-                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
+
+                            <div class="tab-pane" id="pickup" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Name</label>
+                                                    <input type="text" class="form-control" name="" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Email</label>
+                                                    <input type="text" class="form-control" name="" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Phone Number</label>
+                                                    <input type="text" class="form-control" name="" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Mobile Number</label>
+                                                    <input type="text" class="form-control" name="" required="">
+                                                </div>
+                                                <div clasa="form-group">
+                                                    <label for="last-name-column">Pick Up Address</label>
+                                                    <textarea class="form-control" id="" name="" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label class="col-12">Upload Doc. Pick Up Information</label>
+                                                    <div class="col-12">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
+                                                            <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -353,8 +376,7 @@
         </form>
     </div>
 
-    <div class="modal fade" id="modal-slideup" tabindex="-1" role="dialog" aria-labelledby="modal-slideup"
-        aria-hidden="true">
+    <div class="modal fade" id="modal-slideup" tabindex="-1" role="dialog" aria-labelledby="modal-slideup" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0">
@@ -370,8 +392,7 @@
                         <div class="form-group row">
                             <label class="col-12" for="example-select">SO Number :</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" value="{{ $query->sales_order->id }}"
-                                    disabled>
+                                <input type="text" class="form-control" value="{{ $query->sales_order->id }}" disabled>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -379,8 +400,7 @@
                                 <h5>Product List</h5>
                             </div>
                             <div class="col-sm-12">
-                                <table class="table table-bordered table-center w-100" style="font-size:11px"
-                                    sales_order_selected_items>
+                                <table class="table table-bordered table-center w-100" style="font-size:11px" sales_order_selected_items>
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
@@ -687,8 +707,12 @@
                 });
             });
 
-            handleListDocument(JSON.parse({!! old('document_list', json_encode($query->document_list)) !!}));
-            handleSetSalesOrder({!! $query->sales_order->toJson() !!});
+            handleListDocument(JSON.parse({
+                !!old('document_list', json_encode($query - > document_list)) !!
+            }));
+            handleSetSalesOrder({
+                !!$query - > sales_order - > toJson() !!
+            });
             handleCalculate();
         </script>
     </x-slot>
