@@ -110,7 +110,7 @@ class PaymentRequestController extends Controller
             $query->pick_up_information_mobile_number = $request->pick_up_information_mobile_number;
             $query->pick_up_information_pick_up_address = $request->pick_up_information_pick_up_address;
 
-            $query->status = 'Waiting for Approval';
+            $query->status = 'Waiting for Approval Finance';
 
             $query->save();
 

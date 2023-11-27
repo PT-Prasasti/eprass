@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
+
 class PurchaseOrderSupplierController extends Controller
 {
     protected $fileController, $redisController, $hosting;
@@ -115,7 +116,7 @@ class PurchaseOrderSupplierController extends Controller
             $filePickup = null;
             if ($request->hasFile('dokumen_pickup')) {
                 $fileDirectory = 'dokumen_pickup';
-                $file = $request->file('invoice');
+                $file = $request->file('dokumen_pickup');
                 $filePickup = $this->fileController->store($fileDirectory, $file);
             }
 
@@ -142,7 +143,8 @@ class PurchaseOrderSupplierController extends Controller
             $query->name = $request->name;
             $query->email = $request->email;
             $query->pickup_adress = $request->pickup_adress;
-            $query->dokumen_pickup = $request->$filePickup;
+            $query->dokumen_pickup = $filePickup;
+
 
 
             $query->total_shipping_note = $request->total_shipping_note;
@@ -352,6 +354,20 @@ class PurchaseOrderSupplierController extends Controller
             'query' => $query,
         ]);
     }
+
+    // public function get_pdf(Request $request): JsonResponse
+    // {
+    //     $so = $request->so;
+    //     $so = str_replace('/', '_', $so);
+    //     $key = 'purchase_order_document_' . $so . '_' . auth()->user()->uuid;
+    //     $data = json_decode(Redis::get($key), true);
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'message' => 'success',
+    //         'data' => $data
+    //     ]);
+    // }
 
     public function upload_document(Request $request)
     {

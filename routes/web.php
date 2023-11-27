@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalPoSupplierController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Crm\InquiryController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
 use App\Http\Controllers\Helper\NotificationController;
+use App\Http\Controllers\ListPaymentController;
 use App\Http\Controllers\PaymentRequest\PaymentRequestController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
 use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
@@ -314,6 +316,31 @@ Route::prefix('/payment-request')->name('payment-request')->group(function () {
     Route::delete('/{id}', [PaymentRequestController::class, 'delete'])->name('.delete');
     Route::get('/search/purchase-order-supplier', [PaymentRequestController::class, 'search_purchase_order_supplier'])->name('.search.purchase-order-supplier');
     Route::post('upload-document', [PaymentRequestController::class, 'upload_document'])->name('.upload-document');
+});
+
+Route::prefix('list-payment')->name('list-payment')->group(function () {
+    Route::get('/', [ListPaymentController::class, 'index']);
+    Route::get('/add', [PurchaseOrderCustomerController::class, 'add'])->name('.add');
+    Route::post('/store', [PurchaseOrderCustomerController::class, 'store'])->name('.store');
+    Route::get('/{id}/edit', [ListPaymentController::class, 'edit'])->name('.edit');
+    Route::get('/{id}/approve', [ListPaymentController::class, 'approve'])->name('.approve');
+    Route::get('/{id}/bukti_transfer', [ListPaymentController::class, 'bukti_transfer'])->name('.bukti_transfer');
+    Route::put('/{id}', [PurchaseOrderCustomerController::class, 'update'])->name('.update');
+    Route::delete('/{id}', [PurchaseOrderCustomerController::class, 'delete'])->name('.delete');
+    Route::get('/search/quotation', [PurchaseOrderCustomerController::class, 'search_quotation'])->name('.search.quotation');
+    Route::post('upload-document', [PurchaseOrderCustomerController::class, 'uploadDocument'])->name('.upload-document');
+});
+
+Route::prefix('approval-po')->name('approval-po')->group(function () {
+    Route::get('/', [ApprovalPoSupplierController::class, 'index']);
+    Route::get('/add', [PurchaseOrderCustomerController::class, 'add'])->name('.add');
+    Route::post('/store', [PurchaseOrderCustomerController::class, 'store'])->name('.store');
+    Route::get('/{id}/edit', [ApprovalPoSupplierController::class, 'edit'])->name('.edit');
+    Route::get('/{id}/approve', [ApprovalPoSupplierController::class, 'approve'])->name('.approve');
+    Route::put('/{id}', [PurchaseOrderCustomerController::class, 'update'])->name('.update');
+    Route::delete('/{id}', [PurchaseOrderCustomerController::class, 'delete'])->name('.delete');
+    Route::get('/search/quotation', [PurchaseOrderCustomerController::class, 'search_quotation'])->name('.search.quotation');
+    Route::post('upload-document', [PurchaseOrderCustomerController::class, 'uploadDocument'])->name('.upload-document');
 });
 
 Route::any('/files/{any}', function ($filePath) {

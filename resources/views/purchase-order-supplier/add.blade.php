@@ -12,7 +12,7 @@
                         <i class="fa fa-plus mr-5"></i>Select SO
                     </button>
                     <button type="submit" class="btn btn-success mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save Quotation
+                        <i class="fa fa-save mr-5"></i>Save 
                     </button>
                 </div>
             </div>

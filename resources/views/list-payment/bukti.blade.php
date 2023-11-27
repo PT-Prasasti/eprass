@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="content">
-        <form method="POST" action="{{ route('payment-request.update', $query->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -9,8 +9,8 @@
                     <h4><b>{{ $query->transaction_code }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <button type="submit" class="btn btn-success mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save
+                    <button type="button" class="btn btn-primary mr-5 mb-5">
+                        <i class="fa fa-save mr-5"></i> Save Data
                     </button>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                                                         <input type="text" name="nominal"
                                                             autocomplete="one-time-code" class="form-control"
                                                             value="{{ number_format($query->value, 0, ',', '.') }}"
-                                                            number_format>
+                                                            number_format readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -121,7 +121,7 @@
                                                     <div class="col-lg-8">
                                                         <input type="date" name="due_date"
                                                             autocomplete="one-time-code" class="form-control"
-                                                            value="{{ $query->transaction_date }}">
+                                                            value="{{ $query->transaction_date }}" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -133,9 +133,19 @@
                                                     <div class="col-lg-8">
                                                         <input type="text" name="note"
                                                             autocomplete="one-time-code" class="form-control"
-                                                            value="{{ $query->note }}">
+                                                            value="{{ $query->note }}" readonly>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">Upload</label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
+                                                        <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>

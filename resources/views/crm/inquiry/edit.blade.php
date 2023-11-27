@@ -243,6 +243,7 @@
                         so: id
                     },
                     success: function(response) {
+                        console.log(response);
                         listItemPdf(response.status, response.data)
                     },
                     error: function(xhr, status, error) {

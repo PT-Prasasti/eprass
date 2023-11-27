@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="content">
-        <form method="POST" action="{{ route('payment-request.update', $query->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -9,8 +9,14 @@
                     <h4><b>{{ $query->transaction_code }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <button type="submit" class="btn btn-success mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save
+                    <button type="button" class="btn btn-success mr-5 mb-5">
+                        <a href="{{ route('approval-po.approve', $query->id) }}" class="text-white">
+                        <i class="fa fa-save mr-5"></i>Approve
+
+                        </a>
+                    </button>
+                    <button type="button" class="btn btn-danger mr-5 mb-5">
+                        <i class="fa fa-close mr-5"></i>Rejected
                     </button>
                 </div>
             </div>
@@ -109,7 +115,7 @@
                                                         <input type="text" name="nominal"
                                                             autocomplete="one-time-code" class="form-control"
                                                             value="{{ number_format($query->value, 0, ',', '.') }}"
-                                                            number_format>
+                                                            number_format readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -121,7 +127,7 @@
                                                     <div class="col-lg-8">
                                                         <input type="date" name="due_date"
                                                             autocomplete="one-time-code" class="form-control"
-                                                            value="{{ $query->transaction_date }}">
+                                                            value="{{ $query->transaction_date }}" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -133,7 +139,7 @@
                                                     <div class="col-lg-8">
                                                         <input type="text" name="note"
                                                             autocomplete="one-time-code" class="form-control"
-                                                            value="{{ $query->note }}">
+                                                            value="{{ $query->note }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>

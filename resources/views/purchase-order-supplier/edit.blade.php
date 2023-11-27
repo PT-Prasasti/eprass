@@ -506,6 +506,7 @@
                 var element = ``;
                 var iteration = 1;
                 $.each(data, function(index, value) {
+                    console.log(value);
                     element += `
                         <li class="list-group-item" data-id="${value.filename}">
                             <div class="d-flex justify-content-between align-items-center">
