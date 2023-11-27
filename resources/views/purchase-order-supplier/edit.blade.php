@@ -13,7 +13,7 @@
                         <i class="fa fa-plus mr-5"></i>Edit SO
                     </button>
                     <button type="submit" class="btn btn-success mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save Quotation
+                        <i class="fa fa-save mr-5"></i>Save
                     </button>
                 </div>
             </div>
@@ -245,6 +245,62 @@
                                 </div>
                             </div>
 
+                            <div class="tab-pane" id="bank" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Name
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_name" class="form-control" required="" value="{{ $query->bank_name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Account
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_account" class="form-control" value="{{ $query->bank_account }}" autocomplete="one-time-code" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Swift / Code
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_swift" class="form-control" required="" value="{{ $query->bank_swift }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Number
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_number" class="form-control" value="{{ $query->bank_number }}" autocomplete="one-time-code" required="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="col-12">
+                                                        Upload Invoice
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <div class="col-12">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="invoice" name="invoice">
+                                                            <label class="custom-file-label" for="invoice">Choose
+                                                                file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="tab-pane" id="document" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-4 text-center">
@@ -290,44 +346,6 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane" id="bank" role="tabpanel">
-                                <div class="block block-rounded">
-                                    <div class="block-content block-content-full">
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label for="last-name-column">Bank Name</label>
-                                                    <input type="text" class="form-control" name="delivery_term" required="">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="last-name-column">Bank Swift / Code</label>
-                                                    <input type="text" class="form-control" name="delivery_term" required="">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="last-name-column">Bank Account</label>
-                                                    <input type="text" class="form-control" name="delivery_term" required="">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="last-name-column">Bank Number</label>
-                                                    <input type="text" class="form-control" name="delivery_term" required="">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group row">
-                                                    <label class="col-12">Upload Invoice</label>
-                                                    <div class="col-12">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
-                                                            <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="tab-pane" id="pickup" role="tabpanel">
                                 <div class="block block-rounded">
                                     <div class="block-content block-content-full">
@@ -335,23 +353,23 @@
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="last-name-column">Name</label>
-                                                    <input type="text" class="form-control" name="" required="">
+                                                    <input type="text" class="form-control" value="{{ $query->name }}" name="name" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Email</label>
-                                                    <input type="text" class="form-control" name="" required="">
+                                                    <input type="text" class="form-control" value="{{ $query->email }}" name="email" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Phone Number</label>
-                                                    <input type="text" class="form-control" name="" required="">
+                                                    <input type="text" class="form-control" value="{{ $query->phone_number}}" name="phone_number" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Mobile Number</label>
-                                                    <input type="text" class="form-control" name="" required="">
+                                                    <input type="text" class="form-control" value="{{ $query->mobile_number}}" name="mobile_number" required="">
                                                 </div>
                                                 <div clasa="form-group">
                                                     <label for="last-name-column">Pick Up Address</label>
-                                                    <textarea class="form-control" id="" name="" rows="4"></textarea>
+                                                    <textarea class="form-control" id="" value="{{ $query->pickup_adress}}" name="pickup_adress" rows="4"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -359,7 +377,7 @@
                                                     <label class="col-12">Upload Doc. Pick Up Information</label>
                                                     <div class="col-12">
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="dokumen_pickup" data-toggle="custom-file-input">
                                                             <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
                                                         </div>
                                                     </div>

@@ -111,6 +111,13 @@ class PurchaseOrderSupplierController extends Controller
                 $file = $request->file('invoice');
                 $filePath = $this->fileController->store($fileDirectory, $file);
             }
+            
+            $filePickup = null;
+            if ($request->hasFile('dokumen_pickup')) {
+                $fileDirectory = 'dokumen_pickup';
+                $file = $request->file('invoice');
+                $filePickup = $this->fileController->store($fileDirectory, $file);
+            }
 
             $query = new PurchaseOrderSupplier;
             $query->sales_order_id = $request->sales_order_id;
@@ -130,11 +137,19 @@ class PurchaseOrderSupplierController extends Controller
             $query->bank_number = $request->bank_number;
             $query->invoice_url = $filePath;
 
+            $query->phone_number = $request->phone_number;
+            $query->mobile_number = $request->mobile_number;
+            $query->name = $request->name;
+            $query->email = $request->email;
+            $query->pickup_adress = $request->pickup_adress;
+            $query->dokumen_pickup = $request->$filePickup;
+
+
             $query->total_shipping_note = $request->total_shipping_note;
             $query->total_shipping_value = $request->total_shipping_value ? str_replace(',', '.', str_replace('.', '', $request->total_shipping_value)) : 0;
 
             $query->document_list = $request->document_list;
-            $query->status = 'Waiting for Approval';
+            $query->status = 'Send PO';
 
             $query->save();
 

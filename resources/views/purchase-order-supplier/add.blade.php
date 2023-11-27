@@ -8,8 +8,7 @@
                     <h4><b>{{ $transactionCode }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <button type="button" class="btn btn-primary mr-5 mb-5" data-toggle="modal"
-                        data-target="#modal-slideup">
+                    <button type="button" class="btn btn-primary mr-5 mb-5" data-toggle="modal" data-target="#modal-slideup">
                         <i class="fa fa-plus mr-5"></i>Select SO
                     </button>
                     <button type="submit" class="btn btn-success mr-5 mb-5">
@@ -21,25 +20,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
                     @endif
 
                     @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                <span class="d-block">
-                                    {{ $loop->iteration }}. {{ $error }}
-                                </span>
-                            @endforeach
-                        </div>
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                        <span class="d-block">
+                            {{ $loop->iteration }}. {{ $error }}
+                        </span>
+                        @endforeach
+                    </div>
                     @endif
                 </div>
             </div>
@@ -54,18 +53,20 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#term_con">Term &amp; Condition</a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" href="#bank">Bank Information</a>
-                            </li> --}}
                             <li class="nav-item">
                                 <a class="nav-link" href="#document">Document</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#bank">Bank Information</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#pickup">Pick Up Information</a>
                             </li>
                         </ul>
                         <div class="block-content tab-content">
                             <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
                                 <div class="row" hidden>
-                                    <input type="text" class="form-control" name="sales_order_id" value=""
-                                        readonly sales_order_id>
+                                    <input type="text" class="form-control" name="sales_order_id" value="" readonly sales_order_id>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
@@ -75,16 +76,14 @@
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value=""
-                                                            readonly sales_order_number>
+                                                        <input type="text" class="form-control" value="" readonly sales_order_number>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value=""
-                                                            readonly sales_order_subject>
+                                                        <input type="text" class="form-control" value="" readonly sales_order_subject>
                                                     </div>
                                                 </div>
                                             </div>
@@ -93,11 +92,8 @@
                                     <div class="col-md-4">
                                         <div class="custom-file">
                                             <input type="hidden" name="document_list" value="">
-                                            <input type="file" id="upload-document" name="upload_document"
-                                                class="custom-file-input" data-toggle="custom-file-input"
-                                                accept="application/pdf">
-                                            <label id="upload-document-label" for="upload-document"
-                                                class="custom-file-label">
+                                            <input type="file" id="upload-document" name="upload_document" class="custom-file-input" data-toggle="custom-file-input" accept="application/pdf">
+                                            <label id="upload-document-label" for="upload-document" class="custom-file-label">
                                                 Choose file
                                             </label>
                                         </div>
@@ -109,8 +105,7 @@
                                                     <div class="mr-2">
                                                         <span>Uploading file</span>
                                                     </div>
-                                                    <div class="spinner-border spinner-border-sm text-info"
-                                                        role="status">
+                                                    <div class="spinner-border spinner-border-sm text-info" role="status">
                                                         <span class="sr-only">Loading...</span>
                                                     </div>
                                                 </div>
@@ -142,15 +137,11 @@
                                         <th class="text-center"></th>
                                         <th class="text-center"></th>
                                         <th class="text-center">
-                                            <input type="text" class="form-control" name="total_shipping_note"
-                                                value="Shipping Fee (to Prasasti's Werehouse)"
-                                                autocomplete="one-time-code">
+                                            <input type="text" class="form-control" name="total_shipping_note" value="Shipping Fee (to Prasasti's Werehouse)" autocomplete="one-time-code">
                                         </th>
                                         <th class="text-right pr-4">1</th>
                                         <th class="text-right">
-                                            <input type="text" class="form-control text-right"
-                                                name="total_shipping_value" value=""
-                                                autocomplete="one-time-code" number_format>
+                                            <input type="text" class="form-control text-right" name="total_shipping_value" value="" autocomplete="one-time-code" number_format>
                                         </th>
                                         <th class="text-right text-nowrap pt-3" total_shipping_total></th>
                                         <th class="text-center"></th>
@@ -168,24 +159,21 @@
                                                         Term
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="term" class="form-control"
-                                                        required="" autocomplete="one-time-code">
+                                                    <input type="text" name="term" class="form-control" required="" autocomplete="one-time-code">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Delivery
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="delivery" class="form-control"
-                                                        required="" autocomplete="one-time-code">
+                                                    <input type="text" name="delivery" class="form-control" required="" autocomplete="one-time-code">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Note
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="note" class="form-control"
-                                                        required="" autocomplete="one-time-code">
+                                                    <input type="text" name="note" class="form-control" required="" autocomplete="one-time-code">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -197,10 +185,9 @@
                                                     <select class="form-control" name="payment_term" required="">
                                                         <option value="">Select one</option>
                                                         @foreach ($paymentTerms as $itemKey => $itemValue)
-                                                            <option value="{{ $itemKey }}"
-                                                                {{ $itemKey === old('payment_term') ? 'selected' : '' }}>
-                                                                {{ $itemValue }}
-                                                            </option>
+                                                        <option value="{{ $itemKey }}" {{ $itemKey === old('payment_term') ? 'selected' : '' }}>
+                                                            {{ $itemValue }}
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -212,10 +199,9 @@
                                                     <select class="form-control" name="vat" required="">
                                                         <option value="">Select one</option>
                                                         @foreach ($vatTypes as $itemKey => $itemValue)
-                                                            <option value="{{ $itemKey }}"
-                                                                {{ $itemKey === old('vat') ? 'selected' : '' }}>
-                                                                {{ $itemValue }}
-                                                            </option>
+                                                        <option value="{{ $itemKey }}" {{ $itemKey === old('vat') ? 'selected' : '' }}>
+                                                            {{ $itemValue }}
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -224,8 +210,7 @@
                                                         Attachment
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" name="attachment"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input type="text" class="form-control" name="attachment" autocomplete="one-time-code" required="">
                                                 </div>
                                             </div>
                                         </div>
@@ -233,7 +218,7 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="tab-pane" id="bank" role="tabpanel">
+                            <div class="tab-pane" id="bank" role="tabpanel">
                                 <div class="block block-rounded">
                                     <div class="block-content block-content-full">
                                         <div class="row">
@@ -243,16 +228,14 @@
                                                         Bank Name
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="bank_name" class="form-control"
-                                                        required="">
+                                                    <input type="text" name="bank_name" class="form-control" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Bank Account
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="bank_account" class="form-control"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input type="text" name="bank_account" class="form-control" autocomplete="one-time-code" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -261,16 +244,14 @@
                                                         Bank Swift / Code
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="bank_swift" class="form-control"
-                                                        required="">
+                                                    <input type="text" name="bank_swift" class="form-control" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Bank Number
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="bank_number" class="form-control"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input type="text" name="bank_number" class="form-control" autocomplete="one-time-code" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -281,9 +262,7 @@
                                                     </label>
                                                     <div class="col-12">
                                                         <div class="custom-file">
-                                                            <input type="file"
-                                                                class="custom-file-input js-custom-file-input-enabled"
-                                                                id="invoice" name="invoice">
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="invoice" name="invoice">
                                                             <label class="custom-file-label" for="invoice">Choose
                                                                 file</label>
                                                         </div>
@@ -293,13 +272,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             <div class="tab-pane" id="document" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -307,8 +285,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -316,8 +293,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -325,8 +301,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -334,12 +309,53 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
                                             <label class="custom-control-label" for="f4">PO SUPPLIER</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="pickup" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Name</label>
+                                                    <input type="text" class="form-control" name="name" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Email</label>
+                                                    <input type="text" class="form-control" name="email" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Phone Number</label>
+                                                    <input type="text" class="form-control" name="phone_number" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="last-name-column">Mobile Number</label>
+                                                    <input type="text" class="form-control" name="mobile_number" required="">
+                                                </div>
+                                                <div clasa="form-group">
+                                                    <label for="last-name-column">Pick Up Address</label>
+                                                    <textarea class="form-control" id="" name="pickup_adress" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group row">
+                                                    <label class="col-12">Upload Doc. Pick Up Information</label>
+                                                    <div class="col-12">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="dokumen_pickup" data-toggle="custom-file-input">
+                                                            <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -351,8 +367,7 @@
         </form>
     </div>
 
-    <div class="modal fade" id="modal-slideup" tabindex="-1" role="dialog" aria-labelledby="modal-slideup"
-        aria-hidden="true">
+    <div class="modal fade" id="modal-slideup" tabindex="-1" role="dialog" aria-labelledby="modal-slideup" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0">
@@ -381,8 +396,7 @@
                                 <h5>Product List</h5>
                             </div>
                             <div class="col-sm-12">
-                                <table class="table table-bordered table-center w-100" style="font-size:11px"
-                                    sales_order_selected_items>
+                                <table class="table table-bordered table-center w-100" style="font-size:11px" sales_order_selected_items>
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
@@ -733,14 +747,16 @@
 
             handleCalculate();
 
-            @if (session('quotation'))
-                $(`[name="quotation"]`).select2("trigger", "select", {
+            @if(session('quotation'))
+            $(`[name="quotation"]`).select2("trigger", "select", {
+                data: {
+                    id: `{{ session('quotation')->id }}`,
+                    text: `{{ session('quotation')->quotation_code }}`,
                     data: {
-                        id: `{{ session('quotation')->id }}`,
-                        text: `{{ session('quotation')->quotation_code }}`,
-                        data: {!! session('quotation')->toJson() !!}
+                        !!session('quotation') - > toJson() !!
                     }
-                });
+                }
+            });
             @endif
         </script>
     </x-slot>

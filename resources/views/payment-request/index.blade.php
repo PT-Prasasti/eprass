@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                        List PO Supplier
+                    List Payment Request
                     </b>
                 </h4>
             </div>
@@ -114,7 +114,7 @@
                                     badgeColor = `danger`;
                                     break;
                                 default:
-                                    badgeColor = `secondary`;
+                                    badgeColor = `warning`;
                             }
 
                             return `<span class="badge badge-${badgeColor}">${row.status}</span>`;

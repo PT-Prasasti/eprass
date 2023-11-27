@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-md-6 text-right">
                     <button type="submit" class="btn btn-success mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save Quotation
+                        <i class="fa fa-save mr-5"></i>Save
                     </button>
                 </div>
             </div>
@@ -17,25 +17,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
                     @endif
 
                     @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                <span class="d-block">
-                                    {{ $loop->iteration }}. {{ $error }}
-                                </span>
-                            @endforeach
-                        </div>
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                        <span class="d-block">
+                            {{ $loop->iteration }}. {{ $error }}
+                        </span>
+                        @endforeach
+                    </div>
                     @endif
                 </div>
             </div>
@@ -56,6 +56,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#document">Document</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#bank">Bank Information</a>
+                            </li>
                         </ul>
                         <div class="block-content tab-content">
                             <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
@@ -70,8 +73,7 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <select class="form-control" name="purchase_order_supplier"
-                                                            required="">
+                                                        <select class="form-control" name="purchase_order_supplier" required="">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -79,16 +81,14 @@
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value=""
-                                                            readonly purchase_order_supplier_subject>
+                                                        <input type="text" class="form-control" value="" readonly purchase_order_supplier_subject>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Supplier Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value=""
-                                                            readonly purchase_order_supplier_supplier>
+                                                        <input type="text" class="form-control" value="" readonly purchase_order_supplier_supplier>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,9 +104,7 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" name="nominal"
-                                                            autocomplete="one-time-code" class="form-control"
-                                                            value="" number_format>
+                                                        <input type="text" name="nominal" autocomplete="one-time-code" class="form-control" value="" number_format>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -116,9 +114,7 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="date" name="due_date"
-                                                            autocomplete="one-time-code" class="form-control"
-                                                            value="">
+                                                        <input type="date" name="due_date" autocomplete="one-time-code" class="form-control" value="">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -128,9 +124,7 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" name="note"
-                                                            autocomplete="one-time-code" class="form-control"
-                                                            value="">
+                                                        <input type="text" name="note" autocomplete="one-time-code" class="form-control" value="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -161,8 +155,7 @@
                                         </tr>
                                         <tr>
                                             <th></th>
-                                            <td class="text-left" colspan="3"
-                                                purchase_order_supplier_shipping_fee_note>Shipping Fee</td>
+                                            <td class="text-left" colspan="3" purchase_order_supplier_shipping_fee_note>Shipping Fee</td>
                                             <th class="text-right" purchase_order_supplier_shipping_fee_value></th>
                                             <th></th>
                                         </tr>
@@ -197,25 +190,19 @@
                                                     <label>
                                                         Term
                                                     </label>
-                                                    <input type="text" class="form-control" required=""
-                                                        autocomplete="one-time-code" readonly
-                                                        purchase_order_supplier_term>
+                                                    <input type="text" class="form-control" required="" autocomplete="one-time-code" readonly purchase_order_supplier_term>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Delivery
                                                     </label>
-                                                    <input type="text" class="form-control" required=""
-                                                        autocomplete="one-time-code" readonly
-                                                        purchase_order_supplier_delivery>
+                                                    <input type="text" class="form-control" required="" autocomplete="one-time-code" readonly purchase_order_supplier_delivery>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Note
                                                     </label>
-                                                    <input type="text" class="form-control" required=""
-                                                        autocomplete="one-time-code" readonly
-                                                        purchase_order_supplier_note>
+                                                    <input type="text" class="form-control" required="" autocomplete="one-time-code" readonly purchase_order_supplier_note>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -223,25 +210,19 @@
                                                     <label>
                                                         Payment Term
                                                     </label>
-                                                    <input type="text" class="form-control" required=""
-                                                        autocomplete="one-time-code" readonly
-                                                        purchase_order_supplier_payment_term>
+                                                    <input type="text" class="form-control" required="" autocomplete="one-time-code" readonly purchase_order_supplier_payment_term>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         PPN
                                                     </label>
-                                                    <input type="text" class="form-control" required=""
-                                                        autocomplete="one-time-code" readonly
-                                                        purchase_order_supplier_vat>
+                                                    <input type="text" class="form-control" required="" autocomplete="one-time-code" readonly purchase_order_supplier_vat>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Attachment
                                                     </label>
-                                                    <input type="text" class="form-control" required=""
-                                                        autocomplete="one-time-code" readonly
-                                                        purchase_order_supplier_attachment>
+                                                    <input type="text" class="form-control" required="" autocomplete="one-time-code" readonly purchase_order_supplier_attachment>
                                                 </div>
                                             </div>
                                         </div>
@@ -256,35 +237,26 @@
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="pick_up_information_name">Name</label>
-                                                    <input id="pick_up_information_name" type="text"
-                                                        class="form-control" name="pick_up_information_name"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input id="pick_up_information_name" type="text" class="form-control" name="pick_up_information_name" autocomplete="one-time-code" readonly purchase_order_supplier_name>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="pick_up_information_email">Email</label>
-                                                    <input id="pick_up_information_email" type="text"
-                                                        class="form-control" name="pick_up_information_email"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input id="pick_up_information_email" type="text" class="form-control" name="pick_up_information_email" autocomplete="one-time-code" purchase_order_supplier_email readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="pick_up_information_phone_number">Phone Number</label>
-                                                    <input id="pick_up_information_phone_number" type="text"
-                                                        class="form-control" name="pick_up_information_phone_number"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input id="pick_up_information_phone_number" type="text" class="form-control" name="pick_up_information_phone_number" autocomplete="one-time-code" readonly purchase_order_supplier_phone_number>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="pick_up_information_mobile_number">
                                                         Mobile Number
                                                     </label>
-                                                    <input id="pick_up_information_mobile_number" type="text"
-                                                        class="form-control" name="pick_up_information_mobile_number"
-                                                        autocomplete="one-time-code" required="">
+                                                    <input id="pick_up_information_mobile_number" type="text" class="form-control" name="pick_up_information_mobile_number" autocomplete="one-time-code" readonly purchase_order_supplier_mobile_number>
                                                 </div>
                                                 <div clasa="form-group">
                                                     <label for="pick_up_information_pick_up_address">Pick Up
                                                         Address</label>
-                                                    <textarea class="form-control" id="pick_up_information_pick_up_address" name="pick_up_information_pick_up_address"
-                                                        rows="4"></textarea>
+                                                    <textarea class="form-control" id="pick_up_information_pick_up_address" name="pick_up_information_pick_up_address" rows="4" readonly purchase_order_supplier_pickup_adress></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -304,8 +276,7 @@
                             <div class="tab-pane" id="document" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -313,8 +284,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -322,8 +292,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -331,8 +300,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -340,12 +308,66 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
                                             <label class="custom-control-label" for="f4">PO SUPPLIER</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="bank" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Name
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_name" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_name>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Account
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_account" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_account>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Swift / Code
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_swift" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_swift>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Number
+                                                    </label>
+                                                    <input type="text" name="bank_number" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_number>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="col-12">
+                                                        Upload Invoice
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <div class="col-12">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="invoice" name="invoice">
+                                                            <label class="custom-file-label" for="invoice">Choose
+                                                                file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -453,7 +475,7 @@
             const handleSetPurchaseOrderSupplier = (data) => {
                 purchaseOrderSupplierItemTable.clear().draw();
                 purchaseOrderSupplierItemTable.rows.add(data.purchase_order_supplier_items ?? []).draw(true);
-
+                console.log(data);
                 $(`[purchase_order_supplier_subject]`).val(data.supplier.company);
                 $(`[purchase_order_supplier_supplier]`).val(data.sales_order.inquiry.subject);
                 $(`[purchase_order_supplier_term]`).val(data.term);
@@ -462,6 +484,15 @@
                 $(`[purchase_order_supplier_payment_term]`).val(data.payment_term);
                 $(`[purchase_order_supplier_vat]`).val(data.vat);
                 $(`[purchase_order_supplier_attachment]`).val(data.attachment);
+                $(`[purchase_order_supplier_name]`).val(data.name);
+                $(`[purchase_order_supplier_email]`).val(data.email);
+                $(`[purchase_order_supplier_phone_number]`).val(data.phone_number);
+                $(`[purchase_order_supplier_mobile_number]`).val(data.mobile_number);
+                $(`[purchase_order_supplier_pickup_adress]`).val(data.pickup_adress);
+                $(`[purchase_order_supplier_bank_name]`).val(data.bank_name);
+                $(`[purchase_order_supplier_bank_account]`).val(data.bank_account);
+                $(`[purchase_order_supplier_bank_swift]`).val(data.bank_swift);
+                $(`[purchase_order_supplier_bank_number]`).val(data.bank_number);
 
                 var subtotal = totalVat = 0;
 
