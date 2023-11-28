@@ -213,9 +213,7 @@
                         <li>
                             <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
                         </li>
-                        <li>
-                            <a href="{{ route('approval-po') }}">Approval PO Supplier</a>
-                        </li>
+                       
                     </ul>
                 </li>
                 <li>
