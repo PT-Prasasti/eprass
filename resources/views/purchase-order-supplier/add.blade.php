@@ -56,12 +56,12 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#document">Document</a>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" href="#bank">Bank Information</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#pickup">Pick Up Information</a>
-                            </li>
+                            </li> -->
                         </ul>
                         <div class="block-content tab-content">
                             <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
