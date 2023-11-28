@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="content">
-        <form method="POST"  enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -9,64 +9,40 @@
                     <h4><b>{{ $query->transaction_code }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <button type="button" class="btn btn-primary mr-5 mb-5">
-                        <a href="{{ route('list-payment.approve', $query->id) }}" class="text-white">
-                            <i class="fa fa-check mr-5"></i>Aprroved
+                    <button type="button" class="btn btn-success mr-5 mb-5">
+                        <a href="{{ route('approval-po.approve', $query->id) }}" class="text-white">
+                        <i class="fa fa-save mr-5"></i>Approve
+
                         </a>
                     </button>
-                    <button type="button" class="btn btn-danger mr-5 mb-5" data-toggle="modal" data-target="#modal-fadein">
+                    <button type="button" class="btn btn-danger mr-5 mb-5">
                         <i class="fa fa-close mr-5"></i>Rejected
                     </button>
-                    <div class="modal fade" id="modal-fadein" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="block block-themed block-transparent mb-0">
-                                    <div class="block-header bg-primary-dark">
-                                        <h3 class="block-title">Note</h3>
-                                        <div class="block-options">
-                                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                                <i class="si si-close"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="block-content">
-                                        <textarea class="form-control" id="" name="" rows="4"></textarea>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-alt-secondary" data-dismiss="modal"> <i class="fa fa-close"></i> Close</button>
-                                    <button type="button" class="btn btn-alt-success" data-dismiss="modal">
-                                        <i class="fa fa-check"></i> Save
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                     @endif
 
                     @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                     @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                        <span class="d-block">
-                            {{ $loop->iteration }}. {{ $error }}
-                        </span>
-                        @endforeach
-                    </div>
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <span class="d-block">
+                                    {{ $loop->iteration }}. {{ $error }}
+                                </span>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
             </div>
@@ -85,6 +61,9 @@
                                 <a class="nav-link" href="#pick-up-information">Pick Up Information</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="#bank">Bank Information</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="#document">Document</a>
                             </li>
                         </ul>
@@ -100,21 +79,27 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->transaction_code }}" readonly>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $query->purchase_order_supplier->transaction_code }}"
+                                                            readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->sales_order->inquiry->subject }}" readonly>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $query->purchase_order_supplier->sales_order->inquiry->subject }}"
+                                                            readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Supplier Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->supplier->company }}" readonly>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $query->purchase_order_supplier->supplier->company }}"
+                                                            readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,7 +115,10 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" name="nominal" autocomplete="one-time-code" class="form-control" value="{{ number_format($query->value, 0, ',', '.') }}" number_format readonly>
+                                                        <input type="text" name="nominal"
+                                                            autocomplete="one-time-code" class="form-control"
+                                                            value="{{ number_format($query->value, 0, ',', '.') }}"
+                                                            number_format readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -140,7 +128,9 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="date" name="due_date" autocomplete="one-time-code" class="form-control" value="{{ $query->transaction_date }}" readonly>
+                                                        <input type="date" name="due_date"
+                                                            autocomplete="one-time-code" class="form-control"
+                                                            value="{{ $query->transaction_date }}" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -150,7 +140,9 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" name="note" autocomplete="one-time-code" class="form-control" value="{{ $query->note }}" readonly>
+                                                        <input type="text" name="note"
+                                                            autocomplete="one-time-code" class="form-control"
+                                                            value="{{ $query->note }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -181,7 +173,8 @@
                                         </tr>
                                         <tr>
                                             <th></th>
-                                            <td class="text-left" colspan="3" purchase_order_supplier_shipping_fee_note>Shipping Fee</td>
+                                            <td class="text-left" colspan="3"
+                                                purchase_order_supplier_shipping_fee_note>Shipping Fee</td>
                                             <th class="text-right" purchase_order_supplier_shipping_fee_value></th>
                                             <th></th>
                                         </tr>
@@ -216,19 +209,25 @@
                                                     <label>
                                                         Term
                                                     </label>
-                                                    <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->term }}" required="" autocomplete="one-time-code" readonly>
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $query->purchase_order_supplier->term }}"
+                                                        required="" autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Delivery
                                                     </label>
-                                                    <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->delivery }}" required="" autocomplete="one-time-code" readonly>
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $query->purchase_order_supplier->delivery }}"
+                                                        required="" autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Note
                                                     </label>
-                                                    <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->note }}" required="" autocomplete="one-time-code" readonly>
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $query->purchase_order_supplier->note }}"
+                                                        required="" autocomplete="one-time-code" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -236,19 +235,25 @@
                                                     <label>
                                                         Payment Term
                                                     </label>
-                                                    <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->payment_term_to_text }}" required="" autocomplete="one-time-code" readonly>
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $query->purchase_order_supplier->payment_term_to_text }}"
+                                                        required="" autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         PPN
                                                     </label>
-                                                    <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->vat_to_text }}" required="" autocomplete="one-time-code" readonly>
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $query->purchase_order_supplier->vat_to_text }}"
+                                                        required="" autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Attachment
                                                     </label>
-                                                    <input type="text" class="form-control" value="{{ $query->purchase_order_supplier->attachment }}" required="" autocomplete="one-time-code" readonly>
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $query->purchase_order_supplier->attachment }}"
+                                                        required="" autocomplete="one-time-code" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -263,27 +268,40 @@
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="pick_up_information_name">Name</label>
-                                                    <input id="pick_up_information_name" type="text" class="form-control" name="pick_up_information_name" value="{{ $query->pick_up_information_name }}" autocomplete="one-time-code" readonly>
+                                                    <input id="pick_up_information_name" type="text"
+                                                        class="form-control" name="pick_up_information_name"
+                                                        value="{{ $query->pick_up_information_name }}"
+                                                        autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="pick_up_information_email">Email</label>
-                                                    <input id="pick_up_information_email" type="text" class="form-control" name="pick_up_information_email" value="{{ $query->pick_up_information_email }}" autocomplete="one-time-code" readonly>
+                                                    <input id="pick_up_information_email" type="text"
+                                                        class="form-control" name="pick_up_information_email"
+                                                        value="{{ $query->pick_up_information_email }}"
+                                                        autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="pick_up_information_phone_number">Phone Number</label>
-                                                    <input id="pick_up_information_phone_number" type="text" class="form-control" name="pick_up_information_phone_number" value="{{ $query->pick_up_information_phone_number }}" autocomplete="one-time-code" readonly>
+                                                    <input id="pick_up_information_phone_number" type="text"
+                                                        class="form-control" name="pick_up_information_phone_number"
+                                                        value="{{ $query->pick_up_information_phone_number }}"
+                                                        autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="pick_up_information_mobile_number">
                                                         Mobile Number
                                                     </label>
-                                                    <input id="pick_up_information_mobile_number" type="text" class="form-control" name="pick_up_information_mobile_number" value="{{ $query->pick_up_information_mobile_number }}" autocomplete="one-time-code" readonly>
+                                                    <input id="pick_up_information_mobile_number" type="text"
+                                                        class="form-control" name="pick_up_information_mobile_number"
+                                                        value="{{ $query->pick_up_information_mobile_number }}"
+                                                        autocomplete="one-time-code" readonly>
                                                 </div>
                                                 <div clasa="form-group">
                                                     <label for="pick_up_information_pick_up_address">
                                                         Pick Up Address
                                                     </label>
-                                                    <textarea class="form-control" id="pick_up_information_pick_up_address" name="pick_up_information_pick_up_address" rows="4" readonly>{{ $query->pick_up_information_pick_up_address }}</textarea>
+                                                    <textarea class="form-control" id="pick_up_information_pick_up_address" name="pick_up_information_pick_up_address"
+                                                        rows="4" readonly>{{ $query->pick_up_information_pick_up_address }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -300,10 +318,66 @@
                                 </div>
                             </div>
 
+                              <div class="tab-pane" id="bank" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Name
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_name" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_name>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Account
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_account" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_account>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Swift / Code
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="bank_swift" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_swift>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Bank Number
+                                                    </label>
+                                                    <input type="text" name="bank_number" class="form-control" autocomplete="one-time-code" readonly purchase_order_supplier_bank_number>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="col-12">
+                                                        Upload Invoice
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <div class="col-12">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="invoice" name="invoice">
+                                                            <label class="custom-file-label" for="invoice">Choose
+                                                                file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="tab-pane" id="document" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                            data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -311,7 +385,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                            data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -319,7 +394,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                            data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -327,7 +403,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                            data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -335,7 +412,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                            data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -456,6 +534,15 @@
                 $(`[purchase_order_supplier_payment_term]`).val(data.payment_term);
                 $(`[purchase_order_supplier_vat]`).val(data.vat);
                 $(`[purchase_order_supplier_attachment]`).val(data.attachment);
+                $(`[purchase_order_supplier_name]`).val(data.name);
+                $(`[purchase_order_supplier_email]`).val(data.email);
+                $(`[purchase_order_supplier_phone_number]`).val(data.phone_number);
+                $(`[purchase_order_supplier_mobile_number]`).val(data.mobile_number);
+                $(`[purchase_order_supplier_pickup_adress]`).val(data.pickup_adress);
+                $(`[purchase_order_supplier_bank_name]`).val(data.bank_name);
+                $(`[purchase_order_supplier_bank_account]`).val(data.bank_account);
+                $(`[purchase_order_supplier_bank_swift]`).val(data.bank_swift);
+                $(`[purchase_order_supplier_bank_number]`).val(data.bank_number);
 
                 var subtotal = totalVat = 0;
 
@@ -510,9 +597,7 @@
                 $(`[total_shipping_total]`).html(handleCurrencyFormat(handleSetNumber(totalShippingValue)));
             }
 
-            handleSetPurchaseOrderSupplier({
-                !!$query - > purchase_order_supplier - > toJson() !!
-            });
+            handleSetPurchaseOrderSupplier({!! $query->purchase_order_supplier->toJson() !!});
 
             $(document).on("input", "[number_format]", function() {
                 this.value = handleRupiahFormat(handleSetNumber(this.value));
