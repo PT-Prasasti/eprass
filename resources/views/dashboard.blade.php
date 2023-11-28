@@ -169,7 +169,7 @@
                 <div class="block">
                     <div class="block-content">
                         <div class="row items-push">
-                            <div class="col-xl-12">
+                            <div class="col-xl-12" style="font-size:10px">
                                 <!-- Calendar Container -->
                                 <div id="calendar"></div>
                             </div>

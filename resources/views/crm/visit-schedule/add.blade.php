@@ -17,7 +17,7 @@
                                 @enderror
                             </div>
                             <div class="form-group row">
-                                <label class="col-12">Company</label>
+                                <label class="col-12">Company<span class="text-danger"> *<span></label>
                                 <div class="col-md-12">
                                     <select class="form-control @error('company') is-invalid @enderror" name="company" required>
                                         <option value="0" disabled selected>Please select</option>
@@ -49,7 +49,7 @@
                         <div class="col-md-4">
                             <div class="form-group row">
                                 <div class="col-6">
-                                    <label>Visit By</label>
+                                    <label>Visit By<span class="text-danger"> *<span></label>
                                     <select class="form-control @error('visit_by') is-invalid @enderror" name="visit_by" required>
                                         <option value="0" disabled selected>Please select</option>
                                         <option>Phone</option>
@@ -61,7 +61,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label>Devision</label>
+                                    <label>Division<span class="text-danger"> *<span></label>
                                     <input type="text" class="form-control @error('devision') is-invalid @enderror" name="devision" value="{{ old('devision') }}">
                                     @error('devision')
                                         <small class="text-danger">{{ $message }}</small>
@@ -69,14 +69,14 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Date *</label>
+                                <label>Date <span class="text-danger"> *<span></label>
                                 <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required>
                                 @error('date')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label>Time</label>
+                                <label>Time<span class="text-danger"> *<span></label>
                                 <input type="time" class="form-control @error('time') is-invalid @enderror" name="time" value="{{ old('time') }}">
                                 @error('time')
                                     <small class="text-danger">{{ $message }}</small>
@@ -85,7 +85,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group row">
-                                <label class="col-12">Schedule</label>
+                                <label class="col-12">Schedule<span class="text-danger"> *<span></label>
                                 <div class="col-12">
                                     <textarea class="form-control" name="schedule" rows="6">{{ old('schedule') }}</textarea>
                                 </div>
@@ -95,7 +95,7 @@
                             <hr>
                         </div>
                         <div class="col-md-12 mt-3">
-                            <h5>Invite Engineer :</h5>
+                            <h5>Invite Other :</h5>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group row">
