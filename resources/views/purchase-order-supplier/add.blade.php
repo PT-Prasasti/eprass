@@ -218,7 +218,7 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane" id="bank" role="tabpanel">
+                            <!-- <div class="tab-pane" id="bank" role="tabpanel">
                                 <div class="block block-rounded">
                                     <div class="block-content block-content-full">
                                         <div class="row">
@@ -359,7 +359,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
