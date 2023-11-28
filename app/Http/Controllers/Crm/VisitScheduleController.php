@@ -147,7 +147,7 @@ class VisitScheduleController extends Controller
 
         foreach ($company as $item) {
             $result[] = array(
-                'company' => ucwords($item->company),
+                'company' => ucwords($item->company. ' - ' . $item->name),
                 'uuid' => $item->uuid,
             );
         }
