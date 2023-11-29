@@ -35,13 +35,15 @@
                                 <label>Customer - Company Name</label>
                                 <input type="text" class="form-control" name="customer" value="{{ strtoupper($visit->visit->customer->name . " - " . $visit->visit->customer->company) }}" disabled>
                             </div>
-                            <div class="form-group">
-                                <label>Phone</label>
-                                <input type="text" class="form-control" name="phone" value="{{ $visit->visit->customer->phone }}" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>Sales Email</label>
-                                <input type="email" class="form-control" name="email" value="{{ $visit->visit->customer->email }}" disabled>
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <label>Phone</label>
+                                    <input type="text" class="form-control" name="phone" value="{{ $visit->visit->customer->phone }}" disabled>
+                                </div>
+                                <div class="col-6">
+                                    <label>Sales Email</label>
+                                    <input type="email" class="form-control" name="email" value="{{ $visit->visit->customer->email }}" disabled>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -59,7 +61,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <div class="col-md-6">
                                     <label>Next Visit Schedule</label>
                                     <input type="date" class="form-control @error('next_date_visit') is-invalid @enderror" name="next_date_visit" value="{{ $visit->next_date_visit }}">
@@ -82,7 +84,7 @@
                                         <option value="0">Please select</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="col-md-12">
                             <hr>
@@ -112,7 +114,6 @@
                         <div class="col-md-12 text-center">
                             <a href="{{ route('crm.visit-report') }}" class="btn btn-hero btn-danger text-white mr-3 mb-2"><i class="fa fa-arrow-circle-left mr-2"></i>BACK</a>
                             <button type="submit" class="btn btn-hero btn-primary mb-2"><i class="fa fa-check mr-2"></i>SAVE REPORT</button><br>
-                            <button type="submit" class="btn btn-hero btn-success"><i class="fa fa-save mr-2"></i>SAVE REPORT & CREATED QUOTATION</button>
                         </div>
                     </div>
                 </form>
