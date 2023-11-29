@@ -61,6 +61,29 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-12">Upload File (png,jpg,jpeg,pdf.xls.doc)</label>
+                                <div class="col-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="" name="" data-toggle="custom-file-input">
+                                        <label class="custom-file-label" >Choose file</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <h5>Document List</h5>
+                                    <div class="d-none align-items-center" id="loading-file">
+                                        <div class="mr-2">
+                                            <span>Uploading file</span>
+                                        </div>
+                                        <div class="spinner-border spinner-border-sm text-info" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <ul class="list-group">
+
+                                    </ul>
+                                </div>
+                            </div>
                             <!-- <div class="form-group row">
                                 <div class="col-md-6">
                                     <label>Next Visit Schedule</label>

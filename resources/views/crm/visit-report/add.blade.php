@@ -58,23 +58,25 @@
                                     <input type="text" class="form-control" name="customer" disabled>
                                 @endif
                             </div>
-                            <div class="form-group">
-                                <label>Phone</label>
-                                @if (isset($data))
-                                    <input type="text" class="form-control" name="phone"
-                                        value="{{ $data['phone'] }}" disabled>
-                                @else
-                                    <input type="text" class="form-control" name="phone" disabled>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                @if (isset($data))
-                                    <input type="email" class="form-control" name="email"
-                                        value="{{ $data['email'] }}" disabled>
-                                @else
-                                    <input type="email" class="form-control" name="email" disabled>
-                                @endif
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label>Phone</label>
+                                    @if (isset($data))
+                                        <input type="text" class="form-control" name="phone"
+                                            value="{{ $data['phone'] }}" disabled>
+                                    @else
+                                        <input type="text" class="form-control" name="phone" disabled>
+                                    @endif
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                    @if (isset($data))
+                                        <input type="email" class="form-control" name="email"
+                                            value="{{ $data['email'] }}" disabled>
+                                    @else
+                                        <input type="email" class="form-control" name="email" disabled>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -94,6 +96,29 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-12">Upload File (png,jpg,jpeg,pdf.xls.doc)</label>
+                                <div class="col-12">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="" name="" data-toggle="custom-file-input">
+                                        <label class="custom-file-label" >Choose file</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <h5>Document List</h5>
+                                    <div class="d-none align-items-center" id="loading-file">
+                                        <div class="mr-2">
+                                            <span>Uploading file</span>
+                                        </div>
+                                        <div class="spinner-border spinner-border-sm text-info" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <ul class="list-group">
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group row">
                                 <div class="col-6">
                                     <label>Next Visit Schedule</label>
                                     <input type="date"
@@ -120,7 +145,7 @@
                                         <option value="0">Please select</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="col-md-12">
                             <hr>
