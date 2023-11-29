@@ -50,8 +50,9 @@
                                 <div class="col-md-12">
                                     <select class="form-control @error('status') is-invalid @enderror" name="status">
                                         <option value="0" selected disabled>Please select</option>
-                                        <option {{ $visit->status == 'Budgeting' ? 'selected' : '' }}>Budgeting</option>
-                                        <option {{ $visit->status == 'Feed' ? 'selected' : '' }}>Feed</option>
+                                        <option {{ $visit->status == 'Feed / Budgeting' ? 'selected' : '' }}>Feed / Budgeting</option>
+                                        <option {{ $visit->status == 'Building' ? 'selected' : '' }}>Building</option>
+                                        <option {{ $visit->status == 'Buying' ? 'selected' : '' }}>Buying</option>
                                     </select>
                                     @error('status')
                                         <small class="text-danger">{{ $message }}</small>

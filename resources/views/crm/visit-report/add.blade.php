@@ -84,8 +84,9 @@
                                     <select class="form-control @error('status') is-invalid @enderror" name="status"
                                         required>
                                         <option value="0" selected disabled>Please select</option>
-                                        <option>Budgeting</option>
-                                        <option>Feed</option>
+                                        <option>Feed / Budgeting</option>
+                                        <option>Building</option>
+                                        <option>Buying</option>
                                     </select>
                                     @error('status')
                                         <small class="text-danger">{{ $message }}</small>
