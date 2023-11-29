@@ -187,6 +187,10 @@ class VisitScheduleController extends Controller
             $visit->user_created    = Auth::user()->id;
             $visit->save();
 
+          
+
+           
+
             $usersToNotify = User::role('manager')->get();
             Notification::send($usersToNotify, new NewVisitScheduleNotification($visit));
 
@@ -203,7 +207,7 @@ class VisitScheduleController extends Controller
             ];
             $email = new VisitMail(collect($dataVisit));
             $sendmail = 'test@pt-prasasti.com';
-            Mail::to($sendmail)->send($email);
+           
 
             if ($request->has('engineer')) {
                 foreach ($request->engineer as $enginer) {
@@ -296,11 +300,11 @@ class VisitScheduleController extends Controller
     public function search_enginer(Request $request): JsonResponse
     {
         if ($request->q) {
-            $data = Enginer::where('name', 'LIKE', "%{$request->q}%")->limit(10)->get(['email']);
+            $data = User::where('name', 'LIKE', "%{$request->q}%")->limit(10)->get(['email']);
 
             return response()->json($data);
         } else {
-            $data = Enginer::limit(10)->get(['email']);
+            $data = User::limit(10)->get(['email']);
 
             return response()->json($data);
         }
