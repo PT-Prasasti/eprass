@@ -380,6 +380,10 @@
                     rowHeights: 23,
                     colWidths: columnWidth,
                     licenseKey: 'non-commercial-and-evaluation',
+                    hiddenColumns: {
+                        // specify columns hidden by default
+                        columns: [5],
+                    },
                     rowClassName: 'custom-row-style',
                     afterChange: (changes) => {
                         changes?.forEach(([row, prop, oldValue, newValue]) => {
