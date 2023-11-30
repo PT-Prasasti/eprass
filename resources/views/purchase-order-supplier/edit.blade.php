@@ -57,12 +57,18 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#document">Document</a>
                             </li>
+                            @if($query->status != 'Rejected By Manager')
                             <li class="nav-item">
                                 <a class="nav-link" href="#bank">Bank Information</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#pickup">Pick Up Information</a>
                             </li>
+                            @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="#alasan">Alasan Ditolak</a>
+                            </li>
+                            @endif
                         </ul>
                         <div class="block-content tab-content">
                             <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
@@ -345,6 +351,25 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane" id="alasan" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Alasan ditolak
+                                                    </label>
+                                                    <textarea class="form-control" id="" cols="30" rows="10" readonly>
+                                                    {{ $query->reason }}
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="tab-pane" id="pickup" role="tabpanel">
                                 <div class="block block-rounded">

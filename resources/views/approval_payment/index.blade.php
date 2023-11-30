@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                    List PO Supplier
+                    List Payment Request
                     </b>
                 </h4>
             </div>
@@ -131,7 +131,7 @@
                             `;
 
                             html += `
-                            <a type="button" href="{{ route('approval-po') }}/${row.id}/edit" class="btn btn-sm btn-info js-tooltip-enabled" data-toggle="tooltip" title="View Report">
+                            <a type="button" href="{{ route('approval-payment') }}/${row.id}/edit" class="btn btn-sm btn-info js-tooltip-enabled" data-toggle="tooltip" title="View Report">
                                     <i class="fa fa-file-text-o"></i>
                                 </a> |
                             `;

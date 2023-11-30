@@ -187,15 +187,10 @@
                     <span class="sidebar-mini-hidden">Order Supplier</span>
                 </li>
                 <li>
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                        <i class="fa fa-book"></i>
-                        <span class="sidebar-mini-hide">PO Supplier</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="{{ route('approval-po') }}">Approval PO Supplier</a>
-                        </li>
-                    </ul>
+                    <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App PO Supplier</span></a>
+                </li>
+                <li>
+                    <a class="active" href="{{ route('approval-payment') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App Payment Request</span></a>
                 </li>
                 @else
                 <li class="nav-main-heading">

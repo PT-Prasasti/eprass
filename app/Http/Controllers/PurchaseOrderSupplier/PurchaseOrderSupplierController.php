@@ -241,6 +241,13 @@ class PurchaseOrderSupplierController extends Controller
                 $query->invoice_url = $filePath;
             }
 
+            $filePickup = null;
+            if ($request->hasFile('dokumen_pickup')) {
+                $fileDirectory = 'dokumen_pickup';
+                $file = $request->file('dokumen_pickup');
+                $filePickup = $this->fileController->store($fileDirectory, $file);
+            }
+
             $query->term = $request->term;
             $query->payment_term = $request->payment_term;
             $query->delivery = $request->delivery;
@@ -252,6 +259,13 @@ class PurchaseOrderSupplierController extends Controller
             $query->bank_swift = $request->bank_swift;
             $query->bank_account = $request->bank_account;
             $query->bank_number = $request->bank_number;
+
+            $query->phone_number = $request->phone_number;
+            $query->mobile_number = $request->mobile_number;
+            $query->name = $request->name;
+            $query->email = $request->email;
+            $query->pickup_adress = $request->pickup_adress;
+            $query->dokumen_pickup = $filePickup;
 
             $query->total_shipping_note = $request->total_shipping_note;
             $query->total_shipping_value = str_replace(',', '.', str_replace('.', '', $request->total_shipping_value));

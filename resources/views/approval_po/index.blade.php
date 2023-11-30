@@ -120,66 +120,11 @@
                         render: function(data, type, row, meta) {
                             var html = ``;
                             console.log(row.status);
-                            switch (row.status) {
-                                case 'Send PO':
-                                    html += `
-                                    <a href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-success" target="_blank" data-toggle="tooltip" title="Print">
-                                        <i class="fa fa-print"></i>
-                                    </a> |
-                                `;
-
                             html += `
-                                <a href="{{ route('purchase-order-supplier') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
+                                <a href="{{ route('approval-po') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
                                 </a> |
                             `;
-
-                            html += `
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                            `;
-                                    break;
-                                case 'Rejected By Manager':
-                                    html += `
-                                    <a href="javascript:;" class="btn btn-sm btn-dark" data-toggle="tooltip" title="Print">
-                                        <i class="fa fa-print"></i>
-                                    </a> |
-                                `;
-                                html += `
-                                <a href="{{ route('purchase-order-supplier') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
-                                    <i class="fa fa-file-text-o"></i>
-                                </a> |
-                            `;
-
-                            html += `
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                            `;
-                                break;
-
-                                default:
-
-                            html += `
-                                    <a href="javascript:;" class="btn btn-sm btn-dark" data-toggle="tooltip" title="Print">
-                                        <i class="fa fa-print"></i>
-                                    </a> |
-                                `;
-
-                            html += `
-                                <a href="javascript:;" class="btn btn-sm btn-dark" data-toggle="tooltip" title="View">
-                                    <i class="fa fa-file-text-o"></i>
-                                </a> |
-                            `;
-
-                            html += `
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                            `;
-                            }
-                          
 
                             return `
                                 ${html}

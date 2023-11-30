@@ -37,17 +37,18 @@ class ApprovalPoSupplierController extends Controller
 
     public function index(Request $request)
     {
-        $query = PaymentRequest::query()
-            ->with([
-                'purchase_order_supplier.supplier',
-            ])
+        $query = PurchaseOrderSupplier::query()
+        ->with([
+            'sales_order',
+            'supplier',
+        ])
             ->select([
-                'payment_requests.id AS id',
-                'payment_requests.purchase_order_supplier_id AS purchase_order_supplier_id',
-                'payment_requests.transaction_date AS transaction_date',
-                'payment_requests.transaction_due_date AS transaction_due_date',
-                'payment_requests.transaction_code AS transaction_code',
-                'payment_requests.status AS status',
+                'purchase_order_suppliers.id AS id',
+                'purchase_order_suppliers.sales_order_id AS sales_order_id',
+                'purchase_order_suppliers.supplier_id AS supplier_id',
+                'purchase_order_suppliers.transaction_date AS transaction_date',
+                'purchase_order_suppliers.transaction_code AS transaction_code',
+                'purchase_order_suppliers.status AS status',
             ]);
 
         if ($request->ajax()) {
@@ -56,36 +57,28 @@ class ApprovalPoSupplierController extends Controller
                 ->toJson();
         }
 
-        return view('approval.index');
+        return view('approval_po.index');
     }
 
-    public function edit($id): View
+    public function edit($id, Request $request): View
     {
-        $query = PaymentRequest::query()
+        $query = PurchaseOrderSupplier::query()
             ->with([
-                'purchase_order_supplier.supplier',
-                'purchase_order_supplier.purchase_order_supplier_items.selected_sourcing_supplier.sourcing_supplier.inquiry_product',
-                'purchase_order_supplier.sales_order.inquiry',
-            ])
-            ->select([
-                'payment_requests.id AS id',
-                'payment_requests.purchase_order_supplier_id AS purchase_order_supplier_id',
-                'payment_requests.transaction_date AS transaction_date',
-                'payment_requests.transaction_due_date AS transaction_due_date',
-                'payment_requests.transaction_code AS transaction_code',
-                'payment_requests.value AS value',
-                'payment_requests.note AS note',
-                'payment_requests.pick_up_information_name AS pick_up_information_name',
-                'payment_requests.pick_up_information_email AS pick_up_information_email',
-                'payment_requests.pick_up_information_phone_number AS pick_up_information_phone_number',
-                'payment_requests.pick_up_information_mobile_number AS pick_up_information_mobile_number',
-                'payment_requests.pick_up_information_pick_up_address AS pick_up_information_pick_up_address',
-                'payment_requests.status AS status',
+                'sales_order.sourcing.selected_sourcing_suppliers' => function ($query) {
+                    $query->doesntHave('purchase_order_supplier_item');
+                },
+                'sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
+                'supplier',
+                'purchase_order_supplier_items',
             ])
             ->findOrFail($id);
+        $paymentTerms = PaymentTermConstant::texts();
+        $vatTypes = VatTypeConstant::texts();
 
-        return view('approval.edit', [
+        return view('approval_po.edit', [
             'query' => $query,
+            'paymentTerms' => $paymentTerms,
+            'vatTypes' => $vatTypes,
         ]);
     }
 
@@ -94,8 +87,28 @@ class ApprovalPoSupplierController extends Controller
         try {
             DB::beginTransaction();
 
-            $query = PaymentRequest::query()->findOrFail($id);
-            $query->status = 'Approved By Manager';
+            $query = PurchaseOrderSupplier::query()->findOrFail($id);
+            $query->status = 'Send PO';
+
+            $query->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            dd($e);
+            // return redirect()->back()->withInput($request->input())->with('quotation', $quotation)->with('error', Constants::ERROR_MSG);
+        }
+    }
+
+    public function reject($id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $query = PurchaseOrderSupplier::query()->findOrFail($id);
+            $query->status = 'Rejected By Manager';
+            $query->reason = $request->reason_for_refusing;
 
             $query->save();
 

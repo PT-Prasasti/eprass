@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalPaymentRequestController;
 use App\Http\Controllers\ApprovalPoSupplierController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -337,14 +338,15 @@ Route::prefix('list-payment')->name('list-payment')->group(function () {
 
 Route::prefix('approval-po')->name('approval-po')->group(function () {
     Route::get('/', [ApprovalPoSupplierController::class, 'index']);
-    Route::get('/add', [PurchaseOrderCustomerController::class, 'add'])->name('.add');
-    Route::post('/store', [PurchaseOrderCustomerController::class, 'store'])->name('.store');
     Route::get('/{id}/edit', [ApprovalPoSupplierController::class, 'edit'])->name('.edit');
     Route::get('/{id}/approve', [ApprovalPoSupplierController::class, 'approve'])->name('.approve');
-    Route::put('/{id}', [PurchaseOrderCustomerController::class, 'update'])->name('.update');
-    Route::delete('/{id}', [PurchaseOrderCustomerController::class, 'delete'])->name('.delete');
-    Route::get('/search/quotation', [PurchaseOrderCustomerController::class, 'search_quotation'])->name('.search.quotation');
-    Route::post('upload-document', [PurchaseOrderCustomerController::class, 'uploadDocument'])->name('.upload-document');
+    Route::get('/{id}/reject', [ApprovalPoSupplierController::class, 'reject'])->name('.reject');
+});
+
+Route::prefix('approval-payment')->name('approval-payment')->group(function () {
+    Route::get('/', [ApprovalPaymentRequestController::class, 'index']);
+    Route::get('/{id}/edit', [ApprovalPaymentRequestController::class, 'edit'])->name('.edit');
+    Route::get('/{id}/approve', [ApprovalPaymentRequestController::class, 'approve'])->name('.approve');
 });
 
 Route::any('/files/{any}', function ($filePath) {
