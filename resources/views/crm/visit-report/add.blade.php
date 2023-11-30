@@ -12,21 +12,12 @@
                             <div class="form-group row">
                                 <label class="col-12">ID Visit</label>
                                 <div class="col-md-12">
-                                    @if (isset($data))
-                                        <input type="hidden" name="visit" value="{{ $data['uuid'] }}">
-                                        <select class="form-control @error('visit') is-invalid @enderror" name=""
-                                            disabled>
-                                            <option value="0" selected>{{ $data['id'] }}</option>
-                                        </select>
-                                    @else
+                                    
                                         <select class="form-control @error('visit') is-invalid @enderror"
                                             name="visit">
                                             <option value="0" selected disabled>Please select</option>
                                         </select>
-                                    @endif
-                                    @error('visit')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+                                    
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -99,8 +90,8 @@
                                 <label class="col-12">Upload File (png,jpg,jpeg,pdf.xls.doc)</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="" name="" data-toggle="custom-file-input">
-                                        <label class="custom-file-label" >Choose file</label>
+                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="" name="upload-pdf" data-toggle="custom-file-input">
+                                        <label class="custom-file-label" id="upload-pdf-labe">Choose file</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -178,6 +169,7 @@
                             {{-- <button type="submit" class="btn btn-hero btn-success"><i class="fa fa-save mr-2"></i>SAVE REPORT & CREATED INQUIRY</button> --}}
                         </div>
                     </div>
+                    <input type="hidden" name="pdf">
                 </form>
             </div>
         </div>
@@ -191,6 +183,12 @@
                 $('select[name=visit]').select2()
                 $('select[name=visit]').change(function() {
                     getVisitDetail($(this).val())
+                    getPdf($(this).val())
+                })
+                $('input[name=upload-pdf]').change(function() {
+                    $('#loading-file').removeClass('d-none')
+                    $('#loading-file').addClass('d-flex')
+                    uploadPdf($(this).prop('files')[0])
                 })
             })
 
@@ -198,6 +196,7 @@
                 var url = "{{ route('crm.visit-report.id') }}"
                 $.get(url, function(response) {
                     $('input[name=id]').val(response)
+                    $('#id').html(response)
                 })
             }
 
@@ -223,6 +222,92 @@
                     $('input[name=email]').val(response.email)
                 })
             }
+
+            function getPdf(id) {
+                $.ajax({
+                    url: "{{ route('crm.visit-report.get-pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        so: id
+                    },
+                    success: function(response) {
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function uploadPdf(file) {
+                const formData = new FormData()
+                formData.append('_token', '{{ csrf_token() }}')
+                formData.append('file', file)
+                formData.append('so', $('select[name=visit]').val())
+                $.ajax({
+                    url: '{{ route('crm.visit-report.upload-pdf') }}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#loading-file').removeClass('d-flex')
+                        $('#loading-file').addClass('d-none')
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+                $('#upload-pdf-label').html('Choose file')
+            }
+
+            function listItemPdf(status, data) {
+                if (status == 200) {
+                    var element = ``
+                    var number = 1
+                    var visit = $('select[name=visit]').val()
+                    $.each(data, function(index, value) {
+                        element += `<li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="/file/show/temp/${visit}/${value.filename}" target="_blank">` +
+                            number + `. ` + value.aliases + `</a>
+                                            <button type="button" onclick="deletePdf('` + value.filename + `')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                                </svg>    
+                                            </button>
+                                        </div>
+                                    </li>`
+                        number++
+                    })
+                    $('.list-group').html(``)
+                    $('.list-group').html(element)
+                    $('input[name=pdf]').val(JSON.stringify(data))
+                }
+            }
+
+            function deletePdf(file) {
+                $.ajax({
+                    url: "{{ route('crm.visit-report.delete-pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        file: file,
+                        so: $('select[name=visit]').val()
+                    },
+                    success: function(response) {
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+
             $("#engineer").select2({
                 ajax: {
                     url: `{{ route('crm.visit-schedule.search_enginer') }}`,

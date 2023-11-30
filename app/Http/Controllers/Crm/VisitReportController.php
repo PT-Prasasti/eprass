@@ -19,8 +19,12 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewVisitReportNotification;
 use App\Notifications\NewVisitScheduleNotification;
 use App\Http\Controllers\Crm\VisitScheduleController;
+use App\Http\Controllers\Helper\FilesController;
+use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Crm\VisitReport\AddVisitReportRequest;
 use App\Http\Requests\Crm\VisitReport\EditVisitReportRequest;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 
 use App\Mail\VisitMail;
 use App\Mail\ReportMail;
@@ -29,14 +33,51 @@ use Auth;
 
 class VisitReportController extends Controller
 {
+    protected $fileController, $redisController;
     public function __construct()
     {
         $this->middleware('auth');
+        $this->fileController = new FilesController();
+        $this->redisController = new RedisController();
     }
 
     public function index() : View
     {
+        $keys = Redis::keys('*');
+        foreach ($keys as $item) {
+            $key = 'visit_report_pdf_';
+            if (str_contains($item, $key)) {
+                if (str_contains($item, auth()->user()->uuid)) {
+                    $item = explode($key, $item);
+                    $redis = $key . $item[1];
+                    Redis::del($redis);
+                }
+            }
+        }
         return view('crm.visit-report.index');
+    }
+
+    public function generate_id(): JsonResponse
+    {
+        $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $code = 'IQ';
+        $month = (int) date('m');
+        $year = date('y');
+
+        $last_data = VisitReport::orderBy('created_at', 'DESC')->withTrashed()->first();
+
+        if ($last_data) {
+            $last_id = $last_data->id;
+            $id = explode("/", $last_id);
+            $number = (int) $id[0];
+            $number++;
+        } else {
+            $number = 1;
+        }
+
+        $generate_id = sprintf("%04s", $number) . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
+
+        return response()->json($generate_id);
     }
 
     public function data(Request $request) : JsonResponse
@@ -138,6 +179,94 @@ class VisitReportController extends Controller
         return response()->json($result);
     }
 
+    public function get_pdf(Request $request): JsonResponse
+    {
+        $so = $request->so;
+        $so = str_replace('/', '_', $so);
+        $key = 'visit_report_pdf_' . $so . '_' . auth()->user()->uuid;
+        $data = json_decode(Redis::get($key), true);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function upload_pdf(Request $request): JsonResponse
+    {
+        try {
+            if ($request->hasFile('file')) {
+                $so = $request->so;
+                $so = str_replace('/', '_', $so);
+                $file = $request->file('file');
+                $path = $so;
+                $upload = $this->fileController->store_temp($file, $path);
+                if ($upload->original['status'] == 200) {
+                    $key = 'visit_report_pdf_' . $so . '_' . auth()->user()->uuid;
+                    $data = $upload->original['data'];
+                    $redis = $this->redisController->store($key, $data);
+
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
+    }
+
+    public function delete_pdf(Request $request): JsonResponse
+    {
+        try {
+            $so = $request->so;
+            $so = str_replace('/', '_', $so);
+            $file = $request->file;
+            if ($request->has('edit')) {
+                $path = 'public/inquiry/' . $so . '/' . $file;
+            } else {
+                $path = 'temp/' . $so . '/' . $file;
+            }
+            $exist = Storage::exists($path);
+            if ($exist) {
+                $delete = Storage::delete($path);
+
+                if ($delete) {
+                    $key = 'visit_report_pdf_' . $so . '_' . auth()->user()->uuid;
+                    $redis = $this->redisController->delete_item($key, 'filename', $file);
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        if (sizeof($data) == 0) {
+                            Redis::del($key);
+                        }
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
+    }
+
     public function store(AddVisitReportRequest $request) : RedirectResponse
     {
         try {
@@ -151,9 +280,30 @@ class VisitReportController extends Controller
             $visitReport->status = $request->status;
             $visitReport->note = $request->note;
             $visitReport->planing = $request->planing;
-            $visitReport->next_date_visit = $request->next_date_visit;
-            $visitReport->next_time_visit = $request->next_time_visit;
+            // $visitReport->next_date_visit = $request->next_date_visit;
+            // $visitReport->next_time_visit = $request->next_time_visit;
+            $visitReport->files = ($request->pdf == 'null') ? '' : $request->pdf;
             $visitReport->save();
+
+            $so = $request->visit;
+
+            if ($request->pdf != 'null') {
+                $files = json_decode($request->pdf, true);
+                foreach ($files as $item) {
+                    $sourcePath = storage_path('app/temp/' . $so . '/' . $item['filename']);
+                    $destinationPath = storage_path('app/public/visit-report/' . $so . '/' . $item['filename']);
+
+                    if (!Storage::exists('public/visit-report/' . $so)) {
+                        Storage::makeDirectory('public/visit-report/' . $so);
+                    }
+
+                    if (file_exists($sourcePath)) {
+                        rename($sourcePath, $destinationPath);
+                    }
+                }
+
+                Storage::deleteDirectory('temp/' . $so);
+            }
     
             $usersToNotify = User::role('manager')->get(); 
             Notification::send($usersToNotify, new NewVisitReportNotification($visitReport));
@@ -250,9 +400,30 @@ class VisitReportController extends Controller
             $visitReport->status = $request->status;
             $visitReport->note = $request->note;
             $visitReport->planing = $request->planing;
-            $visitReport->next_date_visit = $request->next_date_visit;
-            $visitReport->next_time_visit = $request->next_time_visit;
+            // $visitReport->next_date_visit = $request->next_date_visit;
+            // $visitReport->next_time_visit = $request->next_time_visit;
+            $visitReport->files = $request->pdf;
             $visitReport->save();
+
+            $so = str_replace('/', '_', $request->visit);
+
+            if (!empty($request->pdf)) {
+                $files = json_decode($request->pdf, true);
+                foreach ($files as $item) {
+                    $sourcePath = storage_path('app/temp/' . $so . '/' . $item['filename']);
+                    $destinationPath = storage_path('app/public/visit-report/' . $so . '/' . $item['filename']);
+
+                    if (!Storage::exists('public/visit-report/' . $so)) {
+                        Storage::makeDirectory('public/visit-report/' . $so);
+                    }
+
+                    if (file_exists($sourcePath)) {
+                        rename($sourcePath, $destinationPath);
+                    }
+                }
+
+                Storage::deleteDirectory('temp/' . $so);
+            }
             
             $usersToNotify = User::role('manager')->get(); 
             Notification::send($usersToNotify, new NewVisitReportNotification($visitReport));

@@ -138,6 +138,10 @@ Route::prefix('/crm')->name('crm')->group(function () {
         Route::get('/edit/{id}', [VisitReportController::class, 'edit'])->name('.edit');
         Route::get('/delete/{id}', [VisitReportController::class, 'delete'])->name('.delete');
 
+        Route::post('/get_pdf', [VisitReportController::class, 'get_pdf'])->name('.get-pdf');
+        Route::post('/upload_pdf', [VisitReportController::class, 'upload_pdf'])->name('.upload-pdf');
+        Route::post('/delete_pdf', [VisitReportController::class, 'delete_pdf'])->name('.delete-pdf');
+
         Route::post('/data', [VisitReportController::class, 'data'])->name('.data');
         Route::post('/store', [VisitReportController::class, 'store'])->name('.store');
         Route::post('/edit', [VisitReportController::class, 'store_edit'])->name('.store-edit');

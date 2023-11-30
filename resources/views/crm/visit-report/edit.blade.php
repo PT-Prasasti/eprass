@@ -153,6 +153,7 @@
                 $('select[name=visit]').change(function() {
                     getVisitDetail($(this).val())
                 })
+                
             })
 
             function listVisit()
