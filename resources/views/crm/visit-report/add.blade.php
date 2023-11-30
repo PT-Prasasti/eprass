@@ -87,7 +87,7 @@
                                         required>
                                         <option value="0" selected disabled>Please select</option>
                                         <option>Feed / Budgeting</option>
-                                        <option>Building</option>
+                                        <option>Bidding</option>
                                         <option>Buying</option>
                                     </select>
                                     @error('status')

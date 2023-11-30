@@ -53,7 +53,7 @@
                                     <select class="form-control @error('status') is-invalid @enderror" name="status">
                                         <option value="0" selected disabled>Please select</option>
                                         <option {{ $visit->status == 'Feed / Budgeting' ? 'selected' : '' }}>Feed / Budgeting</option>
-                                        <option {{ $visit->status == 'Building' ? 'selected' : '' }}>Building</option>
+                                        <option {{ $visit->status == 'Bidding' ? 'selected' : '' }}>Bidding</option>
                                         <option {{ $visit->status == 'Buying' ? 'selected' : '' }}>Buying</option>
                                     </select>
                                     @error('status')
