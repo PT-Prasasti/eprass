@@ -65,8 +65,8 @@
                                 <label class="col-12">Upload File (png,jpg,jpeg,pdf.xls.doc)</label>
                                 <div class="col-12">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="" name="" data-toggle="custom-file-input">
-                                        <label class="custom-file-label" >Choose file</label>
+                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="" name="upload-pdf" data-toggle="custom-file-input">
+                                        <label class="custom-file-label"  id="upload-pdf-label" >Choose file</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -148,15 +148,16 @@
         <script>
             $(document).ready(function() {
                 listVisit()
+                getPdf("{{ $visit->visit->uuid }}")
+                getVisitDetail("{{ $visit->visit->uuid }}")
                 $('select[name=visit]').select2()
                 $('select[name=visit]').val("{{ $visit->visit->uuid }}")
                 $('select[name=visit]').change(function() {
-                    getVisitDetail("{{ $visit->visit->uuid }}")
-                    getPdf($(this).val())
+                    getVisitDetail($(this).val())
+                    $('input[type=file]').attr('disabled', false)
                 })
                 $('input[name=upload-pdf]').change(function() {
-                    $('#loading-file').removeClass('d-none')
-                    $('#loading-file').addClass('d-flex')
+                 
                     uploadPdf($(this).prop('files')[0])
                 })
                 
