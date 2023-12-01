@@ -87,7 +87,6 @@
                     </a>
                 </li>
                 @endif
-
                 @if (auth()->user()->hasRole('admin_sales') ||
                 auth()->user()->hasRole('manager') ||
                 auth()->user()->hasRole('purchasing') ||
