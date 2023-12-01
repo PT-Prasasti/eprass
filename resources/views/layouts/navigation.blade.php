@@ -42,7 +42,8 @@
                 </li>
 
                 @if (auth()->user()->hasRole('sales') ||
-                auth()->user()->hasRole('superadmin'))
+                auth()->user()->hasRole('superadmin') ||
+                auth()->user()->hasRole('hod'))
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Pipeline</span>
                 </li>
@@ -90,14 +91,16 @@
                 @if (auth()->user()->hasRole('admin_sales') ||
                 auth()->user()->hasRole('manager') ||
                 auth()->user()->hasRole('purchasing') ||
-                auth()->user()->hasRole('superadmin'))
+                auth()->user()->hasRole('superadmin') ||
+                auth()->user()->hasRole('hod'))
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Transaction</span>
                 </li>
                 @endif
 
                 @if (auth()->user()->hasRole('admin_sales') ||
-                auth()->user()->hasRole('superadmin'))
+                auth()->user()->hasRole('superadmin') || 
+                auth()->user()->hasRole('hod'))
                 <li>
                     <a href="{{ route('crm.inquiry') }}"><i class="si si-docs"></i><span class="sidebar-mini-hide">List Inquiry</span></a>
                 </li>
@@ -147,7 +150,8 @@
 
                 @if (auth()->user()->hasRole('purchasing') ||
                 auth()->user()->hasRole('manager') ||
-                auth()->user()->hasRole('superadmin'))
+                auth()->user()->hasRole('superadmin') ||
+                auth()->user()->hasRole('hod'))
                 <li>
                     <a href="{{ route('transaction.sales-order') }}"><i class="si si-docs"></i><span class="sidebar-mini-hide">List Sales Order</span></a>
                 </li>
@@ -229,7 +233,7 @@
                 @endif
 
                 @if (auth()->user()->hasRole('sales') ||
-                auth()->user()->hasRole('superadmin'))
+                auth()->user()->hasRole('superadmin')) || 
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Data Master</span>
                 </li>

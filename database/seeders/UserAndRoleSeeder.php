@@ -17,19 +17,19 @@ class UserAndRoleSeeder extends Seeder
     public function run()
     {
         Role::updateOrCreate([
-            'name' => 'finance',
+            'name' => 'hod',
             'guard_name' => 'web',
         ], []);
 
         $finance = User::updateOrCreate(
             [
-                'username' => 'finance',
+                'username' => 'hod',
             ],
             [
-                'name' => 'Finance',
+                'name' => 'Hod',
                 'password' => bcrypt('123123123')
             ]
         );
-        $finance->assignRole('finance');
+        $finance->assignRole('hod');
     }
 }
