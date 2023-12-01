@@ -91,7 +91,11 @@ class InquiryController extends Controller
                     return $date . ' - ' . $due_date;
                 })
                 ->editColumn('status', function ($q) {
-                    return strtoupper($q->status);
+                    $so = null;
+                    if (isset($q->sales_order)) {
+                        $so = $q->sales_order->status;
+                    }
+                    return $so;
                 })
                 ->addColumn('sales', function ($q) {
                     $sales = null;

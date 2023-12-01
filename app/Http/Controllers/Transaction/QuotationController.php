@@ -59,6 +59,9 @@ class QuotationController extends Controller
 
             return DataTables::eloquent($data)
                 ->addIndexColumn()
+                ->editColumn('status', function ($q) {
+                    return strtoupper($q->sales_order->status);
+                })
                 ->toJson();
         }
     }
