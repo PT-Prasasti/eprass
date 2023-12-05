@@ -23,6 +23,7 @@ use App\Http\Requests\Transaction\Quotation\UpdateQuotationRequest;
 use App\Models\PurchaseOrderCustomer;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
+use App\Models\Sales;
 
 class PurchaseOrderCustomerController extends Controller
 {
@@ -79,14 +80,16 @@ class PurchaseOrderCustomerController extends Controller
                 'sales_order.inquiry.sales',
                 'quotation_items.inquiry_product',
                 // 'purchase_order_customer',
-            ])
+            ])->whereHas('sales_order.inquiry.sales', function ($query) {
+                $query->where('id', Sales::where('username', auth()->user()->username)->first()->id);
+            })
             ->doesntHave('purchase_order_customer')
             ->where('quotation_code', 'like', '%' . $request->term . '%')
             ->where('status', 'Done')
             ->orderBy('quotation_code')
             ->get()
             ->take(20);
-
+             
         return response()->json($query);
     }
 

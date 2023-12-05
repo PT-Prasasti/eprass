@@ -87,6 +87,26 @@
                     </a>
                 </li>
                 @endif
+
+                @if (auth()->user()->hasRole('sales') )
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Transaction</span>
+                </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                        <i class="fa fa-dollar"></i>
+                        <span class="sidebar-mini-hide">PO Customer</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('purchase-order-customer.add') }}">Add PO Customer</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
                 @if (auth()->user()->hasRole('admin_sales') ||
                 auth()->user()->hasRole('manager') ||
                 auth()->user()->hasRole('purchasing') ||
@@ -98,7 +118,7 @@
                 @endif
 
                 @if (auth()->user()->hasRole('admin_sales') ||
-                auth()->user()->hasRole('superadmin') || 
+                auth()->user()->hasRole('superadmin') ||
                 auth()->user()->hasRole('hod'))
                 <li>
                     <a href="{{ route('crm.inquiry') }}"><i class="si si-docs"></i><span class="sidebar-mini-hide">List Inquiry</span></a>
@@ -131,20 +151,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                        <i class="fa fa-dollar"></i>
-                        <span class="sidebar-mini-hide">PO Customer</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="{{ route('purchase-order-customer.add') }}">Add PO Customer</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
-                        </li>
-                    </ul>
-                </li>
+
                 @endif
 
                 @if (auth()->user()->hasRole('purchasing') ||
@@ -211,7 +218,7 @@
                         <li>
                             <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
                         </li>
-                       
+
                     </ul>
                 </li>
                 <li>
@@ -232,7 +239,7 @@
                 @endif
 
                 @if (auth()->user()->hasRole('sales') ||
-                auth()->user()->hasRole('superadmin')) || 
+                auth()->user()->hasRole('superadmin'))
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Data Master</span>
                 </li>
