@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                        List PO Supplier
+                        List PO Supplierr
                     </b>
                 </h4>
             </div>
@@ -123,7 +123,7 @@
                             switch (row.status) {
                                 case 'Send PO':
                                     html += `
-                                    <a href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-success" target="_blank" data-toggle="tooltip" title="Print">
+                                    <a id="print" href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-success" target="_blank" data-toggle="tooltip" title="Print">
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;
@@ -210,6 +210,11 @@
                         $(`#form-delete`).submit();
                     }
                 })
+            });
+
+            $(document).on('click', $('#print'), function() {
+                console.log('a');
+                window.location.reload();
             });
         </script>
     </x-slot>

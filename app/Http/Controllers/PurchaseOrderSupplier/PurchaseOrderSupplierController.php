@@ -353,7 +353,8 @@ class PurchaseOrderSupplierController extends Controller
 
     public function print($id)
     {
-        $query = PurchaseOrderSupplier::query()
+        try { 
+            $query = PurchaseOrderSupplier::query()
             ->with([
                 'sales_order.sourcing.selected_sourcing_suppliers' => function ($query) {
                     $query->doesntHave('purchase_order_supplier_item');
@@ -363,10 +364,21 @@ class PurchaseOrderSupplierController extends Controller
                 'purchase_order_supplier_items.selected_sourcing_supplier.sourcing_supplier.inquiry_product',
             ])
             ->findOrFail($id);
+            $query->status = 'Sent PO';
+            $query->save();
+    
+            DB::commit();
 
-        return view('purchase-order-supplier.print', [
-            'query' => $query,
-        ]);
+            return view('purchase-order-supplier.print', [
+                'query' => $query,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
+
+        
+
+          
     }
 
     // public function get_pdf(Request $request): JsonResponse
