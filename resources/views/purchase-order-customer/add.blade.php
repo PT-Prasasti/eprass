@@ -5,11 +5,11 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <h4><b>Add PO Customer</b></h4>
+                    <h4><b>PO Customer</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
                     <button type="submit" class="btn btn-success mr-5 mb-5 save-customer">
-                        <i class="fa fa-save mr-5"></i>Save Quotation
+                        <i class="fa fa-save mr-5"></i>Save PO Customer
                     </button>
                 </div>
             </div>
@@ -391,7 +391,7 @@
                         url: `{{ url('purchase-order-customer/save-po') }}/` + id,
                         type: 'post',
                         success: function(res) {
-                            window.location.reload();
+                            window.location.href = "/purchase-order-customer";
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             alert('File not uploaded');
