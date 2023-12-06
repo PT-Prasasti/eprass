@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\PurchaseOrderCustomer;
+namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Constants;
 use App\Constants\PaymentTermConstant;
 use App\Constants\VatTypeConstant;
 use Illuminate\View\View;
 use App\Models\SalesOrder;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -25,7 +25,7 @@ use App\Models\Quotation;
 use App\Models\QuotationItem;
 use App\Models\Sales;
 
-class PurchaseOrderCustomerController extends Controller
+class PurchaseOrderCustomerSalesController extends Controller
 {
     protected $fileController, $redisController, $hosting;
 
@@ -64,35 +64,12 @@ class PurchaseOrderCustomerController extends Controller
                 ->toJson();
         }
 
-        return view('purchase-order-customer.index');
+        return view('purchase-order-customer-sales.index');
     }
 
     public function add(): View
     {
-        return view('purchase-order-customer.add');
-    }
-
-    public function generate_id(): JsonResponse
-    {
-        $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        $code = 'VI';
-        $month = (int) date('m');
-        $year = date('y');
-
-        $last_data = PurchaseOrderCustomer::orderBy('created_at', 'DESC')->withTrashed()->first();
-
-        if ($last_data) {
-            $last_id = $last_data->id;
-            $id = explode("/", $last_id);
-            $number = (int) $id[0];
-            $number++;
-        } else {
-            $number = 1;
-        }
-
-        $generate_id = sprintf("%04s", $number) . "/" . "POC" . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
-
-        return response()->json($generate_id);
+        return view('purchase-order-customer-sales.add');
     }
 
     public function search_quotation(Request $request): JsonResponse
@@ -102,19 +79,20 @@ class PurchaseOrderCustomerController extends Controller
                 'sales_order.inquiry.visit.customer',
                 'sales_order.inquiry.sales',
                 'quotation_items.inquiry_product',
-                'purchase_order_customer',
-            ])->whereHas('purchase_order_customer', function ($query) {
-                $query->where('kode_khusus', null);
+                // 'purchase_order_customer',
+            ])->whereHas('sales_order.inquiry.sales', function ($query) {
+                $query->where('id', Sales::where('username', auth()->user()->username)->first()->id);
             })
+            ->doesntHave('purchase_order_customer')
             ->where('quotation_code', 'like', '%' . $request->term . '%')
             ->where('status', 'Done')
             ->orderBy('quotation_code')
             ->get()
             ->take(20);
-
+             
         return response()->json($query);
     }
-
+    
     public function store(AddPurchaseOrderCustomerRequest $request): RedirectResponse
     {
         $quotation = Quotation::query()
@@ -155,59 +133,6 @@ class PurchaseOrderCustomerController extends Controller
             return redirect()->route('purchase-order-customer')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
             return redirect()->back()->withInput($request->input())->with('quotation', $quotation)->with('error', Constants::ERROR_MSG);
-        }
-    }
-
-    public function savePOCustomer($id, Request $request)
-    {
-        $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-        $code = 'VI';
-        $month = (int) date('m');
-        $year = date('y');
-
-        $last_data = PurchaseOrderCustomer::orderBy('created_at', 'DESC')->withTrashed()->first();
-
-        if ($last_data) {
-            $last_id = $last_data->id;
-            $idx = explode("/", $last_id);
-            $number = (int) $idx[0];
-            $number++;
-        } else {
-            $number = 1;
-        }
-
-        $generate_id = sprintf("%04s", $number) . "/" . "POC" . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
-
-        
-        $quotation = Quotation::query()
-            ->with([
-                'sales_order.inquiry.visit.customer',
-                'sales_order.inquiry.sales',
-                'quotation_items.inquiry_product',
-            ])
-            ->find($id)
-            ->first();
-
-        try {
-            DB::beginTransaction();
-
-            $query = PurchaseOrderCustomer::query()->updateOrCreate(
-                [
-                    'quotation_id' => $id,
-                ],
-                [
-                    'transaction_date' => date('Y-m-d'),
-                    'kode_khusus' => $generate_id,
-                ]
-            );
-
-
-            DB::commit();
-            
-            return true;
-        } catch (\Exception $e) {
-            dd($e);
-            return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
         }
     }
 

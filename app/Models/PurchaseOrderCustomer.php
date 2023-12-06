@@ -17,7 +17,7 @@ class PurchaseOrderCustomer extends Model
     protected $guarded = [];
 
     protected $appends = [
-        'transaction_due_date'
+        'transaction_due_date',
     ];
 
     public static function boot()

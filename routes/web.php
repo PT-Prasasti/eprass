@@ -15,6 +15,7 @@ use App\Http\Controllers\Helper\NotificationController;
 use App\Http\Controllers\ListPaymentController;
 use App\Http\Controllers\PaymentRequest\PaymentRequestController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
+use App\Http\Controllers\PurchaseOrderCustomerSalesController;
 use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
 use App\Http\Controllers\Transaction\QuotationController;
 use App\Http\Controllers\Transaction\SalesOrderController;
@@ -297,6 +298,18 @@ Route::prefix('/purchase-order-customer')->name('purchase-order-customer')->grou
     Route::delete('/{id}', [PurchaseOrderCustomerController::class, 'delete'])->name('.delete');
     Route::get('/search/quotation', [PurchaseOrderCustomerController::class, 'search_quotation'])->name('.search.quotation');
     Route::post('upload-document', [PurchaseOrderCustomerController::class, 'uploadDocument'])->name('.upload-document');
+    Route::post('save-po/{id}', [PurchaseOrderCustomerController::class, 'savePOCustomer'])->name('.save-po');
+});
+
+Route::prefix('/purchase-order-customer-sales')->name('purchase-order-customer-sales')->group(function () {
+    Route::get('/', [PurchaseOrderCustomerSalesController::class, 'index']);
+    Route::get('/add', [PurchaseOrderCustomerSalesController::class, 'add'])->name('.add');
+    Route::post('/store', [PurchaseOrderCustomerSalesController::class, 'store'])->name('.store');
+    Route::get('/{id}/edit', [PurchaseOrderCustomerSalesController::class, 'edit'])->name('.edit');
+    Route::put('/{id}', [PurchaseOrderCustomerSalesController::class, 'update'])->name('.update');
+    Route::delete('/{id}', [PurchaseOrderCustomerSalesController::class, 'delete'])->name('.delete');
+    Route::get('/search/quotation', [PurchaseOrderCustomerSalesController::class, 'search_quotation'])->name('.search.quotation');
+    Route::post('upload-document', [PurchaseOrderCustomerSalesController::class, 'uploadDocument'])->name('.upload-document');
 });
 
 Route::prefix('/purchase-order-supplier')->name('purchase-order-supplier')->group(function () {
