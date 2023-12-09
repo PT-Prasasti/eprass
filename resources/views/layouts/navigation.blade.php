@@ -43,7 +43,7 @@
 
                 @if (auth()->user()->hasRole('sales') ||
                 auth()->user()->hasRole('superadmin') ||
-                auth()->user()->hasRole('hod'))
+                auth()->user()->hasRole('hod') ||  auth()->user()->hasRole('manager') )
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Pipeline</span>
                 </li>
@@ -119,7 +119,7 @@
 
                 @if (auth()->user()->hasRole('admin_sales') ||
                 auth()->user()->hasRole('superadmin') ||
-                auth()->user()->hasRole('hod'))
+                auth()->user()->hasRole('hod') ||auth()->user()->hasRole('manager') )
                 <li>
                     <a href="{{ route('crm.inquiry') }}"><i class="si si-docs"></i><span class="sidebar-mini-hide">List Inquiry</span></a>
                 </li>
