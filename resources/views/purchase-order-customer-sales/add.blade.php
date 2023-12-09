@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-md-6 text-right">
                     <button type="submit" class="btn btn-success mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save Quotation
+                        <i class="fa fa-save mr-5"></i>Save
                     </button>
                 </div>
             </div>
@@ -17,25 +17,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
                     @endif
 
                     @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                <span class="d-block">
-                                    {{ $loop->iteration }}. {{ $error }}
-                                </span>
-                            @endforeach
-                        </div>
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                        <span class="d-block">
+                            {{ $loop->iteration }}. {{ $error }}
+                        </span>
+                        @endforeach
+                    </div>
                     @endif
                 </div>
             </div>
@@ -69,16 +69,14 @@
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly sales_order_number>
+                                                        <input type="text" class="form-control" name="" value="" readonly sales_order_number>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Sales Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly sales_name>
+                                                        <input type="text" class="form-control" name="" value="" readonly sales_name>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -87,50 +85,41 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly customer_name>
+                                                        <input type="text" class="form-control" name="" value="" readonly customer_name>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly company_name>
+                                                        <input type="text" class="form-control" name="" value="" readonly company_name>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Phonne & Email</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly phone_number>
+                                                        <input type="text" class="form-control" name="" value="" readonly phone_number>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly email>
+                                                        <input type="text" class="form-control" name="" value="" readonly email>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Telp</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly phone>
+                                                        <input type="text" class="form-control" name="" value="" readonly phone>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name=""
-                                                            value="" readonly subject>
+                                                        <input type="text" class="form-control" name="" value="" readonly subject>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">PO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control"
-                                                            name="purchase_order_number"
-                                                            value="{{ old('purchase_order_number') }}"
-                                                            autocomplete="one-time-code" required>
+                                                        <input type="text" class="form-control" name="purchase_order_number" value="{{ old('purchase_order_number') }}" autocomplete="one-time-code" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -138,10 +127,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="custom-file">
-                                            <input type="file"
-                                                class="custom-file-input js-custom-file-input-enabled"
-                                                id="example-file-input-custom" name="example-file-input-custom"
-                                                data-toggle="custom-file-input">
+                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
                                             <label class="custom-file-label" for="example-file-input-custom">
                                                 Choose file
                                             </label>
@@ -149,10 +135,8 @@
                                         <div class="block block-rounded">
                                             <div class="block-content block-content-full bg-pattern">
                                                 <h5>Document List</h5>
-                                                <ul class="list-group" {{ old('document') ? '' : 'hidden' }}
-                                                    document-show>
-                                                    <input type="hidden" name="document"
-                                                        value="{{ old('document') }}" required>
+                                                <ul class="list-group" {{ old('document') ? '' : 'hidden' }} document-show>
+                                                    <input type="hidden" name="document" value="{{ old('document') }}" required>
 
                                                     <li class="list-group-item">
                                                         <div class="d-flex justify-content-between align-items-center">
@@ -172,8 +156,7 @@
                                         <h5>Product List</h5>
                                     </div>
                                 </div>
-                                <table class="table table-bordered table-center" style="font-size:13px"
-                                    quotation_items>
+                                <table class="table table-bordered table-center" style="font-size:13px" quotation_items>
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
@@ -182,6 +165,7 @@
                                             <th class="text-center">Unit Price</th>
                                             <th class="text-center">Total Price</th>
                                             <th class="text-center">Delevery Time</th>
+                                            <th class="text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -377,9 +361,7 @@
 
                                         <div class="mt-4">
                                             <p class="mb-0">Best Regards</p>
-                                            <img src="" alt="tanda-tangan" class="mt-2 mb-2"
-                                                style="width: 200px; height: 80px;" hidden
-                                                span-quotation-sales-signature>
+                                            <img src="" alt="tanda-tangan" class="mt-2 mb-2" style="width: 200px; height: 80px;" hidden span-quotation-sales-signature>
                                             <p span-quotation-sales-name></p>
                                         </div>
                                     </div>
@@ -389,6 +371,13 @@
                     </div>
                 </div>
             </div>
+        </form>
+    </div>
+
+    <div hidden>
+        <form id="form-delete" action="" method="POST">
+            @csrf
+            @method('delete')
         </form>
     </div>
 
@@ -433,6 +422,7 @@
                         orderable: false,
                         className: 'text-center align-top',
                         render: function(data, type, row, meta) {
+                            console.log(row);
                             return meta.row + 1;
                         }
                     },
@@ -472,6 +462,18 @@
                             `;
                         }
                     },
+                    {
+                        searchable: false,
+                        orderable: false,
+                        className: 'align-top',
+                        render: function(data, type, row, meta) {
+                            return `
+                            <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                            `;
+                        }
+                    },
                 ],
                 fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
@@ -479,6 +481,52 @@
                 fnCreatedRow: function(nRow, aData, iDataIndex) {
                     $(nRow).attr('data-id', aData.id);
                 },
+            });
+
+            $(document).on('click', `[button-delete]`, function() {
+                const row = $(this).closest('tr');
+                console.log(row.data('id'));
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let formData = new FormData();
+                        formData.append('_token', '{{ csrf_token() }}');
+
+                        $.ajax({
+                            url: `{{ url('/purchase-order-customer-sales/product-delete') }}/${row.data('id')}`,
+                            type: 'post',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(res) {
+                                console.log(res);
+
+
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                alert('File not uploaded');
+                            }
+                        });
+                        quotationItemTable.row($(this).parents('tr'))
+                            .remove()
+                            .draw();
+                        // $(`#form-delete`).attr('action', `{{ url('purchase-order-customer/product-delete') }}/${row.data('id')}`);
+                        // $(`#form-delete`).submit((function(e) {
+                        //     console.log(e);
+                        //     e.preventDefault(e);
+                        // }));
+                        // quotationItemTable.row($(this).parents('tr'))
+                        //     .remove()
+                        //     .draw();
+                    }
+                })
             });
 
             const handleSetQuotation = (data) => {
@@ -503,10 +551,10 @@
                 quotationItemTable.clear().draw();
                 quotationItemTable.rows.add(data.quotation_items ?? []).draw(true);
 
-                @if (session('quotation') && is_array(old('item')))
-                    @foreach (old('item') as $itemId => $itemValue)
-                        $(`[name="item[{{ $itemId }}][delivery_time]"]`).val(`{{ $itemValue['delivery_time'] }}`);
-                    @endforeach
+                @if(session('quotation') && is_array(old('item')))
+                @foreach(old('item') as $itemId => $itemValue)
+                $(`[name="item[{{ $itemId }}][delivery_time]"]`).val(`{{ $itemValue['delivery_time'] }}`);
+                @endforeach
                 @endif
 
                 // quotation print
@@ -575,6 +623,11 @@
                                 <td class="text-right text-nowrap">
                                     <p>
                                         ${handleCurrencyFormat(Number(data.total_cost))}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        ${data.inquiry_product.delivery_time}
                                     </p>
                                 </td>
                                 <td>
@@ -673,14 +726,16 @@
                 });
             });
 
-            @if (session('quotation'))
-                $(`[name="quotation"]`).select2("trigger", "select", {
+            @if(session('quotation'))
+            $(`[name="quotation"]`).select2("trigger", "select", {
+                data: {
+                    id: `{{ session('quotation')->id }}`,
+                    text: `{{ session('quotation')->quotation_code }}`,
                     data: {
-                        id: `{{ session('quotation')->id }}`,
-                        text: `{{ session('quotation')->quotation_code }}`,
-                        data: {!! session('quotation')->toJson() !!}
+                        !!session('quotation') - > toJson() !!
                     }
-                });
+                }
+            });
             @endif
         </script>
     </x-slot>

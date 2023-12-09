@@ -20,6 +20,7 @@ use App\Http\Requests\PurchaseOrderCustomer\UpdatePurchaseOrderCustomerRequest;
 use App\Http\Requests\PurchaseOrderCustomer\UploadPurchaseOrderCustomerRequest;
 use App\Http\Requests\Transaction\Quotation\AddQuotationRequest;
 use App\Http\Requests\Transaction\Quotation\UpdateQuotationRequest;
+use App\Models\InquiryProduct;
 use App\Models\PurchaseOrderCustomer;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
@@ -213,5 +214,23 @@ class PurchaseOrderCustomerSalesController extends Controller
         }
 
         return $filePath;
+    }
+
+    public function deleteProduct($id)
+    {
+        try {
+            $query = QuotationItem::find($id);
+            
+            DB::beginTransaction();
+           
+            $query->delete();
+
+            DB::commit();
+
+
+           return response()->json($query);
+        } catch (\Exception $e) {
+            return response()->json($e);
+        }
     }
 }

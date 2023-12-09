@@ -310,6 +310,7 @@ Route::prefix('/purchase-order-customer-sales')->name('purchase-order-customer-s
     Route::delete('/{id}', [PurchaseOrderCustomerSalesController::class, 'delete'])->name('.delete');
     Route::get('/search/quotation', [PurchaseOrderCustomerSalesController::class, 'search_quotation'])->name('.search.quotation');
     Route::post('upload-document', [PurchaseOrderCustomerSalesController::class, 'uploadDocument'])->name('.upload-document');
+    Route::post('/product-delete/{id}', [PurchaseOrderCustomerSalesController::class, 'deleteProduct'])->name('.delete-product');
 });
 
 Route::prefix('/purchase-order-supplier')->name('purchase-order-supplier')->group(function () {
