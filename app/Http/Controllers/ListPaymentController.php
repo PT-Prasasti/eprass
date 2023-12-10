@@ -48,6 +48,7 @@ class ListPaymentController extends Controller
                 'payment_requests.transaction_due_date AS transaction_due_date',
                 'payment_requests.transaction_code AS transaction_code',
                 'payment_requests.status AS status',
+                'payment_requests.kode_payment AS kode_payment',
             ]);
 
         if ($request->ajax()) {
