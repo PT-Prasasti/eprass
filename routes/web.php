@@ -335,6 +335,7 @@ Route::prefix('/payment-request')->name('payment-request')->group(function () {
     Route::delete('/{id}', [PaymentRequestController::class, 'delete'])->name('.delete');
     Route::get('/search/purchase-order-supplier', [PaymentRequestController::class, 'search_purchase_order_supplier'])->name('.search.purchase-order-supplier');
     Route::post('upload-document', [PaymentRequestController::class, 'upload_document'])->name('.upload-document');
+    Route::get('/id', [PaymentRequestController::class, 'generate_id'])->name('.id');
 });
 
 Route::prefix('list-payment')->name('list-payment')->group(function () {

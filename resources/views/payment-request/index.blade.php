@@ -42,6 +42,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
+                            <th class="text-center">Kode Payment Request</th>
                             <th class="text-center">PO Number</th>
                             <th class="text-center">Payment Request</th>
                             <th class="text-center">Supplier Name</th>
@@ -86,6 +87,9 @@
                         searchable: false,
                         width: "8%",
                         className: "text-center"
+                    },
+                    {
+                        data: 'kode_payment',
                     },
                     {
                         data: 'purchase_order_supplier.transaction_code',

@@ -48,6 +48,7 @@ class PaymentRequestController extends Controller
                 'payment_requests.transaction_due_date AS transaction_due_date',
                 'payment_requests.transaction_code AS transaction_code',
                 'payment_requests.status AS status',
+                'payment_requests.kode_payment AS kode_payment',
             ]);
 
         if ($request->ajax()) {
@@ -70,6 +71,53 @@ class PaymentRequestController extends Controller
             'paymentTerms' => $paymentTerms,
             'vatTypes' => $vatTypes,
         ]);
+    }
+
+
+    public static function generate_id_static(): string
+    {
+        $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $code = 'VI';
+        $month = (int) date('m');
+        $year = date('y');
+
+        $last_data = PaymentRequest::orderBy('created_at', 'DESC')->withTrashed()->first();
+
+        if ($last_data) {
+            $last_id = $last_data->id;
+            $id = explode("/", $last_id);
+            $number = (int) $id[0];
+            $number++;
+        } else {
+            $number = 1;
+        }
+
+        $generate_id = sprintf("%04s", $number) . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
+
+        return $generate_id;
+    }
+
+    public function generate_id(): JsonResponse
+    {
+        $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        $code = 'PR';
+        $month = (int) date('m');
+        $year = date('y');
+
+        $last_data = PaymentRequest::orderBy('created_at', 'DESC')->withTrashed()->first();
+
+        if ($last_data) {
+            $last_id = $last_data->kode_payment;
+            $id = explode("/", $last_id);
+            $number = (int) $id[0];
+            $number++;
+        } else {
+            $number = 1;
+        }
+
+        $generate_id = sprintf("%04s", $number) . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
+
+        return response()->json($generate_id);
     }
 
     public function search_purchase_order_supplier(Request $request): JsonResponse
@@ -103,6 +151,8 @@ class PaymentRequestController extends Controller
             $query->transaction_code = $this->handle_generate_transaction_code($query->transaction_date);
             $query->value = str_replace(',', '', str_replace('.', '', $request->nominal));
             $query->note = $request->note;
+            $query->subject = $request->subject;
+            $query->kode_payment = $request->kode_payment;
 
             $query->pick_up_information_name = $request->pick_up_information_name;
             $query->pick_up_information_email = $request->pick_up_information_email;

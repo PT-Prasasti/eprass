@@ -68,6 +68,15 @@
                                             <div class="col-md-12">
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">
+                                                        Kode Payment
+                                                    </label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                    <input type="text" class="form-control @error('id') is-invalid @enderror" name="kode_payment" value="" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">
                                                         PO Supplier
                                                         <span class="text-danger">*</span>
                                                     </label>
@@ -125,6 +134,22 @@
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
                                                         <input type="text" name="note" autocomplete="one-time-code" class="form-control" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">
+                                                        Subject
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                        <select class="form-control" name="subject" required="">
+                                                            <option>Pilih Subject</option>
+                                                            <option value="Pembelian">Pembelian</option>
+                                                            <option value="Rembers">Rembers</option>
+                                                            <option value="Expenses">Expenses</option>
+                                                            <option value="Laporan Keuangan">Laporan Keuangan</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -381,6 +406,9 @@
 
     <x-slot name="js">
         <script>
+             $(document).ready(function() {
+                generateId();
+             });
             const handleCurrencyFormat = (value) => {
                 return value.toLocaleString('id-ID', {
                     style: 'currency',
@@ -409,6 +437,14 @@
                 let numberToString = number.toString().replace(/[^,\d]/g, '').replace(/,/g, '.');
 
                 return Number(numberToString) ? Number(numberToString) : 0;
+            }
+
+            function generateId()
+            {
+                var url = "{{ route('payment-request.id') }}"
+                $.get(url, function(response) {
+                    $('input[name=kode_payment]').val(response)
+                })
             }
 
             const purchaseOrderSupplierItemTable = $('[purchase_order_supplier_items]').DataTable({
