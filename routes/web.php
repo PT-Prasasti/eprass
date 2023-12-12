@@ -11,6 +11,7 @@ use App\Http\Controllers\DataMaster\SalesController;
 use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
+use App\Http\Controllers\EximController;
 use App\Http\Controllers\Helper\NotificationController;
 use App\Http\Controllers\ListPaymentController;
 use App\Http\Controllers\PaymentRequest\PaymentRequestController;
@@ -80,6 +81,17 @@ Route::prefix('/data-master')->name('data-master')->group(function () {
         Route::post('/data', [CustomerController::class, 'data'])->name('.data');
         Route::post('/store', [CustomerController::class, 'store'])->name('.store');
         Route::post('/edit', [CustomerController::class, 'store_edit'])->name('.store-edit');
+    });
+    Route::prefix('/exim')->name('.exim')->group(function () {
+        Route::get('/', [EximController::class, 'index']);
+        Route::get('/add', [EximControllerController::class, 'add'])->name('.add');
+        Route::get('/edit/{id}', [EximController::class, 'edit'])->name('.edit');
+        Route::get('/profile/{id}', [EximController::class, 'profile'])->name('.profile');
+        Route::get('/delete/{id}', [EximController::class, 'delete'])->name('.delete');
+
+        Route::post('/data', [EximController::class, 'data'])->name('.data');
+        Route::post('/store', [EximController::class, 'store'])->name('.store');
+        Route::post('/edit', [EximController::class, 'store_edit'])->name('.store-edit');
     });
 
     // route data master supplier

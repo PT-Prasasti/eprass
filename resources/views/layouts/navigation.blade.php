@@ -270,6 +270,25 @@
                 </li>
                 @endif
 
+                @if (auth()->user()->hasRole('exim'))
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Data Master</span>
+                </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-truck"></i><span class="sidebar-mini-hide">Data Forwarder</span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('data-master.customer.add') }}">Add Forwarder</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('data-master.customer') }}">List Forwarder</a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+                
+
+
                 @if (auth()->user()->hasRole('superadmin'))
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-user-secret"></i><span class="sidebar-mini-hide">Supplier</span></a>
