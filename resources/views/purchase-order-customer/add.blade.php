@@ -135,12 +135,22 @@
                                         <div class="block block-rounded">
                                             <div class="block-content block-content-full bg-pattern">
                                                 <h5>Document List</h5>
-                                                <ul class="list-group" {{ old('document') ? '' : 'hidden' }} document-show>
+                                                <!-- <ul class="list-group" {{ old('document') ? '' : 'hidden' }} document-show>
                                                     <input type="hidden" name="document" value="{{ old('document') }}" required>
 
                                                     <li class="list-group-item">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <a href="" target="_blank">
+                                                            <a href="{{asset('js/app.js')}}" target="_blank">
+                                                                Show Document
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                </ul> -->
+                                                <ul class="list-group">
+
+                                                    <li class="list-group-item">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <a  class="show_files" target="_blank">
                                                                 Show Document
                                                             </a>
                                                         </div>
@@ -497,7 +507,12 @@
                 const phoneElement = $(`[phone]`);
                 const subjectElement = $(`[subject]`);
                 const poNumberElement = $(`[po-number]`);
+                const showFile = $('.show_files');
 
+                console.log(data);
+
+
+                showFile.attr('href',"{{asset("storage")}}/"+data.purchase_order_customer.document_url);
                 salesOrderNumberElement.val(data.sales_order.id);
                 salesNameElement.val(data.sales_order?.inquiry?.sales?.name ?? '');
                 customerNameElement.val(data.sales_order?.inquiry?.visit.customer?.name ?? '');

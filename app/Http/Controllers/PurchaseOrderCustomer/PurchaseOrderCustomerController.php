@@ -278,6 +278,20 @@ class PurchaseOrderCustomerController extends Controller
         }
     }
 
+    public function get_pdf(Request $request): JsonResponse
+    {
+        $so = $request->so;
+        $so = str_replace('/', '_', $so);
+        $key = 'inquiry_pdf_' . $so . '_' . auth()->user()->uuid;
+        $data = json_decode(Redis::get($key), true);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
     public function uploadDocument(UploadPurchaseOrderCustomerRequest $request)
     {
         $filePath = null;
@@ -289,4 +303,6 @@ class PurchaseOrderCustomerController extends Controller
 
         return $filePath;
     }
+
+    
 }
