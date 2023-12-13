@@ -42,32 +42,26 @@
 
 
     </table>
-    <table>
+
+    <br>
+    <table style="width: 100%; border: 1px solid;">
         <thead>
             <tr>
-                <th>ITEM NAME</th>
-                <th>MATERIAL DESCRIPTION</th>
-                <th>SIZE</th>
-                <th>QTY</th>
-                <th>REMARK</th>
+                <th style="width: 20%; border: 1px solid;">ITEM NAME</th>
+                <th style="width: 20%; border: 1px solid;">MATERIAL DESCRIPTION</th>
+                <th style="width: 20%; border: 1px solid;">SIZE</th>
+                <th style="width: 20%; border: 1px solid;">QTY</th>
+                <th style="width: 20%; border: 1px solid;">REMARK</th>
             </tr>
         </thead>
         <tbody>
             @foreach($data['products'] as $p)
             <tr>
-                <td>{{ $p->item_name }}</td>
-            </tr>
-            <tr>
-                <td>{{ $p->description }}</td>
-            </tr>
-            <tr>
-                <td>{{ $p->size }}</td>
-            </tr>
-            <tr>
-                <td>{{ $p->qty }}</td>
-            </tr>
-            <tr>
-                <td>{{ $p->remark }}</td>
+                <td style="border: 1px solid;">{{ $p->item_name }}</td>
+                <td style="border: 1px solid;">{{ $p->description }}</td>
+                <td style="border: 1px solid;">{{ $p->size }}</td>
+                <td style="border: 1px solid;">{{ $p->qty }}</td>
+                <td style="border: 1px solid;">{{ $p->remark }}</td>
             </tr>
             @endforeach
         </tbody>
