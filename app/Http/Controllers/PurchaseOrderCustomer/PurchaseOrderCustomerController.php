@@ -51,6 +51,7 @@ class PurchaseOrderCustomerController extends Controller
             ])
             ->select([
                 'purchase_order_customers.id AS id',
+                'purchase_order_customers.kode_khusus AS kode_khusus',
                 'purchase_order_customers.quotation_id AS quotation_id',
                 'purchase_order_customers.transaction_date AS transaction_date',
                 'purchase_order_customers.purchase_order_number AS purchase_order_number',
@@ -90,7 +91,7 @@ class PurchaseOrderCustomerController extends Controller
             $number = 1;
         }
 
-        $generate_id = sprintf("%04s", $number) . "/" . "POC" . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
+        $generate_id = sprintf("%04s", $number) . "/" . "POC" . "/"  . $romans[$month - 1] . "/" . $year;
 
         return response()->json($generate_id);
     }

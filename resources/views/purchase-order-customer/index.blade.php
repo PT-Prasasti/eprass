@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                        List PO Customer
+                        List PO Customerd
                     </b>
                 </h4>
             </div>
@@ -42,12 +42,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
-                            <th class="text-center">Quotation Number</th>
-                            @if (auth()->user()->hasRole('purchasing'))
-                                <th class="text-center">SO Number</th>
-                            @else
-                                <th class="text-center">PO Number</th>
-                            @endif
+                            <th class="text-center">Kode Khusus</th>
                             <th class="text-center">Customer - Company Name</th>
                             <th class="text-center">Sales Name</th>
                             <th class="text-center">Date</th>
@@ -122,16 +117,16 @@
                         className: "text-center"
                     },
                     {
-                        data: 'quotation.quotation_code',
+                        data: 'kode_khusus',
                     },
                     @if (auth()->user()->hasRole('purchasing'))
                         {
                             data: 'quotation.sales_order.id',
                         },
                     @else
-                        {
-                            data: 'purchase_order_number',
-                        },
+                        // {
+                        //     data: 'purchase_order_number',
+                        // },
                     @endif {
                         data: 'quotation.sales_order.inquiry.visit.customer.name',
                         render: function(data, type, row, meta) {
