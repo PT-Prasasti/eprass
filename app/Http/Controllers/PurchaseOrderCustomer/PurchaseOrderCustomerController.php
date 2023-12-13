@@ -177,7 +177,7 @@ class PurchaseOrderCustomerController extends Controller
             $number = 1;
         }
 
-        $generate_id = sprintf("%04s", $number) . "/" . "POC" . "/" . $code . "/" . $romans[$month - 1] . "/" . $year;
+        $generate_id = sprintf("%04s", $number) . "/" . "POC" . "/" . $romans[$month - 1] . "/" . $year;
 
         
         $quotation = Quotation::query()
