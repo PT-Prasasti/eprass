@@ -26,7 +26,10 @@ use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Crm\Inquiry\AddInquiryRequest;
 use App\Http\Requests\Crm\Inquiry\EditInquiryRequest;
+use App\Mail\InquiryMail;
 use App\Models\InquiryProduct;
+
+use Mail;
 
 class InquiryController extends Controller
 {
@@ -664,6 +667,22 @@ class InquiryController extends Controller
             $inquiry->files = ($request->pdf == 'null') ? '' : $request->pdf;
             $inquiry->save();
 
+            $usersToNotify = User::role('manager')->get();
+            Notification::send($usersToNotify, new NewInquiryNotification($inquiry));
+
+            $dataInquiry = [
+                'id'                => $inquiry->visit_schedule_id,
+                'due_date'                => $inquiry->due_date,
+                'subject'                => $inquiry->subject,
+                'grade'                => $inquiry->grade,
+                'description'                => $inquiry->description,
+            ];
+            $email = new InquiryMail(collect($dataInquiry));
+            $sendmail = 'sales@pt-prasasti.com';
+            $sendmail1 = 'dhita@pt-prasasti.com';
+            Mail::to($sendmail)->send($email);
+            Mail::to($sendmail1)->send($email);
+
             $so = $request->visit;
 
             if ($request->pdf != 'null') {
@@ -715,6 +734,7 @@ class InquiryController extends Controller
 
             return redirect()->route('crm.inquiry')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }

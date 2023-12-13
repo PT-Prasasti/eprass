@@ -307,7 +307,6 @@ class VisitReportController extends Controller
     
             $usersToNotify = User::role('manager')->get(); 
             Notification::send($usersToNotify, new NewVisitReportNotification($visitReport));
-            $sendmail = 'test@pt-prasasti.com';
 
             $dataVisitReport = [
                 'id' => $visitReport->visit_schedule_id,
@@ -321,8 +320,12 @@ class VisitReportController extends Controller
                 'plan'      => $visitReport->planing,
                 'sales'     => $visitReport->sales->name
             ];
+           
             $email_report = new ReportMail(collect($dataVisitReport));
+            $sendmail = 'sales@pt-prasasti.com';
+            $sendmail1 = 'dhita@pt-prasasti.com';
             Mail::to($sendmail)->send($email_report);
+            Mail::to($sendmail1)->send($email_report);
     
             if(($request->next_date_visit != null) && ($request->next_time_visit != null)) {
                 
