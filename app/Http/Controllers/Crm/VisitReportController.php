@@ -156,7 +156,7 @@ class VisitReportController extends Controller
 
         foreach ($visit as $item) {
             $result[] = array(
-                'id' => $item->id,
+                'id' => $item->id . ' / ' . $item->customer->company . ' - ' . $item->customer->name,
                 'uuid' => $item->uuid,
             );
         }
