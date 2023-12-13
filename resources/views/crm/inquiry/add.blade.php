@@ -240,7 +240,7 @@
                     var element = ``
                     element += `<option selected disabled>Please select</option>`
                     $.each(response, function(index, value) {
-                        element += `<option value="` + value.uuid + `">` + value.sales_id + `</option>`
+                        element += `<option value="` + value.uuid + `">` + value.id + `</option>`
                     })
                     $('select[name=visit]').append(element)
                 })
