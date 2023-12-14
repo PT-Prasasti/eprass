@@ -84,7 +84,7 @@ Route::prefix('/data-master')->name('data-master')->group(function () {
     });
     Route::prefix('/exim')->name('.exim')->group(function () {
         Route::get('/', [EximController::class, 'index']);
-        Route::get('/add', [EximControllerController::class, 'add'])->name('.add');
+        Route::get('/add', [EximController::class, 'add'])->name('.add');
         Route::get('/edit/{id}', [EximController::class, 'edit'])->name('.edit');
         Route::get('/profile/{id}', [EximController::class, 'profile'])->name('.profile');
         Route::get('/delete/{id}', [EximController::class, 'delete'])->name('.delete');
@@ -476,14 +476,6 @@ Route::prefix('/pre-order')->name('pre-order')->group(function () {
     Route::post('/store', [PreOrderSupplierController::class, 'store'])->name('.store');
 });
 
-// route exim 
-Route::prefix('/exim')->name('exim')->group(function () {
-    Route::get('/', [EximController::class, 'index']);
-    Route::get('/{id}', [EximController::class, 'add'])->name('.add');
-
-    Route::post('/data', [EximController::class, 'data'])->name('.data');
-    Route::post('/store', [EximController::class, 'store'])->name('.store');
-});
 
 Route::get('/test_mail', function () {
     try {

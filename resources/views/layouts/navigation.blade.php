@@ -278,10 +278,10 @@
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-truck"></i><span class="sidebar-mini-hide">Data Forwarder</span></a>
                     <ul>
                         <li>
-                            <a href="{{ route('data-master.customer.add') }}">Add Forwarder</a>
+                            <a href="{{ route('data-master.exim.add') }}">Add Forwarder</a>
                         </li>
                         <li>
-                            <a href="{{ route('data-master.customer') }}">List Forwarder</a>
+                            <a href="{{ route('data-master.exim') }}">List Forwarder</a>
                         </li>
                     </ul>
                 </li>
