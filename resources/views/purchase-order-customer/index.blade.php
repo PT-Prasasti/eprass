@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                        List PO Customerd
+                        List PO Customer
                     </b>
                 </h4>
             </div>
@@ -119,7 +119,7 @@
                     {
                         data: 'kode_khusus',
                     },
-                    @if (auth()->user()->hasRole('purchasing'))
+                    @if (auth()->user()->hasRole('admin-sales'))
                         {
                             data: 'quotation.sales_order.id',
                         },
@@ -171,7 +171,7 @@
                                 </a>
                             `;
 
-                            @if (!auth()->user()->hasRole('purchasing'))
+                            @if (!auth()->user()->hasRole('admin-sales'))
                                 html = `
                                     | <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                         <i class="fa fa-trash-o"></i>
