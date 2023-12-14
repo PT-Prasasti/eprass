@@ -13,32 +13,31 @@
         <div class="row">
             <div class="col-sm-12">
                 @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
                 @endif
                 @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                            <span class="d-block">
-                                {{ $loop->iteration }}. {{ $error }}
-                            </span>
-                        @endforeach
-                    </div>
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                    <span class="d-block">
+                        {{ $loop->iteration }}. {{ $error }}
+                    </span>
+                    @endforeach
+                </div>
                 @endif
             </div>
         </div>
 
         <div class="block block-rounded">
             <div class="block-content block-content-full table-responsive">
-                <table id="table-purchase-order-customer" class="table table-striped table-vcenter w-100"
-                    style="font-size:14px">
+                <table id="table-purchase-order-customer" class="table table-striped table-vcenter w-100" style="font-size:14px">
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
@@ -64,8 +63,7 @@
         </form>
     </div>
 
-    <div class="modal fade" id="modal-reject" tabindex="-1" role="dialog" aria-labelledby="modal-reject"
-        aria-hidden="true">
+    <div class="modal fade" id="modal-reject" tabindex="-1" role="dialog" aria-labelledby="modal-reject" aria-hidden="true">
         <input type="hidden" name="status" value="reject">
 
         <div class="modal-dialog modal-dialog-reject" role="document">
@@ -119,15 +117,7 @@
                     {
                         data: 'kode_khusus',
                     },
-                    @if (auth()->user()->hasRole('admin-sales'))
-                        {
-                            data: 'quotation.sales_order.id',
-                        },
-                    @else
-                        // {
-                        //     data: 'purchase_order_number',
-                        // },
-                    @endif {
+                    {
                         data: 'quotation.sales_order.inquiry.visit.customer.name',
                         render: function(data, type, row, meta) {
                             return `${row.quotation.sales_order.inquiry.visit.customer.name} - ${row.quotation.sales_order.inquiry.visit.customer.company}`;
@@ -171,8 +161,8 @@
                                 </a>
                             `;
 
-                            @if (!auth()->user()->hasRole('admin-sales'))
-                                html = `
+                            @if(!auth() - > user() - > hasRole('purchasing'))
+                            html = `
                                     | <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                         <i class="fa fa-trash-o"></i>
                                     </button>
