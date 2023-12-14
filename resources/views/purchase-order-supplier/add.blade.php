@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-md-6 text-right">
                     <button type="button" class="btn btn-primary mr-5 mb-5" data-toggle="modal" data-target="#modal-slideup">
-                        <i class="fa fa-plus mr-5"></i>Select SO
+                        <i class="fa fa-plus mr-5"></i>Select PO Customer
                     </button>
                     <button type="submit" class="btn btn-success mr-5 mb-5">
                         <i class="fa fa-save mr-5"></i>Save 
@@ -72,6 +72,13 @@
                                     <div class="col-md-8">
                                         <div class="row">
                                             <div class="col-md-12">
+                                            <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">PO Customer</label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="" readonly sales_order_number>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
@@ -385,10 +392,18 @@
                             <input type="text" class="form-control" value="" selected_sales_order_subject>
                         </div>
                         <div class="form-group row">
+                            <label class="col-12" for="example-select">PO Customer :</label>
+                            <div class="col-sm-12">
+                                <select class="form-control" name="" required="">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-12" for="example-select">SO Number :</label>
                             <div class="col-sm-12">
-                                <select class="form-control" name="selected_sales_order" required="">
-                                </select>
+                                <!-- <select class="form-control" name="selected_sales_order" required="">
+                                </select> -->
+                                <input type="text" class="form-control" value="" readonly>
                             </div>
                         </div>
                         <div class="form-group row">
