@@ -68,17 +68,33 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Date <span class="text-danger"> *<span></label>
-                                <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required>
-                                @error('date')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <label>Date <span class="text-danger"> *<span></label>
+                                    <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required>
+                                    @error('date')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="col-6">
+                                    <label>Time<span class="text-danger"> *<span></label>
+                                    <input type="time" class="form-control @error('time') is-invalid @enderror" name="time" value="{{ old('time') }}">
+                                    @error('time')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label>Time<span class="text-danger"> *<span></label>
-                                <input type="time" class="form-control @error('time') is-invalid @enderror" name="time" value="{{ old('time') }}">
-                                @error('time')
+                                <label>Transportation<span class="text-danger"> *<span></label>
+                                <select class="form-control @error('') is-invalid @enderror" name="" required>
+                                    <option value="0" disabled selected>Please select</option>
+                                    <option>Ford Eco Sport</option>
+                                    <option>Chevrolet Colorado</option>
+                                    <option>Suzuki Granmax</option>
+                                    <option>Yamaha Mx</option>
+                                    <option>Other</option>
+                                </select>
+                                @error('visit_by')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
