@@ -161,7 +161,7 @@
                                 </a>
                             `;
 
-                            @if(!auth() - > user() - > hasRole('purchasing'))
+                            @if(!auth() -> user() -> hasRole('purchasing'))
                             html = `
                                     | <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                         <i class="fa fa-trash-o"></i>
