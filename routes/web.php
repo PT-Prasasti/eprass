@@ -334,6 +334,7 @@ Route::prefix('/purchase-order-supplier')->name('purchase-order-supplier')->grou
     Route::put('/{id}', [PurchaseOrderSupplierController::class, 'update'])->name('.update');
     Route::delete('/{id}', [PurchaseOrderSupplierController::class, 'delete'])->name('.delete');
     Route::get('/search/sales-order', [PurchaseOrderSupplierController::class, 'search_sales_order'])->name('.search.sales-order');
+    Route::get('/search/po-customer', [PurchaseOrderSupplierController::class, 'search_po_customer'])->name('.search.po_customer');
     Route::post('upload-document', [PurchaseOrderSupplierController::class, 'upload_document'])->name('.upload-document');
 });
 

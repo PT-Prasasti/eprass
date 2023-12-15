@@ -8,6 +8,7 @@ use App\Constants\VatTypeConstant;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
+use App\Models\PurchaseOrderCustomer;
 use App\Models\PurchaseOrderSupplier;
 use App\Models\PurchaseOrderSupplierItem;
 use App\Models\SalesOrder;
@@ -100,6 +101,43 @@ class PurchaseOrderSupplierController extends Controller
 
         return response()->json($query);
     }
+   
+    public function search_po_customer(Request $request): JsonResponse
+    {
+        $query = PurchaseOrderCustomer::query()
+            ->with([
+                'quotation.sales_order.inquiry.visit.customer',
+                'quotation.sales_order.inquiry.sales',
+                'quotation.sales_order.sourcing.selected_sourcing_suppliers',
+                'quotation.sales_order.sourcing.selected_sourcing_suppliers.supplier',
+                'quotation.sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier',
+                'quotation.sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
+                'quotation.quotation_items',
+                'quotation.quotation_items.inquiry_product',
+                'quotation.quotation_items.inquiry_product.inquiry',
+                'quotation.quotation_items.inquiry_product.sourcing_items.sourcing_supplier'
+            ])
+            ->select([
+                'purchase_order_customers.id AS id',
+                'purchase_order_customers.kode_khusus AS kode_khusus',
+                'purchase_order_customers.quotation_id AS quotation_id',
+                'purchase_order_customers.transaction_date AS transaction_date',
+                'purchase_order_customers.purchase_order_number AS purchase_order_number',
+                'purchase_order_customers.status AS status',
+                'purchase_order_customers.document_url AS document_url',
+            ])
+            // ->whereHas('sourcing.selected_sourcing_suppliers', function ($query) {
+            //     $query->doesntHave('purchase_order_supplier_item');
+            // })
+            ->where('id', 'like', '%' . $request->term . '%')
+            ->where('kode_khusus', '!=', null)
+            ->orderBy('id')
+            ->get()
+            ->take(20);
+
+        return response()->json($query);
+    }
+    
 
     public function store(Request $request): RedirectResponse
     {

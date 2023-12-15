@@ -12,7 +12,7 @@
                         <i class="fa fa-plus mr-5"></i>Select PO Customer
                     </button>
                     <button type="submit" class="btn btn-success mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save 
+                        <i class="fa fa-save mr-5"></i>Save
                     </button>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                                     <div class="col-md-8">
                                         <div class="row">
                                             <div class="col-md-12">
-                                            <div class="form-group row">
+                                                <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">PO Customer</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
@@ -394,7 +394,7 @@
                         <div class="form-group row">
                             <label class="col-12" for="example-select">PO Customer :</label>
                             <div class="col-sm-12">
-                                <select class="form-control" name="" required="">
+                                <select class="form-control" name="selected_po_customer" required="">
                                 </select>
                             </div>
                         </div>
@@ -482,11 +482,12 @@
                         orderable: false,
                         className: 'align-top text-center',
                         render: function(data, type, row, meta) {
+                            console.log(row);
                             return meta.row + 1;
                         }
                     },
                     {
-                        data: 'sourcing_supplier.company',
+                        data: 'inquiry_product.inquiry.subject',
                         className: 'align-top',
                     },
                     {
@@ -494,34 +495,32 @@
                         className: 'align-top',
                         render: function(data, type, row, meta) {
                             return `
-                                ${row.sourcing_supplier.item_name}
-                                <br/>${row.sourcing_supplier.description}
-                                <br/>${row.sourcing_supplier.inquiry_product.size}
-                                <br/>${row.sourcing_supplier.inquiry_product.remark}
+                                ${row.inquiry_product.item_name}
+                                <br/>${row.inquiry_product.description}
+                                <br/>${row.inquiry_product.size}
+                                <br/>${row.inquiry_product.remark}
                             `;
                         },
                     },
                     {
-                        data: 'sourcing_supplier.qty',
+                        data: 'inquiry_product.sourcing_qty',
                         className: 'align-top text-right',
                     },
                     {
-                        data: 'sourcing_supplier.unitprice',
-                        className: 'align-top text-right',
+                        data: 'cost',
+                        className: 'text-right align-top',
                         render: function(data, type, row, meta) {
-                            return `<span class="text-nowrap">${handleCurrencyFormat(Number(row.sourcing_supplier.unitprice))}</span>`;
+                            return handleCurrencyFormat(Number(row.cost));
                         },
                     },
                     {
-                        searchable: false,
-                        orderable: false,
-                        className: 'align-top text-right',
+                        className: 'text-right align-top',
                         render: function(data, type, row, meta) {
-                            return `<span class="text-nowrap">${handleCurrencyFormat(Number(row.sourcing_supplier.qty*row.sourcing_supplier.unitprice))}</span>`;
+                            return `<span total_cost>${handleCurrencyFormat(Number(row.total_cost))}</span>`;
                         }
                     },
                     {
-                        data: 'sourcing_supplier.dt',
+                        data: 'max_delivery_time_of_purchase_order_customer',
                         className: 'align-top',
                     },
                     {
@@ -547,11 +546,12 @@
             });
 
             const handleSetSalesOrder = (data) => {
+                console.log(data);
                 salesOrderSelectedItemTable.clear().draw();
-                salesOrderSelectedItemTable.rows.add(data.sourcing.selected_sourcing_suppliers ?? []).draw(true);
+                salesOrderSelectedItemTable.rows.add(data.quotation.quotation_items ?? []).draw(true);
 
                 $(`[selected_sales_order_number]`).val(data.id);
-                $(`[selected_sales_order_subject]`).val(data.inquiry.subject);
+                $(`[selected_sales_order_subject]`).val(data.quotation.sales_order.inquiry.subject);
             }
 
             const handleCalculate = () => {
@@ -625,6 +625,39 @@
                 await $(`#upload-document-label`).html('Choose file');
             }
 
+            $(`[name="selected_po_customer"]`).select2({
+                placeholder: "Select from the list",
+                width: '100%',
+                ajax: {
+                    url: `{{ route('purchase-order-supplier.search.po_customer') }}`,
+                    dataType: 'json',
+                    language: "id",
+                    type: 'GET',
+                    delay: 450,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        };
+                    },
+                    processResults: function(res) {
+                        console.log(res);
+                        return {
+                            results: $.map(res, function(object) {
+                                return {
+                                    id: object.kode_khusus,
+                                    text: object.kode_khusus,
+                                    data: object,
+                                    // disabled: object.status != 'Done' || object.purchase_order_customer,
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
+                },
+            });
             $(`[name="selected_sales_order"]`).select2({
                 placeholder: "Select from the list",
                 width: '100%',
@@ -658,8 +691,9 @@
                 },
             });
 
-            $(document).on('select2:selecting', `[name="selected_sales_order"]`, function(e) {
+            $(document).on('select2:selecting', `[name="selected_po_customer"]`, function(e) {
                 const data = e.params.args.data.data;
+                console.log(data);
                 handleSetSalesOrder(data);
             });
 
@@ -684,6 +718,7 @@
                 if (salesOrderSelectedItemTable.rows().data().length > 0) {
                     var iteration = selectedSalesOrderItems.length;
                     salesOrderSelectedItemTable.rows().data().map((data, index) => {
+                        console.log(data);
                         if ($(`[name="sales_order_selected_item[${data.uuid}]"]`).is(":checked")) {
                             if (!selectedSalesOrderItems.includes(data.uuid)) {
                                 selectedSalesOrderItemsElement.append(`
@@ -692,24 +727,24 @@
                                             <p>${iteration+=1}</p>
                                         </td>
                                         <td class="align-top pt-3">
-                                            ${data.sourcing_supplier.company}
+                                            ${data.inquiry_product.sourcing_items[0].sourcing_supplier.company}
                                         </td>
                                         <td class="align-top pt-3 pb-3"  style="min-width: 250px;">
-                                            ${data.sourcing_supplier.item_name}
-                                            <br/>${data.sourcing_supplier.description}
-                                            <br/>${data.sourcing_supplier.inquiry_product.size}
-                                            <br/>${data.sourcing_supplier.inquiry_product.remark}
+                                            ${data.item_name}
+                                            <br/>${data.inquiry_product.description}
+                                            <br/>${data.inquiry_product.size}
+                                            <br/>${data.inquiry_product.remark}
                                         </td>
                                         <td class="align-top pt-3 pr-4 text-right" style="width: 150px;">
-                                            ${handleRupiahFormat(data.sourcing_supplier.qty)}
-                                            <input type="hidden" class="form-control text-right" name="item[${data.uuid}][quantity]" value="${handleRupiahFormat(data.sourcing_supplier.qty)}" autocomplete="one-time-code" required="" number_format>
+                                            ${handleRupiahFormat(data.inquiry_product.sourcing_qty)}
+                                            <input type="hidden" class="form-control text-right" name="item[${data.uuid}][quantity]" value="${handleRupiahFormat(data.inquiry_product.sourcing_qty)}" autocomplete="one-time-code" required="" number_format>
                                         </td>
                                         <td class="align-top">
-                                            <input type="text" class="form-control text-right" name="item[${data.uuid}][cost]" value="${handleRupiahFormat(data.sourcing_supplier.unitprice)}" autocomplete="one-time-code" required="" number_format>
+                                            <input type="text" class="form-control text-right" name="item[${data.uuid}][cost]" value="${handleRupiahFormat(data.cost)}" autocomplete="one-time-code" required="" number_format>
                                         </td>
-                                        <td class="align-top text-right text-nowrap pt-3" price>${handleCurrencyFormat(data.sourcing_supplier.qty*data.sourcing_supplier.unitprice)}</td>
+                                        <td class="align-top text-right text-nowrap pt-3" price>${handleCurrencyFormat(data.total_cost)}</td>
                                         <td class="align-top">
-                                            <input type="text" class="form-control" name="item[${data.uuid}][delivery_time]" value="${data.sourcing_supplier.dt}" autocomplete="one-time-code" required="">
+                                            <input type="text" class="form-control" name="item[${data.uuid}][delivery_time]" value="${data.total_cost}" autocomplete="one-time-code" required="">
                                         </td>
                                     </tr>
                                 `);
