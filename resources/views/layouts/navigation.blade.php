@@ -43,7 +43,7 @@
 
                 @if (auth()->user()->hasRole('sales') ||
                 auth()->user()->hasRole('superadmin') ||
-                auth()->user()->hasRole('hod') ||  auth()->user()->hasRole('manager') )
+                auth()->user()->hasRole('hod') || auth()->user()->hasRole('manager') )
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Pipeline</span>
                 </li>
@@ -151,7 +151,7 @@
                         </li>
                     </ul>
                 </li>
-                  <li>
+                <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                         <i class="fa fa-dollar"></i>
                         <span class="sidebar-mini-hide">PO Customer</span>
@@ -271,6 +271,25 @@
                 @endif
 
                 @if (auth()->user()->hasRole('exim'))
+                <li>
+                    <a class="nav-submenu nav-link" data-toggle="nav-submenu" href="#"><i class="fa fa-dollar"></i><span class="sidebar-mini-hide">PO Supplier</span></a>
+                    <ul>
+                        <li>
+                            <a href="../po_supplier/index.php">List PO Supplier</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="nav-submenu nav-link" data-toggle="nav-submenu" href="#"><i class="fa fa-truck"></i><span class="sidebar-mini-hide">PO Tracking</span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('po-tracking.add')}}">Add PO Tracking</a>
+                        </li>
+                        <li>
+                            <a href="../po_tracking/index.php">List PO Tracking</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Data Master</span>
                 </li>
@@ -286,7 +305,7 @@
                     </ul>
                 </li>
                 @endif
-                
+
 
 
                 @if (auth()->user()->hasRole('superadmin'))

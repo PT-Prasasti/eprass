@@ -15,6 +15,7 @@ use App\Http\Controllers\EximController;
 use App\Http\Controllers\Helper\NotificationController;
 use App\Http\Controllers\ListPaymentController;
 use App\Http\Controllers\PaymentRequest\PaymentRequestController;
+use App\Http\Controllers\PoTrackingController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
 use App\Http\Controllers\PurchaseOrderCustomerSalesController;
 use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
@@ -65,6 +66,10 @@ Route::prefix('/notification')->name('notification')->group(function () {
 // route file 
 Route::prefix('/file')->name('file')->group(function () {
     Route::get('/show/{folder1}/{folder2}/{file}', [FilesController::class, 'show'])->name('.show');
+});
+
+Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
+    Route::get('/add', [PoTrackingController::class, 'add'])->name('.add');
 });
 
 // route data master
