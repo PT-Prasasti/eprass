@@ -112,7 +112,7 @@ class PurchaseOrderSupplierController extends Controller
                 'quotation.sales_order.sourcing.selected_sourcing_suppliers',
                 'quotation.sales_order.sourcing.selected_sourcing_suppliers.supplier',
                 'quotation.sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier',
-                'quotation.sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
+                'quotation.sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product.inquiry',
                 'quotation.quotation_items',
                 'quotation.quotation_items.inquiry_product',
                 'quotation.quotation_items.inquiry_product.inquiry',
@@ -196,7 +196,6 @@ class PurchaseOrderSupplierController extends Controller
 
             foreach ($request->item as $selectedSourcingSupplierId => $item) {
                 $selectedSourcingSupplier = SelectedSourcingSupplier::query()->whereUuid($selectedSourcingSupplierId)->first();
-                dd($selectedSourcingSupplier);
                 if ($selectedSourcingSupplier) {
                     $purchaseOrderSupplierItem = new PurchaseOrderSupplierItem();
                     $purchaseOrderSupplierItem->purchase_order_supplier_id = $query->id;
@@ -209,7 +208,6 @@ class PurchaseOrderSupplierController extends Controller
                 }
             }
 
-            dd($selectedSourcingSupplier);
 
             $query->supplier_id = $selectedSourcingSupplier->supplier->uuid;
             $query->save();
