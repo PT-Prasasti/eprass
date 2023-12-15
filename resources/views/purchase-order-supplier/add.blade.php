@@ -403,7 +403,7 @@
                             <div class="col-sm-12">
                                 <!-- <select class="form-control" name="selected_sales_order" required="">
                                 </select> -->
-                                <input type="text" class="form-control" value="" readonly>
+                                <input type="text" class="form-control" value="" readonly name="selected_sales_order">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -550,6 +550,7 @@
                 salesOrderSelectedItemTable.clear().draw();
                 salesOrderSelectedItemTable.rows.add(data.quotation.quotation_items ?? []).draw(true);
 
+                $(`[name="selected_sales_order"]`).val(data.quotation.sales_order.id);
                 $(`[selected_sales_order_number]`).val(data.id);
                 $(`[selected_sales_order_subject]`).val(data.quotation.sales_order.inquiry.subject);
             }
@@ -658,38 +659,38 @@
                     return markup;
                 },
             });
-            $(`[name="selected_sales_order"]`).select2({
-                placeholder: "Select from the list",
-                width: '100%',
-                ajax: {
-                    url: `{{ route('purchase-order-supplier.search.sales-order') }}`,
-                    dataType: 'json',
-                    language: "id",
-                    type: 'GET',
-                    delay: 450,
-                    data: function(params) {
-                        return {
-                            term: params.term
-                        };
-                    },
-                    processResults: function(res) {
-                        return {
-                            results: $.map(res, function(object) {
-                                return {
-                                    id: object.uuid,
-                                    text: object.id,
-                                    data: object,
-                                    // disabled: object.status != 'Done' || object.purchase_order_customer,
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                },
-                escapeMarkup: function(markup) {
-                    return markup;
-                },
-            });
+            // $(`[name="selected_sales_order"]`).select2({
+            //     placeholder: "Select from the list",
+            //     width: '100%',
+            //     ajax: {
+            //         url: `{{ route('purchase-order-supplier.search.sales-order') }}`,
+            //         dataType: 'json',
+            //         language: "id",
+            //         type: 'GET',
+            //         delay: 450,
+            //         data: function(params) {
+            //             return {
+            //                 term: params.term
+            //             };
+            //         },
+            //         processResults: function(res) {
+            //             return {
+            //                 results: $.map(res, function(object) {
+            //                     return {
+            //                         id: object.uuid,
+            //                         text: object.id,
+            //                         data: object,
+            //                         // disabled: object.status != 'Done' || object.purchase_order_customer,
+            //                     }
+            //                 })
+            //             };
+            //         },
+            //         cache: true
+            //     },
+            //     escapeMarkup: function(markup) {
+            //         return markup;
+            //     },
+            // });
 
             $(document).on('select2:selecting', `[name="selected_po_customer"]`, function(e) {
                 const data = e.params.args.data.data;
@@ -737,20 +738,20 @@
                                         </td>
                                         <td class="align-top pt-3 pr-4 text-right" style="width: 150px;">
                                             ${handleRupiahFormat(data.inquiry_product.sourcing_qty)}
-                                            <input type="hidden" class="form-control text-right" name="item[${data.uuid}][quantity]" value="${handleRupiahFormat(data.inquiry_product.sourcing_qty)}" autocomplete="one-time-code" required="" number_format>
+                                            <input type="hidden" class="form-control text-right" name="item[${data.inquiry_product.uuid}][quantity]" value="${handleRupiahFormat(data.inquiry_product.sourcing_qty)}" autocomplete="one-time-code" required="" number_format>
                                         </td>
                                         <td class="align-top">
-                                            <input type="text" class="form-control text-right" name="item[${data.uuid}][cost]" value="${handleRupiahFormat(data.cost)}" autocomplete="one-time-code" required="" number_format>
+                                            <input type="text" class="form-control text-right" name="item[${data.inquiry_product.uuid}][cost]" value="${handleRupiahFormat(data.cost)}" autocomplete="one-time-code" required="" number_format>
                                         </td>
                                         <td class="align-top text-right text-nowrap pt-3" price>${handleCurrencyFormat(data.total_cost)}</td>
                                         <td class="align-top">
-                                            <input type="text" class="form-control" name="item[${data.uuid}][delivery_time]" value="${data.total_cost}" autocomplete="one-time-code" required="">
+                                            <input type="text" class="form-control" name="item[${data.inquiry_product.uuid}][delivery_time]" value="${data.total_cost}" autocomplete="one-time-code" required="">
                                         </td>
                                     </tr>
                                 `);
                             }
                         } else {
-                            $(`[data-id="${data.uuid}"]`).remove()
+                            $(`[data-id="${data.inquiry_product.uuid}"]`).remove()
                         }
                     });
                 }
