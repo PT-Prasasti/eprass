@@ -286,7 +286,7 @@
                             <a href="{{ route('po-tracking.add')}}">Add PO Tracking</a>
                         </li>
                         <li>
-                            <a href="../po_tracking/index.php">List PO Tracking</a>
+                            <a href="{{ route('po-tracking')}}">List PO Tracking</a>
                         </li>
                     </ul>
                 </li>

@@ -70,6 +70,7 @@ Route::prefix('/file')->name('file')->group(function () {
 
 Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
     Route::get('/add', [PoTrackingController::class, 'add'])->name('.add');
+    Route::get('/', [PoTrackingController::class, 'index']);
 });
 
 // route data master
