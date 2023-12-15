@@ -143,7 +143,6 @@ class PurchaseOrderSupplierController extends Controller
     public function store(Request $request): RedirectResponse
     {
         try {
-            dd($request->all());
             DB::beginTransaction();
             $filePath = null;
             if ($request->hasFile('invoice')) {
