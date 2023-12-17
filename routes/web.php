@@ -70,6 +70,9 @@ Route::prefix('/file')->name('file')->group(function () {
 
 Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
     Route::get('/add', [PoTrackingController::class, 'add'])->name('.add');
+    Route::post('/store', [PoTrackingController::class, 'add'])->name('.store');
+    Route::get('/search/po_supplier', [PoTrackingController::class, 'search_po_supplier'])->name('.search.po_supplier');
+    Route::get('/search/forwarder', [PoTrackingController::class, 'search_forwarder'])->name('.search.forwarder');
     Route::get('/', [PoTrackingController::class, 'index']);
 });
 

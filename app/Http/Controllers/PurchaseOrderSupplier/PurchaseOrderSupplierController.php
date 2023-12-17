@@ -183,8 +183,6 @@ class PurchaseOrderSupplierController extends Controller
             $query->pickup_adress = $request->pickup_adress;
             $query->dokumen_pickup = $filePickup;
 
-
-
             $query->total_shipping_note = $request->total_shipping_note;
             $query->total_shipping_value = $request->total_shipping_value ? str_replace(',', '.', str_replace('.', '', $request->total_shipping_value)) : 0;
 
