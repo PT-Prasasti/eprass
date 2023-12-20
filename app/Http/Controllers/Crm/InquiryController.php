@@ -425,7 +425,7 @@ class InquiryController extends Controller
                 ->get();
         } else {
             $sales = Sales::where('username', auth()->user()->username)->first();
-            $visit = VisitSchedule::where('sales_id', $sales->id)
+            $visit = VisitSchedule::with('customer')->where('sales_id', $sales->id)
                 ->whereNotIn('id', Inquiry::select('visit_schedule_id')->get())
                 ->get();
         }
@@ -436,6 +436,8 @@ class InquiryController extends Controller
             $result[] = array(
                 'id' => $item->id,
                 'uuid' => $item->uuid,
+                'company' => $item->customer->company,
+                'name' => $item->customer->name
             );
         }
 
