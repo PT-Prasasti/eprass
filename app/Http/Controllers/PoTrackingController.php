@@ -12,11 +12,31 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class PoTrackingController extends Controller
 {
     public function index(): View
     {
+        $query = Tracking::query()
+        ->with([
+            'sales_order',
+            'supplier',
+        ])
+        ->select([
+            'purchase_order_suppliers.id AS id',
+            'purchase_order_suppliers.sales_order_id AS sales_order_id',
+            'purchase_order_suppliers.supplier_id AS supplier_id',
+            'purchase_order_suppliers.transaction_date AS transaction_date',
+            'purchase_order_suppliers.transaction_code AS transaction_code',
+            'purchase_order_suppliers.status AS status',
+        ]);
+
+    if ($request->ajax()) {
+        return DataTables::eloquent($query)
+            ->addIndexColumn()
+            ->toJson();
+    }
         return view('po_tracking.index');
     }
 
@@ -65,7 +85,6 @@ class PoTrackingController extends Controller
             $query->po_suplier_id = $request->po_suplier_id;
             $query->status = 'Ready Pick Up';
             $query->save();
-            dd($query);
 
             foreach ($request->input('details') as $detail) {
                 ForwarderItem::create([

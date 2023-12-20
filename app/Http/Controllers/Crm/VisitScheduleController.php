@@ -147,7 +147,7 @@ class VisitScheduleController extends Controller
 
         foreach ($company as $item) {
             $result[] = array(
-                'company' => ucwords($item->company. ' - ' . $item->name),
+                'company' => ucwords($item->company . ' - ' . $item->name),
                 'uuid' => $item->uuid,
             );
         }
@@ -174,8 +174,9 @@ class VisitScheduleController extends Controller
         try {
             DB::beginTransaction();
 
+            $company =  Customer::where('uuid', $request->company)->first();
             $visit = new VisitSchedule();
-            $visit->id = $request->id;
+            $visit->id = $request->id . ' / ' . $company->company.' - '.$company->name;
             $visit->customer_id = Customer::where('uuid', $request->company)->first()->id;
             $visit->sales_id = Sales::where('username', auth()->user()->username)->first()->id;
             $visit->visit_by = $request->visit_by;

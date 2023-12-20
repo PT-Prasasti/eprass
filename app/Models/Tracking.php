@@ -17,4 +17,10 @@ class Tracking extends Model
             $model->uuid = (string) Uuid::generate(4);
         });
     }
+
+
+    public function forwarder_item()
+    {
+        return $this->hasMany(ForwarderItem::class, 'so_id');
+    }
 }

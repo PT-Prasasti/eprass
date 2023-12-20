@@ -10,11 +10,25 @@ class ForwarderItem extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'tracking_id',
+        'forwarder_id',
+        'price',
+        'track',
+        'description'
+    ];
+
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
             $model->uuid = (string) Uuid::generate(4);
         });
+    }
+
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class, 'so_id');
     }
 }

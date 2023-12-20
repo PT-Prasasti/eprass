@@ -475,7 +475,7 @@
                     dataType: "json",
 
                     success: function(response) {
-                        console.log('ok');
+                        window.location.href = "/po-tracking/"
                     },
                     error: function(xhr, status, error) {
                         Swal.fire({

@@ -236,6 +236,7 @@
             function listVisit() {
                 var url = "{{ route('crm.inquiry.visit') }}"
                 $.get(url, function(response) {
+                    console.log(response);
                     $('select[name=visit]').html('')
                     var element = ``
                     element += `<option selected disabled>Please select</option>`
