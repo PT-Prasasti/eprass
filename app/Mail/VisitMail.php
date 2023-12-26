@@ -30,8 +30,9 @@ class VisitMail extends Mailable
      */
     public function envelope()
     {
+        $d =  $this->datas;
         return new Envelope(
-            subject: 'Visit Mail',
+            subject: $d['id'],
         );
     }
 

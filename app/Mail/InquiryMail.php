@@ -30,8 +30,9 @@ class InquiryMail extends Mailable
      */
     public function envelope()
     {
+        $d = $this->datas;
         return new Envelope(
-            subject: 'Inquiry Mail',
+            subject: $d['id'],
         );
     }
 
