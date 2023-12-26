@@ -3,7 +3,7 @@
     <div class="content">
         <div class="row">
             <div class="col-md-6">
-                <h4><b>List Visit Scheduler</b></h4>
+                <h4><b>List Visit Schedule</b></h4>
             </div>
             <div class="col-md-6 text-right">
                 <a type="button" href="{{ route('crm.visit-schedule.add') }}" class="btn btn-info min-width-125"><i class="fa fa-plus mr-2"></i>NEW VISIT</a>

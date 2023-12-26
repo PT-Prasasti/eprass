@@ -259,7 +259,7 @@ class InquiryController extends Controller
     public function data_customer(Request $request): JsonResponse
     {
         if ($request->ajax()) {
-            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin_sales')) {
+            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
                 $data = Inquiry::whereHas('visit.customer', function ($q) use ($request) {
                     $q->where('name', 'like', '%' . $request->value . '%');
                 })
