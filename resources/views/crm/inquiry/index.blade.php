@@ -808,7 +808,11 @@
                             <th class="text-center">No.</th>
                             <th class="text-center">ID Visit</th>
                             <th class="text-center">ID Inquiry</th>
-                            <th class="text-center">Customer - Company Name</th>
+                            <th class="text-center">Customer - Company Name</th>`+
+                            @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
+                            `<th class="text-center">Sales</th>`
+                            @endif
+                            +`
                             <th class="text-center">Date</th>
                             <th class="text-center">Grade</th>
                             <th class="text-center">Status</th>
@@ -849,6 +853,11 @@
                     {
                         data: "customer"
                     },
+                    @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
+                    {
+                        data: "sales"
+                    },
+                    @endif
                     {
                         data: "date"
                     },
