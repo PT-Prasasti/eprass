@@ -105,8 +105,14 @@
                         render: function(data, type, row, meta) {
                             var badgeColor = ``;
                             switch (row.status) {
-                                case 'Waiting For Payment':
+                                case 'Waiting Approval For Manager':
                                     badgeColor = `danger`;
+                                    break;
+                                case 'Sent PO':
+                                    badgeColor = `primary`;
+                                    break;
+                                case 'Approved By Manager':
+                                    badgeColor = `success`;
                                     break;
                                 default:
                                     badgeColor = `warning`;
@@ -121,9 +127,9 @@
                             var html = ``;
                             console.log(row.status);
                             switch (row.status) {
-                                case 'Send PO':
+                                case 'Approved By Manager':
                                     html += `
-                                    <a id="print" href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-success" target="_blank" data-toggle="tooltip" title="Print">
+                                    <a id="print" href="{{ route('purchase-order-supplier') }}/${row.id}/print" class="btn btn-sm btn-success" target="_blank" title="Print">
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;
@@ -212,10 +218,10 @@
                 })
             });
 
-            $(document).on('click', $('#print'), function() {
-                console.log('a');
-                window.location.reload();
-            });
+            // $(document).on('click', $('#print'), function() {
+            //     console.log('a');
+            //     window.location.reload();
+            // });
         </script>
     </x-slot>
 </x-app-layout>

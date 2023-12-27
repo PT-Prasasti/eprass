@@ -187,7 +187,7 @@ class PurchaseOrderSupplierController extends Controller
             $query->total_shipping_value = $request->total_shipping_value ? str_replace(',', '.', str_replace('.', '', $request->total_shipping_value)) : 0;
 
             $query->document_list = $request->document_list;
-            $query->status = ' Waiting Approval For Manager';
+            $query->status = 'Waiting Approval For Manager';
 
             $query->save();
 
@@ -391,16 +391,7 @@ class PurchaseOrderSupplierController extends Controller
     public function print($id)
     {
         try { 
-            $query = PurchaseOrderSupplier::query()
-            ->with([
-                'sales_order.sourcing.selected_sourcing_suppliers' => function ($query) {
-                    $query->doesntHave('purchase_order_supplier_item');
-                },
-                'sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
-                'supplier',
-                'purchase_order_supplier_items.selected_sourcing_supplier.sourcing_supplier.inquiry_product',
-            ])
-            ->findOrFail($id);
+            $query = PurchaseOrderSupplier::query()->findOrFail($id);
             $query->status = 'Sent PO';
             $query->save();
     
