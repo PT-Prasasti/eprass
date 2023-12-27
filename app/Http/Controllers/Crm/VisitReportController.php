@@ -83,31 +83,31 @@ class VisitReportController extends Controller
     public function data(Request $request): JsonResponse
     {
         if ($request->ajax()) {
-            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
+            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) {
                 $data = VisitReport::all();
-        } else {
-            $sales = Sales::where('username', auth()->user()->username)->first();
-            $data = VisitReport::where('sales_id', $sales->id)
-                ->get();
+            } else {
+                $sales = Sales::where('username', auth()->user()->username)->first();
+                $data = VisitReport::where('sales_id', $sales->id)->get();
+            }
+
+            $result = DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('id', function ($q) {
+                    return $q->visit_schedule_id;
+                })
+                ->addColumn('customer', function ($q) {
+                    return strtoupper($q->visit->customer->name . ' - ' . $q->visit->customer->company);
+                })
+                ->addColumn('sales', function ($q) {
+                    return $q->sales->name;
+                })
+                ->editColumn('date', function ($q) {
+                    return Carbon::parse($q->visit->date)->format('d M Y');
+                })
+                ->make(true);
+
+            return $result;
         }
-
-        $result = DataTables::of($data)
-            ->addIndexColumn()
-            ->editColumn('id', function ($q) {
-                return $q->visit_schedule_id;
-            })
-            ->addColumn('customer', function ($q) {
-                return strtoupper($q->visit->customer->name . ' - ' . $q->visit->customer->company);
-            })
-            ->addColumn('sales', function ($q) {
-                return $q->sales->name;
-            })
-            ->editColumn('date', function ($q) {
-                return Carbon::parse($q->visit->date)->format('d M Y');
-            })
-            ->make(true);
-
-        return $result;
     }
 
     public function report($id = null): RedirectResponse

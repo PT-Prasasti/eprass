@@ -881,12 +881,6 @@
                                     <a href="inquiry/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Inquiry">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="inquiry/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Inquiry">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Inquiry">
-                                        <i class="fa fa-trash-o"></i>
-                                    </button>
                                     @elseif(auth()->user()->hasRole('admin_sales'))
                                     <a href="inquiry/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Inquiry">
                                         <i class="fa fa-file-text-o"></i>

@@ -97,11 +97,10 @@
                         <tr>
                             <th class="text-center">No.</th>
                             <th class="text-center">ID Visit</th>
-                            <th class="text-center">Customer - Company Name</th>`+
+                            <th class="text-center">Customer - Company Name</th>
                             @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
-                            `<th class="text-center">Sales</th>`
+                            <th class="text-center">Sales</th>
                             @endif
-                            +`
                             <th class="text-center">Date</th>
                             <th class="text-center">Time</th>
                             <th class="text-center">Report</th>
