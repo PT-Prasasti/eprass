@@ -324,7 +324,7 @@ class VisitReportController extends Controller
             ];
 
             $email_report = new ReportMail(collect($dataVisitReport));
-            $sendmail = 'sales@pt-prasasti.com';
+            $sendmail = 'eprass.d@pt-prasasti.com';
             $sendmail1 = 'dhita@pt-prasasti.com';
             Mail::to($sendmail)->send($email_report);
             Mail::to($sendmail1)->send($email_report);

@@ -205,7 +205,7 @@ class VisitScheduleController extends Controller
                 'schedule'          => $visit->schedule
             ];
             $email = new VisitMail(collect($dataVisit));
-            $sendmail = 'sales@pt-prasasti.com';
+            $sendmail = 'eprass.d@pt-prasasti.com';
             $sendmail1 = 'dhita@pt-prasasti.com';
             Mail::to($sendmail)->send($email);
             Mail::to($sendmail1)->send($email);

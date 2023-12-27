@@ -723,7 +723,7 @@ class InquiryController extends Controller
                 'products'          => $products
             ];
             $email = new InquiryMail(collect($dataInquiry));
-            $sendmail = 'sales@pt-prasasti.com';
+            $sendmail = 'eprass.d@pt-prasasti.com';
             $sendmail1 = 'dhita@pt-prasasti.com';
             Mail::to($sendmail)->send($email);
             Mail::to($sendmail1)->send($email);
