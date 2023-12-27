@@ -69,7 +69,7 @@ class InquiryController extends Controller
     public function data(Request $request): JsonResponse
     {
         if ($request->ajax()) {
-            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin_sales')) {
+            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) {
                 $data = Inquiry::orderBy('created_at', 'DESC')->get();
             } else {
                 $sales = Sales::where('username', auth()->user()->username)->first();
@@ -133,7 +133,7 @@ class InquiryController extends Controller
     public function data_grade(Request $request): JsonResponse
     {
         if ($request->ajax()) {
-            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin_sales')) {
+            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) {
                 $data = Inquiry::whereBetween('grade', [$request->value1, $request->value2])
                     ->orderBy('created_at', 'DESC')
                     ->get();
@@ -196,7 +196,7 @@ class InquiryController extends Controller
     public function data_status(Request $request): JsonResponse
     {
         if ($request->ajax()) {
-            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin_sales')) {
+            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) {
                 $data = Inquiry::where('status', $request->value)
                     ->orderBy('created_at', 'DESC')
                     ->get();
@@ -265,62 +265,61 @@ class InquiryController extends Controller
                 })
                     ->orderBy('created_at', 'DESC')
                     ->get();
-            } else {
-                $sales = Sales::where('username', auth()->user()->username)->first();
-                $data = Inquiry::where('sales_id', $sales->id)
-                    ->whereHas('visit.customer', function ($q) use ($request) {
-                        $q->where('name', 'like', '%' . $request->value . '%');
-                    })
-                    ->orderBy('created_at', 'DESC')->get();
-            }
-
-            $result = DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('id_visit', function ($q) {
-                    return $q->visit->id;
+        } else {
+            $sales = Sales::where('username', auth()->user()->username)->first();
+            $data = Inquiry::where('sales_id', $sales->id)
+                ->whereHas('visit.customer', function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->value . '%');
                 })
-                ->addColumn('id_inquiry', function ($q) {
-                    return $q->id;
-                })
-                ->addColumn('customer', function ($q) {
-                    return strtoupper($q->visit->customer->name . ' - ' . $q->visit->customer->company);
-                })
-                ->addColumn('date', function ($q) {
-                    $date = Carbon::parse($q->created_at)->format('d M Y');
-                    $due_date = Carbon::parse($q->due_date)->format('d M Y');
-                    return $date . ' - ' . $due_date;
-                })
-                ->editColumn('status', function ($q) {
-                    return strtoupper($q->status);
-                })
-                ->addColumn('sales', function ($q) {
-                    $sales = null;
-                    if (isset($q->sales)) {
-                        $sales = strtoupper($q->sales->name);
-                    }
-                    return $sales;
-                })
-                ->addColumn('so_number', function ($q) {
-                    $so = null;
-                    if (isset($q->sales_order)) {
-                        $so = $q->sales_order->id;
-                    }
-                    return $so;
-                })
-                ->addColumn('warning', function ($q) {
-                    $now = Carbon::now();
-                    $date = Carbon::parse($q->due_date);
-                    $daysDifference = $date->diffInDays($now);
-                    if ($daysDifference <= 2) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                })
-                ->make(true);
-
-            return $result;
+                ->orderBy('created_at', 'DESC')->get();
         }
+
+        $result = DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('id_visit', function ($q) {
+                return $q->visit->id;
+            })
+            ->addColumn('id_inquiry', function ($q) {
+                return $q->id;
+            })
+            ->addColumn('customer', function ($q) {
+                return strtoupper($q->visit->customer->name . ' - ' . $q->visit->customer->company);
+            })
+            ->addColumn('date', function ($q) {
+                $date = Carbon::parse($q->created_at)->format('d M Y');
+                $due_date = Carbon::parse($q->due_date)->format('d M Y');
+                return $date . ' - ' . $due_date;
+            })
+            ->editColumn('status', function ($q) {
+                return strtoupper($q->status);
+            })
+            ->addColumn('sales', function ($q) {
+                $sales = null;
+                if (isset($q->sales)) {
+                    $sales = strtoupper($q->sales->name);
+                }
+                return $sales;
+            })
+            ->addColumn('so_number', function ($q) {
+                $so = null;
+                if (isset($q->sales_order)) {
+                    $so = $q->sales_order->id;
+                }
+                return $so;
+            })
+            ->addColumn('warning', function ($q) {
+                $now = Carbon::now();
+                $date = Carbon::parse($q->due_date);
+                $daysDifference = $date->diffInDays($now);
+                if ($daysDifference <= 2) {
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+            ->make(true);
+
+        return $result;
     }
 
     public function data_sales(Request $request): JsonResponse
@@ -711,7 +710,7 @@ class InquiryController extends Controller
                 $redis = Redis::del($key);
             }
 
-            
+
             $usersToNotify = User::role('admin_sales')->get();
             Notification::send($usersToNotify, new NewInquiryNotification($inquiry));
             $dataInquiry = [

@@ -57,6 +57,9 @@ class VisitScheduleController extends Controller
                 ->addColumn('customer', function ($q) {
                     return strtoupper($q->customer->name . ' - ' . $q->customer->company);
                 })
+                ->addColumn('sales', function ($q) {
+                    return $q->sales->name;
+                })
                 ->editColumn('date', function ($q) {
                     return Carbon::parse($q->date)->format('d M Y');
                 })
