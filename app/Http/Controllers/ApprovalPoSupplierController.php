@@ -88,7 +88,7 @@ class ApprovalPoSupplierController extends Controller
             DB::beginTransaction();
 
             $query = PurchaseOrderSupplier::query()->findOrFail($id);
-            $query->status = 'Send PO';
+            $query->status = 'Approved By Manager';
 
             $query->save();
 

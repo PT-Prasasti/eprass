@@ -13,32 +13,31 @@
         <div class="row">
             <div class="col-sm-12">
                 @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
                 @endif
                 @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                            <span class="d-block">
-                                {{ $loop->iteration }}. {{ $error }}
-                            </span>
-                        @endforeach
-                    </div>
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                    <span class="d-block">
+                        {{ $loop->iteration }}. {{ $error }}
+                    </span>
+                    @endforeach
+                </div>
                 @endif
             </div>
         </div>
 
         <div class="block block-rounded">
             <div class="block-content block-content-full table-responsive">
-                <table id="table-purchase-order-supplier" class="table table-striped table-vcenter w-100"
-                    style="font-size:14px">
+                <table id="table-purchase-order-supplier" class="table table-striped table-vcenter w-100" style="font-size:14px">
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
@@ -105,8 +104,14 @@
                         render: function(data, type, row, meta) {
                             var badgeColor = ``;
                             switch (row.status) {
-                                case 'Waiting For Payment':
+                                case 'Waiting Approval For Manager':
                                     badgeColor = `danger`;
+                                    break;
+                                case 'Sent PO':
+                                    badgeColor = `primary`;
+                                    break;
+                                case 'Approved By Manager':
+                                    badgeColor = `success`;
                                     break;
                                 default:
                                     badgeColor = `warning`;

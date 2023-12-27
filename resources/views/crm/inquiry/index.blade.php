@@ -809,6 +809,9 @@
                             <th class="text-center">ID Visit</th>
                             <th class="text-center">ID Inquiry</th>
                             <th class="text-center">Customer - Company Name</th>
+                            @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
+                            <th class="text-center">Sales</th>
+                            @endif
                             <th class="text-center">Date</th>
                             <th class="text-center">Grade</th>
                             <th class="text-center">Status</th>
@@ -849,6 +852,11 @@
                     {
                         data: "customer"
                     },
+                    @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
+                    {
+                        data: "sales"
+                    },
+                    @endif
                     {
                         data: "date"
                     },
@@ -869,16 +877,10 @@
                         data: "uuid",
                         className: "text-center",
                         render: function(data) {
-                            return `@if(auth()->user()->hasRole('superadmin'))
+                            return `@if(auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('hod') || auth()->user()->hasRole('manager'))
                                     <a href="inquiry/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Inquiry">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="inquiry/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Inquiry">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Inquiry">
-                                        <i class="fa fa-trash-o"></i>
-                                    </button>
                                     @elseif(auth()->user()->hasRole('admin_sales'))
                                     <a href="inquiry/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Inquiry">
                                         <i class="fa fa-file-text-o"></i>

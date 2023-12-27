@@ -30,8 +30,9 @@ class ReportMail extends Mailable
      */
     public function envelope()
     {
+        $d =  $this->datas;
         return new Envelope(
-            subject: 'Report Mail',
+            subject: $d['id'],
         );
     }
 
