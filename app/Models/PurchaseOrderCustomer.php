@@ -33,6 +33,11 @@ class PurchaseOrderCustomer extends Model
         return $this->belongsTo(Quotation::class);
     }
 
+    public function cloud()
+    {
+        return $this->hasMany(Cloud::class);
+    }
+
     public function getTransactionDueDateAttribute(): string
     {
         $dueDate = '';

@@ -53,7 +53,7 @@ class FilesController extends Controller
     public function store($fileDirectory = 'others', $file)
     {
         do {
-            $fileName      = date('Y_m_d_His_') . $file->hashName();
+            $fileName = date('Y_m_d_His_') . $file->hashName();
         } while (Storage::disk('public')->exists($fileDirectory . '/' . $fileName));
 
         return $file->storeAs($fileDirectory, $fileName, 'public');

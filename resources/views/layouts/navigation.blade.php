@@ -252,6 +252,18 @@
                 @endif
                 @endif
 
+                @if(auth()->user()->hasRole('purchasing') || auth()->user()->hasRole('superadmin'))
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Cloud</span>
+                </li>
+                <li>
+                    <a href="{{ route('cloud') }}">
+                        <i class="fa fa-archive"></i>
+                        <span class="sidebar-mini-hide"> Document List</span>
+                    </a>
+                </li>
+                @endif
+
                 @if (auth()->user()->hasRole('sales') ||
                 auth()->user()->hasRole('superadmin'))
                 <li class="nav-main-heading">

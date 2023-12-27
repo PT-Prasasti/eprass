@@ -1,27 +1,28 @@
 <?php
 
-use App\Http\Controllers\ApprovalPaymentRequestController;
-use App\Http\Controllers\ApprovalPoSupplierController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EximController;
+use App\Http\Controllers\CloudController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PoTrackingController;
 use App\Http\Controllers\Crm\InquiryController;
+use App\Http\Controllers\ListPaymentController;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Crm\VisitReportController;
 use App\Http\Controllers\DataMaster\SalesController;
 use App\Http\Controllers\Crm\VisitScheduleController;
+use App\Http\Controllers\ApprovalPoSupplierController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
-use App\Http\Controllers\EximController;
 use App\Http\Controllers\Helper\NotificationController;
-use App\Http\Controllers\ListPaymentController;
-use App\Http\Controllers\PaymentRequest\PaymentRequestController;
-use App\Http\Controllers\PoTrackingController;
-use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
-use App\Http\Controllers\PurchaseOrderCustomerSalesController;
-use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
 use App\Http\Controllers\Transaction\QuotationController;
+use App\Http\Controllers\ApprovalPaymentRequestController;
 use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
+use App\Http\Controllers\PurchaseOrderCustomerSalesController;
+use App\Http\Controllers\PaymentRequest\PaymentRequestController;
+use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
+use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -332,6 +333,17 @@ Route::prefix('/purchase-order-customer-sales')->name('purchase-order-customer-s
     Route::get('/search/quotation', [PurchaseOrderCustomerSalesController::class, 'search_quotation'])->name('.search.quotation');
     Route::post('upload-document', [PurchaseOrderCustomerSalesController::class, 'uploadDocument'])->name('.upload-document');
     Route::post('/product-delete/{id}', [PurchaseOrderCustomerSalesController::class, 'deleteProduct'])->name('.delete-product');
+});
+
+Route::prefix('/cloud')->name('cloud')->group(function () {
+    Route::get('/', [CloudController::class, 'index']);
+    Route::get('/create', [CloudController::class, 'create'])->name('.create');
+    Route::get('/get-poc/{id}', [CloudController::class, 'getPoc'])->name('.getPoc');
+    Route::post('/store', [CloudController::class, 'store'])->name('.store');
+    Route::get('/{id}/view', [CloudController::class, 'view'])->name('.view');
+    Route::delete('/{id}', [CloudController::class, 'delete'])->name('.delete');
+    Route::get('/{id}/print', [CloudController::class, 'print'])->name('.print');
+    Route::post('upload-document', [CloudController::class, 'upload_document'])->name('.upload-document');
 });
 
 Route::prefix('/purchase-order-supplier')->name('purchase-order-supplier')->group(function () {
