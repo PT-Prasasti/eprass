@@ -76,7 +76,7 @@
                                                     <label class="col-lg-3 col-form-label">PO Customer</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="" readonly sales_order_number>
+                                                        <input type="text" class="form-control" value="" readonly kode_khusus>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -553,7 +553,9 @@
                 salesOrderSelectedItemTable.rows.add(data.quotation.sales_order.sourcing.selected_sourcing_suppliers ?? []).draw(true);
 
                 $(`[name="selected_sales_order"]`).val(data.quotation.sales_order.id);
-                $(`[selected_sales_order_number]`).val(data.id);
+                console.log(data);
+                $(`[selected_sales_order_number]`).val(data.quotation.sales_order.id);
+                $(`[kode_khusus]`).val(data.kode_khusus);
                 $(`[selected_sales_order_subject]`).val(data.quotation.sales_order.inquiry.subject);
             }
 
@@ -708,6 +710,7 @@
                 }
 
                 $(`[sales_order_id]`).val($(`[name="selected_sales_order"]`).val());
+                console.log( $(`[sales_order_id]`).val());
                 $(`[sales_order_number]`).val($(`[selected_sales_order_number]`).val());
                 $(`[sales_order_subject]`).val($(`[selected_sales_order_subject]`).val());
 
