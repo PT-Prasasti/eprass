@@ -13,32 +13,31 @@
         <div class="row">
             <div class="col-sm-12">
                 @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
                 @endif
                 @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                            <span class="d-block">
-                                {{ $loop->iteration }}. {{ $error }}
-                            </span>
-                        @endforeach
-                    </div>
+                <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                    <span class="d-block">
+                        {{ $loop->iteration }}. {{ $error }}
+                    </span>
+                    @endforeach
+                </div>
                 @endif
             </div>
         </div>
 
         <div class="block block-rounded">
             <div class="block-content block-content-full table-responsive">
-                <table id="table-purchase-order-supplier" class="table table-striped table-vcenter w-100"
-                    style="font-size:14px">
+                <table id="table-purchase-order-supplier" class="table table-striped table-vcenter w-100" style="font-size:14px">
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
@@ -134,13 +133,13 @@
                                     </a> |
                                 `;
 
-                            html += `
+                                    html += `
                                 <a href="{{ route('purchase-order-supplier') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
                                 </a> |
                             `;
 
-                            html += `
+                                    html += `
                                 <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                     <i class="fa fa-trash-o"></i>
                                 </button>
@@ -152,40 +151,40 @@
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;
-                                html += `
+                                    html += `
                                 <a href="{{ route('purchase-order-supplier') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
                                 </a> |
                             `;
 
-                            html += `
+                                    html += `
                                 <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                     <i class="fa fa-trash-o"></i>
                                 </button>
                             `;
-                                break;
+                                    break;
 
                                 default:
 
-                            html += `
+                                    html += `
                                     <a href="javascript:;" class="btn btn-sm btn-dark" data-toggle="tooltip" title="Print">
                                         <i class="fa fa-print"></i>
                                     </a> |
                                 `;
 
-                            html += `
+                                    html += `
                                 <a href="javascript:;" class="btn btn-sm btn-dark" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
                                 </a> |
                             `;
 
-                            html += `
+                                    html += `
                                 <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                     <i class="fa fa-trash-o"></i>
                                 </button>
                             `;
                             }
-                          
+
 
                             return `
                                 ${html}
@@ -218,10 +217,11 @@
                 })
             });
 
-            // $(document).on('click', $('#print'), function() {
-            //     console.log('a');
-            //     window.location.reload();
-            // });
+            $(document).on('click', $('#print'), function() {
+                setTimeout(function() {
+                    window.location.reload();
+                }, 5000);
+            });
         </script>
     </x-slot>
 </x-app-layout>
