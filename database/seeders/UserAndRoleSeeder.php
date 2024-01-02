@@ -26,11 +26,11 @@ class UserAndRoleSeeder extends Seeder
                 'username' => 'dhita@pt-prasasti.com',
             ],
             [
-                'name' => 'Retno Dhita',
-                'password' => bcrypt('*dhita*34932'),
-                'email' => 'dhita@pt-prasasti.com'
+                'name' => 'Fitri',
+                'password' => bcrypt('cp4NO170902'),
+                'email' => 'fitri@pt-prasasti.com'
             ]
         );
-        $finance->assignRole('hod');
+        $finance->assignRole('purchasing');
     }
 }
