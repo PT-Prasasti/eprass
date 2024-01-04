@@ -23,6 +23,7 @@ use App\Http\Controllers\PurchaseOrderCustomerSalesController;
 use App\Http\Controllers\PaymentRequest\PaymentRequestController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
 use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -179,6 +180,8 @@ Route::prefix('/crm')->name('crm')->group(function () {
         Route::get('/download/excel/template', [InquiryController::class, 'download_template'])->name('.download-template');
         Route::get('/visit', [InquiryController::class, 'visit'])->name('.visit');
         Route::get('/visit/{id}', [InquiryController::class, 'visit_detail'])->name('.visit-detail');
+        Route::get('/excel/{id}', [InquiryController::class, 'excel'])->name('.excel');
+        Route::get('/rev/excel/{id}', [InquiryController::class, 'reviewExcel'])->name('.reviewExcel');
         Route::get('/customer', [InquiryController::class, 'customer'])->name('.customer');
         Route::get('/customer/{id}', [InquiryController::class, 'customer_detail'])->name('.customer-detail');
         Route::get('/sales', [InquiryController::class, 'sales'])->name('.sales');
@@ -414,37 +417,37 @@ Route::any('/files/{any}', function ($filePath) {
 Route::prefix('/project')->name('project')->group(function () {
 
     // route project purchasing
-    Route::prefix('/purchasing')->name('.purchasing')->group(function () {
-        Route::get('/', [PurchasingController::class, 'index']);
-        Route::get('/add', [PurchasingController::class, 'add'])->name('.add');
-        Route::get('/id', [PurchasingController::class, 'generate_id'])->name('.id');
-        Route::get('/download/excel/template', [PurchasingController::class, 'downloaod_template'])->name('.download-template');
-        Route::get('/inquiries', [PurchasingController::class, 'inquiries'])->name('.inquiries');
-        Route::get('/inquiry/{id}/{edit?}', [PurchasingController::class, 'inquiry_detail'])->name('.inquiry-detail');
-        Route::get('/get-excel/{id}', [PurchasingController::class, 'get_excel'])->name('.get-excel');
-        Route::get('/get-header/{id}', [PurchasingController::class, 'get_header'])->name('.get-header');
-        Route::get('/review-excel/{id}', [PurchasingController::class, 'review_excel'])->name('.review-excel');
-        Route::get('/get-folders/{id}', [PurchasingController::class, 'get_folders'])->name('.get-folders');
-        Route::get('/edit/{id}', [PurchasingController::class, 'edit'])->name('.edit');
-        Route::get('/estimate/{id}', [PurchasingController::class, 'estimate'])->name('.estimate');
-        Route::get('/delete/{id}', [PurchasingController::class, 'delete'])->name('.delete');
+    // Route::prefix('/purchasing')->name('.purchasing')->group(function () {
+    //     Route::get('/', [PurchasingController::class, 'index']);
+    //     Route::get('/add', [PurchasingController::class, 'add'])->name('.add');
+    //     Route::get('/id', [PurchasingController::class, 'generate_id'])->name('.id');
+    //     Route::get('/download/excel/template', [PurchasingController::class, 'downloaod_template'])->name('.download-template');
+    //     Route::get('/inquiries', [PurchasingController::class, 'inquiries'])->name('.inquiries');
+    //     Route::get('/inquiry/{id}/{edit?}', [PurchasingController::class, 'inquiry_detail'])->name('.inquiry-detail');
+    //     Route::get('/get-excel/{id}', [PurchasingController::class, 'get_excel'])->name('.get-excel');
+    //     Route::get('/get-header/{id}', [PurchasingController::class, 'get_header'])->name('.get-header');
+    //     Route::get('/review-excel/{id}', [PurchasingController::class, 'review_excel'])->name('.review-excel');
+    //     Route::get('/get-folders/{id}', [PurchasingController::class, 'get_folders'])->name('.get-folders');
+    //     Route::get('/edit/{id}', [PurchasingController::class, 'edit'])->name('.edit');
+    //     Route::get('/estimate/{id}', [PurchasingController::class, 'estimate'])->name('.estimate');
+    //     Route::get('/delete/{id}', [PurchasingController::class, 'delete'])->name('.delete');
 
-        Route::post('/data', [PurchasingController::class, 'data'])->name('.data');
-        Route::post('/upload_excel', [PurchasingController::class, 'upload_excel'])->name('.upload-excel');
-        Route::post('/delete_excel', [PurchasingController::class, 'delete_excel'])->name('.delete-excel');
-        Route::post('/review-set-supplier', [PurchasingController::class, 'set_supplier'])->name('.review-set-supplier');
-        Route::post('/create-folder', [PurchasingController::class, 'create_folder'])->name('.create-folder');
-        Route::post('/upload-folder-files', [PurchasingController::class, 'upload_document'])->name('.upload-folder-files');
-        Route::post('/open-folder', [PurchasingController::class, 'open_folder'])->name('.open-folder');
-        Route::post('/show-file', [PurchasingController::class, 'open_file'])->name('.show-file');
-        Route::post('/delete-folder', [PurchasingController::class, 'delete_folder'])->name('.delete-folder');
-        Route::post('/store', [PurchasingController::class, 'store'])->name('.store');
-        Route::post('/edit', [PurchasingController::class, 'store_edit'])->name('.store-edit');
-        Route::post('/estimate/data', [PurchasingController::class, 'estimate_data'])->name('.estimate-data');
-        Route::post('/estimate/dt', [PurchasingController::class, 'estimate_dt'])->name('.estimate-dt');
-        Route::post('/estimate/shipping', [PurchasingController::class, 'estimate_shipping'])->name('.estimate-shipping');
-        Route::post('/estimate/estimate', [PurchasingController::class, 'estimate_estimate'])->name('.estimate-estimate');
-    });
+    //     Route::post('/data', [PurchasingController::class, 'data'])->name('.data');
+    //     Route::post('/upload_excel', [PurchasingController::class, 'upload_excel'])->name('.upload-excel');
+    //     Route::post('/delete_excel', [PurchasingController::class, 'delete_excel'])->name('.delete-excel');
+    //     Route::post('/review-set-supplier', [PurchasingController::class, 'set_supplier'])->name('.review-set-supplier');
+    //     Route::post('/create-folder', [PurchasingController::class, 'create_folder'])->name('.create-folder');
+    //     Route::post('/upload-folder-files', [PurchasingController::class, 'upload_document'])->name('.upload-folder-files');
+    //     Route::post('/open-folder', [PurchasingController::class, 'open_folder'])->name('.open-folder');
+    //     Route::post('/show-file', [PurchasingController::class, 'open_file'])->name('.show-file');
+    //     Route::post('/delete-folder', [PurchasingController::class, 'delete_folder'])->name('.delete-folder');
+    //     Route::post('/store', [PurchasingController::class, 'store'])->name('.store');
+    //     Route::post('/edit', [PurchasingController::class, 'store_edit'])->name('.store-edit');
+    //     Route::post('/estimate/data', [PurchasingController::class, 'estimate_data'])->name('.estimate-data');
+    //     Route::post('/estimate/dt', [PurchasingController::class, 'estimate_dt'])->name('.estimate-dt');
+    //     Route::post('/estimate/shipping', [PurchasingController::class, 'estimate_shipping'])->name('.estimate-shipping');
+    //     Route::post('/estimate/estimate', [PurchasingController::class, 'estimate_estimate'])->name('.estimate-estimate');
+    // });
 
     // route project quotation
     Route::prefix('/quotation')->name('.quotation')->group(function () {
@@ -468,34 +471,34 @@ Route::prefix('/project')->name('project')->group(function () {
 
     // route project preorder
     Route::prefix('/pre-order')->name('.pre-order')->group(function () {
-        Route::get('/', [PreOrderCustomerController::class, 'index']);
-        Route::get('/add', [PreOrderCustomerController::class, 'add'])->name('.add');
-        Route::get('/quotation-list', [PreOrderCustomerController::class, 'quotation_list'])->name('.quotation-list');
-        Route::get('/quotation-detail/{id}', [PreOrderCustomerController::class, 'quotation_detail'])->name('.quotation-detail');
-        Route::get('/item-detail/{id}', [PreOrderCustomerController::class, 'item_detail'])->name('.item-detail');
-        Route::get('/view/{id}', [PreOrderCustomerController::class, 'view'])->name('.view');
+        // Route::get('/', [PreOrderCustomerController::class, 'index']);
+        // Route::get('/add', [PreOrderCustomerController::class, 'add'])->name('.add');
+        // Route::get('/quotation-list', [PreOrderCustomerController::class, 'quotation_list'])->name('.quotation-list');
+        // Route::get('/quotation-detail/{id}', [PreOrderCustomerController::class, 'quotation_detail'])->name('.quotation-detail');
+        // Route::get('/item-detail/{id}', [PreOrderCustomerController::class, 'item_detail'])->name('.item-detail');
+        // Route::get('/view/{id}', [PreOrderCustomerController::class, 'view'])->name('.view');
 
-        Route::post('/data', [PreOrderCustomerController::class, 'data'])->name('.data');
-        Route::post('/store', [PreOrderCustomerController::class, 'store'])->name('.store');
+        // Route::post('/data', [PreOrderCustomerController::class, 'data'])->name('.data');
+        // Route::post('/store', [PreOrderCustomerController::class, 'store'])->name('.store');
     });
 });
 
 // route preorder 
 Route::prefix('/pre-order')->name('pre-order')->group(function () {
-    Route::get('/', [PreOrderSupplierController::class, 'index']);
-    Route::get('/ready', [PreOrderSupplierController::class, 'ready'])->name('.ready');
-    Route::get('/create-po/{id}', [PreOrderSupplierController::class, 'create_po'])->name('.create-po');
-    Route::get('/id', [PreOrderSupplierController::class, 'generate_id'])->name('.id');
-    Route::get('/list-item/{id}', [PreOrderSupplierController::class, 'list_item'])->name('.list-item');
-    Route::get('/document/{id}', [PreOrderSupplierController::class, 'document'])->name('.document');
-    Route::get('/list/{id}', [PreOrderSupplierController::class, 'list'])->name('.list');
-    Route::get('/print/{id}', [PreOrderSupplierController::class, 'print'])->name('.print');
+    // Route::get('/', [PreOrderSupplierController::class, 'index']);
+    // Route::get('/ready', [PreOrderSupplierController::class, 'ready'])->name('.ready');
+    // Route::get('/create-po/{id}', [PreOrderSupplierController::class, 'create_po'])->name('.create-po');
+    // Route::get('/id', [PreOrderSupplierController::class, 'generate_id'])->name('.id');
+    // Route::get('/list-item/{id}', [PreOrderSupplierController::class, 'list_item'])->name('.list-item');
+    // Route::get('/document/{id}', [PreOrderSupplierController::class, 'document'])->name('.document');
+    // Route::get('/list/{id}', [PreOrderSupplierController::class, 'list'])->name('.list');
+    // Route::get('/print/{id}', [PreOrderSupplierController::class, 'print'])->name('.print');
 
-    Route::post('/data', [PreOrderSupplierController::class, 'data'])->name('.data');
-    Route::post('/ready-data', [PreOrderSupplierController::class, 'ready_data'])->name('.ready-data');
-    Route::post('/add', [PreOrderSupplierController::class, 'add'])->name('.add');
-    Route::any('/change-price', [PreOrderSupplierController::class, 'change_price'])->name('.change-price');
-    Route::post('/store', [PreOrderSupplierController::class, 'store'])->name('.store');
+    // Route::post('/data', [PreOrderSupplierController::class, 'data'])->name('.data');
+    // Route::post('/ready-data', [PreOrderSupplierController::class, 'ready_data'])->name('.ready-data');
+    // Route::post('/add', [PreOrderSupplierController::class, 'add'])->name('.add');
+    // Route::any('/change-price', [PreOrderSupplierController::class, 'change_price'])->name('.change-price');
+    // Route::post('/store', [PreOrderSupplierController::class, 'store'])->name('.store');
 });
 
 
@@ -518,7 +521,7 @@ Route::get('/test_mail', function () {
         ];
         $email = new \App\Mail\ReportMail(collect($dataVisitReport));
 
-        \Mail::to($sendmail)->send($email);
+        // \Mail::to($sendmail)->send($email);
         // dispatch(new \App\Jobs\SendMailVisitJob($sendmail));
         dd('Success');
     } catch (\Throwable $th) {

@@ -27,8 +27,8 @@ class ForwarderItem extends Model
         });
     }
 
-    public function suppliers()
+    public function tracking()
     {
-        return $this->hasMany(Supplier::class, 'so_id');
+        return $this->hasMany(Tracking::class, 'tracking_id');
     }
 }

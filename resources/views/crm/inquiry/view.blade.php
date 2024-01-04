@@ -11,7 +11,7 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-8">
                 <div class="block block-rounded">
@@ -90,7 +90,7 @@
                     <div class="block-content block-content-full bg-pattern">
                         <h5>Document List</h5>
                         @php
-                            $no = 1;
+                        $no = 1;
                         @endphp
                         @if(json_decode($inquiry->files, true) !== null)
                         @foreach (json_decode($inquiry->files) as $item)
@@ -122,7 +122,7 @@
                     </thead>
                     <tbody>
                         @php
-                            $no = 1;
+                        $no = 1;
                         @endphp
                         @if(isset($inquiry->products))
                         @foreach ($inquiry->products as $item)

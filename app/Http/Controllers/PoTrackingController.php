@@ -13,30 +13,40 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use App\Http\Controllers\Helper\FilesController;
+use App\Http\Controllers\Helper\RedisController;
 
 class PoTrackingController extends Controller
 {
-    public function index(): View
+    protected $fileController, $redisController, $hosting;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->fileController = new FilesController();
+        $this->redisController = new RedisController();
+
+        if (env('HOSTING')) {
+            $this->hosting = env('HOSTING');
+        } else {
+            $this->hosting = false;
+        }
+    }
+    public function index(Request $request)
     {
         $query = Tracking::query()
-        ->with([
-            'sales_order',
-            'supplier',
-        ])
-        ->select([
-            'purchase_order_suppliers.id AS id',
-            'purchase_order_suppliers.sales_order_id AS sales_order_id',
-            'purchase_order_suppliers.supplier_id AS supplier_id',
-            'purchase_order_suppliers.transaction_date AS transaction_date',
-            'purchase_order_suppliers.transaction_code AS transaction_code',
-            'purchase_order_suppliers.status AS status',
-        ]);
-
-    if ($request->ajax()) {
-        return DataTables::eloquent($query)
-            ->addIndexColumn()
-            ->toJson();
-    }
+            ->with([
+                'purchase_order_suppliers',
+                'purchase_order_suppliers.supplier',
+            ])
+            ->select([
+                'trackings.status AS status'
+            ]);
+        if ($request->ajax()) {
+            return DataTables::eloquent($query)
+                ->addIndexColumn()
+                ->toJson();
+        }
         return view('po_tracking.index');
     }
 

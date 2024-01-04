@@ -38,10 +38,10 @@ class ApprovalPoSupplierController extends Controller
     public function index(Request $request)
     {
         $query = PurchaseOrderSupplier::query()
-        ->with([
-            'sales_order',
-            'supplier',
-        ])
+            ->with([
+                'sales_order',
+                'supplier',
+            ])
             ->select([
                 'purchase_order_suppliers.id AS id',
                 'purchase_order_suppliers.sales_order_id AS sales_order_id',
@@ -120,6 +120,4 @@ class ApprovalPoSupplierController extends Controller
             // return redirect()->back()->withInput($request->input())->with('quotation', $quotation)->with('error', Constants::ERROR_MSG);
         }
     }
-
-    
 }

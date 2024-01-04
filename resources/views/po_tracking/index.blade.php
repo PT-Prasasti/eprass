@@ -33,36 +33,120 @@
 
         <div class="block block-rounded">
             <div class="block-content block-content-full">
-                <table class="table table-striped table-vcenter js-dataTable-simple" style="font-size:13px">
+                <table id="table-po-tracking" class="table table-striped table-vcenter" style="font-size:13px">
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
                             <th class="text-center">PO Number</th>
                             <th class="text-center">Customer Name</th>
                             <th class="text-center">Supplier Name</th>
-                            <th class="text-center">DD to Customer</th>
+                            <!-- <th class="text-center">DD to Customer</th> -->
                             <th class="text-center">Status</th>
                             <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="text-center">1.</td>
-                            <td class="text-center">0002/PO/PRASASTI/X/2023</td>
-                            <td class="">PT. SPV</td>
-                            <td class="">-</td>
-                            <td class="text-center">01 Desember 2023</td>
-                            <td class="text-center"><span class="badge badge-danger">Waiting for Approvale</span></td>
-                            <td class="text-center">
-                                <a type="button" href="form_view.php" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Report">
-                                    <i class="fa fa-file-text-o"></i>
-                                </a>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
     </div>
+
+    <x-slot name="js">
+        <script>
+            const quotationTable = $('#table-po-tracking').DataTable({
+                ajax: `{{ url()->full() }}`,
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                language: {
+                    "paginate": {
+                        "previous": '<i class="fa fa-angle-left"></i>',
+                        "next": '<i class="fa fa-angle-right"></i>'
+                    }
+                },
+                order: [
+                    [1, 'desc']
+                ],
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: "8%",
+                        className: "text-center"
+                    },
+                    {
+                        data: 'purchase_order_suppliers.transaction_code',
+                        className: "text-center",
+                        render: function(data, type, row, meta) {
+                            console.log(row);
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'purchase_order_suppliers.supplier.company',
+                        className: "text-center",
+                        render: function(data, type, row, meta) {
+                            console.log(row);
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'purchase_order_suppliers.supplier.sales_representation',
+                        className: "text-center",
+                    },
+                    // {
+                    //     data: 'supplier.company',
+                    // },
+                    // {
+                    //     data: 'transaction_date',
+                    //     className: 'text-center',
+                    // },
+                    {
+                        data: 'status',
+                        className: 'text-left',
+                        render: function(data, type, row, meta) {
+                            console.log(data);
+                            var badgeColor = ``;
+                            switch (row.status) {
+                                case 'Waiting Approval For Manager':
+                                    badgeColor = `danger`;
+                                    break;
+                                case 'Sent PO':
+                                    badgeColor = `primary`;
+                                    break;
+                                case 'Approved By Manager':
+                                    badgeColor = `success`;
+                                    break;
+                                default:
+                                    badgeColor = `warning`;
+                            }
+
+                            return `<span class="badge badge-${badgeColor}">${row.status}</span>`;
+                        },
+                    },
+                    {
+                        className: 'text-center text-nowrap',
+                        render: function(data, type, row, meta) {
+                            var html = ``;
+                            console.log(row.status);
+                            html += `
+                                <a href="{{ route('approval-po') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
+                                    <i class="fa fa-file-text-o"></i>
+                                </a> |
+                            `;
+
+                            return `
+                                ${html}
+                            `
+                        },
+                    }
+                ],
+                fnCreatedRow: function(nRow, aData, iDataIndex) {
+                    $(nRow).attr('data-id', aData.id);
+                },
+            });
+        </script>
+    </x-slot>
 </x-app-layout>

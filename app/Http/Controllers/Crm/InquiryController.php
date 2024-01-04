@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Crm;
 
 use App\Constants;
 use App\Events\InquiryExcelExport;
+use App\Exports\InquiryExport;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Sales;
@@ -854,6 +855,35 @@ class InquiryController extends Controller
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
+
+    public function excel($id)
+    {
+          // dd( InquiryProduct::query()->where('inquiry_id', $this->id)->get());
+        $inquiry = Inquiry::with('visit', 'sales', 'products')->where('uuid', $id)->first();
+        $idInquiry = $inquiry->id;
+        $idVisit = $inquiry->visit_schedule_id;
+        $dueDate  = $inquiry->due_date;
+        $subject  = $inquiry->subject;
+        $gradeInquiry = $inquiry->grade;
+        $companyName = $inquiry->visit->customer->company;
+        $customerName = $inquiry->visit->customer->name;
+        $telephone =  $inquiry->visit->customer->company_phone;
+        $phone = $inquiry->visit->customer->phone;
+        $email = $inquiry->visit->customer->email;
+        $file = $inquiry->files;
+        $note = $inquiry->visit->note;
+        $note = $inquiry->visit->note;
+        $data = $inquiry->products;
+        return Excel::download(new InquiryExport($idInquiry, $idVisit, $dueDate, $subject, $gradeInquiry, $companyName, $customerName, $telephone, $phone, $email, $file, $note, $data, $id), 'inqury.xlsx');
+    }
+
+    public function reviewExcel($id)
+    {
+        // $query = Inquiry::query()->findOrFail($id);
+        return view('export.inquiry');
+    }
+
+
 
     public function delete_product(Request $request)
     {

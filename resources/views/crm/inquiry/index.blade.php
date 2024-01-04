@@ -878,6 +878,9 @@
                         className: "text-center",
                         render: function(data) {
                             return `@if(auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('hod') || auth()->user()->hasRole('manager'))
+                                    <a href="inquiry/excel/${data}" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
+                                        <i class="fa fa-print"></i>
+                                    </a>
                                     <a href="inquiry/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Inquiry">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
