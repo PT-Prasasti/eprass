@@ -874,7 +874,7 @@ class InquiryController extends Controller
         $note = $inquiry->visit->note;
         $note = $inquiry->visit->note;
         $data = $inquiry->products;
-        return Excel::download(new InquiryExport($idInquiry, $idVisit, $dueDate, $subject, $gradeInquiry, $companyName, $customerName, $telephone, $phone, $email, $file, $note, $data, $id), 'inqury.xlsx');
+        return Excel::download(new InquiryExport($idInquiry, $idVisit, $dueDate, $subject, $gradeInquiry, $companyName, $customerName, $telephone, $phone, $email, $file, $note, $data, $id), ''.str_replace('/','',$idInquiry).'.xlsx');
     }
 
     public function reviewExcel($id)
