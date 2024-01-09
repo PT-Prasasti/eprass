@@ -41,9 +41,76 @@
                     <a href="{{ route('dashboard') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
                 </li>
 
+                @if (auth()->user()->hasRole('hod'))
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">SALES</span>
+                </li>
+                <li>
+                    <a href="{{ route('crm.visit-schedule') }}"><i class="fa fa-calendar"></i><span class="sidebar-mini-hide">ListVisit Schedule</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('crm.visit-report') }}"><i class="fa fa-file-text-o"></i><span class="sidebar-mini-hide">List Report</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide">List Inquiry</span></a>
+                </li>
+
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">SALES ADMIN</span>
+                </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-edit"></i><span class="sidebar-mini-hide">Sales Order</span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('transaction.sales-order.add') }}">Add SO</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('transaction.sales-order') }}">List SO</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                        <i class="fa fa-lock"></i>
+                        <span class="sidebar-mini-hide">Quotation</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('transaction.quotation.add') }}">Add Quotation</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('transaction.quotation') }}">List Quotation</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('transaction.quotation') }}?filter=reject">Rejected Quotation</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">PURCHASING</span>
+                </li>
+                <li>
+                    @if (auth()->user()->hasRole('manager'))
+                    <a href="{{ route('transaction.sourcing-item') }}"><i class="fa fa-fax"></i><span class="sidebar-mini-hide">List Sourcing Item</span></a>
+                    @else
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-fax"></i><span class="sidebar-mini-hide">Sourcing Item</span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('transaction.sourcing-item.add') }}">Add Sourcing Item</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item</a>
+                        </li>
+                    </ul>
+                    @endif
+                </li>
+
+                @endif
+                
                 @if (auth()->user()->hasRole('sales') ||
                 auth()->user()->hasRole('superadmin') ||
-                auth()->user()->hasRole('hod') || auth()->user()->hasRole('manager') )
+                auth()->user()->hasRole('hos') || auth()->user()->hasRole('manager') )
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Pipeline</span>
                 </li>
@@ -111,7 +178,7 @@
                 auth()->user()->hasRole('manager') ||
                 auth()->user()->hasRole('purchasing') ||
                 auth()->user()->hasRole('superadmin') ||
-                auth()->user()->hasRole('hod'))
+                auth()->user()->hasRole('hos'))
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Transaction</span>
                 </li>
@@ -119,7 +186,7 @@
 
                 @if (auth()->user()->hasRole('admin_sales') ||
                 auth()->user()->hasRole('superadmin') ||
-                auth()->user()->hasRole('hod') ||auth()->user()->hasRole('manager') )
+                auth()->user()->hasRole('hos') ||auth()->user()->hasRole('manager') )
                 <li>
                     <a href="{{ route('crm.inquiry') }}"><i class="si si-docs"></i><span class="sidebar-mini-hide">List Inquiry</span></a>
                 </li>
@@ -171,7 +238,7 @@
                 @if (auth()->user()->hasRole('purchasing') ||
                 auth()->user()->hasRole('manager') ||
                 auth()->user()->hasRole('superadmin') ||
-                auth()->user()->hasRole('hod'))
+                auth()->user()->hasRole('hos'))
                 <li>
                     <a href="{{ route('transaction.sales-order') }}"><i class="si si-docs"></i><span class="sidebar-mini-hide">List Sales Order</span></a>
                 </li>
