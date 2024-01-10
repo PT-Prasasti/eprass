@@ -80,7 +80,7 @@
                     <span class="sidebar-mini-hidden">PURCHASING</span>
                 </li>
                 <li>
-                    <a href="{{ route('transaction.sourcing-item') }}"><i class="fa fa-fax"></i><span class="sidebar-mini-hide">List Sourcing Item</span></a>
+                    <a href="{{ route('transaction.sourcing-item') }}"><i class="fa fa-fax"></i><span class="sidebar-mini-hide">List App Item</span></a>
                 </li>
                 @endif
 

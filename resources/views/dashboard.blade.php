@@ -22,6 +22,12 @@
                                     </p>
                                     <p class="font-w600 text-white"><b>INQUIRY</b></p>
                                 @endif
+                                @if (auth()->user()->hasRole('hod') || auth()->user()->hasRole('manager'))
+                                    <p class="mt-10 text-white" style="font-size: 30px; margin-bottom: -10px;">
+                                        <b id="visit-count">{{ $inquiry }}</b>
+                                    </p>
+                                    <p class="font-w600 text-white"><b>INQUIRY</b></p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -42,6 +48,12 @@
                                     <p class="font-w600 text-white"><b>INQUIRY</b></p>
                                 @endif
                                 @if (auth()->user()->hasRole('admin_sales'))
+                                    <p class="mt-10 text-white" style="font-size: 30px; margin-bottom: -10px;">
+                                        <b>{{ $sales }}</b>
+                                    </p>
+                                    <p class="font-w600 text-white"><b>SALES ORDER</b></p>
+                                @endif
+                                @if (auth()->user()->hasRole('hod') || auth()->user()->hasRole('manager'))
                                     <p class="mt-10 text-white" style="font-size: 30px; margin-bottom: -10px;">
                                         <b>{{ $sales }}</b>
                                     </p>
@@ -87,7 +99,7 @@
         </div>
     </div>
 
-    @if (auth()->user()->hasRole('admin_sales'))
+    @if (auth()->user()->hasRole('hod') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('admin_sales'))
         <div class="content row">
             <div class="col-xl-6">
                 <div class="block">
@@ -209,10 +221,10 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     @endif
+
+    
 
     @if (auth()->user()->hasRole('admin_sales'))
         <x-slot name="js">

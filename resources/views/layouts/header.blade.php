@@ -113,10 +113,10 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right min-width-200"
                     aria-labelledby="page-header-user-dropdown">
-                    <a class="dropdown-item" href="">
+                    <!-- <a class="dropdown-item" href="">
                         <i class="si si-user mr-5"></i> Profile
                     </a>
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-divider"></div> -->
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
 
