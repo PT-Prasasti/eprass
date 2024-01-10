@@ -252,7 +252,7 @@
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                     @endif
-                                    @if (auth()->user()->hasRole('purchasing') ||
+                                    @if (auth()->user()->hasRole('purchasing') || auth()->user()->hasRole('hod') ||
                                             auth()->user()->hasRole('superadmin'))
                                     <a href="` + (status == "SELECTION DONE" ? "sales-order/price/" + data : "#") +
                                     `" class="btn btn-sm btn-` + (status == "SELECTION DONE" ? "success" :
