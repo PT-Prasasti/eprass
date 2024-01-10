@@ -106,6 +106,15 @@
                     @endif
                 </li>
 
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Transaction SALES</span>
+                </li>
+                <li>
+                    <a href="{{ route('purchase-order-customer-sales') }}">
+                        <i class="fa fa-dollar"></i>
+                        <span class="sidebar-mini-hide">List PO Customer</span>
+                    </a>
+                </li>
                 @endif
                 
                 @if (auth()->user()->hasRole('sales') ||
