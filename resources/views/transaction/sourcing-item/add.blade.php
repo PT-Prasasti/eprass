@@ -206,41 +206,18 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
-                            <div class="row">
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <input class="custom-control-input" type="checkbox" name="" id="f1" value="">
-                                        <label class="custom-control-label" for="f1">Catalog</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <input class="custom-control-input" type="checkbox" name="" id="f2" value="">
-                                        <label class="custom-control-label" for="f2">Drawing</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <input class="custom-control-input" type="checkbox" name="" id="f3" value="">
-                                        <label class="custom-control-label" for="f3">Folder 1</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 text-center">
-                                    <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <input class="custom-control-input" type="checkbox" name="" id="f4" value="">
-                                        <label class="custom-control-label" for="f4">Folder 2</label>
+                            <div class="block block-rounded">
+                                <div class="block-content block-content-full bg-pattern">
+                                    <div class="row">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
+                                            <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
+                                        </div>
+                                        <div class="block block-rounded mt-3">
+                                            <div class="block-content block-content-full bg-pattern">
+                                                <h5>Document List</h5>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
