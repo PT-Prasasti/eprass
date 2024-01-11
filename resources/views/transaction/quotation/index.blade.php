@@ -234,6 +234,9 @@
 
                             return `
                                 ${html}
+                                <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
+                                        <i class="fa fa-print"></i>
+                                    </a> |
                                 <a href="{{ route('transaction.quotation') }}/${row.id}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
                                 </a>
