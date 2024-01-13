@@ -52,7 +52,7 @@
                     <a href="{{ route('crm.visit-report') }}"><i class="fa fa-file-text-o"></i><span class="sidebar-mini-hide">List Report</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide">List Inquiry</span></a>
+                    <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide" id="inquiry-nav">List Inquiry</span></a>
                 </li>
 
                 <li class="nav-main-heading">
@@ -95,7 +95,7 @@
                     <a href="{{ route('crm.visit-report') }}"><i class="fa fa-file-text-o"></i><span class="sidebar-mini-hide">List Report</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide">List Inquiry</span></a>
+                    <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide" id="inquiry-nav">List Inquiry</span></a>
                 </li>
 
                 <li class="nav-main-heading">
@@ -195,7 +195,7 @@
                             <a href="{{ route('crm.inquiry.add') }}">Add Inquiry</a>
                         </li>
                         <li>
-                            <a href="{{ route('crm.inquiry') }}">List Inquiry</a>
+                            <a href="{{ route('crm.inquiry') }}" >List Inquiry</a>
                         </li>
                     </ul>
                 </li>

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PoTrackingController;
 use App\Http\Controllers\Crm\InquiryController;
 use App\Http\Controllers\ListPaymentController;
+use App\Http\Controllers\Ajax\HelperController;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Crm\VisitReportController;
 use App\Http\Controllers\DataMaster\SalesController;
@@ -499,6 +500,13 @@ Route::prefix('/pre-order')->name('pre-order')->group(function () {
     // Route::post('/add', [PreOrderSupplierController::class, 'add'])->name('.add');
     // Route::any('/change-price', [PreOrderSupplierController::class, 'change_price'])->name('.change-price');
     // Route::post('/store', [PreOrderSupplierController::class, 'store'])->name('.store');
+});
+
+
+//Helper
+
+Route::prefix('/helper')->name('helper')->group(function () {
+    Route::get('/count-new-inquiry', [HelperController::class, 'countNewInquiry'])->name('.count-new-inquiry');
 });
 
 
