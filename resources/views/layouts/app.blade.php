@@ -210,6 +210,18 @@
     </script>
     @endif
     
+    @if (auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) 
+    <script>
+        $.get("{{ route('helper.count-new-inquiry') }}", function(data){
+            console.log("helper data", data);
+            if (data.data.jumlah > 0) {
+                $("#inquiry-nav").append(`&nbsp;<i class="badge badge-danger">`+data.data.jumlah+`<i>`)
+            }
+            
+        })
+    </script>
+    @endif
+
     @if (isset($js))
     {{ $js }}
     @endif

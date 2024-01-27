@@ -77,4 +77,6 @@ class HelperController extends Controller
             'data' => $documents
         ]);
     }
+    
 }
+

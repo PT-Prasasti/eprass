@@ -502,6 +502,11 @@ Route::prefix('/pre-order')->name('pre-order')->group(function () {
     // Route::post('/store', [PreOrderSupplierController::class, 'store'])->name('.store');
 });
 
+//Helper
+
+Route::prefix('/helper')->name('helper')->group(function () {
+    Route::get('/count-new-inquiry', [HelperController::class, 'countNewInquiry'])->name('.count-new-inquiry');
+});
 
 //Helper
 
