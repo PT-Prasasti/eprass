@@ -14,6 +14,7 @@ use App\Models\Supplier;
 use App\Models\Sourcing;
 use App\Models\SourcingItem;
 use App\Models\SourcingSupplier;
+use App\Models\Documentes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
@@ -82,7 +83,12 @@ class SourcingItemController extends Controller
 
     public function store(Request $re)
     {
+
+        ini_set('max_input_vars', 2000);
+        ini_set('max_multipart_body_parts', 2000);
+
         /* grouping param by product inquery id */
+
         $inquery_id = $re->so_id[0];
         $par = [];
         foreach ($re->product_inquery_id as $v) {
@@ -96,9 +102,9 @@ class SourcingItemController extends Controller
                     'product_desc' => $re->product_desc[$v][$k],
                     'product_qty' => $re->product_qty[$v][$k],
                     'product_curentcy' => $re->product_curentcy[$v][$k],
-                    'product_price' => str_replace(".", "", $re->product_price[$v][$k]),
-                    'production_time' => $re->production_time[$v][$k],
-                    'remark' => $re->remark[$v][$k],
+                    'product_price' => str_replace(".", "", $re->product_price[$v][$k] ?? ""),
+                    'production_time' => $re->production_time[$v][$k] ?? null,
+                    'remark' => $re->remark[$v][$k] ?? null,
                 ];
             }
         }
@@ -179,6 +185,7 @@ class SourcingItemController extends Controller
         $so = SalesOrder::where('uuid', $id)->first();
 
         $result = array(
+            'soid' => $so->id,
             'sales' => $so->inquiry->visit->sales->name,
             'customer' => $so->inquiry->visit->customer->name,
             'company' => $so->inquiry->visit->customer->company,
@@ -222,6 +229,9 @@ class SourcingItemController extends Controller
 
             Redis::set($key, json_encode($data));
         }
+
+        //documents
+        $result['documents'] = Documentes::getDocuments("sales_orders", $so->id);
 
         return response()->json($result);
     }

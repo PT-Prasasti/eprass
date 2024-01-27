@@ -507,6 +507,9 @@ Route::prefix('/pre-order')->name('pre-order')->group(function () {
 
 Route::prefix('/helper')->name('helper')->group(function () {
     Route::get('/count-new-inquiry', [HelperController::class, 'countNewInquiry'])->name('.count-new-inquiry');
+    Route::get('/attachment/list', [HelperController::class, 'doclist'])->name('.doclist');
+    Route::post('/attachment/add', [HelperController::class, 'docadd'])->name('.docadd');
+    Route::post('/attachment/delete', [HelperController::class, 'docrem'])->name('.docrem');
 });
 
 
