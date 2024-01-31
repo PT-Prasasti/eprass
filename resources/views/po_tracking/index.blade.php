@@ -96,18 +96,17 @@
                         data: 'purchase_order_suppliers.supplier.sales_representation',
                         className: "text-center",
                     },
-                    // {
-                    //     data: 'supplier.company',
-                    // },
-                    // {
-                    //     data: 'transaction_date',
-                    //     className: 'text-center',
-                    // },
                     {
-                        data: 'status',
+                        data: 'supplier.company',
+                    },
+                    {
+                        data: 'transaction_date',
+                        className: 'text-center',
+                    },
+                    {
                         className: 'text-left',
                         render: function(data, type, row, meta) {
-                            console.log(data);
+                            console.log(row);
                             var badgeColor = ``;
                             switch (row.status) {
                                 case 'Waiting Approval For Manager':

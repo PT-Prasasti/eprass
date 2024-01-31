@@ -34,11 +34,12 @@ class PoTrackingController extends Controller
     }
     public function index(Request $request)
     {
-        $query = Tracking::query()
-            ->with([
-                'purchase_order_suppliers',
-              
-            ])->select('trackings.status AS status');
+
+        $query = Tracking::with(
+            [
+                'purchase_order_supplier'
+            ]
+        );
         if ($request->ajax()) {
             return DataTables::eloquent($query)
                 ->addIndexColumn()

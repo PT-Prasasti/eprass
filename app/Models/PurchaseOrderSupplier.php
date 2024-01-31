@@ -61,4 +61,11 @@ class PurchaseOrderSupplier extends Model
     {
         return $this->hasMany(PurchaseOrderSupplierItem::class);
     }
+    
+    public function tracking()
+    {
+        return $this->hasOne(Tracking::class);
+    }
+
+    
 }

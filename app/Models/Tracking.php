@@ -10,6 +10,10 @@ class Tracking extends Model
 {
     use HasFactory;
 
+
+    protected $primaryKey = 'id';
+
+
     protected $guarded = [];
 
     public static function boot()
@@ -26,8 +30,8 @@ class Tracking extends Model
         return $this->hasMany(ForwarderItem::class);
     }
     
-    public function purchase_order_suppliers()
+    public function purchase_order_supplier()
     {
-        return $this->belongsTo(PurchaseOrderSupplier::class, 'po_suplier_id',);
+        return $this->belongsTo(PurchaseOrderSupplier::class, 'po_suplier_id', 'id');
     }
 }
