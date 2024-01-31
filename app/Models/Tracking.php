@@ -28,6 +28,6 @@ class Tracking extends Model
     
     public function purchase_order_suppliers()
     {
-        return $this->belongsTo(PurchaseOrderSupplier::class, 'po_suplier_id', 'id');
+        return $this->belongsTo(PurchaseOrderSupplier::class, 'po_suplier_id',);
     }
 }

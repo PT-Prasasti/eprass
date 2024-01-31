@@ -130,7 +130,6 @@
                         className: 'text-center text-nowrap',
                         render: function(data, type, row, meta) {
                             var html = ``;
-                            console.log(row.status);
                             html += `
                                 <a href="{{ route('approval-po') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
