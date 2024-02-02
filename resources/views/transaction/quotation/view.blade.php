@@ -68,6 +68,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#btabs-static-review">Term &amp; Condition</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#btabs-static-doc">Document</a>
+                            </li>
                         </ul>
 
                         <div class="block-content tab-content">
@@ -223,6 +226,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#btabs-static-review">Term &amp; Condition</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#btabs-static-doc">Document</a>
+                            </li>
                         </ul>
 
                         <div class="block-content tab-content">
@@ -336,7 +342,7 @@
                                     <div class="col-md-4">
                                         <div class="block block-rounded">
                                             <div class="block-content block-content-full bg-pattern">
-                                                <h5>Document List</h5>
+                                                {{-- <h5>Document List</h5>
                                                 @if ($query->sales_order->inquiry->files)
                                                     <?php
                                                     $files = json_decode($query->sales_order->inquiry->files);
@@ -351,7 +357,7 @@
                                                     <?php
                                                     }
                                                     ?>
-                                                @endif
+                                                @endif --}}
                                             </div>
                                         </div>
                                     </div>
@@ -481,6 +487,34 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full bg-pattern">
+                                        <div class="row">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
+                                                <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
+                                            </div>
+                                            <div class="block block-rounded mt-3">
+                                                <div class="block-content block-content-full bg-pattern">
+                                                    <h5>Document List</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="product-file-type">
+                                                    <ul class="list-unstyled" id="document-attachment-list">
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -488,3 +522,110 @@
         </div>
     @endif
 </x-app-layout>
+<style>
+    .block-file-header {
+        background-color: #eee;
+        width: 50px;
+        height: 50px;
+        padding: 10px;
+    }
+
+    .block-file-body {
+        padding-top:15px;
+    }
+</style>
+<script>
+    /* upload and show document start */
+
+    /* triggers */
+
+    $(document).ready(function(){
+        SOID = '{{ $id }}';
+        getDocuments();
+    })
+
+    $("#example-file-input-custom").change(function(){
+        var fileinfo = $(this)[0].files[0];
+        addDocument(fileinfo);
+    });
+
+    /* functions */
+
+    function addDocument(fileinfo)
+    {
+        var formData = new FormData();
+        
+        formData.append('file', fileinfo);
+        formData.append('related_table', 'quotations');
+        formData.append('related_id', SOID);
+        formData.append('file_size', fileinfo.size);
+        formData.append('file_type', fileinfo.type);
+        formData.append('_token', "{{ csrf_token() }}");
+
+        $.ajax({
+            url : "{{ route('helper.docadd') }}",
+            type : 'POST',
+            data : formData,
+            processData: false, 
+            contentType: false,
+            success : function(data, status) {
+                if (status == "success") {
+                    getDocuments()
+                }
+            },
+            error : function(data, status) {
+                alert("Upload gagal, pastikan file yang diupload tidak terlalu besar dan tidak corrupt!");
+            }
+        });
+    }
+
+    function getDocuments() 
+    {
+        $.get("{{ route('helper.doclist') }}?related_table=quotations&related_id=" + SOID, function(res){
+            
+            baseurl = "{{asset('storage')}}/";
+            html = ``
+            $.each(res.data, function(k,v){
+
+                filetype = "";
+                sliptstr = v.file_type.split("/");
+                filetype = sliptstr[1];
+
+                html = html + `
+                <li class="media media-list">
+                    <span class="mr-3 align-self-center img-icon primary-rgba text-primary d-block block-file-header">.`+ filetype +`</span>
+                    <div class="media-body block-file-body">
+                        <h5 class="font-16 mb-1">`+v.filename+`
+                            <span class="float-right">
+                            <a href="`+ baseurl + v.path+`" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                            <a onclick="rmDocument(`+v.id+`)" class="btn btn-sm btn-danger delete-pointer"><i class="fa fa-trash text-white"></i></a>
+                            <span>
+                        </h5>
+                        <p>`+v.timeago+`, `+(v.file_size/1024).toFixed(2)+` KB</p>
+                    </div>
+                </li>
+                `;
+            })
+            setTimeout(() => {
+                $("#document-attachment-list").html(html);
+            }, 200);
+        });
+    }
+
+    function rmDocument(id)
+    {
+        response = window.confirm("Apa anda yakin ingin menghapus document ini? Aksi ini tidak bisa di-rollback")
+        if (response) {
+            $.post("{{ route('helper.docrem') }}", {
+                _token : "{{ csrf_token() }}",
+                id : id
+            }, function(data){
+                getDocuments()
+            })
+        } else {
+            return false;
+        }
+    }
+
+    /* upload and show document finish */
+</script>
