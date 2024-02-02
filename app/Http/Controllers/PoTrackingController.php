@@ -45,8 +45,33 @@ class PoTrackingController extends Controller
             $result = DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('po_number', function ($q) {
-                    return $q->;
+                    return $q->purchase_order_supplier->transaction_code;
                 })
+                ->addColumn('customer_name', function ($q) {
+                    return $q->purchase_order_supplier->supplier->company;
+                })
+                ->addColumn('supplier_name', function ($q) {
+                    return $q->purchase_order_suppliers->supplier->sales_representation;
+                })
+                ->addColumn('status', function ($row) {
+                    $badgeColor = '';
+                    switch ($row->status) {
+                        case 'Waiting Approval For Manager':
+                            $badgeColor = 'danger';
+                            break;
+                        case 'Sent PO':
+                            $badgeColor = 'primary';
+                            break;
+                        case 'Approved By Manager':
+                            $badgeColor = 'success';
+                            break;
+                        default:
+                            $badgeColor = 'warning';
+                    }
+    
+                    return '<span class="badge badge-' . $badgeColor . '">' . $row->status . '</span>';
+                })
+                ->toJson();
         }
     }
 
