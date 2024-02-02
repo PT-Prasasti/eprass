@@ -77,6 +77,7 @@ Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
     Route::get('/search/po_supplier', [PoTrackingController::class, 'search_po_supplier'])->name('.search.po_supplier');
     Route::get('/search/forwarder', [PoTrackingController::class, 'search_forwarder'])->name('.search.forwarder');
     Route::get('/', [PoTrackingController::class, 'index']);
+    Route::get('/data', [PoTrackingController::class, 'data'])->name('.data');
 });
 
 // route data master

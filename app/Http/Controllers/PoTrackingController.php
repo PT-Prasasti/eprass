@@ -34,23 +34,26 @@ class PoTrackingController extends Controller
     }
     public function index(Request $request)
     {
-
-        $query = Tracking::with(
-            [
-                'purchase_order_supplier'
-            ]
-        );
-        if ($request->ajax()) {
-            return DataTables::eloquent($query)
-                ->addIndexColumn()
-                ->toJson();
-        }
         return view('po_tracking.index');
+    }
+
+    public function data(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Tracking::orderBy('created_at', 'DESC')->get();
+
+            $result = DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('po_number', function ($q) {
+                    return $q->;
+                })
+        }
     }
 
     public function add(): View
     {
-        return view('po_tracking.add');
+        $data['forwarders'] = \App\Models\Forwarder::get();
+        return view('po_tracking.add', $data);
     }
 
     public function search_po_supplier(Request $request): JsonResponse
@@ -87,46 +90,50 @@ class PoTrackingController extends Controller
 
     public function store(Request $request)
     {
-        DB::beginTransaction();
-        try {
-            $query = new Tracking();
-            $query->po_suplier_id = $request->po_suplier_id;
-            $query->status = 'Ready Pick Up';
-            $query->save();
+        // dd($request->all());
+        $inquery_id = $request->so_id[0];
+        $par = [];
 
-            foreach ($request->input('details') as $detail) {
-                ForwarderItem::create([
-                    'tracking_id' => $query->id,
-                    'forwarder_id' => $detail['forwarder_id'],
-                    'price' => $detail['price'],
-                    'track' => $detail['track'],
-                    'description' => $detail['description'],
-                ]);
+        foreach ($request->product_inquery_id as $value) {
+            foreach ($request->forwarder_id[$value] as $key => $r) {
+                $par[$value][$key] = [
+                    'so_id' => $inquery_id,
+                    'forwarder_id' => $request->forwarder_id[$value][$key],
+                    'forwarder' => \App\Models\Forwarder::find($request->forwarder_id[$value][$key]),
+                    'inquery_products' => \App\Models\InquiryProduct::find($value),
+                    'price' => str_replace(".", "", $request->price[$value][$key]),
+                    "track" => $request->track[$value][$key],
+                    "description" => $request->description[$value][$key],
+                ];
             }
+        }
 
-            // if ($request->document_list) {
-            //     $files = json_decode($request->document_list, true);
-            //     $fileDirectory = 'purchase-order-suppliers';
-            //     foreach ($files as $item) {
-            //         $sourceFilePath = storage_path('app/temp/' . $fileDirectory . '/' . $item['filename']);
-            //         $destinationFilePath = storage_path('app/public/' . $fileDirectory . '/' . $item['filename']);
+        try {
+            DB::beginTransaction();
+            $tracking = new Tracking();
+            $tracking->po_suplier_id = $request->selected_po_supplier;
+            $tracking->status = 'Ready Pick Up';
+            $tracking->save();
 
-            //         if (!Storage::exists('public/' . $fileDirectory)) {
-            //             Storage::makeDirectory('public/' . $fileDirectory);
-            //         }
-
-            //         if (file_exists($sourceFilePath)) {
-            //             rename($sourceFilePath, $destinationFilePath);
-            //         }
-            //     }
-            // }
+            foreach ($par as $product_inquery_id => $items) {
+                foreach ($items as $item) {
+                    $forwarderItem = new \App\Models\ForwarderItem;
+                    $forwarderItem->tracking_id = $tracking->id;
+                    $forwarderItem->forwarder_id = $item['forwarder']->id;
+                    $forwarderItem->price = $item['price'];
+                    $forwarderItem->track = $item['track'];
+                    $forwarderItem->description = $item['description'];
+                    $forwarderItem->save();
+                }
+            }
 
             DB::commit();
 
-            return ["data" => $query];
+            return redirect(route('po-tracking.add'))->with("success", "Data has beed successfuly submited");
         } catch (\Exception $e) {
             dd($e);
-            return redirect()->back()->withInput($request->input())->with('quotation', $quotation)->with('error', Constants::ERROR_MSG);
+            DB::rollback();
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
 }

@@ -345,7 +345,7 @@
             function review_product_select(datas)
             {
                 $(datas).each(function(k,v){
-                    console.log('product detail', v)
+                    // console.log('product detail', v)
                     no = k + 1;
                     html = `
                         <div class="carl-long-row carl-long-row-`+k+`" data-rowid="`+k+`" data-prodinq="`+v[5]+`">

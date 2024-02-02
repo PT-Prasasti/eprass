@@ -82,6 +82,27 @@
                 <li>
                     <a href="{{ route('transaction.sourcing-item') }}"><i class="fa fa-fax"></i><span class="sidebar-mini-hide">List App Item</span></a>
                 </li>
+
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Order Customer</span>
+                </li>
+                <li>
+                    <a href="{{ route('purchase-order-customer') }}">
+                        <i class="fa fa-file"></i>
+                        <span class="sidebar-mini-hide">List PO Customer</span>
+                    </a>
+                </li>
+
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Order Supplier</span>
+                </li>
+                <li>
+                    <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App PO Supplier</span></a>
+                </li>
+                <li>
+                    <a class="" href="{{ route('approval-payment') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App Payment Request</span></a>
+                </li>
+
                 @endif
 
                 @if (auth()->user()->hasRole('hod'))
@@ -309,7 +330,7 @@
                     </ul>
                     @endif
                 </li>
-                @if (auth()->user()->hasRole('manage'))
+                @if (auth()->user()->hasRole('manager'))
 
                 @else
 
@@ -325,7 +346,7 @@
 
                 @endif
 
-                @if (auth()->user()->hasRole('manage'))
+                @if (auth()->user()->hasRole('manager'))
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Order Supplier</span>
                 </li>
@@ -351,7 +372,6 @@
                         <li>
                             <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
                         </li>
-
                     </ul>
                 </li>
                 <li>
@@ -402,11 +422,14 @@
                 @endif
 
                 @if (auth()->user()->hasRole('exim'))
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Order Supplier</span>
+                </li>
                 <li>
                     <a class="nav-submenu nav-link" data-toggle="nav-submenu" href="#"><i class="fa fa-dollar"></i><span class="sidebar-mini-hide">PO Supplier</span></a>
                     <ul>
                         <li>
-                            <a href="../po_supplier/index.php">List PO Supplier</a>
+                            <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
                         </li>
                     </ul>
                 </li>
