@@ -34,45 +34,9 @@ class PoTrackingController extends Controller
     }
     public function index(Request $request)
     {
-        return view('po_tracking.index');
-    }
-
-    public function data(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Tracking::orderBy('created_at', 'DESC')->get();
-
-            $result = DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('po_number', function ($q) {
-                    return $q->purchase_order_supplier->transaction_code;
-                })
-                ->addColumn('customer_name', function ($q) {
-                    return $q->purchase_order_supplier->supplier->company;
-                })
-                ->addColumn('supplier_name', function ($q) {
-                    return $q->purchase_order_suppliers->supplier->sales_representation;
-                })
-                ->addColumn('status', function ($row) {
-                    $badgeColor = '';
-                    switch ($row->status) {
-                        case 'Waiting Approval For Manager':
-                            $badgeColor = 'danger';
-                            break;
-                        case 'Sent PO':
-                            $badgeColor = 'primary';
-                            break;
-                        case 'Approved By Manager':
-                            $badgeColor = 'success';
-                            break;
-                        default:
-                            $badgeColor = 'warning';
-                    }
-    
-                    return '<span class="badge badge-' . $badgeColor . '">' . $row->status . '</span>';
-                })
-                ->toJson();
-        }
+        $data = Tracking::with(['purchase_order_supplier.supplier'])->orderBy('created_at', 'DESC')
+        ->get();
+        return view('po_tracking.index', compact('data'));
     }
 
     public function add(): View
@@ -115,7 +79,6 @@ class PoTrackingController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $inquery_id = $request->so_id[0];
         $par = [];
 
@@ -160,5 +123,30 @@ class PoTrackingController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
+    }
+
+    public function update_status(Request $req, $id)
+    {
+        $tracking = Tracking::find($id);
+        if ($tracking) {
+            $tracking->status = $req->status;
+            $tracking->save();
+            return redirect()->back()->with("success", "Status updated successfully");
+        } else {
+            return redirect()->back()->with("error", "Failed to update status");
+        }
+    }
+
+    public function view($id)
+    {
+        $tracking = Tracking::with([
+            'purchase_order_supplier',
+            'purchase_order_supplier.sales_order.sourcing.selected_sourcing_suppliers.supplier',
+            'purchase_order_supplier.sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
+            'purchase_order_supplier.sales_order.inquiry.visit.customer',
+            'purchase_order_supplier.sales_order.quotations.purchase_order_customer',
+        ])->where('uuid', $id)->first();
+    
+        return view('po_tracking.view', compact('tracking'));
     }
 }
