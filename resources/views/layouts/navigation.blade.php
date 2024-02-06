@@ -52,6 +52,7 @@
                     <a href="{{ route('crm.visit-report') }}"><i class="fa fa-file-text-o"></i><span class="sidebar-mini-hide">List Report</span></a>
                 </li>
                 <li>
+                <li>
                     <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide" id="inquiry-nav">List Inquiry</span></a>
                 </li>
 
