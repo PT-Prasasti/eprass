@@ -33,14 +33,14 @@ class UserAndRoleSeeder extends Seeder
 
         $finance = User::updateOrCreate(
             [
-                'username' => 'dhita@pt-prasasti.com',
+                'username' => 'adisti@pt-prasasti.com',
             ],
             [
-                'name' => 'Fitri',
-                'password' => bcrypt('cp4NO170902'),
-                'email' => 'fitri@pt-prasasti.com'
+                'name' => 'Adisti',
+                'password' => bcrypt('cp4NO170855'),
+                'email' => 'adisti@pt-prasasti.com'
             ]
         );
-        $finance->assignRole('purchasing');
+        $finance->assignRole('sales');
     }
 }
