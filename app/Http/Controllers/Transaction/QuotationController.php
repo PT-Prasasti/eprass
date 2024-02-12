@@ -240,6 +240,7 @@ class QuotationController extends Controller
         $vatTypes = VatTypeConstant::texts();
 
         return view('transaction.quotation.view', [
+            'id' => $id,
             'query' => $query,
             'paymentTerms' => $paymentTerms,
             'vatTypes' => $vatTypes,

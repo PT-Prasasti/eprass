@@ -229,15 +229,22 @@
                             data: null,
                             className: "text-center",
                             render: function(r) {
-                                console.log('action data', r)
+                                // console.log('action data', r)
                                 data = r.uuid
                                 status = r.status
-                                return `@if (auth()->user()->hasRole('manager'))
+
+                                console.log('status', r.status);
+                                console.log('id', r.id);
+                                
+                                return `
+                                    @if (auth()->user()->hasRole('manager'))
+
                                     <a href="` + (status == "ON PROCESS" ? "sales-order/open/" + data : "#") +
                                     `" class="btn btn-sm btn-` + (status == "ON PROCESS" ? "success" :
                                         "secondary") + `" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-file"></i>
                                     </a>
+
                                     ` + (status == "SELECTION DONE" ? `
                                     <a href="sourcing-item/selected/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Selected Supliyer">
                                         <i class="fa fa-eye"></i>
@@ -247,6 +254,7 @@
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                     @endif
+
                                     @if (auth()->user()->hasRole('superadmin'))
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-pencil"></i>
@@ -254,8 +262,9 @@
                                     @endif
                                     @if (auth()->user()->hasRole('purchasing') || auth()->user()->hasRole('hod') ||
                                             auth()->user()->hasRole('superadmin'))
-                                    <a href="` + (status == "SELECTION DONE" ? "sales-order/price/" + data : "#") +
-                                    `" class="btn btn-sm btn-` + (status == "SELECTION DONE" ? "success" :
+
+                                    <a href="` + (status == "SELECTION DONE" || status == "PRICE LIST READY" ? "sales-order/price/" + data : "#") +
+                                    `" class="btn btn-sm btn-` + (status == "SELECTION DONE" || status == "PRICE LIST READY" ? "success" :
                                         "secondary") + `" data-toggle="tooltip" title="Price">
                                         <i class="fa fa-dollar"></i>
                                     </a>

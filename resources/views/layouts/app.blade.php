@@ -198,7 +198,6 @@
             }
         });
     </script>
-    
     @if (auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) 
     <script>
         $.get("{{ route('helper.count-new-inquiry') }}", function(data){
