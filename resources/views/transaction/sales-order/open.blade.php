@@ -18,14 +18,14 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
                     @endif
                     @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                     @endif
                 </div>
                 <div class="col-lg-12">
@@ -64,8 +64,7 @@
                                                             <label class="col-lg-3 col-form-label">Sales Name</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control"
-                                                                    name="sales" value="" disabled>
+                                                                <input type="text" class="form-control" name="sales" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -73,56 +72,48 @@
                                                                 Name</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control"
-                                                                    name="customer" value="" readonly>
+                                                                <input type="text" class="form-control" name="customer" value="" readonly>
                                                             </div>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control"
-                                                                    name="company" value="" readonly>
+                                                                <input type="text" class="form-control" name="company" value="" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Phone & Email</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control"
-                                                                    name="phone" value="" disabled>
+                                                                <input type="text" class="form-control" name="phone" value="" disabled>
                                                             </div>
                                                             <div class="col-lg-4">
-                                                                <input type="text" class="form-control"
-                                                                    name="email" value="" disabled>
+                                                                <input type="text" class="form-control" name="email" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Telp</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control"
-                                                                    name="company_phone" value="" disabled>
+                                                                <input type="text" class="form-control" name="company_phone" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Subject</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control"
-                                                                    name="subject" value="" disabled>
+                                                                <input type="text" class="form-control" name="subject" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Due Date</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control"
-                                                                    name="due_date" value="" disabled>
+                                                                <input type="text" class="form-control" name="due_date" value="" disabled>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-lg-3 col-form-label">Grade</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-8">
-                                                                <input type="text" class="form-control"
-                                                                    name="grade" value="" disabled>
+                                                                <input type="text" class="form-control" name="grade" value="" disabled>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -153,23 +144,15 @@
                                             </div>
                                             <div class="col-md-6 text-right">
                                                 <div class="push">
-                                                    <div class="btn-group" role="group"
-                                                        aria-label="Button group with nested dropdown">
+                                                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                                         <div class="btn-group" role="group">
-                                                            <button type="button"
-                                                                class="btn btn-primary dropdown-toggle"
-                                                                id="btnGroupDrop1" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false">Download
+                                                            <button type="button" class="btn btn-primary dropdown-toggle" id="btnGroupDrop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download
                                                                 Product List</button>
-                                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"
-                                                                x-placement="bottom-start"
-                                                                style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                                <a class="dropdown-item" id="download-excel"
-                                                                    href="javascript:void(0)">
+                                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                <a class="dropdown-item" id="download-excel" href="javascript:void(0)">
                                                                     Excel
                                                                 </a>
-                                                                <a class="dropdown-item" id="download-pdf"
-                                                                    href="javascript:void(0)">
+                                                                <a class="dropdown-item" id="download-pdf" href="javascript:void(0)">
                                                                     PDF
                                                                 </a>
                                                             </div>
@@ -178,8 +161,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <table class="table table-bordered table-vcenter js-dataTable-simple"
-                                            style="font-size:13px">
+                                        <table class="table table-bordered table-vcenter js-dataTable-simple" style="font-size:13px">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">No.</th>
@@ -221,9 +203,9 @@
                             </div>
                             <div class="tab-pane active" id="btabs-static-review" role="tabpanel">
                                 <div class="table-responsive pb-4" id="product-list">
-                                
-                                
-                                
+
+
+
                                 </div>
                             </div>
                             <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
@@ -282,56 +264,56 @@
                     </table>
                 `)
                 const table = $('#data_table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    responsive: true,
-                    "paging": true,
-                    "order": [
+                    processing: true
+                    , serverSide: true
+                    , responsive: true
+                    , "paging": true
+                    , "order": [
                         [0, "asc"]
-                    ],
-                    ajax: {
-                        "url": "{{ route('transaction.sales-order.review_get_data') }}",
-                        "type": "POST",
-                        "data": {
-                            "_token": "{{ csrf_token() }}",
-                            "inquiry": inquiry
+                    ]
+                    , ajax: {
+                        "url": "{{ route('transaction.sales-order.review_get_data') }}"
+                        , "type": "POST"
+                        , "data": {
+                            "_token": "{{ csrf_token() }}"
+                            , "inquiry": inquiry
                         }
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false,
-                            width: '8%',
-                            className: 'text-center'
-                        },
-                        {
-                            data: 'item_desc',
-                            className: 'text-center'
-                        },
-                        {
-                            data: 'qty',
-                            className: 'text-center'
-                        },
-                        {
-                            'data': 'description',
-                            className: 'text-center'
-                        },
-                        {
-                            'data': 'qty_item',
-                            className: 'text-center'
-                        },
-                        {
-                            'data': 'unit_price',
-                            className: 'text-center'
-                        },
-                        {
-                            'data': 'dt',
-                            className: 'text-center'
-                        },
-                        {
-                            data: "supplier",
-                            className: 'text-center',
-                            render: function(data, type, row) {
+                    }
+                    , columns: [{
+                            data: 'DT_RowIndex'
+                            , orderable: false
+                            , searchable: false
+                            , width: '8%'
+                            , className: 'text-center'
+                        }
+                        , {
+                            data: 'item_desc'
+                            , className: 'text-center'
+                        }
+                        , {
+                            data: 'qty'
+                            , className: 'text-center'
+                        }
+                        , {
+                            'data': 'description'
+                            , className: 'text-center'
+                        }
+                        , {
+                            'data': 'qty_item'
+                            , className: 'text-center'
+                        }
+                        , {
+                            'data': 'unit_price'
+                            , className: 'text-center'
+                        }
+                        , {
+                            'data': 'dt'
+                            , className: 'text-center'
+                        }
+                        , {
+                            data: "supplier"
+                            , className: 'text-center'
+                            , render: function(data, type, row) {
                                 const selectElement = $(
                                     '<select class="form-control" name="supplierSelected" data-index="' +
                                     row.DT_RowIndex + '">');
@@ -386,11 +368,11 @@
                             }
 
                         }
-                    ],
-                    "language ": {
+                    ]
+                    , "language ": {
                         "paginate": {
-                            "previous": '<i class="fa fa-angle-left"></i>',
-                            "next": '<i class="fa fa-angle-right"></i>'
+                            "previous": '<i class="fa fa-angle-left"></i>'
+                            , "next": '<i class="fa fa-angle-right"></i>'
                         }
                     }
                 })
@@ -401,17 +383,17 @@
 
             function saveSupplier(supplierId = null, supplierCompany = null) {
                 $.ajax({
-                    url: "{{ route('transaction.sales-order.review_set_supplier') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        supplier_id: supplierId,
-                        supplier_company: supplierCompany
-                    },
-                    success: function(response) {
+                    url: "{{ route('transaction.sales-order.review_set_supplier') }}"
+                    , type: "POST"
+                    , data: {
+                        _token: "{{ csrf_token() }}"
+                        , supplier_id: supplierId
+                        , supplier_company: supplierCompany
+                    }
+                    , success: function(response) {
                         console.log(response)
-                    },
-                    error: function(xhr, status, error) {
+                    }
+                    , error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -454,16 +436,16 @@
 
             function getPdf(id) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.get-pdf') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        so: id
-                    },
-                    success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.get-pdf') }}"
+                    , type: "POST"
+                    , data: {
+                        _token: "{{ csrf_token() }}"
+                        , so: id
+                    }
+                    , success: function(response) {
                         listItemPdf(response.status, response.data)
-                    },
-                    error: function(xhr, status, error) {
+                    }
+                    , error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -490,21 +472,22 @@
 
             function getProductList(id) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.get-product') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        so: id
-                    },
-                    success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.get-product') }}"
+                    , type: "POST"
+                    , data: {
+                        _token: "{{ csrf_token() }}"
+                        , so: id
+                    }
+                    , success: function(response) {
                         listItemTable(response.status, response.data)
+                        console.log(response.data);
                         $('#download-excel').attr('href', '/transaction/sales-order/download/product-list/excel/' +
                             response.uuid)
                         $('#download-pdf').attr('href', '/transaction/sales-order/download/product-list/pdf/' +
                             response.uuid)
                         review_product_select(response.data)
-                    },
-                    error: function(xhr, status, error) {
+                    }
+                    , error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -532,13 +515,13 @@
 
             function getStorage(inquiry = null) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.get-storage') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        inquiry: inquiry
-                    },
-                    success: function(response) {
+                    url: "{{ route('transaction.sourcing-item.get-storage') }}"
+                    , type: "POST"
+                    , data: {
+                        _token: "{{ csrf_token() }}"
+                        , inquiry: inquiry
+                    }
+                    , success: function(response) {
                         $('#file-manager').html(``)
                         $('#file-manager').html(`
                             <div class="col-md-12 py-5 mb-5">
@@ -612,8 +595,8 @@
                             })
                             $('#file-manager').append(html)
                         })
-                    },
-                    error: function(xhr, status, error) {
+                    }
+                    , error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -622,20 +605,19 @@
             function saveNewFolder() {
                 let folderName = $('#nameFolder').val()
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.save-folder') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        inquiry: $('select[name=so]').val(),
-                        folderName: folderName
-                    },
-                    success: function(response) {
-                        console.log(response)
+                    url: "{{ route('transaction.sourcing-item.save-folder') }}"
+                    , type: "POST"
+                    , data: {
+                        _token: "{{ csrf_token() }}"
+                        , inquiry: $('select[name=so]').val()
+                        , folderName: folderName
+                    }
+                    , success: function(response) {
                         $('#newFolder').val('')
                         $('#newFolder').modal('hide')
                         getStorage($('select[name=so]').val())
-                    },
-                    error: function(xhr, status, error) {
+                    }
+                    , error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
@@ -643,58 +625,57 @@
 
             function deleteSelectedFileFolder(file) {
                 $.ajax({
-                    url: "{{ route('transaction.sourcing-item.delete-file-folder') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        inquiry: $('select[name=so]').val(),
-                        file: file
-                    },
-                    success: function(response) {
-                        console.log(response)
+                    url: "{{ route('transaction.sourcing-item.delete-file-folder') }}"
+                    , type: "POST"
+                    , data: {
+                        _token: "{{ csrf_token() }}"
+                        , inquiry: $('select[name=so]').val()
+                        , file: file
+                    }
+                    , success: function(response) {
                         getStorage($('select[name=so]').val())
-                    },
-                    error: function(xhr, status, error) {
+                    }
+                    , error: function(xhr, status, error) {
                         console.log(error)
                     }
                 })
             }
+
         </script>
 
         <script>
-            var SUPLIYER_OPT = {!! json_encode($suppliyers) !!};
-            var SUPPLIYER_PRODUCT = {!! json_encode($suppliyers_products) !!};
+            var SUPLIYER_OPT = {!!json_encode($suppliyers) !!};
+            var SUPPLIYER_PRODUCT = {!!json_encode($suppliyers_products) !!};
             var IS_READONLY = true;
 
-            function review_product_select(datas)
-            {
-                $(datas).each(function(k,v){
+            function review_product_select(datas) {
+                $(datas).each(function(k, v) {
                     console.log('product detail', v)
                     no = k + 1;
                     html = `
-                        <div class="carl-long-row carl-long-row-`+k+`" data-rowid="`+k+`" data-prodinq="`+v[5]+`">
+                        <div class="carl-long-row carl-long-row-` + k + `" data-rowid="` + k + `" data-prodinq="` + v[5] + `">
                             <div class="item-information">
                                 <div class="row m-0">
                                     <div class="col-2">
                                         <small>No.</small>
-                                        <p>`+ no +`</p>
-                                        <input type="hidden" class="product_inquery_id" name="product_inquery_id[]" value="`+v[5]+`">
-                                        <input type="hidden" class="so_id" name="so_id[]" value="`+v[6]+`">
+                                        <p>` + no + `</p>
+                                        <input type="hidden" class="product_inquery_id" name="product_inquery_id[]" value="` + v[5] + `">
+                                        <input type="hidden" class="so_id" name="so_id[]" value="` + v[6] + `">
                                     </div>
                                     <div class="col-8">
                                         <small>Item Description</small>
-                                        <p class="m-0">Item Name : `+ v[0] +`</p>
-                                        <p class="m-0">Material Description : `+ v[1] +`</p>
-                                        <p class="m-0">Size : `+ v[2] +`</p>
-                                        <p class="m-0">Remark : `+ v[4] +`</p>
+                                        <p class="m-0">Item Name : ` + v[0] + `</p>
+                                        <p class="m-0">Material Description : ` + v[1] + `</p>
+                                        <p class="m-0">Size : ` + v[2] + `</p>
+                                        <p class="m-0">Remark : ` + v[4] + `</p>
                                     </div>
                                     <div class="col-2">
                                         <small>Qty</small>
-                                        <p>`+v[3]+`</p>
+                                        <p>` + v[3] + `</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="supliyer-information-action supliyer-information-action-`+k+`">
+                            <div class="supliyer-information-action supliyer-information-action-` + k + `">
                                 
                             </div>
                         </div>
@@ -705,22 +686,23 @@
                 })
 
                 setTimeout(() => {
-                    init_readonly() 
+                    init_readonly()
                 }, 300);
             }
+
         </script>
         <script src="{{ asset('assets/js/suppliyer/form.js') }}"></script>
         <script src="{{ asset('assets/js/suppliyer/function.js') }}"></script>
-       
+
         <style>
             .item-information {
-                width:400px;
+                width: 400px;
                 min-height: 250px;
                 display: inline-block;
             }
 
             .supliyer-information {
-                width:400px;
+                width: 400px;
                 min-height: 150px;
                 display: inline-block;
                 background-color: #efefef;
@@ -731,7 +713,7 @@
             }
 
             .supliyer-information-action {
-                width:0px;
+                width: 0px;
                 height: 0px;
                 display: inline-block;
             }
@@ -743,6 +725,7 @@
             small {
                 font-weight: bold;
             }
+
         </style>
     </x-slot>
 

@@ -22,6 +22,7 @@ use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
 use App\Http\Controllers\PurchaseOrderCustomerSalesController;
 use App\Http\Controllers\PaymentRequest\PaymentRequestController;
+use App\Http\Controllers\PaymentRequestEximController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
 use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
 use Illuminate\Support\Facades\Storage;
@@ -79,6 +80,8 @@ Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
     Route::get('/', [PoTrackingController::class, 'index']);
     Route::patch('/status/{id}', [PoTrackingController::class, 'update_status'])->name('.update_status');
     Route::get('/{id}/view', [PoTrackingController::class, 'view'])->name('.view');
+    Route::get('/{id}/open', [PoTrackingController::class, 'open'])->name('.open');
+    Route::get('/{id}/forwarder', [PoTrackingController::class, 'get_forwarder_item'])->name('.get_forwarder_item');
 });
 
 // route data master
@@ -376,6 +379,19 @@ Route::prefix('/payment-request')->name('payment-request')->group(function () {
     Route::get('/search/purchase-order-supplier', [PaymentRequestController::class, 'search_purchase_order_supplier'])->name('.search.purchase-order-supplier');
     Route::post('upload-document', [PaymentRequestController::class, 'upload_document'])->name('.upload-document');
     Route::get('/id', [PaymentRequestController::class, 'generate_id'])->name('.id');
+
+    Route::prefix('/exim')->name('.exim')->group(function() {
+        Route::get('/', [PaymentRequestEximController::class, 'index']);
+        Route::get('/add', [PaymentRequestEximController::class, 'add'])->name('.add');
+        Route::post('/store', [PaymentRequestEximController::class, 'store'])->name('.store');
+        Route::post('/store_product', [PaymentRequestEximController::class, 'store_product'])->name('.store_product');
+        Route::post('/get_product_list', [PaymentRequestEximController::class, 'getProductList'])->name('.get_product');
+        Route::post('/getedit-data', [PaymentRequestEximController::class, 'getEditData'])->name('.get_edit_data');
+        Route::post('/update_product', [PaymentRequestEximController::class, 'updateProduct'])->name('.update_product');
+        Route::post('/delete-data', [PaymentRequestEximController::class, 'deleteData'])->name('.delete_data');
+
+        Route::get('/id', [PaymentRequestEximController::class, 'generate_id'])->name('.id');
+    });
 });
 
 Route::prefix('list-payment')->name('list-payment')->group(function () {

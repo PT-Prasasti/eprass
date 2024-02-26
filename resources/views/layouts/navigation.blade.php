@@ -168,6 +168,18 @@
                         </li>
                     </ul>
                     @endif
+                    @if (auth()->user()->hasRole('hod'))
+                    <li class="nav-main-heading">
+                        <span class="sidebar-mini-hidden">PO TRACKING</span>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('po-tracking') }}">
+                            <i class="fa fa-truck"></i>
+                            <span class="sidebar-mini-hide">List PO Tracking</span>
+                        </a>
+                    </li>                    
+                    @endif
                 </li>
 
                 <li class="nav-main-heading">
@@ -180,7 +192,7 @@
                     </a>
                 </li>
                 @endif
-                
+
                 @if (auth()->user()->hasRole('sales') ||
                 auth()->user()->hasRole('superadmin') ||
                 auth()->user()->hasRole('hos') || auth()->user()->hasRole('manage') )
@@ -216,7 +228,7 @@
                             <a href="{{ route('crm.inquiry.add') }}">Add Inquiry</a>
                         </li>
                         <li>
-                            <a href="{{ route('crm.inquiry') }}" >List Inquiry</a>
+                            <a href="{{ route('crm.inquiry') }}">List Inquiry</a>
                         </li>
                     </ul>
                 </li>
@@ -444,11 +456,22 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a class="nav-submenu nav-link" data-toggle="nav-submenu" href="#"><i class="fa fa-book"></i><span class="sidebar-mini-hide">Payment Request</span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('payment-request.exim.add') }}">Add Payment Request</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('payment-request') }}">List Payment Request</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Data Master</span>
                 </li>
                 <li>
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-truck"></i><span class="sidebar-mini-hide">Data Forwarder</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-dollar"></i><span class="sidebar-mini-hide">Data Forwarder</span></a>
                     <ul>
                         <li>
                             <a href="{{ route('data-master.exim.add') }}">Add Forwarder</a>

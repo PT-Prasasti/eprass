@@ -13,7 +13,7 @@
         
 
         <div class="block block-rounded">
-            <div class="block-content block-content-full" id="viewTable">
+            <div class="block-content block-content-full table-responsive" id="viewTable">
                 <table class="table table-striped table-vcenter js-dataTable-simple" style="font-size:13px" id="dataTable">
                     <thead>
                         <tr>

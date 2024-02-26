@@ -2,17 +2,18 @@
     <div class="content">
         <form action="{{ route('po-tracking.store') }}" method="POST">
             @csrf
+            <input type="hidden" name="inquiry_product_id" value="0" id="inquiry_product_id_hidden">
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
                     @endif
                     @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
                     @endif
                 </div>
 
@@ -51,8 +52,7 @@
                                                     <label class="col-lg-3 col-form-label">PO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-md-8">
-                                                        <select class="form-control" id="selected_po_supplier"
-                                                            name="selected_po_supplier">
+                                                        <select class="form-control" id="selected_po_supplier" name="selected_po_supplier">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -67,24 +67,21 @@
                                                     <label class="col-lg-3 col-form-label">Customer Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" id="customer_name"
-                                                            readonly>
+                                                        <input type="text" class="form-control" id="customer_name" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Due Date to CS</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" id="due_date"
-                                                            readonly>
+                                                        <input type="text" class="form-control" id="due_date" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" id="subject"
-                                                            readonly>
+                                                        <input type="text" class="form-control" id="subject" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -97,36 +94,31 @@
                                                     <label class="col-lg-3 col-form-label">Supplier Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" id="supplier_name"
-                                                            readonly>
+                                                        <input type="text" class="form-control" id="supplier_name" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Supplier Telephone</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control"
-                                                            id="supplier_telephone" readonly>
+                                                        <input type="text" class="form-control" id="supplier_telephone" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">PIC Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" id="pic_name"
-                                                            readonly>
+                                                        <input type="text" class="form-control" id="pic_name" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">PIC Email - Phone</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" id="pic_email"
-                                                            readonly>
+                                                        <input type="text" class="form-control" id="pic_email" readonly>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" id="pic_phone"
-                                                            readonly>
+                                                        <input type="text" class="form-control" id="pic_phone" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -140,8 +132,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-vcenter" style="font-size:13px"
-                                        sales_order_selected_items>
+                                    <table class="table table-bordered table-vcenter" style="font-size:13px" sales_order_selected_items>
                                         <thead>
                                             <tr>
                                                 <th class="text-center">No.</th>
@@ -166,23 +157,19 @@
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="last-name-column">Name</label>
-                                                    <input type="text" class="form-control" id="name"
-                                                        required="">
+                                                    <input type="text" class="form-control" id="name" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Email</label>
-                                                    <input type="text" class="form-control" id="email"
-                                                        required="">
+                                                    <input type="text" class="form-control" id="email" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Phone Number</label>
-                                                    <input type="text" class="form-control" id="phone_number"
-                                                        required="">
+                                                    <input type="text" class="form-control" id="phone_number" required="">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Mobile Number</label>
-                                                    <input type="text" class="form-control" id="mobile_number"
-                                                        required="">
+                                                    <input type="text" class="form-control" id="mobile_number" required="">
                                                 </div>
                                                 <div clasa="form-group">
                                                     <label for="last-name-column">Pick Up Address</label>
@@ -206,8 +193,7 @@
                             <div class="tab-pane" id="document" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -215,8 +201,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -224,8 +209,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -233,8 +217,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -242,8 +225,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -251,8 +233,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal"
-                                            data-target="#modal-f1">
+                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
                                             <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
                                         </button>
                                         <div class="custom-control custom-checkbox mb-5">
@@ -298,18 +279,18 @@
 
             const handleCurrencyFormat = (value) => {
                 return value.toLocaleString('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    maximumFractionDigits: 2,
-                });
+                    style: 'currency'
+                    , currency: 'IDR'
+                    , maximumFractionDigits: 2
+                , });
             }
 
             function handleRupiahFormat(number, prefix) {
-                let numberToString = number.toString().replace(/[^,\d]/g, ''),
-                    split = numberToString.split(','),
-                    sisa = split[0].length % 3,
-                    rupiah = split[0].substr(0, sisa),
-                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                let numberToString = number.toString().replace(/[^,\d]/g, '')
+                    , split = numberToString.split(',')
+                    , sisa = split[0].length % 3
+                    , rupiah = split[0].substr(0, sisa)
+                    , ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
                 if (ribuan) {
                     separator = sisa ? '.' : '';
@@ -327,69 +308,69 @@
             }
 
             $(`.forwarder_name`).select2({
-                placeholder: "Select from the list",
-                width: '100%',
-                ajax: {
-                    url: `{{ route('po-tracking.search.forwarder') }}`,
-                    dataType: 'json',
-                    language: "id",
-                    type: 'GET',
-                    delay: 450,
-                    data: function(params) {
+                placeholder: "Select from the list"
+                , width: '100%'
+                , ajax: {
+                    url: `{{ route('po-tracking.search.forwarder') }}`
+                    , dataType: 'json'
+                    , language: "id"
+                    , type: 'GET'
+                    , delay: 450
+                    , data: function(params) {
                         return {
                             term: params.term
                         };
-                    },
-                    processResults: function(res) {
+                    }
+                    , processResults: function(res) {
                         console.log(res);
                         return {
                             results: $.map(res, function(object) {
                                 return {
-                                    id: object.id,
-                                    text: object.forwarder_name,
-                                    data: object,
-                                }
+                                    id: object.id
+                                    , text: object.forwarder_name
+                                    , data: object
+                                , }
                             })
                         };
-                    },
-                    cache: true
-                },
-                escapeMarkup: function(markup) {
+                    }
+                    , cache: true
+                }
+                , escapeMarkup: function(markup) {
                     return markup;
-                },
-            });
+                }
+            , });
 
             $(`[name="selected_po_supplier"]`).select2({
-                placeholder: "Select from the list",
-                width: '100%',
-                ajax: {
-                    url: `{{ route('po-tracking.search.po_supplier') }}`,
-                    dataType: 'json',
-                    language: "id",
-                    type: 'GET',
-                    delay: 450,
-                    data: function(params) {
+                placeholder: "Select from the list"
+                , width: '100%'
+                , ajax: {
+                    url: `{{ route('po-tracking.search.po_supplier') }}`
+                    , dataType: 'json'
+                    , language: "id"
+                    , type: 'GET'
+                    , delay: 450
+                    , data: function(params) {
                         return {
                             term: params.term
                         };
-                    },
-                    processResults: function(res) {
+                    }
+                    , processResults: function(res) {
                         return {
                             results: $.map(res, function(object) {
                                 return {
-                                    id: object.id,
-                                    text: object.transaction_code,
-                                    data: object,
-                                }
+                                    id: object.id
+                                    , text: object.transaction_code
+                                    , data: object
+                                , }
                             })
                         };
-                    },
-                    cache: true
-                },
-                escapeMarkup: function(markup) {
+                    }
+                    , cache: true
+                }
+                , escapeMarkup: function(markup) {
                     return markup;
-                },
-            });
+                }
+            , });
 
             $(document).on('select2:selecting', `[name="selected_po_supplier"]`, function(e) {
                 const data = e.params.args.data.data;
@@ -399,7 +380,9 @@
 
             function forwarder(datas) {
                 let item = datas.sales_order.sourcing.selected_sourcing_suppliers;
+                console.log(item);
                 $(item).each(function(index, value) {
+                    $('#inquiry_product_id_hidden').val(value.sourcing_supplier.inquiry_product.id);
                     no = index + 1;
                     html = `
                         <div class="carl-long-row carl-long-row-` + index + `" data-rowid="` + index +
@@ -460,8 +443,7 @@
                 $('#due_date').val(moment(data.sales_order.inquiry.due_date).format('DD MMMM YYYY'));
                 $('#subject').val(data.sales_order.inquiry.subject);
                 $('#supplier_name').val(data.sales_order.sourcing.selected_sourcing_suppliers[0].supplier.company);
-                $('#supplier_telephone').val(data.sales_order.sourcing.selected_sourcing_suppliers[0].supplier
-                    .company_phone);
+                $('#supplier_telephone').val(data.sales_order.sourcing.selected_sourcing_suppliers[0].supplier.company_phone);
                 $('#name').val(data.name);
                 $('#email').val(data.email);
                 $('#phone_number').val(data.phone_number);
@@ -509,28 +491,30 @@
                                         <th class="text-center">${formattedShippingValue}</th>
                                     </tr>
                                     <tr>
-                        <td class="text-center">${number + 1}.</td>    
-                        <td colspan="4">Subtotal.</td>    
+                        <td class="text-center">${number + 1}.</td>
+                        <td colspan="4">Subtotal.</td>
                         <th class="text-center">${handleCurrencyFormat(subtotal + data.total_shipping_value)}</th>
                     </tr>
                     <tr>
-                        <td class="text-center">${number + 2}.</td>    
-                        <td colspan="4">PPN 11%.</td>    
+                        <td class="text-center">${number + 2}.</td>
+                        <td colspan="4">PPN 11%.</td>
                         <th class="text-center">${handleCurrencyFormat(data.vat === 'INCLUDE_11' ? (subtotal + data.total_shipping_value) * 0.11 : 0)}</th>
                     </tr>
                     <tr>
-                        <td class="text-center">${number + 3}.</td>    
-                        <td colspan="4">Grand Total.</td>    
+                        <td class="text-center">${number + 3}.</td>
+                        <td colspan="4">Grand Total.</td>
                         <th class="text-center">${handleCurrencyFormat(data.vat === 'INCLUDE_11' ? subtotal + (subtotal * 0.11) : subtotal)}</th>
                     </tr>`;
 
                     $("#product-list").append(element);
                 }
             }
+
         </script>
         <script>
-            var FORWARDER_OPT = {!! json_encode($forwarders) !!};
+            var FORWARDER_OPT = {!!json_encode($forwarders) !!};
             var IS_READONLY = false;
+
         </script>
         <script src="{{ asset('assets/js/forwarder/form.js') }}"></script>
         <script src="{{ asset('assets/js/suppliyer/function.js') }}"></script>
@@ -565,6 +549,7 @@
             small {
                 font-weight: bold;
             }
+
         </style>
     </x-slot>
 </x-app-layout>

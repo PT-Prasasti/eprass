@@ -149,4 +149,25 @@ class PoTrackingController extends Controller
     
         return view('po_tracking.view', compact('tracking'));
     }
+
+    public function open($id)
+    {
+        $tracking = Tracking::with([
+            'purchase_order_supplier',
+            'purchase_order_supplier.sales_order.sourcing.selected_sourcing_suppliers.supplier',
+            'purchase_order_supplier.sales_order.sourcing.selected_sourcing_suppliers.sourcing_supplier.inquiry_product',
+            'purchase_order_supplier.sales_order.inquiry.visit.customer',
+            'purchase_order_supplier.sales_order.quotations.purchase_order_customer',
+        ])->where('uuid', $id)->first();
+        $forwarders = ForwarderItem::where("tracking_id", $tracking->id)->orderBy("created_at", "desc")->first();
+        $forwarders_items = [];
+        foreach ($forwarders->tracking->purchase_order_supplier->sales_order->sourcing->sourcing_supplier as $v) {
+            $forwarders_items[$v->inquiry_product_id][] = $v;
+        }
+
+        $data['forwarders'] = \App\Models\Forwarder::get();
+        $data['forwarders_item'] = $forwarders_items;
+    
+        return view('po_tracking.open', compact('tracking', 'data'));
+    }
 }

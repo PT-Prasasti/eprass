@@ -29,6 +29,6 @@ class ForwarderItem extends Model
 
     public function tracking()
     {
-        return $this->hasMany(Tracking::class, 'tracking_id');
+        return $this->belongsTo(Tracking::class, 'tracking_id');
     }
 }
