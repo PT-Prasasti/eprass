@@ -1,6 +1,7 @@
 .env
 node_modules
 dump.rdb
+composer.phar
 /docker
 /vendor
 /public/storage

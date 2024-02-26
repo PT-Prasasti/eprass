@@ -848,8 +848,8 @@ class SalesOrderController extends Controller
     public function edit($id): View
     {
         $so = SalesOrder::where('uuid', $id)->first();
-
-        return view('transaction.sales-order.edit', compact('so'));
+        $suppliyers = \App\Models\Supplier::get();
+        return view('transaction.sales-order.edit', compact('so','suppliyers'));
     }
 
     public function store_edit(EditSalesOrderRequest $request): RedirectResponse
@@ -1076,6 +1076,27 @@ class SalesOrderController extends Controller
     public function price($id)
     {
         $so = SalesOrder::where('uuid', $id)->first();
+        // $inquiries = InquiryProduct::where('inquiry_id', $so->inquiry_id)->get();
+        // dd($inquiries);
+        // $inquiry = InquiryProduct::query()->where('inquiry_id', $so->inquiry_id)->get()->map(function ($r) use ($priceList) {
+        //     $sourcing_supplier = \App\Models\SourcingSupplier::where("inquiry_product_id", $r->id)
+        //         ->whereRaw("id IN (SELECT sourcing_supplier_id FROM selected_sourcing_suppliers WHERE deleted_at is NULL)")
+        //         ->first();
+
+        //     if (isset($priceList[$r->uuid])) {
+        //         $r->delivery_time = $priceList[$r->uuid]['delivery_time'];
+        //         $r->sourcing_qty = $sourcing_supplier->qty;
+        //         $r->currency = $priceList[$r->uuid]['currency'];
+        //         $r->price = $sourcing_supplier->price;
+        //         $r->shipping_fee = floatval($priceList[$r->uuid]['shipping_fee']);
+        //         $r->profit = floatval($priceList[$r->uuid]['profit']);
+        //         $r->cost = floatval($priceList[$r->uuid]['cost']);
+        //         $r->total_cost = floatval($priceList[$r->uuid]['total_cost']);
+        //         $r->save();
+        //     }
+
+        //     return $r;
+        // });
         return view('transaction.sales-order.price', compact('so'));
     }
 
@@ -1136,6 +1157,13 @@ class SalesOrderController extends Controller
             $r->supplier = $sourching_supplier->company;
             $r->description = $sourching_supplier->description;
             $r->curency = $sourching_supplier->currency;
+            $r->sourching_supplier = $sourching_supplier;
+            // $r->shipping_fee
+            // $r->profit
+            // $r->cost
+            // $r->total_cost
+
+            
 
             return $r;
         });

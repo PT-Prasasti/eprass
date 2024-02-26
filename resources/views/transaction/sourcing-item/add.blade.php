@@ -119,7 +119,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div class="block block-rounded">
                                         <div class="block-content block-content-full bg-pattern">
                                             <h5>Document List</h5>
@@ -128,7 +128,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-12">
                                     <hr>
                                 </div>
@@ -219,6 +219,16 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="product-file-type">
+                                                <ul class="list-unstyled" id="document-attachment-list">
+                                                    
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -232,8 +242,21 @@
     </div>
 
     <x-slot name="js">
+        <style>
+            .block-file-header {
+                background-color: #eee;
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+            }
+
+            .block-file-body {
+                padding-top:15px;
+            }
+        </style>
         <script>
             var uuid = ''
+            var SOID = ''
 
             $(document).ready(function() {
                 listSO()
@@ -262,6 +285,8 @@
                 var url = "{{ route('transaction.sourcing-item.so-detail', ['id' => ':id']) }}"
                 url = url.replace(':id', id)
                 $.get(url, function(response) {
+                    console.log("detail", response)
+                    SOID = response.soid;
                     $('input[name=sales]').val(response.sales)
                     $('input[name=customer]').val(response.customer)
                     $('input[name=company]').val(response.company)
@@ -277,10 +302,130 @@
                     uuid = response.uuid
                     getPdf(id)
                     getProductList(id)
+                    getDocuments(response.documents)
                     // reviewurl = '{{ route("transaction.sourcing-item.add", ["id", ":id"]) }}';
                     // reviewurl = reviewurl.replace("id?:id", uuid);
                     // reviewurl = reviewurl + '#btabs-static-review';
                     // $('.review-link').attr("href", reviewurl);
+                })
+            }
+
+            /* upload and show document start */
+
+
+            /* triggers */
+
+            $(document).ready(function(){
+            
+                var docheck_interval = setInterval(() => {
+                    if (SOID) {
+                        getDocuments();
+                        clearInterval(docheck_interval);
+                    }
+                }, 3000);
+
+            })
+
+            $("#example-file-input-custom").change(function(){
+                var fileinfo = $(this)[0].files[0];
+                addDocument(fileinfo);
+            });
+
+            /* functions */
+
+            function addDocument(fileinfo)
+            {
+                var formData = new FormData();
+                
+                formData.append('file', fileinfo);
+                formData.append('related_table', 'sourcings');
+                formData.append('related_id', SOID);
+                formData.append('file_size', fileinfo.size);
+                formData.append('file_type', fileinfo.type);
+                formData.append('_token', "{{ csrf_token() }}");
+
+                $.ajax({
+                    url : "{{ route('helper.docadd') }}",
+                    type : 'POST',
+                    data : formData,
+                    processData: false, 
+                    contentType: false,
+                    success : function(data, status) {
+                        if (status == "success") {
+                            getDocuments()
+                        }
+                    },
+                    error : function(data, status) {
+                        alert("Upload gagal, pastikan file yang diupload tidak terlalu besar dan tidak corrupt!");
+                    }
+                });
+            }
+
+            function getDocuments(data) 
+            {
+                $.get("{{ route('helper.doclist') }}?related_table=sourcings&related_id=" + SOID, function(res){
+                    
+                    baseurl = "{{asset('storage')}}/";
+                    html = ``
+                    $.each(res.data, function(k,v){
+
+                        filetype = "";
+                        sliptstr = v.file_type.split("/");
+                        filetype = sliptstr[1];
+
+                        html = html + `
+                        <li class="media media-list">
+                            <span class="mr-3 align-self-center img-icon primary-rgba text-primary d-block block-file-header">.`+ filetype +`</span>
+                            <div class="media-body block-file-body">
+                                <h5 class="font-16 mb-1">`+v.filename+`
+                                    <span class="float-right">
+                                    <a href="`+ baseurl + v.path+`" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                                    <a onclick="rmDocument(`+v.id+`)" class="btn btn-sm btn-danger delete-pointer"><i class="fa fa-trash text-white"></i></a>
+                                    <span>
+                                </h5>
+                                <p>`+v.timeago+`, `+(v.file_size/1024).toFixed(2)+` KB</p>
+                            </div>
+                        </li>
+                        `;
+                    })
+                    setTimeout(() => {
+                        $("#document-attachment-list").html(html);
+                    }, 200);
+                });
+            }
+
+            function rmDocument(id)
+            {
+                response = window.confirm("Apa anda yakin ingin menghapus document ini? Aksi ini tidak bisa di-rollback")
+                if (response) {
+                    $.post("{{ route('helper.docrem') }}", {
+                        _token : "{{ csrf_token() }}",
+                        id : id
+                    }, function(data){
+                        getDocuments()
+                    })
+                } else {
+                    return false;
+                }
+            }
+
+            /* upload and show document finish */
+
+            function createDocuments(id)
+            {
+                $.ajax({
+                    url: "{{ route('transaction.sourcing-item.get-pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        so: id
+                    },
+                    success: function(response) {
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
                 })
             }
 
@@ -450,6 +595,10 @@
         
             small {
                 font-weight: bold;
+            }
+
+            .delete-pointer:hover {
+                cursor: pointer;
             }
         </style>
     </x-slot>

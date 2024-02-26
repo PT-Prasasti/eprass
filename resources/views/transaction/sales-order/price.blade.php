@@ -167,7 +167,7 @@
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
-                                CUR = row.curency.toUpperCase();
+                                CUR = row.currency.toUpperCase();
                                 return `
                                     <select class="simple-form-control" name="price_list[${row.uuid}][currency]" calculate>
                                         <option selected disabled>Choose Currency</option>
@@ -181,19 +181,20 @@
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
+                                console.log("shipping fee row", row);
                                 return `
                                     <select class="simple-form-control" name="price_list[${row.uuid}][shipping_fee]" calculate>
                                         <option selected disabled>Choose Shipping Fee</option>
-                                        <option value="2.0">2,0</option>
-                                        <option value="1.9">1,9</option>
-                                        <option value="1.8">1,8</option>
-                                        <option value="1.7">1,7</option>
-                                        <option value="1.6">1,6</option>
-                                        <option value="1.5">1,5</option>
-                                        <option value="1.4">1,4</option>
-                                        <option value="1.3">1,3</option>
-                                        <option value="1.2">1,2</option>
-                                        <option value="1.1">1,1</option>
+                                        <option value="2.0" ` + (row.shipping_fee == "2.0" ? "selected" : "") + `>2,0</option>
+                                        <option value="1.9" ` + (row.shipping_fee == "1.9" ? "selected" : "") + `>1,9</option>
+                                        <option value="1.8" ` + (row.shipping_fee == "1.8" ? "selected" : "") + `>1,8</option>
+                                        <option value="1.7" ` + (row.shipping_fee == "1.7" ? "selected" : "") + `>1,7</option>
+                                        <option value="1.6" ` + (row.shipping_fee == "1.6" ? "selected" : "") + `>1,6</option>
+                                        <option value="1.5" ` + (row.shipping_fee == "1.5" ? "selected" : "") + `>1,5</option>
+                                        <option value="1.4" ` + (row.shipping_fee == "1.4" ? "selected" : "") + `>1,4</option>
+                                        <option value="1.3" ` + (row.shipping_fee == "1.3" ? "selected" : "") + `>1,3</option>
+                                        <option value="1.2" ` + (row.shipping_fee == "1.2" ? "selected" : "") + `>1,2</option>
+                                        <option value="1.1" ` + (row.shipping_fee == "1.1" ? "selected" : "") + `>1,1</option>
                                     </select>
                                 `
                             }
@@ -206,15 +207,15 @@
                                 return `
                                     <select class="simple-form-control" name="price_list[${row.uuid}][profit]" calculate>
                                         <option selected disabled>Choose Profit</option>
-                                        <option value="0.9">0,9</option>
-                                        <option value="0.8">0,8</option>
-                                        <option value="0.7">0,7</option>
-                                        <option value="0.6">0,6</option>
-                                        <option value="0.5">0,5</option>
-                                        <option value="0.4">0,4</option>
-                                        <option value="0.3">0,3</option>
-                                        <option value="0.2">0,2</option>
-                                        <option value="0.1">0,1</option>
+                                        <option value="0.9" ` + (row.profit == "0.9" ? "selected" : "") + `>0,9</option>
+                                        <option value="0.8" ` + (row.profit == "0.8" ? "selected" : "") + `>0,8</option>
+                                        <option value="0.7" ` + (row.profit == "0.7" ? "selected" : "") + `>0,7</option>
+                                        <option value="0.6" ` + (row.profit == "0.6" ? "selected" : "") + `>0,6</option>
+                                        <option value="0.5" ` + (row.profit == "0.5" ? "selected" : "") + `>0,5</option>
+                                        <option value="0.4" ` + (row.profit == "0.4" ? "selected" : "") + `>0,4</option>
+                                        <option value="0.3" ` + (row.profit == "0.3" ? "selected" : "") + `>0,3</option>
+                                        <option value="0.2" ` + (row.profit == "0.2" ? "selected" : "") + `>0,2</option>
+                                        <option value="0.1" ` + (row.profit == "0.1" ? "selected" : "") + `>0,1</option>
                                     </select>
 
                                     <input type="hidden" name="price_list[${row.uuid}][cost]" value="0">
@@ -227,7 +228,7 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <span class="unit-selling-price p-0"></span>
+                                    <span class="unit-selling-price p-0">`+row.cost+`</span>
                                 `
                             }
                         },
@@ -236,7 +237,7 @@
                             className: 'text-center',
                             render: function(data, type, row) {
                                 return `
-                                    <span class="total-cell p-0"></span>
+                                    <span class="total-cell p-0">`+row.total_cost+`</span>
                                 `
                             }
                         },
