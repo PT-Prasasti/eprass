@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
+use Carbon\Carbon;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\PaymentRequestExim;
@@ -14,6 +15,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 
 class PaymentRequestEximController extends Controller
 {
@@ -32,8 +34,31 @@ class PaymentRequestEximController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $query = PaymentRequestExim::all();
+
+        if ($request->ajax()) {
+            $result = DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('id', function ($q) {
+                    return $q->id;
+                })
+                ->addColumn('subject', function ($q) {
+                    return $q->subject;
+                })
+                ->addColumn('submission_date', function ($q) {
+                    $date = Carbon::parse($q->submission_date)->format('d F Y');
+                    return $date;
+                })
+                ->addColumn('status', function ($q) {
+                    return $q->status;
+                })
+                ->make(true);
+            return $result;
+        }
+
+        return view('payment-request.exim.index');
     }
 
     public function add(): View
@@ -156,6 +181,38 @@ class PaymentRequestEximController extends Controller
         }
     }
 
+    public function getUpdateItem(Request $request): JsonResponse
+    {
+        
+        $data = PaymentRequestItem::where('uuid', $request->id)->first();
+
+        return response()->json([
+            'data' => $data,
+            'message' => 'success',
+            'status' => 200,
+        ]);
+    }
+
+    public function updateProduct2(Request $request): JsonResponse
+    {
+        if($request->ajax()){
+
+            $data = PaymentRequestItem::find($request->id);
+            $amount = floatval(str_replace('.', '', $request->amount));
+            $data->update([
+                'date' => $request->date,
+                'item' => $request->item,
+                'description' => $request->description,
+                'amount' => $amount,
+                'remark' => $request->remark
+            ]);
+
+            return response()->json([
+                'message' => 'success',
+            ], 200);
+        }
+    }
+
     public function deleteData(Request $request)
     {
         $key = $request->input('redis_key');
@@ -170,6 +227,59 @@ class PaymentRequestEximController extends Controller
             "message" => "Successfully deleted item",
             "status" => 200,
         ]);
+    }
+
+    public function view($uuid)
+    {
+        $query = PaymentRequestExim::where('uuid', $uuid)->with('payment_request_item')->first();
+
+        return view('payment-request.exim.edit', compact('query'));
+    }
+
+    public function update(Request $request, $uuid)
+    {
+        try {
+            $paymentReq = PaymentRequestExim::where('uuid', $uuid)->first();
+
+            DB::beginTransaction();
+            $paymentReq->update([
+                'subject' => $request->subject,
+                'submission_date' => $request->submission_date,
+                'name' => $request->name,
+                'position' => $request->position,
+                'bank_name' => $request->bank_name,
+                'bank_swift' => $request->bank_swift,
+                'bank_account' => $request->bank_account,
+                'bank_number' => $request->bank_number,
+            ]);
+            DB::commit();
+            return redirect()->route('payment-request.exim')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
+    }
+
+    public function delete($uuid): RedirectResponse
+    {
+        try {
+            $paymentReq = PaymentRequestExim::where('uuid', $uuid)->first();
+
+            DB::beginTransaction();
+
+            $paymentRequestItems = PaymentRequestItem::where('payment_request_id', $paymentReq->id)->get();
+
+            foreach ($paymentRequestItems as $paymentRequestItem) {
+                $paymentRequestItem->delete();
+            }
+
+            $paymentReq->delete();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', Constants::STORE_DATA_DELETE_MSG);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
     }
 
 
@@ -190,7 +300,13 @@ class PaymentRequestEximController extends Controller
             $paymentRequest->bank_swift = $request->bank_swift;
             $paymentRequest->bank_account = $request->bank_account;
             $paymentRequest->bank_number = $request->bank_number;
-            $paymentRequest->status = 'Waiting for Approval';
+
+            if ($request->subject != 'REIMBURSE') {
+                $paymentRequest->status = 'Waiting for HOD Approval';
+            } else {
+                $paymentRequest->status = 'Waiting for HRD Approval';
+            }
+
             $paymentRequest->save();
 
             $keyPrefix = 'eprass_database_';
@@ -200,9 +316,9 @@ class PaymentRequestEximController extends Controller
             foreach ($redisKeys as $redisKey) {
                 $redisKey = str_replace($keyPrefix, '', $redisKey);
                 $jsonData = Redis::get($redisKey);
-                if($jsonData) {
+                if ($jsonData) {
                     $itemData = json_decode($jsonData, true);
-                    
+
                     $paymentRequestItem = new PaymentRequestItem();
                     $paymentRequestItem->payment_request_id = $paymentRequest->id;
                     $paymentRequestItem->date = $itemData['date'];
@@ -218,7 +334,7 @@ class PaymentRequestEximController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+            return redirect()->route('payment-request.exim')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

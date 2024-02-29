@@ -67,6 +67,7 @@
 
     <x-slot name="js">
         <script>
+
             const quotationTable = $('#table-purchase-order-supplier').DataTable({
                 ajax: `{{ url()->full() }}`,
                 processing: true,

@@ -386,9 +386,14 @@ Route::prefix('/payment-request')->name('payment-request')->group(function () {
         Route::post('/store', [PaymentRequestEximController::class, 'store'])->name('.store');
         Route::post('/store_product', [PaymentRequestEximController::class, 'store_product'])->name('.store_product');
         Route::post('/get_product_list', [PaymentRequestEximController::class, 'getProductList'])->name('.get_product');
-        Route::post('/getedit-data', [PaymentRequestEximController::class, 'getEditData'])->name('.get_edit_data');
+        Route::post('/get-edit-data', [PaymentRequestEximController::class, 'getEditData'])->name('.get_edit_data');
+        Route::post('/get_edit_data', [PaymentRequestEximController::class, 'getUpdateItem'])->name('.get-edit-data');
         Route::post('/update_product', [PaymentRequestEximController::class, 'updateProduct'])->name('.update_product');
+        Route::post('/update-product', [PaymentRequestEximController::class, 'updateProduct2'])->name('.update_product_2');
         Route::post('/delete-data', [PaymentRequestEximController::class, 'deleteData'])->name('.delete_data');
+        Route::get('/{uuid}/view', [PaymentRequestEximController::class, 'view'])->name('.view');
+        Route::patch('/{uuid}/update', [PaymentRequestEximController::class, 'update'])->name('.update');
+        Route::delete('/delete/{uuid}', [PaymentRequestEximController::class, 'delete'])->name('.delete');
 
         Route::get('/id', [PaymentRequestEximController::class, 'generate_id'])->name('.id');
     });

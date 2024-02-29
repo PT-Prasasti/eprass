@@ -464,7 +464,7 @@
                             <a href="{{ route('payment-request.exim.add') }}">Add Payment Request</a>
                         </li>
                         <li>
-                            <a href="{{ route('payment-request') }}">List Payment Request</a>
+                            <a href="{{ route('payment-request.exim') }}">List Payment Request</a>
                         </li>
                     </ul>
                 </li>
