@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('bank_swift');
             $table->string('bank_number');
             $table->string('status');
+            $table->text('rejected_note')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

@@ -9,9 +9,20 @@
                     <h4><b>{{ $query->id }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
+                    @if(auth()->user()->hasRole('exim'))
                     <button type="submit" class="btn btn-primary mr-5 mb-5">
                         <i class="fa fa-save mr-5"></i>Save Data
                     </button>
+                    @else
+                        @if (!Str::startsWith($query->status, 'Rejected by '))
+                            <button type="submit" class="btn btn-primary mr-5 mb-5">
+                            <i class="fa fa-check mr-5"></i>Approved
+                            </button>
+                            <button type="button" class="btn btn-danger mr-5 mb-5" data-toggle="modal" data-target="#modalRejected">
+                            <i class="fa fa-close mr-5"></i>Rejected
+                            </button>
+                        @endif
+                    @endif
                 </div>
             </div>
 
@@ -65,7 +76,7 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <select class="form-control" name="subject" required>
+                                                        <select class="form-control" name="subject" required {{ auth()->user()->hasRole('exim') ? '' : 'readonly' }}>
                                                             <option disabled selected hidden>- PILIH SUBJECT -</option>
                                                             <option value="PEMBELIAN" {{ $query->subject == 'PEMBELIAN' ? 'selected' : '' }}>PEMBELIAN</option>
                                                             <option value="REIMBURSE" {{ $query->subject == 'REIMBURSE' ? 'selected' : '' }}>REIMBURSE</option>
@@ -127,7 +138,9 @@
                                                     <th class="text-center">Description</th>
                                                     <th class="text-center">Amount</th>
                                                     <th class="text-center">Remark</th>
+                                                    @if(auth()->user()->hasRole('exim'))
                                                     <th class="text-center"><i class="fa fa-ellipsis-h"></th>
+                                                    @endif
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -139,12 +152,15 @@
                                                     <td class="text-center">{{ $item->description }}</td>
                                                     <td class="text-center">{{ number_format($item->amount, 0, ',', '.') }}</td>
                                                     <td class="text-center">{{ $item->remark }}</td>
-                                                    <td class="text-center"><button type="button" class="btn btn-warning" onclick="getEditItem('{{ $item->uuid }}')" data-toggle="modal" data-target="#modal-edit">
-                                                            <i class="fa fa-pencil "></i>
-                                                        </button>
-                                                        <button type="button" onclick="deleteData('${data}')" class="btn btn-danger" data-toggle="tooltip" title="Delete Item">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button></td>
+                                                    @if(auth()->user()->hasRole('exim'))
+                                                        <td class="text-center"><button type="button" class="btn btn-warning" onclick="getEditItem('{{ $item->uuid }}')" data-toggle="modal" data-target="#modal-edit">
+                                                                <i class="fa fa-pencil "></i>
+                                                            </button>
+                                                            <button type="button" onclick="deleteData('${data}')" class="btn btn-danger" data-toggle="tooltip" title="Delete Item">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    @endif
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -236,21 +252,21 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="last-name-column">Bank Name</label>
-                                                    <input type="text" class="form-control @error('bank_name') is-invalid @enderror" name="bank_name" value="{{ $query->bank_name }}" required>
+                                                    <input type="text" class="form-control @error('bank_name') is-invalid @enderror" name="bank_name" value="{{ $query->bank_name }}" required {{ auth()->user()->hasRole('exim') ? '' : 'readonly' }}>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Bank Swift / Code</label>
-                                                    <input type="text" class="form-control @error('bank_swift') is-invalid @enderror" name="bank_swift" value="{{ $query->bank_swift }}" required>
+                                                    <input type="text" class="form-control @error('bank_swift') is-invalid @enderror" name="bank_swift" value="{{ $query->bank_swift }}" required {{ auth()->user()->hasRole('exim') ? '' : 'readonly' }}>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="last-name-column">Bank Account</label>
-                                                    <input type="text" class="form-control @error('bank_account') is-invalid @enderror" name="bank_account" value="{{ $query->bank_account }}" required>
+                                                    <input type="text" class="form-control @error('bank_account') is-invalid @enderror" name="bank_account" value="{{ $query->bank_account }}" required {{ auth()->user()->hasRole('exim') ? '' : 'readonly' }}>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Bank Number</label>
-                                                    <input type="text" class="form-control @error('bank_number') is-invalid @enderror" name="bank_number" value="{{ $query->bank_number }}" required>
+                                                    <input type="text" class="form-control @error('bank_number') is-invalid @enderror" name="bank_number" value="{{ $query->bank_number }}" required {{ auth()->user()->hasRole('exim') ? '' : 'readonly' }}>
                                                 </div>
                                             </div>
                                         </div>
@@ -261,6 +277,34 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Modal Rejected --}}
+            <div class="modal fade" id="modalRejected" tabindex="-1" role="dialog" aria-labelledby="modalRejected" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Note</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="si si-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                            <textarea class="form-control" id="rejected_note" name="rejected_note" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-alt-secondary" data-dismiss="modal"> <i class="fa fa-close"></i> Close</button>
+                            <button type="submit" class="btn btn-alt-success">
+                                <i class="fa fa-check"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Modal Rejected --}}
         </form>
     </div>
 

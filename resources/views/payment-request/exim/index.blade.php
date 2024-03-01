@@ -123,31 +123,43 @@
                             render: function(data, type, row, meta) {
                                 var badgeColor = ``;
                                 switch (row.status) {
-                                    case 'Waiting For Approval':
-                                        badgeColor = `danger`;
-                                        break;
+                                    case 'Approved':
+                                        badgeColor = `success`;
+                                    break;
+                                    case 'Rejected by HRD':
+                                    case 'Rejected by HOD':
+                                    case 'Rejected by Manager':
+                                    badgeColor = 'danger';
+                                    break;
                                     default:
                                         badgeColor = `warning`;
                                 }
 
                                 return `<span class="badge badge-${badgeColor}">${row.status}</span>`;
                             }, 
-                        }, 
+                        },
                         {
                             className: 'text-center text-nowrap', 
                             render: function(data, type, row, meta) {
                                 var html = ``;
 
                                 html += `
+                                @if (auth()->user()->hasRole('exim'))
+                                    
                                 <a href="{{ route('payment-request.exim') }}/${row.uuid}/view" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
-                                </a> |
-                            `;
-
-                                html += `
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete data-id="${row.uuid}">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
+                                    </a> |
+                                    `;
+                                    
+                                    html += `
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete data-id="${row.uuid}">
+                                        <i class="fa fa-trash-o"></i>
+                                        </button>
+                                @else
+                                <a href="{{ route('payment-request.exim') }}/${row.uuid}/view" class="btn btn-sm btn-primary text-center" data-toggle="tooltip" title="View">
+                                    <i class="fa fa-file"></i>
+                                    </a>
+                                @endif
                             `;
 
                                 return `${html}`

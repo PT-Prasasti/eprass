@@ -168,60 +168,60 @@
                             <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item</a>
                         </li>
                     </ul>
-                    <li>
-                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                            <i class="fa fa-book"></i>
-                            <span class="sidebar-mini-hide">Payment Request</span>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="{{ route('payment-request.add') }}">Add Payment Request</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('payment-request') }}">List Payment Request</a>
-                            </li>
-                        </ul>
-                    </li>
-                    @endif
-                    @if (auth()->user()->hasRole('hod'))
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                        <i class="fa fa-book"></i>
+                        <span class="sidebar-mini-hide">Payment Request</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('payment-request.add') }}">Add Payment Request</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('payment-request') }}">List Payment Request</a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+                @if (auth()->user()->hasRole('hod'))
 
-                    <li class="nav-main-heading">
-                        <span class="sidebar-mini-hidden">Transaction PO</span>
-                    </li>
-                    <li>
-                        <a href="{{ route('purchase-order-customer-sales') }}">
-                            <i class="fa fa-dollar"></i>
-                            <span class="sidebar-mini-hide">List PO Customer</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                            <i class="fa fa-book"></i>
-                            <span class="sidebar-mini-hide">PO Supplier</span>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="{{ route('purchase-order-supplier.add') }}">Add PO Supplier</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
-                            </li>
-                        </ul>
-                    </li>
-                    
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Transaction PO</span>
+                </li>
+                <li>
+                    <a href="{{ route('purchase-order-customer-sales') }}">
+                        <i class="fa fa-dollar"></i>
+                        <span class="sidebar-mini-hide">List PO Customer</span>
+                    </a>
+                </li>
 
-                    <li class="nav-main-heading">
-                        <span class="sidebar-mini-hidden">PO TRACKING</span>
-                    </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                        <i class="fa fa-book"></i>
+                        <span class="sidebar-mini-hide">PO Supplier</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('purchase-order-supplier.add') }}">Add PO Supplier</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
+                        </li>
+                    </ul>
+                </li>
 
-                    <li>
-                        <a href="{{ route('po-tracking') }}">
-                            <i class="fa fa-truck"></i>
-                            <span class="sidebar-mini-hide">List PO Tracking</span>
-                        </a>
-                    </li>                    
-                    @endif
+
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">PO TRACKING</span>
+                </li>
+
+                <li>
+                    <a href="{{ route('po-tracking') }}">
+                        <i class="fa fa-truck"></i>
+                        <span class="sidebar-mini-hide">List PO Tracking</span>
+                    </a>
+                </li>
+                @endif
                 </li>
                 @endif
 
@@ -515,7 +515,14 @@
                 </li>
                 @endif
 
-
+                @if (auth()->user()->hasRole('hrd'))
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Payment Request</span>
+                </li>
+                <li>
+                    <a class="{{ request()->is('payment-request*') ? 'active' : '' }}" href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App Payment Request</span></a>
+                </li>
+                @endif
 
                 @if (auth()->user()->hasRole('superadmin'))
                 <li>
