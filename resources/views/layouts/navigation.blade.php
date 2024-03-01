@@ -95,6 +95,13 @@
                 </li>
 
                 <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Payment Request</span>
+                </li>
+                <li>
+                    <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App Payment Request</span></a>
+                </li>
+
+                <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Order Supplier</span>
                 </li>
                 <li>
@@ -184,6 +191,12 @@
                 </li>
                 @endif
                 @if (auth()->user()->hasRole('hod'))
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Payment Request</span>
+                </li>
+                <li>
+                    <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App Payment Request</span></a>
+                </li>
 
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">Transaction PO</span>
