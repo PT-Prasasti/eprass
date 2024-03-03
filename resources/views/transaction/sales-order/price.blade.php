@@ -167,7 +167,7 @@
                             data: 'id',
                             className: 'text-center',
                             render: function(data, type, row) {
-                                CUR = row.currency.toUpperCase();
+                                CUR = row.curency.toUpperCase();
                                 return `
                                     <select class="simple-form-control" name="price_list[${row.uuid}][currency]" calculate>
                                         <option selected disabled>Choose Currency</option>
