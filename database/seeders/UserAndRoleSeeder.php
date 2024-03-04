@@ -45,7 +45,7 @@ class UserAndRoleSeeder extends Seeder
         $hrd->assignRole('hrd');
     
 
-        $finance = User::updateOrCreate(
+        $sales = User::updateOrCreate(
             [
                 'username' => 'adisti@pt-prasasti.com',
             ],
@@ -55,6 +55,6 @@ class UserAndRoleSeeder extends Seeder
                 'email' => 'adisti@pt-prasasti.com'
             ]
         );
-        $finance->assignRole('sales');
+        $sales->assignRole('sales');
     }
 }
