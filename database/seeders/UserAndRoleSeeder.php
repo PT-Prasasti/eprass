@@ -16,33 +16,7 @@ class UserAndRoleSeeder extends Seeder
      */
     public function run()
     {
-        Role::updateOrCreate([
-            'name' => 'exim',
-            'guard_name' => 'web',
-        ], []);
-
-        Role::updateOrCreate([
-            'name' => 'hrd',
-            'guard_name' => 'web',
-        ], []);
-        
-        $exim = User::updateOrCreate(
-            [
-                'username' => 'exim',
-                'name' => 'EXIM',
-                'password' => bcrypt('123123123'),
-            ],
-        );
-        $exim->assignRole('exim');
-
-        $hrd = User::updateOrCreate(
-            [
-                'username' => 'hrd',
-                'name' => 'HRD',
-                'password' => bcrypt('123123123'),
-            ],
-        );
-        $hrd->assignRole('hrd');
+   
     
 
         $sales = User::updateOrCreate(
