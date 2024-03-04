@@ -346,7 +346,7 @@
 
             let productListTable
 
-            function eb(data = null) {
+            function initProductListTable(data = null) {
                 const container = document.querySelector('#example')
                 let newData
 
