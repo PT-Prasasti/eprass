@@ -68,6 +68,8 @@ class HelperController extends Controller
             ["related_table", $request->related_table],
             ["related_id", $request->related_id],
         ])->get()->map(function($r){
+            $xten = explode(".", $r->filename);
+            $r->file_type = '/' . $xten[(count($xten) - 1)];
             $r->timeago = \App\Helper\Helper::timeago($r->created_at);
             return $r;
         });
