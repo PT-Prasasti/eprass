@@ -29,6 +29,6 @@ class UserAndRoleSeeder extends Seeder
                 'email' => 'hrd'
             ]
         );
-        $hrd->assignRole('sales');
+        $hrd->assignRole('hrd');
     }
 }
