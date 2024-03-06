@@ -19,16 +19,16 @@ class UserAndRoleSeeder extends Seeder
    
     
 
-        $sales = User::updateOrCreate(
+        $hrd = User::updateOrCreate(
             [
-                'username' => 'adisti@pt-prasasti.com',
+                'username' => 'hrd',
             ],
             [
-                'name' => 'Adisti',
-                'password' => bcrypt('cp4NO170855'),
-                'email' => 'adisti@pt-prasasti.com'
+                'name' => 'hrd',
+                'password' => bcrypt('123123123'),
+                'email' => 'hrd'
             ]
         );
-        $sales->assignRole('sales');
+        $hrd->assignRole('sales');
     }
 }
