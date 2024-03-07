@@ -83,7 +83,6 @@ class PaymentRequestEximController extends Controller
         return view('payment-request.exim.index');
     }
 
-
     public function add(): View
     {
         $transactionCode = $this->handle_generate_transaction_code(date('Y-m-d'));
@@ -309,7 +308,7 @@ class PaymentRequestEximController extends Controller
 
             return redirect()->route('payment-request.exim')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
-            dd($e->getMessage());
+
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
