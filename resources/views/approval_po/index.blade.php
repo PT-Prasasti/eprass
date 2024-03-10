@@ -89,7 +89,7 @@
                         data: 'transaction_code',
                     },
                     {
-                        data: 'sales_order.id',
+                        data: 'sales_order_id',
                     },
                     {
                         data: 'supplier.company',
