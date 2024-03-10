@@ -84,7 +84,14 @@
                     <div class="block-content block-content-full bg-pattern">
                         <h5>Document List</h5>
                         <ul class="list-group">
-                            
+                            @php
+                            $no = 1;
+                            @endphp
+                            @if(json_decode($so->inquiry->files, true) !== null)
+                            @foreach (json_decode($so->inquiry->files) as $item)
+                            <a href="/file/show/inquiry/{{ $so->inquiry->visit->uuid }}/{{ $item->filename }}" target="_blank">{{ $no++ }}. {{ $item->aliases }}</a><br>
+                            @endforeach
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -182,6 +189,7 @@
                         so: id
                     },
                     success: function(response) {
+                        console.log(response.data);
                         listItemPdf(response.status, response.data)
                     },
                     error: function(xhr, status, error) {

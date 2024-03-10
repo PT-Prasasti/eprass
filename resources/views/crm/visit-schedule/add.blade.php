@@ -2,7 +2,11 @@
 
     <div class="content">
         <h4><b>Add Visit</b></h4>
-        
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="block block-rounded">
             <div class="block-content block-content-full bg-pattern">
                 <form action="{{ route('crm.visit-schedule.store') }}" method="POST">
@@ -13,7 +17,7 @@
                                 <label>ID Visit</label>
                                 <input type="text" class="form-control @error('id') is-invalid @enderror" name="id" value="" readonly>
                                 @error('id')
-                                    <small class="text-danger">{{ $message }}</small>
+                                <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group row">
@@ -23,7 +27,7 @@
                                         <option value="0" disabled selected>Please select</option>
                                     </select>
                                     @error('company')
-                                        <small class="text-danger">{{ $message }}</small>
+                                    <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
@@ -57,14 +61,14 @@
                                         <option>Onsite</option>
                                     </select>
                                     @error('visit_by')
-                                        <small class="text-danger">{{ $message }}</small>
+                                    <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="col-6">
                                     <label>Division<span class="text-danger"> *<span></label>
                                     <input type="text" class="form-control @error('devision') is-invalid @enderror" name="devision" value="{{ old('devision') }}">
                                     @error('devision')
-                                        <small class="text-danger">{{ $message }}</small>
+                                    <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
@@ -73,14 +77,14 @@
                                     <label>Date <span class="text-danger"> *<span></label>
                                     <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required>
                                     @error('date')
-                                        <small class="text-danger">{{ $message }}</small>
+                                    <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="col-6">
                                     <label>Time<span class="text-danger"> *<span></label>
                                     <input type="time" class="form-control @error('time') is-invalid @enderror" name="time" value="{{ old('time') }}">
                                     @error('time')
-                                        <small class="text-danger">{{ $message }}</small>
+                                    <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
@@ -95,7 +99,7 @@
                                     <option>Other</option>
                                 </select>
                                 @error('visit_by')
-                                    <small class="text-danger">{{ $message }}</small>
+                                <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                         </div>
@@ -143,28 +147,25 @@
                 })
             })
 
-            function generateId()
-            {
+            function generateId() {
                 var url = "{{ route('crm.visit-schedule.id') }}"
                 $.get(url, function(response) {
                     $('input[name=id]').val(response)
                 })
             }
 
-            function listCompany()
-            {
+            function listCompany() {
                 var url = "{{ route('crm.visit-schedule.company') }}"
                 $.get(url, function(response) {
                     var element = ``
                     $.each(response, function(index, value) {
-                        element += `<option value="`+value.uuid+`">`+value.company+`</option>`
+                        element += `<option value="` + value.uuid + `">` + value.company + `</option>`
                     })
                     $('select[name=company]').append(element)
                 })
             }
 
-            function getCompanyDetail(id)
-            {
+            function getCompanyDetail(id) {
                 var url = "{{ route('crm.visit-schedule.company-detail', ['id' => ':id']) }}"
                 url = url.replace(':id', id)
                 $.get(url, function(response) {
@@ -176,22 +177,23 @@
             }
             $("#engineer").select2({
                 ajax: {
-                    url: `{{ route('crm.visit-schedule.search_enginer') }}`,
-                    dataType: 'json',
-                    delay: 250,
-                    processResults: function (data) {
+                    url: `{{ route('crm.visit-schedule.search_enginer') }}`
+                    , dataType: 'json'
+                    , delay: 250
+                    , processResults: function(data) {
                         return {
-                            results: $.map(data, function (item) {
+                            results: $.map(data, function(item) {
                                 return {
-                                    text: item.email,
-                                    id: item.email,
-                                }
+                                    text: item.email
+                                    , id: item.email
+                                , }
                             })
                         };
-                    },
-                    cache: true
+                    }
+                    , cache: true
                 }
             })
+
         </script>
     </x-slot>
 

@@ -6,25 +6,25 @@ use App\Constants;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Sales;
-use App\Models\Customer;
+use App\Mail\VisitMail;
 use App\Models\Enginer;
+use App\Models\Customer;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\VisitSchedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Notification;
+
 use App\Notifications\NewVisitScheduleNotification;
 use App\Http\Requests\Crm\VisitSchedule\AddVisitScheduleRequest;
 use App\Http\Requests\Crm\VisitSchedule\EditVisitScheduleRequest;
 use App\Http\Requests\Crm\VisitSchedule\StatusVisitScheduleRequest;
-
-use App\Mail\VisitMail;
-use Mail;
-use Auth;
 
 class VisitScheduleController extends Controller
 {
@@ -176,7 +176,6 @@ class VisitScheduleController extends Controller
     {
         try {
             DB::beginTransaction();
-
             $visit = new VisitSchedule();
             $visit->id = $request->id;
             $visit->customer_id = Customer::where('uuid', $request->company)->first()->id;
@@ -187,7 +186,7 @@ class VisitScheduleController extends Controller
             $visit->time = $request->time != null ? $request->time : Carbon::createFromTime(9, 0, 0);
             $visit->schedule = $request->schedule;
             $visit->enginer_email = $request->has('engineer') ? json_encode($request->engineer) : null;
-            $visit->user_created    = Auth::user()->id;
+            $visit->user_created = Auth::user()->id;
             $visit->save();
 
             $usersToNotify = User::role('manager')->get();
@@ -220,6 +219,7 @@ class VisitScheduleController extends Controller
 
             return redirect()->route('crm.visit-schedule')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }

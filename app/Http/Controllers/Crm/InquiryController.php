@@ -56,7 +56,7 @@ class InquiryController extends Controller
                 }
             }
             $key = 'inquiry_product_';
-            if (str_contains($item, $key)) {
+            if (is_string($item) && str_contains($item, $key)) {
                 if (str_contains($item, auth()->user()->uuid)) {
                     $item = explode($key, $item);
                     $redis = $key . $item[1];
@@ -95,7 +95,7 @@ class InquiryController extends Controller
                     return $date . ' - ' . $due_date;
                 })
                 ->editColumn('status', function ($q) {
-                    $so = null;
+                    $so = ucfirst($q->status);
                     if (isset($q->sales_order)) {
                         $so = $q->sales_order->status;
                     }
@@ -714,20 +714,20 @@ class InquiryController extends Controller
 
             $usersToNotify = User::role('admin_sales')->get();
             Notification::send($usersToNotify, new NewInquiryNotification($inquiry));
-            $dataInquiry = [
-                'id'                => $inquiry->id,
-                'id_visit'          => $inquiry->visit_schedule_id,
-                'due_date'          => $inquiry->due_date,
-                'subject'           => $inquiry->subject,
-                'grade'             => $inquiry->grade,
-                'description'       => $inquiry->description,
-                'products'          => $products
-            ];
-            $email = new InquiryMail(collect($dataInquiry));
-            $sendmail = 'eprass.d@pt-prasasti.com';
-            $sendmail1 = 'dhita@pt-prasasti.com';
-            Mail::to($sendmail)->send($email);
-            Mail::to($sendmail1)->send($email);
+             $dataInquiry = [
+                 'id'                => $inquiry->id,
+                 'id_visit'          => $inquiry->visit_schedule_id,
+                 'due_date'          => $inquiry->due_date,
+                 'subject'           => $inquiry->subject,
+                 'grade'             => $inquiry->grade,
+                 'description'       => $inquiry->description,
+                 'products'          => $products
+             ];
+             $email = new InquiryMail(collect($dataInquiry));
+             $sendmail = 'eprass.d@pt-prasasti.com';
+             $sendmail1 = 'dhita@pt-prasasti.com';
+             Mail::to($sendmail)->send($email);
+             Mail::to($sendmail1)->send($email);
 
             DB::commit();
 
