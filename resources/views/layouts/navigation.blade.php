@@ -37,9 +37,21 @@
         </div>
         <div class="content-side content-side-full">
             <ul class="nav-main">
+                @if(!auth()->user()->hasRole('logistic'))
                 <li>
                     <a href="{{ route('dashboard') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
                 </li>
+                @endif
+
+                @if(auth()->user()->hasRole('logistic'))
+                <li>
+                    <a class="{{ Request::is('logistic/dashboard') ? 'active' : '' }}" href="{{ route('logistic.dashboard') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
+                </li>
+
+                <li>
+                    <a href="../delivery/index.php"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">Delivery Schedule</span></a>
+                </li>
+                @endif
 
                 @if (auth()->user()->hasRole('manager'))
                 <li class="nav-main-heading">
@@ -229,7 +241,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('po-tracking') }}">
+                    <a href="{{ route('po-tracking.index') }}">
                         <i class="fa fa-truck"></i>
                         <span class="sidebar-mini-hide">List PO Tracking</span>
                     </a>
@@ -497,7 +509,7 @@
                             <a href="{{ route('po-tracking.add')}}">Add PO Tracking</a>
                         </li>
                         <li>
-                            <a href="{{ route('po-tracking')}}">List PO Tracking</a>
+                            <a href="{{ route('po-tracking.index')}}">List PO Tracking</a>
                         </li>
                     </ul>
                 </li>

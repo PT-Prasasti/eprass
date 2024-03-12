@@ -157,33 +157,33 @@
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="last-name-column">Name</label>
-                                                    <input type="text" class="form-control" id="name" required="">
+                                                    <input type="text" class="form-control" id="name" name="name" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Email</label>
-                                                    <input type="text" class="form-control" id="email" required="">
+                                                    <input type="text" class="form-control" id="email" name="email" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Phone Number</label>
-                                                    <input type="text" class="form-control" id="phone_number" required="">
+                                                    <input type="text" class="form-control" id="phone_number" name="phone_number" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last-name-column">Mobile Number</label>
-                                                    <input type="text" class="form-control" id="mobile_number" required="">
+                                                    <input type="text" class="form-control" id="mobile_number" name="mobile_number" required>
                                                 </div>
                                                 <div clasa="form-group">
                                                     <label for="last-name-column">Pick Up Address</label>
-                                                    <textarea class="form-control" id="pickup_adress" rows="4"></textarea>
+                                                    <textarea class="form-control" id="pickup_adress" name="pickup_address" rows="4"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                {{-- <div class="form-group row">
+                                                <div class="form-group row">
                                                     <label class="col-12">Document Pick Up Information :</label>
-                                                    <!-- <div class="col-12">
+                                                    <div class="col-12">
                                                         <p>1.<a href="#"> Packing List.pdf</a></p>
                                                         <p>2.<a href="#"> Packing List Detail.pdf</a></p>
-                                                    </div> -->
-                                                </div> --}}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

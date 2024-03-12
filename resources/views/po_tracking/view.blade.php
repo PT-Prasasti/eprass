@@ -148,27 +148,23 @@
                                         <div class="col-md-8">
                                             <div class="form-group">
                                                 <label for="last-name-column">Name</label>
-                                                <input type="text" class="form-control" id="name"
-                                                    required="">
+                                                <input type="text" class="form-control" id="name" readonly value="{{ $tracking->name_pickup_information }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="last-name-column">Email</label>
-                                                <input type="text" class="form-control" id="email"
-                                                    required="">
+                                                <input type="text" class="form-control" id="email" readonly value="{{ $tracking->email_pickup_information }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="last-name-column">Phone Number</label>
-                                                <input type="text" class="form-control" id="phone_number"
-                                                    required="">
+                                                <input type="text" class="form-control" id="phone_number" readonly value="{{ $tracking->phone_number_pickup_information }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="last-name-column">Mobile Number</label>
-                                                <input type="text" class="form-control" id="mobile_number"
-                                                    required="">
+                                                <input type="text" class="form-control" id="mobile_number" readonly value="{{ $tracking->mobile_number_pickup_information }}">
                                             </div>
                                             <div clasa="form-group">
                                                 <label for="last-name-column">Pick Up Address</label>
-                                                <textarea class="form-control" id="pickup_adress" rows="4"></textarea>
+                                                <textarea class="form-control" id="pickup_adress" rows="4" readonly>{{ $tracking->pickup_address }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-4">

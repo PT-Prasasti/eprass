@@ -77,7 +77,7 @@
                                     <div class="col-sm-10">
                                         <label>: {{ $query->supplier->company }}</label><br>
                                         <label>: {{ $query->supplier->address }}</label><br><br>
-                                        <label>:{{ $query->supplier->company }}r</label><br>
+                                        <label>:{{ $query->supplier->company }}</label><br>
                                         <label>: {{ $query->supplier->company_phone }}</label><br>
                                         <label>: -</label><br>
                                         <label>: {{ $query->supplier->company_email }}</label>
@@ -223,7 +223,7 @@
                                             5. Document
                                         </label>
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-1">
                                         <label>
                                             : <br>
                                             : <br>
@@ -232,10 +232,20 @@
                                             : <br>
                                         </label>
                                     </div>
+                                    <div class="col-md-9">
+                                        <label>
+                                            {{ $query->note }}<br>
+                                            {{ $query->term }}<br>
+                                            {{ $query->delivery }}<br>
+                                            {{ strtoupper(str_replace('_', ' ', $query->payment_term)) }}<br>
+                                            {{ $query->attachment }}<br>
+                                        </label>
+                                    </div>
                                 </div>
                                 <hr style="border-top: 1px solid #000; margin-top: -3px">
                                 <hr style="border-top: 1px solid #000; margin-top: -12px">
                             </div>
+
                         </div>
 
                         <div class="tab-pane" id="document" role="tabpanel">

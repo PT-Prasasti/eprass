@@ -16,19 +16,33 @@ class UserAndRoleSeeder extends Seeder
      */
     public function run()
     {
-   
-    
+        // $hrd = User::updateOrCreate(
+        //     [
+        //         'username' => 'hrd',
+        //     ],
+        //     [
+        //         'name' => 'hrd',
+        //         'password' => bcrypt('123123123'),
+        //         'email' => 'hrd'
+        //     ]
+        // );
+        // $hrd->assignRole('hrd');
 
-        $hrd = User::updateOrCreate(
+        Role::create([
+            'name' => 'logistic',
+            'guard_name' => 'web'
+        ]);
+
+        $logistic = User::updateOrCreate(
             [
-                'username' => 'hrd',
+                'username' => 'logistic',
             ],
             [
-                'name' => 'hrd',
+                'name' => 'logistic',
                 'password' => bcrypt('123123123'),
-                'email' => 'hrd'
+                'email' => 'logistic'
             ]
         );
-        $hrd->assignRole('hrd');
+        $logistic->assignRole('logistic');
     }
 }

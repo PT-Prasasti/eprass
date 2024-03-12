@@ -1,18 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\EximController;
 use App\Http\Controllers\CloudController;
+use App\Http\Controllers\LogisticController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PoTrackingController;
+use App\Http\Controllers\Ajax\HelperController;
 use App\Http\Controllers\Crm\InquiryController;
 use App\Http\Controllers\ListPaymentController;
-use App\Http\Controllers\Ajax\HelperController;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Crm\VisitReportController;
 use App\Http\Controllers\DataMaster\SalesController;
 use App\Http\Controllers\Crm\VisitScheduleController;
 use App\Http\Controllers\ApprovalPoSupplierController;
+use App\Http\Controllers\PaymentRequestEximController;
 use App\Http\Controllers\DataMaster\CustomerController;
 use App\Http\Controllers\DataMaster\SupplierController;
 use App\Http\Controllers\Helper\NotificationController;
@@ -22,10 +25,8 @@ use App\Http\Controllers\Transaction\SalesOrderController;
 use App\Http\Controllers\Transaction\SourcingItemController;
 use App\Http\Controllers\PurchaseOrderCustomerSalesController;
 use App\Http\Controllers\PaymentRequest\PaymentRequestController;
-use App\Http\Controllers\PaymentRequestEximController;
 use App\Http\Controllers\PurchaseOrderCustomer\PurchaseOrderCustomerController;
 use App\Http\Controllers\PurchaseOrderSupplier\PurchaseOrderSupplierController;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,16 +73,22 @@ Route::prefix('/file')->name('file')->group(function () {
     Route::get('/show/{folder1}/{folder2}/{file}', [FilesController::class, 'show'])->name('.show');
 });
 
+// route po tracking
 Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
     Route::get('/add', [PoTrackingController::class, 'add'])->name('.add');
     Route::post('/store', [PoTrackingController::class, 'store'])->name('.store');
     Route::get('/search/po_supplier', [PoTrackingController::class, 'search_po_supplier'])->name('.search.po_supplier');
     Route::get('/search/forwarder', [PoTrackingController::class, 'search_forwarder'])->name('.search.forwarder');
-    Route::get('/', [PoTrackingController::class, 'index']);
+    Route::get('/', [PoTrackingController::class, 'index'])->name('.index');
     Route::patch('/status/{id}', [PoTrackingController::class, 'update_status'])->name('.update_status');
     Route::get('/{id}/view', [PoTrackingController::class, 'view'])->name('.view');
     Route::get('/{id}/open', [PoTrackingController::class, 'open'])->name('.open');
     Route::get('/{id}/forwarder', [PoTrackingController::class, 'get_forwarder_item'])->name('.get_forwarder_item');
+});
+
+Route::prefix('/logistic')->name('logistic')->group(function() {
+    Route::get('/dashboard', [LogisticController::class, 'index'])->name('.dashboard');
+    Route::post('/data', [LogisticController::class, 'data'])->name('.data');
 });
 
 // route data master

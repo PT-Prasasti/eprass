@@ -38,6 +38,7 @@ return new class extends Migration
 
             $table->json('document_list')->nullable();
             $table->string('status');
+            $table->string('reason')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -80,7 +80,7 @@
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="{{ $query->sales_order->id }}" disabled>
+                                                        <input type="text" class="form-control" value="{{ $query->sales_order_id }}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -358,11 +358,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>
-                                                        Alasan ditolak
+                                                        Rejected Note
                                                     </label>
-                                                    <textarea class="form-control" id="" cols="30" rows="10" readonly>
-                                                    {{ $query->reason }}
-                                                    </textarea>
+                                                    <textarea class="form-control" id="" cols="30" rows="10" readonly>{{ $query->reason }}</textarea>
                                                 </div>
                                             </div>
                                         </div>

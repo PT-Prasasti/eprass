@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
-use App\Models\Forwarder;
-use App\Models\ForwarderItem;
-use App\Models\PurchaseOrderSupplier;
+use App\Models\Stock;
 use App\Models\Tracking;
-use Illuminate\Http\Request;
+use App\Models\Forwarder;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Models\ForwarderItem;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\PurchaseOrderSupplier;
+use Illuminate\Http\RedirectResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
@@ -32,10 +33,11 @@ class PoTrackingController extends Controller
             $this->hosting = false;
         }
     }
+
     public function index(Request $request)
     {
         $data = Tracking::with(['purchase_order_supplier.supplier'])->orderBy('created_at', 'DESC')
-        ->get();
+            ->get();
         return view('po_tracking.index', compact('data'));
     }
 
@@ -100,6 +102,11 @@ class PoTrackingController extends Controller
             DB::beginTransaction();
             $tracking = new Tracking();
             $tracking->po_suplier_id = $request->selected_po_supplier;
+            $tracking->name_pickup_information = $request->name;
+            $tracking->email_pickup_information = $request->email;
+            $tracking->phone_number_pickup_information = $request->phone_number;
+            $tracking->mobile_number_pickup_information = $request->mobile_number;
+            $tracking->pickup_address = $request->pickup_address;
             $tracking->status = 'Ready Pick Up';
             $tracking->save();
 
@@ -117,9 +124,9 @@ class PoTrackingController extends Controller
 
             DB::commit();
 
-            return redirect(route('po-tracking.add'))->with("success", "Data has beed successfuly submited");
+            return redirect()->route('po-tracking.index')->with("success", Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             DB::rollback();
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
@@ -127,13 +134,40 @@ class PoTrackingController extends Controller
 
     public function update_status(Request $req, $id)
     {
-        $tracking = Tracking::find($id);
-        if ($tracking) {
+        try {
+            DB::beginTransaction();
+
+            $tracking = Tracking::find($id);
+            if (!$tracking) {
+                throw new \Exception("Tracking not found");
+            }
+
             $tracking->status = $req->status;
+
+            if ($req->status == 'Done') {
+                $items = $tracking->purchase_order_supplier->sales_order->inquiry->products;
+                $poc_id = $tracking->purchase_order_supplier->sales_order->quotations[0]->purchase_order_customer->kode_khusus;
+
+                foreach ($items as $item) {
+                    $stock = new Stock();
+                    $stock->po_supplier_id = $tracking->po_suplier_id;
+                    $stock->po_customer_id = $poc_id;
+                    $stock->item_name = $item->item_name;
+                    $stock->description = $item->description;
+                    $stock->size = $item->size;
+                    $stock->qty = $item->qty;
+                    $stock->remark = $item->remark;
+                    $stock->save();
+                }
+            }
+
             $tracking->save();
+
+            DB::commit();
             return redirect()->back()->with("success", "Status updated successfully");
-        } else {
-            return redirect()->back()->with("error", "Failed to update status");
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with("error", "Failed to update status: " . $e->getMessage());
         }
     }
 
@@ -146,7 +180,7 @@ class PoTrackingController extends Controller
             'purchase_order_supplier.sales_order.inquiry.visit.customer',
             'purchase_order_supplier.sales_order.quotations.purchase_order_customer',
         ])->where('uuid', $id)->first();
-    
+
         return view('po_tracking.view', compact('tracking'));
     }
 
@@ -167,7 +201,7 @@ class PoTrackingController extends Controller
 
         $data['forwarders'] = \App\Models\Forwarder::get();
         $data['forwarders_item'] = $forwarders_items;
-    
+
         return view('po_tracking.open', compact('tracking', 'data'));
     }
 }

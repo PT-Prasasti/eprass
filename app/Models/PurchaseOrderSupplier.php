@@ -49,7 +49,7 @@ class PurchaseOrderSupplier extends Model
 
     public function sales_order()
     {
-        return $this->belongsTo(SalesOrder::class, 'sales_order_id', 'uuid');
+        return $this->belongsTo(SalesOrder::class, 'sales_order_id', 'id');
     }
 
     public function supplier()
