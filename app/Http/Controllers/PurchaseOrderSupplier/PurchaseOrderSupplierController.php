@@ -142,6 +142,7 @@ class PurchaseOrderSupplierController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // dd($request->all());
         try {
             DB::beginTransaction();
             $filePath = null;

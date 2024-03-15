@@ -28,9 +28,8 @@ class LogisticController extends Controller
     }
 
     public function index()
-    {    
-        $listStock = Stock::orderBy('created_at', 'ASC')->get();
-        return view('logistic.dashboard', compact('listStock'));
+    {
+        return view('logistic.dashboard');
     }
 
     public function data(Request $request)
@@ -50,6 +49,26 @@ class LogisticController extends Controller
                 })
                 ->addColumn('uuid', function($tracking) {
                     return $tracking->uuid;
+                })
+                ->make(true);
+            return $result;
+        }
+    }
+
+    public function dataStock(Request $request)
+    {
+        if ($request->ajax()) {
+            $stock = Stock::orderBy('po_customer_id', 'ASC')->get();
+            $result = DataTables::of($stock)
+                ->addIndexColumn()
+                ->addColumn('item_name', function ($item) {
+                    return $item->item_name;
+                })
+                ->addColumn('qty', function ($item) {
+                    return $item->qty;
+                })
+                ->addColumn('po_customer', function ($item) {
+                    return $item->po_customer_id;
                 })
                 ->make(true);
             return $result;

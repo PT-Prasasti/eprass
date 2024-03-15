@@ -67,5 +67,9 @@ class PurchaseOrderSupplier extends Model
         return $this->hasOne(Tracking::class);
     }
 
+    public function delivery_schedule()
+    {
+        return $this->belongsTo(DeliverySchedule::class);
+    }
     
 }

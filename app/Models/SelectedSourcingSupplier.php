@@ -40,4 +40,9 @@ class SelectedSourcingSupplier extends Model
     {
         return $this->hasOne(PurchaseOrderSupplierItem::class, 'selected_sourcing_supplier_id', 'uuid');
     }
+
+    public function delivery_schedule_item()
+    {
+        return $this->hasOne(DeliverySchedule::class, 'selected_sourcing_supplier_id', 'uuid');
+    }
 }
