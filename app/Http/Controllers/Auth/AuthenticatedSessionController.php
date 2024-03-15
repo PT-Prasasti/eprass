@@ -36,6 +36,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if (Auth::user()->hasRole('logistic')) {
+            return redirect(RouteServiceProvider::LOGISTIC);
+        }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
