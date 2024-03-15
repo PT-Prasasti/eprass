@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('delivery_schedules', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('po_customer_id');
             $table->date('delivery_date');
             $table->string('terms');

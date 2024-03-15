@@ -96,6 +96,7 @@ Route::prefix('/logistic')->name('logistic')->group(function() {
         Route::get('/add', [DeliveryScheduleController::class, 'add'])->name('.add');
         Route::get('/search_po_customer', [DeliveryScheduleController::class, 'search_po_customer'])->name('.search_po_customer');
         Route::post('/store', [DeliveryScheduleController::class, 'store'])->name('.store');
+        Route::patch('/status/{uuid}', [DeliveryScheduleController::class, 'update_status'])->name('.update_status');
     });
 });
 

@@ -96,6 +96,7 @@ class DeliveryScheduleController extends Controller
             $deliverySchedule->po_customer_id = $request->po_customer_id;
             $deliverySchedule->delivery_date = $request->delivery_date;
             $deliverySchedule->terms = $request->terms;
+            $deliverySchedule->status = 'On Progress';
             $deliverySchedule->save();
 
             foreach ($request->item as $selectedSourcingSupplierId => $item) {
@@ -115,6 +116,21 @@ class DeliveryScheduleController extends Controller
             dd($e);
             DB::rollback();
             return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
+        }
+    }
+
+    public function update_status(Request $request, $id): RedirectResponse
+    {
+        try {
+            $deliverySchedule = DeliverySchedule::where('id', $id)->first();
+            if ($deliverySchedule) {
+                $deliverySchedule->status = $request->status;
+                $deliverySchedule->save();
+            }
+
+            return redirect()->back()->with('success', Constants::CHANGE_STATUS_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
 }

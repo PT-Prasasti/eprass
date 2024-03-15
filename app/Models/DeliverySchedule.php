@@ -13,14 +13,6 @@ class DeliverySchedule extends Model
 
     protected $guarded = [];
 
-    public static function boot()
-    {
-        parent::boot();
-        self::creating(function ($model) {
-            $model->id = (string) Uuid::generate(4);
-        });
-    }
-
     public function poc()
     {
         return $this->belongsTo(PurchaseOrderCustomer::class, 'po_customer_id', 'kode_khusus');

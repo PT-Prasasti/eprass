@@ -136,7 +136,7 @@
                                 }
 
                                 return `<span class="badge badge-${badgeColor}">${row.status}</span>`;
-                            }, 
+                            },
                         },
                         {
                             className: 'text-center text-nowrap', 
