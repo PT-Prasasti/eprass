@@ -53,7 +53,7 @@ class DeliveryScheduleController extends Controller
                 'purchase_order_customers.status AS status',
                 'purchase_order_customers.document_url AS document_url',
             ])
-            ->whereRaw('purchase_order_customers.kode_khusus NOT IN (SELECT po_customer_id FROM delivery_schedules)')
+            // ->whereRaw('purchase_order_customers.kode_khusus NOT IN (SELECT po_customer_id FROM delivery_schedules)')
             ->where('id', 'like', '%' . $request->term . '%')
             ->where('kode_khusus', '!=', null)
             ->orderBy('id')
@@ -132,5 +132,22 @@ class DeliveryScheduleController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
+    }
+
+    public function view($id)
+    {
+        $do = DeliverySchedule::where('id', $id)->first();
+        return view('logistic.delivery_schedule.view', compact('do'));
+    }
+
+    public function print($id)
+    {
+        try {
+            $query = DeliverySchedule::findOrFail($id);
+            return view('logistic.delivery_schedule.print', compact('query'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
+        }
+        return view('logistic.delivery_schedule.print');
     }
 }

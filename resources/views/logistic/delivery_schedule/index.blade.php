@@ -10,7 +10,7 @@
             </div>
             <div class="col-md-6 text-right">
                 <a type="button" class="btn btn-primary mr-5 mb-5" href="{{ route('logistic.delivery_order.add') }}">
-                    <i class="fa fa-save mr-5"></i>Add Data
+                    <i class="fa fa-plus mr-5"></i>Add Data
                 </a>
             </div>
         </div>
@@ -79,10 +79,10 @@
                                 <button id="statusBtn_{{ $do->id }}" class="btn btn-{{ $badgeColor }} btn-sm" data-toggle="modal" data-target="#modal_{{ $do->id }}">{{ $do->status }}</button>
                             </td>
                             <td class="text-center">
-                                <a type="button" href="form_app.php" class="btn btn-sm btn-primary" data-toggle="tooltip">
+                                <a type="button" href="{{ route('logistic.delivery_order.view', $do->id) }}" class="btn btn-sm btn-primary" data-toggle="tooltip" data-title="View">
                                     <i class="fa fa-file"></i>
                                 </a> |
-                                <a type="button" href="form_app.php" class="btn btn-sm btn-warning" data-toggle="tooltip">
+                                <a type="button" href="{{ route('logistic.delivery_order.print', $do->id) }}" class="btn btn-sm btn-warning" data-toggle="tooltip" data-title="Print">
                                     <i class="fa fa-print"></i>
                                 </a>
                             </td>

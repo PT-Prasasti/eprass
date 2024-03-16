@@ -91,12 +91,15 @@ Route::prefix('/logistic')->name('logistic')->group(function() {
     Route::get('/dashboard', [LogisticController::class, 'index'])->name('.dashboard');
     Route::post('/data', [LogisticController::class, 'data'])->name('.data');
     Route::post('/data-stock', [LogisticController::class, 'dataStock'])->name('.data-stock');
+    Route::post('/data-do', [LogisticController::class, 'dataDo'])->name('.data-do');
     Route::prefix('/delivery-order')->name('.delivery_order')->group(function() {
         Route::get('/', [DeliveryScheduleController::class, 'index'])->name('.index');
         Route::get('/add', [DeliveryScheduleController::class, 'add'])->name('.add');
         Route::get('/search_po_customer', [DeliveryScheduleController::class, 'search_po_customer'])->name('.search_po_customer');
         Route::post('/store', [DeliveryScheduleController::class, 'store'])->name('.store');
         Route::patch('/status/{uuid}', [DeliveryScheduleController::class, 'update_status'])->name('.update_status');
+        Route::get('/{uuid}/view', [DeliveryScheduleController::class, 'view'])->name('.view');
+        Route::get('/{id}/print', [DeliveryScheduleController::class, 'print'])->name('.print');
     });
 });
 

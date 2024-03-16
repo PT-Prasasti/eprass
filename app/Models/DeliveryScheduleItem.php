@@ -25,4 +25,9 @@ class DeliveryScheduleItem extends Model
     {
         return $this->belongsTo(DeliverySchedule::class, 'delivery_schedule_id', 'id');
     }
+
+    public function selected_sourcing_supplier()
+    {
+        return $this->belongsTo(SelectedSourcingSupplier::class, 'selected_sourcing_supplier_id', 'uuid');
+    }
 }

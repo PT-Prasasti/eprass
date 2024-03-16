@@ -1,6 +1,6 @@
 <div class="text-center">
     <h5>
-        <b>DELIVERY ORDER {{ $query->transaction_code }}</b>
+        <b>PURCHASE ORDER</b>
     </h5>
 </div>
 

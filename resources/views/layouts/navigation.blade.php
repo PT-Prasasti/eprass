@@ -49,7 +49,7 @@
                 </li>
 
                 <li>
-                    <a class="{{ Request::is('logistic/delivery-order') ? 'active' : '' }}" href="{{ route('logistic.delivery_order.index') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">Delivery Schedule</span></a>
+                    <a class="{{ Request::is('logistic/delivery-order*') ? 'active' : '' }}" href="{{ route('logistic.delivery_order.index') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">Delivery Schedule</span></a>
                 </li>
                 @endif
 

@@ -4,24 +4,18 @@
             @csrf
             <div class="row">
                 <div class="col-lg-6">
-                    <h4><b>{{ $transactionCode }}</b></h4>
+                    <h4><b>{{ $do->transaction_code }}</b></h4>
                 </div>
                 <div class="col-lg-6 text-right">
-                    <button type="button" class="btn btn-success mr-5 mb-5" data-toggle="modal" data-target="#modal-slideup">
-                        <i class="fa fa-plus mr-5"></i>Select Item
-                    </button>
-                    <button type="submit" class="btn btn-primary mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save Data
-                    </button>
+                    <a type="button" class="btn btn-warning mr-5 mb-5 text-white">
+                        <i class="fa fa-print"></i> Print
+                    </a>
                 </div>
 
                 <div class="col-lg-12">
                     <div class="block">
                         <div class="block-content tab-content">
                             <div class="tab-pane active" role="tabpanel">
-                                <div class="row" hidden>
-                                    <input type="text" class="form-control" name="sales_order_id" value="" readonly sales_order_id>
-                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="row">
@@ -31,14 +25,14 @@
                                                     <label class="col-lg-3 col-form-label">Delivery Date</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="date" class="form-control" name="delivery_date" required>
+                                                        <input type="date" class="form-control" name="delivery_date" value="{{ $do->delivery_date }}" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Terms</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="terms" required>
+                                                        <input type="text" class="form-control" name="terms" value="{{ $do->terms }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -51,21 +45,21 @@
                                                     <label class="col-lg-3 col-form-label">PO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="po_customer_id" readonly selected_po_customer_number>
+                                                        <input type="text" class="form-control" name="po_customer_id" readonly value="{{ $do->po_customer_id }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Customer Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" readonly customer_name>
+                                                        <input type="text" class="form-control" readonly value="{{ $do->poc->quotation->sales_order->inquiry->visit->customer->name }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Customer Address</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <textarea class="form-control" rows="5" readonly customer_address></textarea>
+                                                        <textarea class="form-control" rows="5" readonly>{{ $do->poc->quotation->sales_order->inquiry->visit->customer->address }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -78,15 +72,29 @@
                                         <h5>Product List</h5>
                                     </div>
                                 </div>
-                                <table class="table table-bordered table-vcenter js-datatable" style="font-size:13px" selected_sales_order_items>
+                                <table class="table table-bordered table-vcenter js-datatable" style="font-size:13px">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center">Item Name</th>
-                                            <th class="text-center">QTY</th>
+                                            <th class="text-center" width="5%">No.</th>
+                                            <th class="">Item Name</th>
+                                            <th class="text-center" width="10%">QTY</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($do->delivery_schedule_items as $item)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="">
+                                                {{ $item->selected_sourcing_supplier->sourcing_supplier->item_name }}
+                                                <br>{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->description }}
+                                                <br>{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->size }}
+                                                <br>{{ $item->selected_sourcing_supplier->sourcing_supplier->inquiry_product->remark }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $item->selected_sourcing_supplier->sourcing_supplier->qty }}
+                                            </td>
+                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -97,57 +105,6 @@
         </form>
     </div>
 
-    <div class="modal fade" id="modal-slideup" tabindex="-1" role="dialog" aria-labelledby="modal-slideup" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="block block-themed block-transparent mb-0">
-                    <div class="block-header bg-primary-dark">
-                        <h3 class="block-title">Select Item</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                <i class="si si-close"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content">
-                        <div class="form-group row">
-                            <label class="col-12" for="po_customer">POC Number :</label>
-                            <div class="col-md-12">
-                                <select class="form-control" id="po_customer" name="selected_po_customer">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-12">
-                                <h5>Product List</h5>
-                            </div>
-                            <div class="col-md-12">
-                                <table class="table table-bordered table-vcenter" style="font-size:11px" sales_order_selected_items>
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center">Supplier</th>
-                                            <th class="text-center">Item Name</th>
-                                            <th class="text-center">QTY</th>
-                                            <th class="text-center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-alt-success" data-dismiss="modal" set_sales_order>
-                        <i class="fa fa-plus"></i> Add Data
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
     <x-slot name="js">
         <script>
             $(`[name="selected_po_customer"]`).select2({
@@ -213,7 +170,7 @@
                         , render: function(data, type, row, meta) {
                             return `
                             ${row.sourcing_supplier.item_name}
-                                <br/>${row.sourcing_supplier.inquiry_product.description}
+                                <br/>${row.sourcing_supplier.description}
                                 <br/>${row.sourcing_supplier.inquiry_product.size}
                                 <br/>${row.sourcing_supplier.inquiry_product.remark}
                             `;
@@ -286,7 +243,7 @@
                                         </td>
                                         <td class="align-top pt-3 pb-3"  style="min-width: 250px;">
                                            ${data.sourcing_supplier.item_name}
-                                            <br/>${data.sourcing_supplier.inquiry_product.description}
+                                            <br/>${data.sourcing_supplier.description}
                                             <br/>${data.sourcing_supplier.inquiry_product.size}
                                             <br/>${data.sourcing_supplier.inquiry_product.remark}
                                         </td>
