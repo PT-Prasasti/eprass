@@ -82,7 +82,7 @@
                                 <a type="button" href="{{ route('logistic.delivery_order.view', $do->id) }}" class="btn btn-sm btn-primary" data-toggle="tooltip" data-title="View">
                                     <i class="fa fa-file"></i>
                                 </a> |
-                                <a type="button" href="{{ route('logistic.delivery_order.print', $do->id) }}" class="btn btn-sm btn-warning" data-toggle="tooltip" data-title="Print">
+                                <a type="button" href="{{ route('logistic.delivery_order.print', $do->id) }}" target="_blank" class="btn btn-sm btn-warning" data-toggle="tooltip" data-title="Print">
                                     <i class="fa fa-print"></i>
                                 </a>
                             </td>

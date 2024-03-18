@@ -7,7 +7,7 @@
                     <h4><b>{{ $do->transaction_code }}</b></h4>
                 </div>
                 <div class="col-lg-6 text-right">
-                    <a type="button" class="btn btn-warning mr-5 mb-5 text-white">
+                    <a type="button" href="{{ route('logistic.delivery_order.print', $do->id) }}" target="_blank" class="btn btn-warning mr-5 mb-5 text-white">
                         <i class="fa fa-print"></i> Print
                     </a>
                 </div>
