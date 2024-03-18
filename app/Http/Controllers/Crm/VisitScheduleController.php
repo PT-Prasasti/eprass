@@ -174,6 +174,7 @@ class VisitScheduleController extends Controller
 
     public function store(AddVisitScheduleRequest $request): RedirectResponse
     {
+        dd($request->all());
         try {
             DB::beginTransaction();
             $visit = new VisitSchedule();

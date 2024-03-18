@@ -51,7 +51,6 @@ class PurchaseOrderSupplier extends Model
     {
         return $this->belongsTo(SalesOrder::class, 'sales_order_id', 'id');
     }
-    
 
     public function supplier()
     {

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Constants;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 use App\Models\DeliverySchedule;
-use App\Models\DeliveryScheduleItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\DeliveryScheduleItem;
 use App\Models\PurchaseOrderCustomer;
 use Illuminate\Http\RedirectResponse;
 use App\Models\SelectedSourcingSupplier;
@@ -65,19 +66,26 @@ class DeliveryScheduleController extends Controller
 
     public function handle_generate_transaction_code($date): string
     {
-        $prefix = 'DO';
+        $prefix = 'PSS';
         $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
         $month = (int) date('m', strtotime($date));
         $year = date('y', strtotime($date));
-        $query = DeliverySchedule::query()->orderBy('transaction_code', 'DESC')->first();
+
+        $query = DeliverySchedule::query()
+            ->whereYear('delivery_date', date('Y', strtotime($date)))
+            ->orderBy('transaction_code', 'DESC')
+            ->first();
+
         if ($query) {
             $transactionCodes = explode('/',  $query->transaction_code);
-            $number = ((int) $transactionCodes[0]) + 1;
+            $number = ((int) substr($transactionCodes[3], 0, 3)) + 1;
         } else {
             $number = 1;
         }
 
-        return sprintf("%04s", $number) . "/" . $prefix . "/" . $romans[$month - 1] . "/" . $year;
+        $number = sprintf("%03s", $number);
+
+        return $prefix . "/" . $romans[$month - 1] . "/" . $year . "/" . $number;
     }
 
     public function store(Request $request): RedirectResponse
@@ -91,12 +99,16 @@ class DeliveryScheduleController extends Controller
 
             DB::beginTransaction();
 
+            $staticId = $this->handle_generate_transaction_code(date('Y-m-d'));
+
             $deliverySchedule = new DeliverySchedule();
-            $deliverySchedule->transaction_code = $this->handle_generate_transaction_code(date('Y-m-d'));
+            $deliveryDate = date('dmY', strtotime($request->delivery_date));
+            $deliverySchedule->transaction_code = $staticId . $deliveryDate;
             $deliverySchedule->po_customer_id = $request->po_customer_id;
             $deliverySchedule->delivery_date = $request->delivery_date;
             $deliverySchedule->terms = $request->terms;
             $deliverySchedule->status = 'On Progress';
+
             $deliverySchedule->save();
 
             foreach ($request->item as $selectedSourcingSupplierId => $item) {
@@ -106,6 +118,13 @@ class DeliveryScheduleController extends Controller
                     $DeliveryScheduleItem->delivery_schedule_id = $deliverySchedule->id;
                     $DeliveryScheduleItem->selected_sourcing_supplier_id = $selectedSourcingSupplier->uuid;
                     $DeliveryScheduleItem->save();
+
+                    // dd($selectedSourcingSupplier->purchase_order_supplier_item->purchase_order_supplier);
+
+                    $stock = Stock::where('po_supplier_id', $selectedSourcingSupplier->purchase_order_supplier_item->purchase_order_supplier->id)->first();
+                    if ($stock) {
+                        $stock->delete();
+                    }
                 }
             }
 
@@ -113,7 +132,6 @@ class DeliveryScheduleController extends Controller
 
             return redirect()->route('logistic.delivery_order.index')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
         }

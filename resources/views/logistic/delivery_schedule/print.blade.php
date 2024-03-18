@@ -54,7 +54,7 @@
                     </div>
                     <div class="col-9">
                         <label>
-                            {{ $query->transaction_code }}
+                            {{ $query->po_customer_id }}
                         </label>
                     </div>
                 </div>

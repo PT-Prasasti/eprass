@@ -126,7 +126,7 @@ class PoTrackingController extends Controller
 
             return redirect()->route('po-tracking.index')->with("success", Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
-            // dd($e);
+            dd($e->getMessage());
             DB::rollback();
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
@@ -146,17 +146,18 @@ class PoTrackingController extends Controller
 
             if ($req->status == 'Done') {
                 $items = $tracking->purchase_order_supplier->sales_order->inquiry->products;
+                $itemsQty = $tracking->purchase_order_supplier->sales_order->sourcing->sourcing_supplier;
                 $poc_id = $tracking->purchase_order_supplier->sales_order->quotations[0]->purchase_order_customer->kode_khusus;
 
-                foreach ($items as $item) {
+                foreach ($items as $i => $item) {
                     $stock = new Stock();
                     $stock->po_supplier_id = $tracking->po_suplier_id;
                     $stock->po_customer_id = $poc_id;
                     $stock->item_name = $item->item_name;
                     $stock->description = $item->description;
                     $stock->size = $item->size;
-                    $stock->qty = $item->qty;
                     $stock->remark = $item->remark;
+                    $stock->qty = $itemsQty[$i]->qty;
                     $stock->save();
                 }
             }
@@ -164,7 +165,7 @@ class PoTrackingController extends Controller
             $tracking->save();
 
             DB::commit();
-            return redirect()->back()->with("success", "Status updated successfully");
+            return redirect()->back()->with("success", Constants::CHANGE_STATUS_SUCCESS_MSG);
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with("error", "Failed to update status: " . $e->getMessage());

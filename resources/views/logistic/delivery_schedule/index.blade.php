@@ -46,6 +46,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
+                            <th class="text-center">No DO</th>
                             <th class="text-center">PO Cust Number</th>
                             <th class="text-center">Customer Name</th>
                             <th class="text-center">Due Date</th>
@@ -58,6 +59,7 @@
                         @foreach ($deliverySchedule as $do)
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $do->transaction_code }}</td>
                             <td class="text-center">{{ $do->po_customer_id }}</td>
                             <td class="text-center">{{ $do->poc->quotation->sales_order->inquiry->visit->customer->name }}</td>
                             <td class="text-center">{{ \Carbon\Carbon::parse($do->poc->quotation->sales_order->inquiry->due_date)->format('d M Y') }}</td>
