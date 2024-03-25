@@ -107,6 +107,9 @@ class DeliveryScheduleController extends Controller
             $deliverySchedule->po_customer_id = $request->po_customer_id;
             $deliverySchedule->delivery_date = $request->delivery_date;
             $deliverySchedule->terms = $request->terms;
+            $deliverySchedule->prepare_name = $request->prepare_name;
+            $deliverySchedule->shipping_name = $request->shipping_name;
+            $deliverySchedule->received_name = $request->received_name;
             $deliverySchedule->status = 'On Progress';
 
             $deliverySchedule->save();

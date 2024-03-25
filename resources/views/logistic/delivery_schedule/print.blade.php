@@ -225,11 +225,11 @@
                 <br>
                 <br>
                 <p>
-                    Husen
+                    {{ $query->prepare_name }}
                     <br>
                     PT. Prambanan Sarana Sejati
                     <br>
-                    Date : {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y'); }}
+                    Date : {{ \Carbon\Carbon::parse($query->delivery_date)->locale('id')->isoFormat('D MMMM Y'); }}
                 </p>
             </div>
 
@@ -242,11 +242,11 @@
                     <br>
                     <br>
                     <p>
-                        Husen
+                        {{ $query->shipping_name }}
                         <br>
                         PT. Prambanan Sarana Sejati
                         <br>
-                        Date : {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y'); }}
+                        Date : {{ \Carbon\Carbon::parse($query->delivery_date)->locale('id')->isoFormat('D MMMM Y'); }}
                     </p>
                 </div>
             </div>
@@ -260,10 +260,11 @@
                     <br>
                     <br>
                     <p>
+                        {{ $query->received_name }}
+                        <br>
                         {{ $query->poc->quotation->sales_order->inquiry->visit->customer->company }}
                         <br>
-                        <br>
-                        Date : {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y'); }}
+                        Date : {{ \Carbon\Carbon::parse($query->delivery_date)->locale('id')->isoFormat('D MMMM Y'); }}
                     </p>
                 </div>
             </div>

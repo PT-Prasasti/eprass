@@ -41,6 +41,30 @@
                                                         <input type="text" class="form-control" name="terms" required>
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">Prepare By</label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" name="prepare_name" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">Shipping By</label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" name="shipping_name" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label class="col-lg-3 col-form-label">Received By</label>
+                                                    <label class="col-lg-1 col-form-label text-right">:</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" name="received_name" required>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

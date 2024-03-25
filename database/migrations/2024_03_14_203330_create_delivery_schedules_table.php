@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('po_customer_id');
             $table->date('delivery_date');
             $table->string('terms');
+            $table->string('prepare_name');
+            $table->string('shipping_name');
+            $table->string('received_name');
             $table->timestamps();
             $table->softDeletes();
         });
