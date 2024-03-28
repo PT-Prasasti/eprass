@@ -87,12 +87,12 @@ Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
     Route::get('/{id}/forwarder', [PoTrackingController::class, 'get_forwarder_item'])->name('.get_forwarder_item');
 });
 
-Route::prefix('/logistic')->name('logistic')->group(function() {
+Route::prefix('/logistic')->name('logistic')->group(function () {
     Route::get('/dashboard', [LogisticController::class, 'index'])->name('.dashboard');
     Route::post('/data', [LogisticController::class, 'data'])->name('.data');
     Route::post('/data-stock', [LogisticController::class, 'dataStock'])->name('.data-stock');
     Route::post('/data-do', [LogisticController::class, 'dataDo'])->name('.data-do');
-    Route::prefix('/delivery-order')->name('.delivery_order')->group(function() {
+    Route::prefix('/delivery-order')->name('.delivery_order')->group(function () {
         Route::get('/', [DeliveryScheduleController::class, 'index'])->name('.index');
         Route::get('/add', [DeliveryScheduleController::class, 'add'])->name('.add');
         Route::get('/search_po_customer', [DeliveryScheduleController::class, 'search_po_customer'])->name('.search_po_customer');
@@ -100,6 +100,15 @@ Route::prefix('/logistic')->name('logistic')->group(function() {
         Route::patch('/status/{uuid}', [DeliveryScheduleController::class, 'update_status'])->name('.update_status');
         Route::get('/{uuid}/view', [DeliveryScheduleController::class, 'view'])->name('.view');
         Route::get('/{id}/print', [DeliveryScheduleController::class, 'print'])->name('.print');
+    });
+    // Route::get('/good-received', [LogisticController::class, 'goodReceived'])->name('.good_received');
+    Route::prefix('/good-received')->name('.good_received')->group(function () {
+        Route::get('/', [LogisticController::class, 'gr_index'])->name('.index');
+        Route::get('/add', [LogisticController::class, 'gr_add'])->name('.add');
+        Route::get('/data', [LogisticController::class, 'gr_data'])->name('.data');
+        Route::get('/get-supplier', [LogisticController::class, 'gr_get_supplier'])->name('.get_supplier');
+        Route::get('/get-product', [LogisticController::class, 'gr_get_product'])->name('.get_product');
+        Route::post('/store', [LogisticController::class, 'gr_store'])->name('.store');
     });
 });
 
@@ -399,7 +408,7 @@ Route::prefix('/payment-request')->name('payment-request')->group(function () {
     Route::post('upload-document', [PaymentRequestController::class, 'upload_document'])->name('.upload-document');
     Route::get('/id', [PaymentRequestController::class, 'generate_id'])->name('.id');
 
-    Route::prefix('/exim')->name('.exim')->group(function() {
+    Route::prefix('/exim')->name('.exim')->group(function () {
         Route::get('/', [PaymentRequestEximController::class, 'index']);
         Route::get('/add', [PaymentRequestEximController::class, 'add'])->name('.add');
         Route::post('/store', [PaymentRequestEximController::class, 'store'])->name('.store');
