@@ -180,4 +180,36 @@ class LogisticController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Data berhasil disimpan']);
     }
+
+    public function gr_view($uuid)
+    {
+        $btb = BTB::where('b_t_b_s.uuid', $uuid)
+            ->join('purchase_order_suppliers', 'b_t_b_s.purchase_order_supplier_id', '=', 'purchase_order_suppliers.id')
+            ->join('suppliers', 'purchase_order_suppliers.supplier_id', '=', 'suppliers.uuid')
+            ->select('suppliers.company', 'b_t_b_s.*', 'purchase_order_suppliers.id as purchase_order_supplier_id')
+            ->first();
+
+        return view('logistic.good_received.view', compact('btb'));
+    }
+
+    public function gr_update(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'uuid' => 'required|exists:b_t_b_s,uuid',
+            'date' => 'required',
+            'note' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()->first()]);
+        }
+
+        $btb = BTB::where('uuid', $request->uuid)->first();
+        $btb->update([
+            'date' => $request->date,
+            'note' => $request->note,
+        ]);
+
+        return response()->json(['status' => 'success', 'message' => 'Data berhasil diubah']);
+    }
 }

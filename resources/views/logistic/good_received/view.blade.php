@@ -6,7 +6,7 @@
                     <h5>Check Mark</h5>
                 </div>
                 <div class="col-lg-6 text-right">
-                    <button type="button" class="btn btn-primary mr-5 mb-5" id="btn-save-data" disabled>
+                    <button type="button" class="btn btn-primary mr-5 mb-5" id="btn-save-data">
                         <i class="fa fa-save mr-5"></i>Save Data
                     </button>
                 </div>
@@ -24,28 +24,9 @@
                                                         Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <select class="form-control" id="po-supplier-number"
-                                                            name="po_supplier_number">
-                                                            <option selected disabled>Please select</option>
-                                                            @php
-                                                                $items = \App\Models\PurchaseOrderSupplier::orderBy(
-                                                                    'transaction_code',
-                                                                    'ASC',
-                                                                )
-                                                                    ->whereNotIn('id', function ($query) {
-                                                                        $query
-                                                                            ->select('purchase_order_supplier_id')
-                                                                            ->from('b_t_b_s');
-                                                                    })
-                                                                    ->get();
-                                                            @endphp
-
-                                                            @foreach ($items as $item)
-                                                                <option value="{{ $item->id }}">
-                                                                    {{ $item->transaction_code }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                                                        <input class="form-control" id="po-supplier-number"
+                                                            name="po_supplier_number" readonly
+                                                            value="{{ $btb->purchase_order_supplier_number }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -53,7 +34,7 @@
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control" name="supplier_name"
-                                                            value="" readonly>
+                                                            readonly value="{{ $btb->company }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -61,14 +42,14 @@
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
                                                         <input type="date" class="form-control" name="date"
-                                                            value="">
+                                                            value="{{ $btb->date }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Note</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <textarea class="form-control" name="note"></textarea>
+                                                        <textarea class="form-control" name="note">{{ $btb->note }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -228,24 +209,7 @@
     <x-slot name="js">
         <script>
             $(document).ready(function() {
-                $('select[name="po_supplier_number"]').on('change', function() {
-                    let id = $(this).val();
-                    $.ajax({
-                        url: "{{ route('logistic.good_received.get_supplier') }}",
-                        type: 'GET',
-                        data: {
-                            id: id
-                        },
-                        success: function(response) {
-                            $('input[name="supplier_name"]').val(response.company);
-                            $('input[name="date"]').val(response.transaction_date);
-                            $('textarea[name="note"]').val(response.note);
-                            $('#btn-save-data').prop('disabled', false);
-
-                            dataTable(response.id);
-                        }
-                    });
-                });
+                dataTable('{{ $btb->purchase_order_supplier_id }}')
 
                 $('#btn-save-data').on('click', function() {
                     saveData();
@@ -317,18 +281,16 @@
             }
 
             function saveData() {
-                let po_supplier_number = $('select[name="po_supplier_number"]').val();
-                let supplier_name = $('input[name="supplier_name"]').val();
+                let uuid = '{{ $btb->uuid }}';
                 let date = $('input[name="date"]').val();
                 let note = $('textarea[name="note"]').val();
 
                 $.ajax({
-                    url: "{{ route('logistic.good_received.store') }}",
+                    url: "{{ route('logistic.good_received.update') }}",
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
-                        purchase_order_supplier_id: po_supplier_number,
-                        supplier_name: supplier_name,
+                        uuid: uuid,
                         date: date,
                         note: note,
                     },

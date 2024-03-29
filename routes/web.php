@@ -109,6 +109,8 @@ Route::prefix('/logistic')->name('logistic')->group(function () {
         Route::get('/get-supplier', [LogisticController::class, 'gr_get_supplier'])->name('.get_supplier');
         Route::get('/get-product', [LogisticController::class, 'gr_get_product'])->name('.get_product');
         Route::post('/store', [LogisticController::class, 'gr_store'])->name('.store');
+        Route::get('/view/{uuid}', [LogisticController::class, 'gr_view'])->name('.view');
+        Route::post('/update', [LogisticController::class, 'gr_update'])->name('.update');
     });
 });
 

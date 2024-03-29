@@ -92,14 +92,14 @@
                             className: 'text-center'
                         },
                         {
-                            data: 'id',
-                            name: 'id',
+                            data: 'uuid',
+                            name: 'uuid',
                             className: 'text-center',
                             orderable: false,
                             searchable: false,
                             render: function(data, type, row) {
                                 return `
-                                    <a type="button" href="form_app.php" class="btn btn-sm btn-primary" data-toggle="tooltip">
+                                    <a type="button" onclick="view('${data}')" class="btn btn-sm btn-primary" data-toggle="tooltip">
                                         <i class="fa fa-file"></i>
                                     </a>
                                 `;
@@ -107,6 +107,13 @@
                         },
                     ]
                 });
+            }
+
+            function view(uuid) {
+                window.location.href =
+                    `{{ route('logistic.good_received.view', ['uuid' => ':uuid']) }}`
+                    .replace(":uuid",
+                        uuid);
             }
         </script>
     </x-slot>
