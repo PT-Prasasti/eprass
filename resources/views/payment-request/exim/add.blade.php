@@ -203,6 +203,13 @@
                                                                 <input type="text" class="form-control" id="remark" placeholder="Remark">
                                                             </div>
                                                         </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-lg-2 col-form-label">File</label>
+                                                            <label class="col-lg-1 col-form-label text-right">:</label>
+                                                            <div class="col-lg-9">
+                                                                <input type="file" class="form-control" id="file">
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -450,7 +457,9 @@
             $('#addItemButton').click(function(e) {
                 e.preventDefault();
                 const modalData = getModalData();
-                storeProduct(modalData);
+                // file upload
+                const file = $('#file').prop('files')[0];
+                storeProduct(modalData, file);
             });
 
             $('#editItemButton').click(function(e) {
@@ -460,18 +469,27 @@
                 updateProduct(modalData, itemKey);
             });
 
-            function storeProduct(data) {
+            function storeProduct(data, file) {
                 const paymentCode = $('input[name=payment_code]').val();
+
+                // Create a FormData object
+                const formData = new FormData();
+                formData.append('_token', "{{ csrf_token() }}");
+                formData.append('payment_code', paymentCode);
+                formData.append('file', file);
+
+                // Append each data item to the FormData
+                for (const key in data) {
+                    formData.append(`data[${key}]`, data[key]);
+                }
 
                 $.ajax({
                     url: "{{ route('payment-request.exim.store_product') }}"
                     , type: "POST"
-                    , data: {
-                        _token: "{{ csrf_token() }}"
-                        , payment_code: paymentCode
-                        , data: data
-                    }
-                    , success: function(response) {
+                    , data: formData
+                    , processData: false, // tell jQuery not to process the data
+                    contentType: false, // tell jQuery not to set contentType
+                    success: function(response) {
                         $('input[id=date]').val('');
                         $('input[id=item]').val('');
                         $('textarea[id=description]').val('');
@@ -482,7 +500,7 @@
                     , error: function(xhr, status, error) {
                         console.error(error)
                     }
-                })
+                });
             }
 
             function updateProduct(data, itemKey) {
@@ -527,7 +545,7 @@
                     , description: $('#description').val()
                     , amount: amountValue
                     , remark: $('#remark').val()
-                , };
+                };
             }
 
             function getModalDataUpdate() {
