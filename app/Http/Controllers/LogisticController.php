@@ -13,6 +13,8 @@ use App\Http\Controllers\Helper\RedisController;
 use App\Models\BTB;
 use App\Models\PurchaseOrderSupplier;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables as DataTablesDataTables;
 
@@ -178,6 +180,34 @@ class LogisticController extends Controller
             'note' => $request->note,
         ]);
 
+        $purchase_order_supplier = PurchaseOrderSupplier::find($request->purchase_order_supplier_id);
+        $purchase_order_supplier->update([
+            'document_list' => ($request->pdf == 'null') ? '' : $request->pdf,
+        ]);
+
+        $po_supplier_number = $purchase_order_supplier->transaction_code;
+
+        if ($request->pdf != 'null') {
+            $files = json_decode($request->pdf, true);
+            foreach ($files as $item) {
+                $sourcePath = storage_path('app/temp/' . str_replace('/', '_', $po_supplier_number) . '/' . $item['filename']);
+                $destinationPath = storage_path('app/public/good-received/' . str_replace('/', '_', $po_supplier_number) . '/' . $item['filename']);
+
+                if (!Storage::exists('public/good-received/' . str_replace('/', '_', $po_supplier_number))) {
+                    Storage::makeDirectory('public/good-received/' . str_replace('/', '_', $po_supplier_number));
+                }
+
+                if (file_exists($sourcePath)) {
+                    rename($sourcePath, $destinationPath);
+                }
+            }
+
+            Storage::deleteDirectory('temp/' . $po_supplier_number);
+        }
+
+        $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+        Redis::del($key);
+
         return response()->json(['status' => 'success', 'message' => 'Data berhasil disimpan']);
     }
 
@@ -210,6 +240,154 @@ class LogisticController extends Controller
             'note' => $request->note,
         ]);
 
+        $purchase_order_supplier = PurchaseOrderSupplier::find($btb->purchase_order_supplier_id);
+        $purchase_order_supplier->update([
+            'document_list' => ($request->pdf == 'null') ? '' : $request->pdf,
+        ]);
+
+        $po_supplier_number = $purchase_order_supplier->transaction_code;
+
+        if ($request->pdf != 'null') {
+            $files = json_decode($request->pdf, true);
+            foreach ($files as $item) {
+                $sourcePath = storage_path('app/temp/' . str_replace('/', '_', $po_supplier_number) . '/' . $item['filename']);
+                $destinationPath = storage_path('app/public/good-received/' . str_replace('/', '_', $po_supplier_number) . '/' . $item['filename']);
+
+                if (!Storage::exists('public/good-received/' . str_replace('/', '_', $po_supplier_number))) {
+                    Storage::makeDirectory('public/good-received/' . str_replace('/', '_', $po_supplier_number));
+                }
+
+                if (file_exists($sourcePath)) {
+                    rename($sourcePath, $destinationPath);
+                }
+            }
+
+            Storage::deleteDirectory('temp/' . $po_supplier_number);
+        }
+
+        $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+        Redis::del($key);
+
         return response()->json(['status' => 'success', 'message' => 'Data berhasil diubah']);
+    }
+
+    public function gr_delete(Request $request)
+    {
+        $btb = BTB::where('uuid', $request->uuid)->first();
+        $purchase_order_supplier = PurchaseOrderSupplier::find($btb->purchase_order_supplier_id);
+        $po_supplier_number = str_replace('/', '_', $purchase_order_supplier->transaction_code);
+
+        $files = $purchase_order_supplier->document_list == '' ? [] : json_decode($purchase_order_supplier->document_list, true);
+        if (sizeof($files) > 0) {
+            foreach ($files as $item) {
+                $path = 'public/good-received/' . $po_supplier_number . '/' . $item['filename'];
+                $exist = Storage::exists($path);
+                if ($exist) {
+                    Storage::delete($path);
+                }
+            }
+        }
+
+        $purchase_order_supplier->update([
+            'document_list' => null,
+        ]);
+
+        $btb->delete();
+
+        $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+        Redis::del($key);
+
+        return response()->json(['status' => 'success', 'message' => 'Data berhasil dihapus']);
+    }
+
+    public function gr_upload_pdf(Request $request)
+    {
+        try {
+            if ($request->hasFile('file')) {
+                $po_supplier_number = str_replace('/', '_', $request->po_supplier_number);
+                $file = $request->file('file');
+                $path = $po_supplier_number;
+                $upload = $this->fileController->store_temp($file, $path);
+                if ($upload->original['status'] == 200) {
+                    $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+                    $data = $upload->original['data'];
+                    $redis = $this->redisController->store($key, $data);
+
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
+    }
+
+    public function gr_get_pdf(Request $request)
+    {
+        $po_supplier_number = $request->po_supplier_number;
+        $po_supplier_number = str_replace('/', '_', $po_supplier_number);
+        $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+        $data = json_decode(Redis::get($key), true);
+
+        if ($data == null) {
+            // 
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function gr_delete_pdf(Request $request)
+    {
+        try {
+            $po_supplier_number = $request->po_supplier_number;
+            $po_supplier_number = str_replace('/', '_', $po_supplier_number);
+            $file = $request->file;
+            if ($request->has('edit')) {
+                $path = 'public/good-received/' . $po_supplier_number . '/' . $file;
+            } else {
+                $path = 'temp/' . $po_supplier_number . '/' . $file;
+            }
+            $exist = Storage::exists($path);
+            if ($exist) {
+                $delete = Storage::delete($path);
+
+                if ($delete) {
+                    $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+                    $redis = $this->redisController->delete_item($key, 'filename', $file);
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        if (sizeof($data) == 0) {
+                            Redis::del($key);
+                        }
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
     }
 }

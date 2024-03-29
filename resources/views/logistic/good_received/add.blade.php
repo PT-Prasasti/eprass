@@ -77,9 +77,9 @@
                                     <div class="col-md-4">
                                         <div class="custom-file">
                                             <input type="hidden" name="document_list" value="">
-                                            <input type="file" id="upload-document" name="upload_document"
+                                            <input type="file" id="upload-document" name="upload-pdf"
                                                 class="custom-file-input js-custom-file-input-enabled"
-                                                data-toggle="custom-file-input" accept="application/pdf">
+                                                data-toggle="custom-file-input" accept="application/pdf" disabled>
                                             <label id="upload-document-label" for="upload-document"
                                                 class="custom-file-label">
                                                 Choose file
@@ -223,6 +223,8 @@
                 </div>
             </div>
         </div>
+
+        <input type="hidden" name="pdf">
     </main>
 
     <x-slot name="js">
@@ -245,11 +247,18 @@
                             dataTable(response.id);
                         }
                     });
+                    getPdf($(this).val());
+                    $('input[name=upload-pdf]').prop('disabled', false)
                 });
 
                 $('#btn-save-data').on('click', function() {
                     saveData();
                 });
+                $('input[name=upload-pdf]').change(function() {
+                    $('#loading-file').removeClass('d-none')
+                    $('#loading-file').addClass('d-flex')
+                    uploadPdf($(this).prop('files')[0])
+                })
             })
 
             function dataTable(po_supplier_number) {
@@ -321,6 +330,7 @@
                 let supplier_name = $('input[name="supplier_name"]').val();
                 let date = $('input[name="date"]').val();
                 let note = $('textarea[name="note"]').val();
+                let pdf = $('input[name="pdf"]').val();
 
                 $.ajax({
                     url: "{{ route('logistic.good_received.store') }}",
@@ -331,6 +341,7 @@
                         supplier_name: supplier_name,
                         date: date,
                         note: note,
+                        pdf: pdf
                     },
                     success: function(response) {
                         if (response.status == 'success') {
@@ -356,6 +367,92 @@
                         }
                     }
                 });
+            }
+
+            function uploadPdf(file) {
+                const formData = new FormData()
+                formData.append('_token', '{{ csrf_token() }}')
+                formData.append('file', file)
+                formData.append('po_supplier_number', $('select[name=po_supplier_number] option:selected').text())
+                $.ajax({
+                    url: "{{ route('logistic.good_received.upload_pdf') }}",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#loading-file').removeClass('d-flex')
+                        $('#loading-file').addClass('d-none')
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+                $('#upload-pdf-label').html('Choose file')
+            }
+
+            function listItemPdf(status, data) {
+                if (status == 200) {
+                    var element = ``
+                    var number = 1
+                    var po_supplier_number = $('select[name=po_supplier_number] option:selected').text()
+                    po_supplier_number = po_supplier_number.replace(/\//g, '_')
+                    $.each(data, function(index, value) {
+                        element +=
+                            `<li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="/file/show/temp/${po_supplier_number}/${value.filename}" target="_blank">` +
+                            number + `. ` + value.aliases + `</a>
+                                            <button type="button" onclick="deletePdf('` + value.filename + `')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                                </svg>    
+                                            </button>
+                                        </div>
+                                    </li>`
+                        number++
+                    })
+                    $('.list-group').html(``)
+                    $('.list-group').html(element)
+                    $('input[name=pdf]').val(JSON.stringify(data))
+                }
+            }
+
+            function getPdf(id) {
+                $.ajax({
+                    url: "{{ route('logistic.good_received.get_pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        po_supplier_number: id
+                    },
+                    success: function(response) {
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function deletePdf(file) {
+                $.ajax({
+                    url: "{{ route('logistic.good_received.delete_pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        file: file,
+                        po_supplier_number: $('select[name=po_supplier_number] option:selected').text()
+                    },
+                    success: function(response) {
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
             }
         </script>
     </x-slot>
