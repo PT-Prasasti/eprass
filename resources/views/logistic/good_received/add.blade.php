@@ -198,11 +198,11 @@
                                                 <div class="block-content">
                                                     <div class="form-group row">
                                                         <div class="col-md-12">
-                                                            <select class="form-control" id="example-select"
-                                                                name="example-select">
-                                                                <option value="0">Please select</option>
-                                                                <option value="1">Good</option>
-                                                                <option value="2">Rejected</option>
+                                                            <input type="hidden" name="inquiry_product_id">
+                                                            <select class="form-control" name="status">
+                                                                <option selected disabled>Please select</option>
+                                                                <option value="good">Good</option>
+                                                                <option value="rejected">Rejected</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -210,7 +210,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-alt-success"
-                                                    data-dismiss="modal">
+                                                    data-dismiss="modal" onclick="saveStatus()">
                                                     <i class="fa fa-save"></i> Save Status
                                                 </button>
                                             </div>
@@ -261,6 +261,49 @@
                 })
             })
 
+            function saveStatus() {
+                let po_supplier_number = $('select[name=po_supplier_number]').val();
+                let inquiry_product_id = $('input[name="inquiry_product_id"]').val();
+                let status = $('select[name="status"]').val();
+
+                $.ajax({
+                    url: "{{ route('logistic.good_received.save_status') }}",
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        inquiry_product_id: inquiry_product_id,
+                        status: status,
+                        po_supplier_number: po_supplier_number
+                    },
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            $('#status_' + response.inquiry_product_id).removeClass('btn-secondary')
+                            $('#status_' + response.inquiry_product_id).text(response.status_name.toUpperCase())
+                            if (response.status_name == 'good') {
+                                $('#status_' + response.inquiry_product_id).removeClass('btn-danger')
+                                $('#status_' + response.inquiry_product_id).addClass('btn-success')
+                            } else {
+                                $('#status_' + response.inquiry_product_id).removeClass('btn-success')
+                                $('#status_' + response.inquiry_product_id).addClass('btn-danger')
+                            }
+                        }
+                    }
+                });
+            }
+
+            function inputInquiryProductId(id) {
+                $('input[name="inquiry_product_id"]').val('');
+                $('input[name="inquiry_product_id"]').val(id);
+            }
+
             function dataTable(po_supplier_number) {
                 $('#container-table').html('');
 
@@ -302,13 +345,15 @@
                             name: 'qty'
                         },
                         {
-                            data: 'id',
-                            name: 'id',
+                            data: 'status',
+                            name: 'status',
                             className: 'text-center',
                             render: function(data, type, full, meta) {
-                                return `
-                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_1">Selected</button>
-                                `;
+                                if (data == 'good' || data == 'rejected') {
+                                    return `<button id="status_${full.id}" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_1" onclick="inputInquiryProductId(${full.id})">${data.toUpperCase()}</button>`
+                                } else {
+                                    return `<button id="status_${full.id}" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#modal_1" onclick="inputInquiryProductId(${full.id})">-- Please select --</button>`
+                                }
                             }
                         },
                         {

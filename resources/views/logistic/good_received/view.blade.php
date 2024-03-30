@@ -147,7 +147,7 @@
                                                                     <span class="sr-only">Loading...</span>
                                                                 </div>
                                                             </div>
-                                                            <ul class="list-group" document_list=""></ul>
+                                                            <ul class="list-group-items" document_list=""></ul>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -265,13 +265,17 @@
                             name: 'qty'
                         },
                         {
-                            data: 'id',
-                            name: 'id',
+                            data: 'status',
+                            name: 'status',
                             className: 'text-center',
                             render: function(data, type, full, meta) {
-                                return `
-                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_1">Selected</button>
-                                `;
+                                if (data == 'good') {
+                                    return `<span class="badge badge-success">Good</span>`
+                                } else if (data == 'rejected') {
+                                    return `<span class="badge badge-danger">Rejected</span>`
+                                } else {
+                                    return `<span class="badge badge-danger">There's problem</span>`
+                                }
                             }
                         },
                         {

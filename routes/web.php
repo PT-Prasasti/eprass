@@ -113,6 +113,8 @@ Route::prefix('/logistic')->name('logistic')->group(function () {
         Route::post('/update', [LogisticController::class, 'gr_update'])->name('.update');
         Route::post('/delete', [LogisticController::class, 'gr_delete'])->name('.delete');
 
+        Route::post('/save-status', [LogisticController::class, 'gr_save_status'])->name('.save_status');
+
         Route::post('/upload-pdf', [LogisticController::class, 'gr_upload_pdf'])->name('.upload_pdf');
         Route::post('/get-pdf', [LogisticController::class, 'gr_get_pdf'])->name('.get_pdf');
         Route::post('/delete-pdf', [LogisticController::class, 'gr_delete_pdf'])->name('.delete_pdf');

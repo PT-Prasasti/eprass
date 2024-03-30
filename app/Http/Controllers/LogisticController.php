@@ -11,6 +11,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Models\BTB;
+use App\Models\BTBItem;
 use App\Models\PurchaseOrderSupplier;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Redis;
@@ -149,11 +150,32 @@ class LogisticController extends Controller
             ->join('sales_orders', 'sourcings.so_id', '=', 'sales_orders.id')
             ->join('inquiries', 'sales_orders.inquiry_id', '=', 'inquiries.id')
             ->join('inquiry_products', 'inquiries.id', '=', 'inquiry_products.inquiry_id')
-            ->select('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty')
+            ->select('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty', 'inquiry_products.description')
+            ->groupBy('inquiry_products.id')
             ->get();
 
         $result = DataTablesDataTables::of($supp_items)
             ->addIndexColumn()
+            ->addColumn('item_name', function ($item) {
+                return $item->item_name . ' ' . $item->description;
+            })
+            ->addColumn('status', function ($item) use ($request) {
+                $status = Redis::get('good_received_status_' . $request->id . '_' . $item->id);
+                if ($status == null) {
+                    $btb = BTB::where('b_t_b_s.purchase_order_supplier_id', $request->id)
+                        ->where('b_t_b_items.inquiry_product_id', $item->id)
+                        ->join('b_t_b_items', 'b_t_b_s.uuid', '=', 'b_t_b_items.b_t_b_id')
+                        ->select('b_t_b_items.status')
+                        ->first();
+                    if ($btb != null) {
+                        return $btb->status;
+                    } else {
+                        return $item->id;
+                    }
+                } else {
+                    return $status;
+                }
+            })
             ->make(true);
 
         return $result;
@@ -172,13 +194,48 @@ class LogisticController extends Controller
             return response()->json(['status' => 'error', 'message' => $validation->errors()->first()]);
         }
 
-        BTB::create([
+        $btb = BTB::create([
             'purchase_order_supplier_id' => $request->purchase_order_supplier_id,
             'purchase_order_supplier_number' => PurchaseOrderSupplier::find($request->purchase_order_supplier_id)->transaction_code,
             'supplier_name' => $request->supplier_name,
             'date' => $request->date,
             'note' => $request->note,
         ]);
+
+        $supp_items = PurchaseOrderSupplier::where('purchase_order_suppliers.id', $btb->purchase_order_supplier_id)
+            ->join('purchase_order_supplier_items', 'purchase_order_suppliers.id', '=', 'purchase_order_supplier_items.purchase_order_supplier_id')
+            ->join('selected_sourcing_suppliers', 'purchase_order_supplier_items.selected_sourcing_supplier_id', '=', 'selected_sourcing_suppliers.uuid')
+            ->join('sourcings', 'selected_sourcing_suppliers.sourcing_id', '=', 'sourcings.id')
+            ->join('sales_orders', 'sourcings.so_id', '=', 'sales_orders.id')
+            ->join('inquiries', 'sales_orders.inquiry_id', '=', 'inquiries.id')
+            ->join('inquiry_products', 'inquiries.id', '=', 'inquiry_products.inquiry_id')
+            ->select('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty')
+            ->groupBy('inquiry_products.id')
+            ->get();
+        foreach ($supp_items as $item) {
+            $keys = Redis::keys('*');
+            foreach ($keys as $key) {
+                // Mencocokkan kunci dengan pola yang sesuai
+                if (preg_match('/eprass_database_good_received_status_(.*?)_(\d+)/', $key, $matches)) {
+                    // $matches[1] akan berisi po_supplier_number dan $matches[2] akan berisi inquiry_product_id
+                    $po_supplier_number = $matches[1];
+                    $inquiry_product_id = $matches[2];
+                }
+            }
+            $redis = Redis::get('good_received_status_' . $po_supplier_number . '_' . $inquiry_product_id);
+
+            $btbItem = BTBItem::where('b_t_b_id', $btb->uuid)->where('inquiry_product_id', $item->id)->first();
+            if ($btbItem == null) {
+                BTBItem::create([
+                    'b_t_b_id' => $btb->uuid,
+                    'inquiry_product_id' => $item->id,
+                    'status' => $redis,
+                    'document_list' => null
+                ]);
+            }
+
+            Redis::del('good_received_status_' . $po_supplier_number . '_' . $inquiry_product_id);
+        }
 
         $purchase_order_supplier = PurchaseOrderSupplier::find($request->purchase_order_supplier_id);
         $purchase_order_supplier->update([
@@ -298,6 +355,23 @@ class LogisticController extends Controller
         Redis::del($key);
 
         return response()->json(['status' => 'success', 'message' => 'Data berhasil dihapus']);
+    }
+
+    public function gr_save_status(Request $request)
+    {
+        $data = Redis::get('good_received_status_' . $request->po_supplier_number . '_' . $request->inquiry_product_id);
+        if ($data != null) {
+            Redis::del('good_received_status_' . $request->po_supplier_number . '_' . $request->inquiry_product_id);
+        }
+
+        Redis::set('good_received_status_' . $request->po_supplier_number . '_' . $request->inquiry_product_id, $request->status);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil disimpan',
+            'inquiry_product_id' => $request->inquiry_product_id,
+            'status_name' => $request->status
+        ]);
     }
 
     public function gr_upload_pdf(Request $request)
