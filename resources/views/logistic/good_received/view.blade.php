@@ -6,7 +6,7 @@
                     <h5>Check Mark</h5>
                 </div>
                 <div class="col-lg-6 text-right">
-                    <button type="button" class="btn btn-primary mr-5 mb-5" id="btn-save-data" disabled>
+                    <button type="button" class="btn btn-primary mr-5 mb-5" id="btn-save-data">
                         <i class="fa fa-save mr-5"></i>Save Data
                     </button>
                 </div>
@@ -24,28 +24,9 @@
                                                         Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <select class="form-control" id="po-supplier-number"
-                                                            name="po_supplier_number">
-                                                            <option selected disabled>Please select</option>
-                                                            @php
-                                                                $items = \App\Models\PurchaseOrderSupplier::orderBy(
-                                                                    'transaction_code',
-                                                                    'ASC',
-                                                                )
-                                                                    ->whereNotIn('id', function ($query) {
-                                                                        $query
-                                                                            ->select('purchase_order_supplier_id')
-                                                                            ->from('b_t_b_s');
-                                                                    })
-                                                                    ->get();
-                                                            @endphp
-
-                                                            @foreach ($items as $item)
-                                                                <option value="{{ $item->id }}">
-                                                                    {{ $item->transaction_code }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                                                        <input class="form-control" id="po-supplier-number"
+                                                            name="po_supplier_number" readonly
+                                                            value="{{ $btb->purchase_order_supplier_number }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -53,7 +34,7 @@
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control" name="supplier_name"
-                                                            value="" readonly>
+                                                            readonly value="{{ $btb->company }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -61,14 +42,14 @@
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
                                                         <input type="date" class="form-control" name="date"
-                                                            value="">
+                                                            value="{{ $btb->date }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Note</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <textarea class="form-control" name="note"></textarea>
+                                                        <textarea class="form-control" name="note">{{ $btb->note }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -79,7 +60,7 @@
                                             <input type="hidden" name="document_list" value="">
                                             <input type="file" id="upload-document" name="upload-pdf"
                                                 class="custom-file-input js-custom-file-input-enabled"
-                                                data-toggle="custom-file-input" accept="application/pdf" disabled>
+                                                data-toggle="custom-file-input" accept="application/pdf">
                                             <label id="upload-document-label" for="upload-document"
                                                 class="custom-file-label">
                                                 Choose file
@@ -143,11 +124,10 @@
                                                 <div class="block-content">
                                                     <div class="custom-file">
                                                         <input type="hidden" name="document_list" value="">
-                                                        <input type="hidden" name="inquiry_id">
-                                                        <input type="file" id="upload-item-file"
-                                                            name="upload-item-file"
+                                                        <input type="file" id="upload-document"
+                                                            name="upload_document"
                                                             class="custom-file-input js-custom-file-input-enabled"
-                                                            data-toggle="custom-file-input">
+                                                            data-toggle="custom-file-input" accept="application/pdf">
                                                         <label id="upload-document-label" for="upload-document"
                                                             class="custom-file-label">
                                                             Choose file
@@ -157,7 +137,8 @@
                                                     <div class="block block-rounded mt-3">
                                                         <div class="block-content block-content-full bg-pattern p-0">
                                                             <h5 class="mb-2">Document List</h5>
-                                                            <div class="d-none align-items-center" id="">
+                                                            <div class="d-none align-items-center"
+                                                                id="upload-document-loading">
                                                                 <div class="mr-2">
                                                                     <span>Uploading file</span>
                                                                 </div>
@@ -198,11 +179,11 @@
                                                 <div class="block-content">
                                                     <div class="form-group row">
                                                         <div class="col-md-12">
-                                                            <input type="hidden" name="inquiry_product_id">
-                                                            <select class="form-control" name="status">
-                                                                <option selected disabled>Please select</option>
-                                                                <option value="good">Good</option>
-                                                                <option value="rejected">Rejected</option>
+                                                            <select class="form-control" id="example-select"
+                                                                name="example-select">
+                                                                <option value="0">Please select</option>
+                                                                <option value="1">Good</option>
+                                                                <option value="2">Rejected</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -210,7 +191,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-alt-success"
-                                                    data-dismiss="modal" onclick="saveStatus()">
+                                                    data-dismiss="modal">
                                                     <i class="fa fa-save"></i> Save Status
                                                 </button>
                                             </div>
@@ -225,32 +206,13 @@
         </div>
 
         <input type="hidden" name="pdf">
-        <input type="hidden" name="file_items[]">
     </main>
 
     <x-slot name="js">
         <script>
             $(document).ready(function() {
-                $('select[name="po_supplier_number"]').on('change', function() {
-                    let id = $(this).val();
-                    $.ajax({
-                        url: "{{ route('logistic.good_received.get_supplier') }}",
-                        type: 'GET',
-                        data: {
-                            id: id
-                        },
-                        success: function(response) {
-                            $('input[name="supplier_name"]').val(response.company);
-                            $('input[name="date"]').val(response.transaction_date);
-                            $('textarea[name="note"]').val(response.note);
-                            $('#btn-save-data').prop('disabled', false);
-
-                            dataTable(response.id);
-                        }
-                    });
-                    getPdf($(this).val());
-                    $('input[name=upload-pdf]').prop('disabled', false)
-                });
+                dataTable('{{ $btb->purchase_order_supplier_id }}')
+                getPdf('{{ $btb->purchase_order_supplier_number }}')
 
                 $('#btn-save-data').on('click', function() {
                     saveData();
@@ -260,55 +222,7 @@
                     $('#loading-file').addClass('d-flex')
                     uploadPdf($(this).prop('files')[0])
                 })
-                $('input[name=upload-item-file]').change(function() {
-                    $('#loading-file').removeClass('d-none')
-                    $('#loading-file').addClass('d-flex')
-                    uploadItemFile($(this).prop('files')[0])
-                })
             })
-
-            function saveStatus() {
-                let po_supplier_number = $('select[name=po_supplier_number]').val();
-                let inquiry_product_id = $('input[name="inquiry_product_id"]').val();
-                let status = $('select[name="status"]').val();
-
-                $.ajax({
-                    url: "{{ route('logistic.good_received.save_status') }}",
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        inquiry_product_id: inquiry_product_id,
-                        status: status,
-                        po_supplier_number: po_supplier_number
-                    },
-                    success: function(response) {
-                        if (response.status == 'success') {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-
-                            $('#status_' + response.inquiry_product_id).removeClass('btn-secondary')
-                            $('#status_' + response.inquiry_product_id).text(response.status_name.toUpperCase())
-                            if (response.status_name == 'good') {
-                                $('#status_' + response.inquiry_product_id).removeClass('btn-danger')
-                                $('#status_' + response.inquiry_product_id).addClass('btn-success')
-                            } else {
-                                $('#status_' + response.inquiry_product_id).removeClass('btn-success')
-                                $('#status_' + response.inquiry_product_id).addClass('btn-danger')
-                            }
-                        }
-                    }
-                });
-            }
-
-            function inputInquiryProductId(id) {
-                $('input[name="inquiry_product_id"]').val('');
-                $('input[name="inquiry_product_id"]').val(id);
-            }
 
             function dataTable(po_supplier_number) {
                 $('#container-table').html('');
@@ -355,10 +269,12 @@
                             name: 'status',
                             className: 'text-center',
                             render: function(data, type, full, meta) {
-                                if (data == 'good' || data == 'rejected') {
-                                    return `<button id="status_${full.id}" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_1" onclick="inputInquiryProductId(${full.id})">${data.toUpperCase()}</button>`
+                                if (data == 'good') {
+                                    return `<span class="badge badge-success">Good</span>`
+                                } else if (data == 'rejected') {
+                                    return `<span class="badge badge-danger">Rejected</span>`
                                 } else {
-                                    return `<button id="status_${full.id}" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#modal_1" onclick="inputInquiryProductId(${full.id})">-- Please select --</button>`
+                                    return `<span class="badge badge-danger">There's problem</span>`
                                 }
                             }
                         },
@@ -368,7 +284,7 @@
                             className: 'text-center',
                             render: function(data, type, full, meta) {
                                 return `
-                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_2" onclick="getItemFile('${data}')"> <i class="fa fa-file"></i></button>
+                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_2"> <i class="fa fa-file"></i></button>
                                 `;
                             }
                         }
@@ -377,24 +293,20 @@
             }
 
             function saveData() {
-                let po_supplier_number = $('select[name="po_supplier_number"]').val();
-                let supplier_name = $('input[name="supplier_name"]').val();
+                let uuid = '{{ $btb->uuid }}';
                 let date = $('input[name="date"]').val();
                 let note = $('textarea[name="note"]').val();
                 let pdf = $('input[name="pdf"]').val();
-                let file_items = $('input[name="file_items[]"]').val();
 
                 $.ajax({
-                    url: "{{ route('logistic.good_received.store') }}",
+                    url: "{{ route('logistic.good_received.update') }}",
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
-                        purchase_order_supplier_id: po_supplier_number,
-                        supplier_name: supplier_name,
+                        uuid: uuid,
                         date: date,
                         note: note,
-                        pdf: pdf,
-                        file_items: file_items
+                        pdf: pdf
                     },
                     success: function(response) {
                         if (response.status == 'success') {
@@ -426,7 +338,7 @@
                 const formData = new FormData()
                 formData.append('_token', '{{ csrf_token() }}')
                 formData.append('file', file)
-                formData.append('po_supplier_number', $('select[name=po_supplier_number] option:selected').text())
+                formData.append('po_supplier_number', $('input[name=po_supplier_number]').val())
                 $.ajax({
                     url: "{{ route('logistic.good_received.upload_pdf') }}",
                     type: 'POST',
@@ -445,42 +357,17 @@
                 $('#upload-pdf-label').html('Choose file')
             }
 
-            function uploadItemFile(file) {
-                console.log(file)
-                const formData = new FormData()
-                formData.append('_token', '{{ csrf_token() }}')
-                formData.append('file', file)
-                formData.append('inquiry_id', $('input[name=inquiry_id]').val())
-                formData.append('po_supplier_number', $('select[name=po_supplier_number] option:selected').text())
-                $.ajax({
-                    url: "{{ route('logistic.good_received.upload_items_file') }}",
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        $('#loading-file').removeClass('d-flex')
-                        $('#loading-file').addClass('d-none')
-                        listItemItemFile(response.status, response.data)
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(error)
-                    }
-                })
-                $('#upload-pdf-label').html('Choose file')
-            }
-
             function listItemPdf(status, data) {
                 if (status == 200) {
                     var element = ``
                     var number = 1
-                    var po_supplier_number = $('select[name=po_supplier_number] option:selected').text()
+                    var po_supplier_number = $('input[name=po_supplier_number]').val()
                     po_supplier_number = po_supplier_number.replace(/\//g, '_')
                     $.each(data, function(index, value) {
                         element +=
                             `<li class="list-group-item">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <a href="/file/show/temp/${po_supplier_number}/${value.filename}" target="_blank">` +
+                                            <a href="/file/show/good_received/${po_supplier_number}/${value.filename}" target="_blank">` +
                             number + `. ` + value.aliases + `</a>
                                             <button type="button" onclick="deletePdf('` + value.filename + `')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -495,37 +382,6 @@
                     $('.list-group').html(``)
                     $('.list-group').html(element)
                     $('input[name=pdf]').val(JSON.stringify(data))
-                }
-            }
-
-            function listItemItemFile(status, data) {
-                if (status == 200) {
-                    var element = ``
-                    var number = 1
-                    var po_supplier_number = $('select[name=po_supplier_number] option:selected').text()
-                    po_supplier_number = po_supplier_number.replace(/\//g, '_')
-                    var inquiry_id = $('input[name=inquiry_id]').val()
-                    var filename = `${po_supplier_number}+${inquiry_id}`
-                    $('#list-group-items').html(``)
-                    $.each(data, function(index, value) {
-                        element +=
-                            `<li class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <a href="/file/show/temp/${filename}/${value.filename}" target="_blank">` +
-                            number + `. ` + value.aliases + `</a>
-                                            <button type="button" onclick="deleteItem('` + value.filename + `', 'edit')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                                                </svg>    
-                                            </button>
-                                        </div>
-                                    </li>`
-                        number++
-                    })
-                    $('.list-group-items').html(``)
-                    $('.list-group-items').html(element)
-                    $('input[name="file_items[]"]').val(JSON.stringify(data))
                 }
             }
 
@@ -546,26 +402,6 @@
                 })
             }
 
-            function getItemFile(id) {
-                $('input[name=inquiry_id]').val('');
-                $.ajax({
-                    url: "{{ route('logistic.good_received.get_items_file') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        inquiry_id: id,
-                        po_supplier_number: $('select[name=po_supplier_number] option:selected').text()
-                    },
-                    success: function(response) {
-                        $('input[name=inquiry_id]').val(id)
-                        listItemItemFile(response.status, response.data)
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(error)
-                    }
-                })
-            }
-
             function deletePdf(file) {
                 $.ajax({
                     url: "{{ route('logistic.good_received.delete_pdf') }}",
@@ -573,30 +409,10 @@
                     data: {
                         _token: "{{ csrf_token() }}",
                         file: file,
-                        po_supplier_number: $('select[name=po_supplier_number] option:selected').text()
+                        po_supplier_number: $('input[name=po_supplier_number]').val()
                     },
                     success: function(response) {
                         listItemPdf(response.status, response.data)
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(error)
-                    }
-                })
-            }
-
-            function deleteItem(file, edit = null) {
-                $.ajax({
-                    url: "{{ route('logistic.good_received.delete_items_file') }}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        file: file,
-                        po_supplier_number: $('select[name=po_supplier_number] option:selected').text(),
-                        inquiry_id: $('input[name=inquiry_id]').val(),
-                        edit: edit
-                    },
-                    success: function(response) {
-                        listItemItemFile(response.status, response.data)
                     },
                     error: function(xhr, status, error) {
                         console.log(error)

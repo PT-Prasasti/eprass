@@ -109,6 +109,19 @@ Route::prefix('/logistic')->name('logistic')->group(function () {
         Route::get('/get-supplier', [LogisticController::class, 'gr_get_supplier'])->name('.get_supplier');
         Route::get('/get-product', [LogisticController::class, 'gr_get_product'])->name('.get_product');
         Route::post('/store', [LogisticController::class, 'gr_store'])->name('.store');
+        Route::get('/view/{uuid}', [LogisticController::class, 'gr_view'])->name('.view');
+        Route::post('/update', [LogisticController::class, 'gr_update'])->name('.update');
+        Route::post('/delete', [LogisticController::class, 'gr_delete'])->name('.delete');
+
+        Route::post('/save-status', [LogisticController::class, 'gr_save_status'])->name('.save_status');
+
+        Route::post('/upload-pdf', [LogisticController::class, 'gr_upload_pdf'])->name('.upload_pdf');
+        Route::post('/get-pdf', [LogisticController::class, 'gr_get_pdf'])->name('.get_pdf');
+        Route::post('/delete-pdf', [LogisticController::class, 'gr_delete_pdf'])->name('.delete_pdf');
+
+        Route::post('/upload-items_file', [LogisticController::class, 'gr_upload_items_file'])->name('.upload_items_file');
+        Route::post('/get-items_file', [LogisticController::class, 'gr_get_items_file'])->name('.get_items_file');
+        Route::post('/delete-items_file', [LogisticController::class, 'gr_delete_items_file'])->name('.delete_items_file');
     });
 });
 
