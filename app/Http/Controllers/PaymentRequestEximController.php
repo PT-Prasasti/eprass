@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
@@ -97,7 +98,7 @@ class PaymentRequestEximController extends Controller
         try {
             $paymentReqId = $request->payment_code;
             $userId = auth()->user()->uuid;
-
+    
             // Cari nomor iterasi terakhir dari key yang sesuai dengan $paymentReqId
             $iteration = 1;
             $key = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_' . $iteration;
@@ -105,14 +106,33 @@ class PaymentRequestEximController extends Controller
                 $iteration++;
                 $key = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_' . $iteration;
             }
-
+    
             $data = $request->data;
-
+    
+            // Check if the request has a file
+            if ($request->hasFile('file')) {
+                $tempPath = 'payment_request/' . $userId . '/' . $iteration;
+    
+                // Create the temp directory if it doesn't exist
+                if (!Storage::disk('public')->exists($tempPath)) {
+                    Storage::disk('public')->makeDirectory($tempPath);
+                }
+    
+                // Store the file in the temp directory
+                $fileResponse = $this->fileController->store_temp($request->file('file'), $tempPath);
+    
+                if ($fileResponse->getData()->status == 200) {
+                    $data['file'] = $fileResponse->getData()->data;
+                } else {
+                    throw new \Exception('File upload failed');
+                }
+            }
+    
             if ($data != null) {
                 // Simpan data ke Redis dengan key yang baru
                 $newKey = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_' . $iteration;
                 Redis::set($newKey, json_encode($data));
-
+    
                 return response()->json([
                     'status' => 200,
                     'message' => 'success',
@@ -368,13 +388,14 @@ class PaymentRequestEximController extends Controller
             $keyPrefix = 'eprass_database_';
             $key = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_*';
             $redisKeys = Redis::keys($key);
+            $iteration = 1;
 
             foreach ($redisKeys as $redisKey) {
                 $redisKey = str_replace($keyPrefix, '', $redisKey);
                 $jsonData = Redis::get($redisKey);
                 if ($jsonData) {
                     $itemData = json_decode($jsonData, true);
-
+    
                     $paymentRequestItem = new PaymentRequestItem();
                     $paymentRequestItem->payment_request_id = $paymentRequest->id;
                     $paymentRequestItem->date = $itemData['date'];
@@ -382,16 +403,45 @@ class PaymentRequestEximController extends Controller
                     $paymentRequestItem->description = $itemData['description'];
                     $paymentRequestItem->amount = $itemData['amount'];
                     $paymentRequestItem->remark = $itemData['remark'];
-                    $paymentRequestItem->save();
+    
+                    if (isset($itemData['file'])) {
+                        // Get the file from the temp directory
+                        $tempPath = 'temp/payment_request/' . $userId . '/' . $iteration . '/' . $itemData['file']['filename'];
+                    
+                        // Check if the file exists in the temp directory
+                        if (Storage::disk('local')->exists($tempPath)) {
+                            // Define the new directory
+                            $newPath = 'payment_request/' . $paymentRequest->uuid . '/' . $iteration . '/' . $itemData['file']['filename'];
+                    
+                            // Create the new directory if it doesn't exist
+                            if (!Storage::disk('public')->exists(dirname($newPath))) {
+                                Storage::disk('public')->makeDirectory(dirname($newPath));
+                            }
 
+                            $file = Storage::disk('local')->get($tempPath);
+
+                            Storage::disk('public')->put($newPath, $file);
+                            Storage::disk('local')->delete($tempPath);
+                    
+                            $paymentRequestItem->file_document = $newPath;
+                        } else {
+                            throw new \Exception('File not found: ' . $tempPath);
+                        }
+                    }
+    
+                    $paymentRequestItem->save();
+    
                     Redis::del($redisKey);
                 }
+
+                $iteration++;
             }
 
             DB::commit();
 
             return redirect()->route('payment-request.exim')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
+            DB::rollback();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

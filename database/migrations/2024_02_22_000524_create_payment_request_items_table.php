@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('amount');
             $table->string('remark');
+            $table->string('file_document')->nullable();
             $table->timestamps();
 
             $table->softDeletes();
