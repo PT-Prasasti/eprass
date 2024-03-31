@@ -215,22 +215,46 @@ class LogisticController extends Controller
         foreach ($supp_items as $item) {
             $keys = Redis::keys('*');
             foreach ($keys as $key) {
-                // Mencocokkan kunci dengan pola yang sesuai
                 if (preg_match('/eprass_database_good_received_status_(.*?)_(\d+)/', $key, $matches)) {
-                    // $matches[1] akan berisi po_supplier_number dan $matches[2] akan berisi inquiry_product_id
                     $po_supplier_number = $matches[1];
                     $inquiry_product_id = $matches[2];
                 }
+
+                if (preg_match('/(?<=\+)(\d+)/', $key, $matches)) {
+                    $number = $matches[1];
+                    Redis::del('good_received_items_file_' . $po_supplier_number . '+' . $number);
+                }
             }
-            $redis = Redis::get('good_received_status_' . $po_supplier_number . '_' . $inquiry_product_id);
+            if ($request->file_items != 'null') {
+                $po_transaction_code = PurchaseOrderSupplier::find($po_supplier_number)->transaction_code;
+                $files = json_decode($request->file_items, true);
+                foreach ($files as $file) {
+                    $filename = str_replace('/', '_', $po_transaction_code) . '+' . $number;
+                    $sourcePath = storage_path('app/temp/' . $filename . '/' . $file['filename']);
+                    $destinationPath = storage_path('app/public/good-received-items/' . $filename . '/' . $file['filename']);
+
+                    if (!Storage::exists('public/good-received-items/' . $filename)) {
+                        Storage::makeDirectory('public/good-received-items/' . $filename);
+                    }
+
+                    if (file_exists($sourcePath)) {
+                        rename($sourcePath, $destinationPath);
+                    }
+                }
+
+                Storage::deleteDirectory('temp/' . $po_transaction_code);
+                $list_files = $request->file_items;
+            }
+
+            $redis_status = Redis::get('good_received_status_' . $po_supplier_number . '_' . $inquiry_product_id);
 
             $btbItem = BTBItem::where('b_t_b_id', $btb->uuid)->where('inquiry_product_id', $item->id)->first();
             if ($btbItem == null) {
                 BTBItem::create([
                     'b_t_b_id' => $btb->uuid,
                     'inquiry_product_id' => $item->id,
-                    'status' => $redis,
-                    'document_list' => null
+                    'status' => $redis_status,
+                    'document_list' => $list_files
                 ]);
             }
 
@@ -406,11 +430,62 @@ class LogisticController extends Controller
         }
     }
 
+    public function gr_upload_items_file(Request $request)
+    {
+        try {
+            if ($request->hasFile('file')) {
+                $po_supplier_number = str_replace('/', '_', $request->po_supplier_number);
+                $file = $request->file('file');
+                $path = $po_supplier_number . '+' . $request->inquiry_id;
+                $upload = $this->fileController->store_temp($file, $path);
+                if ($upload->original['status'] == 200) {
+                    $key = 'good_received_items_file_' . $path . '_' . auth()->user()->uuid;
+                    $data = $upload->original['data'];
+                    $redis = $this->redisController->store($key, $data);
+
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
+    }
+
     public function gr_get_pdf(Request $request)
     {
         $po_supplier_number = $request->po_supplier_number;
         $po_supplier_number = str_replace('/', '_', $po_supplier_number);
         $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+        $data = json_decode(Redis::get($key), true);
+
+        if ($data == null) {
+            // 
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function gr_get_items_file(Request $request)
+    {
+        $po_supplier_number = $request->po_supplier_number;
+        $po_supplier_number = str_replace('/', '_', $po_supplier_number);
+        $filename = $po_supplier_number . '+' . $request->inquiry_id;
+        $key = 'good_received_items_file_' . $filename . '_' . auth()->user()->uuid;
         $data = json_decode(Redis::get($key), true);
 
         if ($data == null) {
@@ -441,6 +516,47 @@ class LogisticController extends Controller
 
                 if ($delete) {
                     $key = 'good_received_pdf_' . $po_supplier_number . '_' . auth()->user()->uuid;
+                    $redis = $this->redisController->delete_item($key, 'filename', $file);
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        if (sizeof($data) == 0) {
+                            Redis::del($key);
+                        }
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
+    }
+
+    public function gr_delete_items_file(Request $request)
+    {
+        try {
+            $po_supplier_number = str_replace('/', '_', $request->po_supplier_number);
+            $filename = $po_supplier_number . '+' . $request->inquiry_id;
+            $file = $request->file;
+            if ($request->has('edit')) {
+                $path = 'public/good-received-items/' . $filename . '/' . $file;
+            } else {
+                $path = 'temp/' . $filename . '/' . $file;
+            }
+            $exist = Storage::exists($path);
+            if ($exist) {
+                $delete = Storage::delete($path);
+
+                if ($delete) {
+                    $key = 'good_received_items_file_' . $filename . '_' . auth()->user()->uuid;
                     $redis = $this->redisController->delete_item($key, 'filename', $file);
                     if ($redis->original['status'] == 200) {
                         $data = json_decode(Redis::get($key), true);

@@ -118,6 +118,10 @@ Route::prefix('/logistic')->name('logistic')->group(function () {
         Route::post('/upload-pdf', [LogisticController::class, 'gr_upload_pdf'])->name('.upload_pdf');
         Route::post('/get-pdf', [LogisticController::class, 'gr_get_pdf'])->name('.get_pdf');
         Route::post('/delete-pdf', [LogisticController::class, 'gr_delete_pdf'])->name('.delete_pdf');
+
+        Route::post('/upload-items_file', [LogisticController::class, 'gr_upload_items_file'])->name('.upload_items_file');
+        Route::post('/get-items_file', [LogisticController::class, 'gr_get_items_file'])->name('.get_items_file');
+        Route::post('/delete-items_file', [LogisticController::class, 'gr_delete_items_file'])->name('.delete_items_file');
     });
 });
 

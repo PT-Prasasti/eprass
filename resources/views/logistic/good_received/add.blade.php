@@ -143,10 +143,11 @@
                                                 <div class="block-content">
                                                     <div class="custom-file">
                                                         <input type="hidden" name="document_list" value="">
-                                                        <input type="file" id="upload-document"
-                                                            name="upload_document"
+                                                        <input type="hidden" name="inquiry_id">
+                                                        <input type="file" id="upload-item-file"
+                                                            name="upload-item-file"
                                                             class="custom-file-input js-custom-file-input-enabled"
-                                                            data-toggle="custom-file-input" accept="application/pdf">
+                                                            data-toggle="custom-file-input">
                                                         <label id="upload-document-label" for="upload-document"
                                                             class="custom-file-label">
                                                             Choose file
@@ -156,8 +157,7 @@
                                                     <div class="block block-rounded mt-3">
                                                         <div class="block-content block-content-full bg-pattern p-0">
                                                             <h5 class="mb-2">Document List</h5>
-                                                            <div class="d-none align-items-center"
-                                                                id="upload-document-loading">
+                                                            <div class="d-none align-items-center" id="">
                                                                 <div class="mr-2">
                                                                     <span>Uploading file</span>
                                                                 </div>
@@ -166,7 +166,7 @@
                                                                     <span class="sr-only">Loading...</span>
                                                                 </div>
                                                             </div>
-                                                            <ul class="list-group" document_list=""></ul>
+                                                            <ul class="list-group-items" document_list=""></ul>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -225,6 +225,7 @@
         </div>
 
         <input type="hidden" name="pdf">
+        <input type="hidden" name="file_items[]">
     </main>
 
     <x-slot name="js">
@@ -258,6 +259,11 @@
                     $('#loading-file').removeClass('d-none')
                     $('#loading-file').addClass('d-flex')
                     uploadPdf($(this).prop('files')[0])
+                })
+                $('input[name=upload-item-file]').change(function() {
+                    $('#loading-file').removeClass('d-none')
+                    $('#loading-file').addClass('d-flex')
+                    uploadItemFile($(this).prop('files')[0])
                 })
             })
 
@@ -362,7 +368,7 @@
                             className: 'text-center',
                             render: function(data, type, full, meta) {
                                 return `
-                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_2"> <i class="fa fa-file"></i></button>
+                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_2" onclick="getItemFile('${data}')"> <i class="fa fa-file"></i></button>
                                 `;
                             }
                         }
@@ -376,6 +382,7 @@
                 let date = $('input[name="date"]').val();
                 let note = $('textarea[name="note"]').val();
                 let pdf = $('input[name="pdf"]').val();
+                let file_items = $('input[name="file_items[]"]').val();
 
                 $.ajax({
                     url: "{{ route('logistic.good_received.store') }}",
@@ -386,7 +393,8 @@
                         supplier_name: supplier_name,
                         date: date,
                         note: note,
-                        pdf: pdf
+                        pdf: pdf,
+                        file_items: file_items
                     },
                     success: function(response) {
                         if (response.status == 'success') {
@@ -437,6 +445,31 @@
                 $('#upload-pdf-label').html('Choose file')
             }
 
+            function uploadItemFile(file) {
+                console.log(file)
+                const formData = new FormData()
+                formData.append('_token', '{{ csrf_token() }}')
+                formData.append('file', file)
+                formData.append('inquiry_id', $('input[name=inquiry_id]').val())
+                formData.append('po_supplier_number', $('select[name=po_supplier_number] option:selected').text())
+                $.ajax({
+                    url: "{{ route('logistic.good_received.upload_items_file') }}",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#loading-file').removeClass('d-flex')
+                        $('#loading-file').addClass('d-none')
+                        listItemItemFile(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+                $('#upload-pdf-label').html('Choose file')
+            }
+
             function listItemPdf(status, data) {
                 if (status == 200) {
                     var element = ``
@@ -465,6 +498,37 @@
                 }
             }
 
+            function listItemItemFile(status, data) {
+                if (status == 200) {
+                    var element = ``
+                    var number = 1
+                    var po_supplier_number = $('select[name=po_supplier_number] option:selected').text()
+                    po_supplier_number = po_supplier_number.replace(/\//g, '_')
+                    var inquiry_id = $('input[name=inquiry_id]').val()
+                    var filename = `${po_supplier_number}+${inquiry_id}`
+                    $('#list-group-items').html(``)
+                    $.each(data, function(index, value) {
+                        element +=
+                            `<li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="/file/show/temp/${filename}/${value.filename}" target="_blank">` +
+                            number + `. ` + value.aliases + `</a>
+                                            <button type="button" onclick="deleteItem('` + value.filename + `', 'edit')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                                </svg>    
+                                            </button>
+                                        </div>
+                                    </li>`
+                        number++
+                    })
+                    $('.list-group-items').html(``)
+                    $('.list-group-items').html(element)
+                    $('input[name="file_items[]"]').val(JSON.stringify(data))
+                }
+            }
+
             function getPdf(id) {
                 $.ajax({
                     url: "{{ route('logistic.good_received.get_pdf') }}",
@@ -475,6 +539,26 @@
                     },
                     success: function(response) {
                         listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function getItemFile(id) {
+                $('input[name=inquiry_id]').val('');
+                $.ajax({
+                    url: "{{ route('logistic.good_received.get_items_file') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        inquiry_id: id,
+                        po_supplier_number: $('select[name=po_supplier_number] option:selected').text()
+                    },
+                    success: function(response) {
+                        $('input[name=inquiry_id]').val(id)
+                        listItemItemFile(response.status, response.data)
                     },
                     error: function(xhr, status, error) {
                         console.log(error)
@@ -493,6 +577,26 @@
                     },
                     success: function(response) {
                         listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function deleteItem(file, edit = null) {
+                $.ajax({
+                    url: "{{ route('logistic.good_received.delete_items_file') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        file: file,
+                        po_supplier_number: $('select[name=po_supplier_number] option:selected').text(),
+                        inquiry_id: $('input[name=inquiry_id]').val(),
+                        edit: edit
+                    },
+                    success: function(response) {
+                        listItemItemFile(response.status, response.data)
                     },
                     error: function(xhr, status, error) {
                         console.log(error)
