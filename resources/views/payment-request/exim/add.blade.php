@@ -358,12 +358,13 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">No.</th>
-                                                    <th class="text-center">Date</th>
-                                                    <th class="text-center">Item</th>
-                                                    <th class="text-center">Description</th>
-                                                    <th class="text-center">Amount</th>
-                                                    <th class="text-center">Remark</th>
-                                                    <th class="text-center"><i class="fa fa-ellipsis-h"></th>
+                                                    <th>Date</th>
+                                                    <th>Item</th>
+                                                    <th>Description</th>
+                                                    <th>Amount</th>
+                                                    <th>Remark</th>
+                                                    <th>File</th>
+                                                    <th><i class="fa fa-ellipsis-h"></th>
                                                 </tr>
                                             </thead>
                                         </table>`);
@@ -392,23 +393,33 @@
                         }
                         , {
                             data: "date"
-                            , className: "text-center"
                         }
                         , {
                             data: "item"
-                            , className: "text-center"
                         }
                         , {
                             data: "description"
-                            , className: "text-center"
                         }
                         , {
                             data: "amount"
-                            , className: "text-center"
                         }
                         , {
                             data: "remark"
-                            , className: "text-center"
+                        }, 
+                        {
+                            data: "file"
+                            , render: function(data, type, full, meta) {
+                                let userId = "{{ auth()->user()->uuid }}";
+                                if (data) {
+                                    // Extract the iteration from the Redis key
+                                    let parts = full.redis_key.split('_');
+                                    let iteration = parts.pop(); // Get the last part of the key
+
+                                    return `<a href="payment-request/exim/download/${userId}/${iteration}/${data.filename}" target="_blank">${data.aliases}</a>`;
+                                } else {
+                                    return '';
+                                }
+                            }
                         }
                         , {
                             // Kolom untuk tombol atau tindakan lainnya

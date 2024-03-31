@@ -138,6 +138,7 @@
                                                     <th class="text-center">Description</th>
                                                     <th class="text-center">Amount</th>
                                                     <th class="text-center">Remark</th>
+                                                    <th class="text-center">File</th>
                                                     @if(auth()->user()->hasRole('exim'))
                                                     <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                                                     @endif
@@ -152,6 +153,11 @@
                                                     <td class="text-center">{{ $item->description }}</td>
                                                     <td class="text-center">{{ number_format($item->amount, 0, ',', '.') }}</td>
                                                     <td class="text-center">{{ $item->remark }}</td>
+                                                    <td class="text-center">
+                                                        <a href="{{ asset('storage' . '/' . $item->file_document) }}" target="_blank">
+                                                            {{ $item->file_aliases }}
+                                                        </a>
+                                                    </td>
                                                     @if(auth()->user()->hasRole('exim'))
                                                         <td class="text-center"><button type="button" class="btn btn-warning" onclick="getEditItem('{{ $item->uuid }}')" data-toggle="modal" data-target="#modal-edit">
                                                                 <i class="fa fa-pencil "></i>

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('amount');
             $table->string('remark');
             $table->string('file_document')->nullable();
+            $table->string('file_aliases')->nullable();
             $table->timestamps();
 
             $table->softDeletes();

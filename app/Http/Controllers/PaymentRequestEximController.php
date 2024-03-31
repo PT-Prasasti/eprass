@@ -181,6 +181,9 @@ class PaymentRequestEximController extends Controller
             ->addColumn('remark', function ($item) {
                 return $item['remark'];
             })
+            ->addColumn('file', function ($item) {
+                return $item['file'];
+            })
             ->make(true);
 
         return $result;
@@ -258,13 +261,26 @@ class PaymentRequestEximController extends Controller
     public function deleteData(Request $request)
     {
         $key = $request->input('redis_key');
-
+    
         $redis = Redis::get($key);
-
+    
         if ($redis) {
-            $redis = Redis::del($key);
+            $itemData = json_decode($redis, true);
+    
+            if (isset($itemData['file'])) {
+                $parts = explode('_', $key);
+                $iteration = end($parts);
+    
+                $tempPath = 'temp/payment_request/' . auth()->user()->uuid . '/' . $iteration . '/' . $itemData['file']['filename'];
+    
+                if (Storage::disk('local')->exists($tempPath)) {
+                    Storage::disk('local')->delete($tempPath);
+                }
+            }
+    
+            Redis::del($key);
         }
-
+    
         return response()->json([
             "message" => "Successfully deleted item",
             "status" => 200,
@@ -345,6 +361,11 @@ class PaymentRequestEximController extends Controller
             $paymentRequestItems = PaymentRequestItem::where('payment_request_id', $paymentReq->id)->get();
 
             foreach ($paymentRequestItems as $paymentRequestItem) {
+                if ($paymentRequestItem->file_document && Storage::disk('public')->exists($paymentRequestItem->file_document)) {
+                    // Delete the file from the public directory
+                    Storage::disk('public')->delete($paymentRequestItem->file_document);
+                }
+
                 $paymentRequestItem->delete();
             }
 
@@ -424,6 +445,7 @@ class PaymentRequestEximController extends Controller
                             Storage::disk('local')->delete($tempPath);
                     
                             $paymentRequestItem->file_document = $newPath;
+                            $paymentRequestItem->file_aliases = $itemData['file']['aliases'];
                         } else {
                             throw new \Exception('File not found: ' . $tempPath);
                         }

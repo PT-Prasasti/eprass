@@ -128,7 +128,7 @@
                             html += `
                                 <a href="{{ route('approval-po') }}/${row.id}/edit" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
                                     <i class="fa fa-file-text-o"></i>
-                                </a> |
+                                </a>
                             `;
 
                             return `

@@ -737,6 +737,7 @@ class InquiryController extends Controller
 
             return redirect()->route('crm.inquiry')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }

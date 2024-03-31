@@ -143,11 +143,6 @@
                         <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span
                                 class="sidebar-mini-hide">App PO Supplier</span></a>
                     </li>
-                    <li>
-                        <a class="" href="{{ route('approval-payment') }}"><i
-                                class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">App Payment
-                                Request</span></a>
-                    </li>
                 @endif
 
                 @if (auth()->user()->hasRole('hod'))
@@ -570,6 +565,9 @@
                                 <a href="{{ route('po-tracking.index') }}">List PO Tracking</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-main-heading">
+                        <span class="sidebar-mini-hidden">Payment</span>
                     </li>
                     <li>
                         <a class="nav-submenu nav-link" data-toggle="nav-submenu" href="#"><i
