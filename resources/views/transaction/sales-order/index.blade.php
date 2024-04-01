@@ -215,9 +215,7 @@
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sales Order">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
+                                    
                                     @endif
                                     @if(auth()->user()->hasRole('purchasing') || auth()->user()->hasRole('manager'))
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
@@ -228,17 +226,13 @@
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sales Order">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
+                                    
                                     @endif
                                     @if(auth()->user()->hasRole('hod'))
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sales Order">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
+                                    
                                     @endif
                                     <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Sales Order">
                                         <i class="fa fa-trash-o"></i>
@@ -350,9 +344,7 @@
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sales Order">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
+                                    
                                     @endif
                                     <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Sales Order">
                                         <i class="fa fa-trash-o"></i>
@@ -463,9 +455,7 @@
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sales Order">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
+                                    
                                     @endif
                                     <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Sales Order">
                                         <i class="fa fa-trash-o"></i>
@@ -582,9 +572,7 @@
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sales Order">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
+                                    
                                     @endif
                                     <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Sales Order">
                                         <i class="fa fa-trash-o"></i>
@@ -701,9 +689,7 @@
                                     <a href="sales-order/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Sales Order">
                                         <i class="fa fa-file-text-o"></i>
                                     </a>
-                                    <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sales Order">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
+                                    
                                     @endif
                                     <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Sales Order">
                                         <i class="fa fa-trash-o"></i>
