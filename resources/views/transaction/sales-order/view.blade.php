@@ -8,7 +8,7 @@
                 <h4><b>SO NUMBER : <span id="id">{{ $so->id }}</span></b></h4>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-8">
                 <div class="block block-rounded">
@@ -19,59 +19,68 @@
                                     <label class="col-lg-3 col-form-label">ID Inquiry</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" name="inquiry" value="{{ $so->inquiry->id }}" disabled>
+                                        <input type="text" class="form-control" name="inquiry"
+                                            value="{{ $so->inquiry->id }}" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Sales Name</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" name="sales" value="{{ $so->inquiry->sales->name }}" disabled>
+                                        <input type="text" class="form-control" name="sales"
+                                            value="{{ $so->inquiry->sales->name }}" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Company Name</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" name="company" value="{{ $so->inquiry->visit->customer->company }}" disabled>
+                                        <input type="text" class="form-control" name="company"
+                                            value="{{ $so->inquiry->visit->customer->company }}" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Phone & Email</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control" name="phone" value="{{ $so->inquiry->visit->customer->phone }}" disabled>
+                                        <input type="text" class="form-control" name="phone"
+                                            value="{{ $so->inquiry->visit->customer->phone }}" disabled>
                                     </div>
                                     <div class="col-lg-4">
-                                        <input type="text" class="form-control" name="email" value="{{ $so->inquiry->visit->customer->email }}" disabled>
+                                        <input type="text" class="form-control" name="email"
+                                            value="{{ $so->inquiry->visit->customer->email }}" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Telp</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" name="company_phone" value="{{ $so->inquiry->visit->customer->company_phone }}" disabled>
+                                        <input type="text" class="form-control" name="company_phone"
+                                            value="{{ $so->inquiry->visit->customer->company_phone }}" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Subject</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" name="subject" value="{{ $so->inquiry->subject }}" disabled>
+                                        <input type="text" class="form-control" name="subject"
+                                            value="{{ $so->inquiry->subject }}" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Due Date</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" name="due_date" value="{{ Carbon\Carbon::parse($so->due_date)->format('d M Y') }}" disabled>
+                                        <input type="text" class="form-control" name="due_date"
+                                            value="{{ Carbon\Carbon::parse($so->due_date)->format('d M Y') }}" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label">Grade</label>
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" name="grade" value="{{ $so->inquiry->grade }}" disabled>
+                                        <input type="text" class="form-control" name="grade"
+                                            value="{{ $so->inquiry->grade }}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -85,12 +94,13 @@
                         <h5>Document List</h5>
                         <ul class="list-group">
                             @php
-                            $no = 1;
+                                $no = 1;
                             @endphp
-                            @if(json_decode($so->inquiry->files, true) !== null)
-                            @foreach (json_decode($so->inquiry->files) as $item)
-                            <a href="/file/show/inquiry/{{ $so->inquiry->visit->uuid }}/{{ $item->filename }}" target="_blank">{{ $no++ }}. {{ $item->aliases }}</a><br>
-                            @endforeach
+                            @if (json_decode($so->inquiry->files, true) !== null)
+                                @foreach (json_decode($so->inquiry->files) as $item)
+                                    <a href="/file/show/inquiry/{{ $so->inquiry->visit->uuid }}/{{ $item->filename }}"
+                                        target="_blank">{{ $no++ }}. {{ $item->aliases }}</a><br>
+                                @endforeach
                             @endif
                         </ul>
                     </div>
@@ -108,12 +118,18 @@
                         <div class="push">
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" id="btnGroupDrop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Product List</button>
-                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                        <a class="dropdown-item" href="{{ route('transaction.sales-order.download-product-list-excel', ['id' => $so->inquiry->uuid]) }}">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" id="btnGroupDrop1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download
+                                        Product List</button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"
+                                        x-placement="bottom-start"
+                                        style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <a class="dropdown-item"
+                                            href="{{ route('transaction.sales-order.download-product-list-excel', ['id' => $so->inquiry->uuid]) }}">
                                             Excel
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('transaction.sales-order.download-product-list-pdf', ['id' => $so->inquiry->uuid]) }}">
+                                        <a class="dropdown-item"
+                                            href="{{ route('transaction.sales-order.download-product-list-pdf', ['id' => $so->inquiry->uuid]) }}">
                                             PDF
                                         </a>
                                     </div>
@@ -137,17 +153,17 @@
                         @php
                             $no = 1;
                         @endphp
-                        @if(isset($so->inquiry->products))
-                        @foreach ($so->inquiry->products as $item)
-                        <tr>
-                            <td class="text-center">{{ $no++ }}.</td>
-                            <td>{{ $item->item_name }}</td>
-                            <td>{{ $item->description }}</td>
-                            <td class="text-center">{{ $item->size }}</td>
-                            <td class="text-center">{{ $item->qty }}</td>
-                            <td class="text-center">{{ $item->remark }}</td>
-                        </tr>
-                        @endforeach
+                        @if (isset($so->inquiry->products))
+                            @foreach ($so->inquiry->products as $item)
+                                <tr>
+                                    <td class="text-center">{{ $no++ }}.</td>
+                                    <td>{{ $item->item_name }}</td>
+                                    <td>{{ $item->description }}</td>
+                                    <td class="text-center">{{ $item->size }}</td>
+                                    <td class="text-center">{{ $item->qty }}</td>
+                                    <td class="text-center">{{ $item->remark }}</td>
+                                </tr>
+                            @endforeach
                         @endif
                     </tbody>
                 </table>
@@ -179,8 +195,7 @@
                 getPdf("{{ $so->inquiry->uuid }}")
             })
 
-            function getPdf(id)
-            {
+            function getPdf(id) {
                 $.ajax({
                     url: "{{ route('transaction.sales-order.get-pdf') }}",
                     type: "POST",
@@ -189,8 +204,8 @@
                         so: id
                     },
                     success: function(response) {
-                        console.log(response.data);
-                        listItemPdf(response.status, response.data)
+                        // console.log(response.data);
+                        // listItemPdf(response.status, response.data)
                     },
                     error: function(xhr, status, error) {
                         console.log(error)
@@ -198,26 +213,25 @@
                 })
             }
 
-            function listItemPdf(status, data)
-            {
-                if(status == 200) {
-                    var element = ``
-                    var number = 1
-                    var visit = $('select[name=inquiry]').val()
-                    $.each(data, function(index, value) {
-                        element += `<li class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <a href="/file/show/inquiry/${uuid}/${value.filename}" target="_blank">`+number+`. `+value.aliases+`</a>
-                                        </div>
-                                    </li>`
-                        number++
-                    })
-                    $('.list-group').html(``)
-                    $('.list-group').html(element)
-                    $('input[name=pdf]').val(JSON.stringify(data))
-                }
-            }
-
+            // function listItemPdf(status, data) {
+            //     if (status == 200) {
+            //         var element = ``
+            //         var number = 1
+            //         var visit = $('select[name=inquiry]').val()
+            //         $.each(data, function(index, value) {
+            //             element += `<li class="list-group-item">
+    //                             <div class="d-flex justify-content-between align-items-center">
+    //                                 <a href="/file/show/inquiry/${uuid}/${value.filename}" target="_blank">` +
+            //                 number + `. ` + value.aliases + `</a>
+    //                             </div>
+    //                         </li>`
+            //             number++
+            //         })
+            //         $('.list-group').html(``)
+            //         $('.list-group').html(element)
+            //         $('input[name=pdf]').val(JSON.stringify(data))
+            //     }
+            // }
         </script>
     </x-slot>
 

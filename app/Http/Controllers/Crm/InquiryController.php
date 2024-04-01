@@ -714,20 +714,20 @@ class InquiryController extends Controller
 
             $usersToNotify = User::role('admin_sales')->get();
             Notification::send($usersToNotify, new NewInquiryNotification($inquiry));
-             $dataInquiry = [
-                 'id'                => $inquiry->id,
-                 'id_visit'          => $inquiry->visit_schedule_id,
-                 'due_date'          => $inquiry->due_date,
-                 'subject'           => $inquiry->subject,
-                 'grade'             => $inquiry->grade,
-                 'description'       => $inquiry->description,
-                 'products'          => $products
-             ];
-             $email = new InquiryMail(collect($dataInquiry));
-             $sendmail = 'eprass.d@pt-prasasti.com';
-             $sendmail1 = 'dhita@pt-prasasti.com';
-             Mail::to($sendmail)->send($email);
-             Mail::to($sendmail1)->send($email);
+            $dataInquiry = [
+                'id'                => $inquiry->id,
+                'id_visit'          => $inquiry->visit_schedule_id,
+                'due_date'          => $inquiry->due_date,
+                'subject'           => $inquiry->subject,
+                'grade'             => $inquiry->grade,
+                'description'       => $inquiry->description,
+                'products'          => $products
+            ];
+            $email = new InquiryMail(collect($dataInquiry));
+            $sendmail = 'eprass.d@pt-prasasti.com';
+            $sendmail1 = 'dhita@pt-prasasti.com';
+            Mail::to($sendmail)->send($email);
+            Mail::to($sendmail1)->send($email);
 
             DB::commit();
 
@@ -859,7 +859,7 @@ class InquiryController extends Controller
 
     public function excel($id)
     {
-          // dd( InquiryProduct::query()->where('inquiry_id', $this->id)->get());
+        // dd( InquiryProduct::query()->where('inquiry_id', $this->id)->get());
         $inquiry = Inquiry::with('visit', 'sales', 'products')->where('uuid', $id)->first();
         $idInquiry = $inquiry->id;
         $idVisit = $inquiry->visit_schedule_id;
@@ -875,7 +875,7 @@ class InquiryController extends Controller
         $note = $inquiry->visit->note;
         $note = $inquiry->visit->note;
         $data = $inquiry->products;
-        return Excel::download(new InquiryExport($idInquiry, $idVisit, $dueDate, $subject, $gradeInquiry, $companyName, $customerName, $telephone, $phone, $email, $file, $note, $data, $id), ''.str_replace('/','',$idInquiry).'.xlsx');
+        return Excel::download(new InquiryExport($idInquiry, $idVisit, $dueDate, $subject, $gradeInquiry, $companyName, $customerName, $telephone, $phone, $email, $file, $note, $data, $id), '' . str_replace('/', '', $idInquiry) . '.xlsx');
     }
 
     public function reviewExcel($id)

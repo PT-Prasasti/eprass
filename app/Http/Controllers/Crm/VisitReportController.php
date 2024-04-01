@@ -381,7 +381,7 @@ class VisitReportController extends Controller
     {
         $visit = VisitReport::where('uuid', $id)->first();
 
-        
+
 
         return view('crm.visit-report.view', compact('visit'));
     }

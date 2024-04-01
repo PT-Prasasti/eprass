@@ -41,7 +41,7 @@ class VisitScheduleController extends Controller
     public function data(Request $request): JsonResponse
     {
         if ($request->ajax()) {
-            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))  {
+            if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) {
                 $data = VisitSchedule::all();
             } else {
                 $sales = Sales::where('username', auth()->user()->username)->first();
@@ -150,7 +150,7 @@ class VisitScheduleController extends Controller
 
         foreach ($company as $item) {
             $result[] = array(
-                'company' => ucwords($item->company. ' - ' . $item->name),
+                'company' => ucwords($item->company . ' - ' . $item->name),
                 'uuid' => $item->uuid,
             );
         }
