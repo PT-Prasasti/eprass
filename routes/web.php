@@ -72,6 +72,7 @@ Route::prefix('/notification')->name('notification')->group(function () {
 // route file 
 Route::prefix('/file')->name('file')->group(function () {
     Route::get('/show/{folder1}/{folder2}/{file}', [FilesController::class, 'show'])->name('.show');
+    Route::get('/docs/uploads/attachment/{folder}/{file}', [FilesController::class, 'docs'])->name('.docs');
 });
 
 // route po tracking
@@ -437,11 +438,11 @@ Route::prefix('/payment-request')->name('payment-request')->group(function () {
         Route::delete('/delete/{uuid}', [PaymentRequestEximController::class, 'delete'])->name('.delete');
         Route::get('/download/{userId}/{iteration}/{filename}', function ($userId, $iteration, $filename) {
             $path = storage_path('temp/payment_request/' . $userId . '/' . $iteration . '/' . $filename);
-        
+
             if (file_exists($path)) {
                 return response()->download($path);
             }
-        
+
             abort(404);
         })->name('.document');
 

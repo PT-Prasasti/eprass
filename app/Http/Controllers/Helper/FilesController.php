@@ -58,4 +58,15 @@ class FilesController extends Controller
 
         return $file->storeAs($fileDirectory, $fileName, 'public');
     }
+
+    public function docs($folder, $file)
+    {
+        $filePath = 'public/uploads/attachment/' . $folder . '/' . $file;
+
+        if (Storage::exists($filePath)) {
+            return response()->file(storage_path('app/' . $filePath));
+        }
+
+        abort(404);
+    }
 }

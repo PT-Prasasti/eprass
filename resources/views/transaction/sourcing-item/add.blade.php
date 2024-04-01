@@ -385,7 +385,7 @@
             function getDocuments(data) {
                 $.get("{{ route('helper.doclist') }}?related_table=sourcings&related_id=" + SOID, function(res) {
 
-                    baseurl = "{{ asset('storage') }}/";
+                    baseurl = "{{ url('/file/docs') }}/";
                     html = ``
                     $.each(res.data, function(k, v) {
 
