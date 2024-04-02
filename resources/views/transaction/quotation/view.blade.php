@@ -493,8 +493,11 @@
                                     <div class="block-content block-content-full bg-pattern">
                                         <div class="row">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
-                                                <label class="custom-file-label" for="example-file-input-custom">Choose file</label>
+                                                <input type="file" class="custom-file-input"
+                                                    id="example-file-input-custom" name="example-file-input-custom"
+                                                    data-toggle="custom-file-input">
+                                                <label class="custom-file-label"
+                                                    for="example-file-input-custom">Choose file</label>
                                             </div>
                                             <div class="block block-rounded mt-3">
                                                 <div class="block-content block-content-full bg-pattern">
@@ -502,12 +505,12 @@
                                                 </div>
                                             </div>
                                         </div>
-    
+
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="product-file-type">
                                                     <ul class="list-unstyled" id="document-attachment-list">
-                                                        
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -531,7 +534,7 @@
     }
 
     .block-file-body {
-        padding-top:15px;
+        padding-top: 15px;
     }
 </style>
 <script>
@@ -539,22 +542,21 @@
 
     /* triggers */
 
-    $(document).ready(function(){
+    $(document).ready(function() {
         SOID = '{{ $id }}';
         getDocuments();
     })
 
-    $("#example-file-input-custom").change(function(){
+    $("#example-file-input-custom").change(function() {
         var fileinfo = $(this)[0].files[0];
         addDocument(fileinfo);
     });
 
     /* functions */
 
-    function addDocument(fileinfo)
-    {
+    function addDocument(fileinfo) {
         var formData = new FormData();
-        
+
         formData.append('file', fileinfo);
         formData.append('related_table', 'quotations');
         formData.append('related_id', SOID);
@@ -563,63 +565,136 @@
         formData.append('_token', "{{ csrf_token() }}");
 
         $.ajax({
-            url : "{{ route('helper.docadd') }}",
-            type : 'POST',
-            data : formData,
-            processData: false, 
+            url: "{{ route('helper.docadd') }}",
+            type: 'POST',
+            data: formData,
+            processData: false,
             contentType: false,
-            success : function(data, status) {
+            success: function(data, status) {
                 if (status == "success") {
                     getDocuments()
                 }
             },
-            error : function(data, status) {
+            error: function(data, status) {
                 alert("Upload gagal, pastikan file yang diupload tidak terlalu besar dan tidak corrupt!");
             }
         });
     }
 
-    function getDocuments() 
-    {
-        $.get("{{ route('helper.doclist') }}?related_table=quotations&related_id=" + SOID, function(res){
-            
-            baseurl = "{{asset('storage')}}/";
-            html = ``
-            $.each(res.data, function(k,v){
+    function getDocuments() {
+        $.get("{{ route('helper.doclist') }}?related_table=quotations&related_id=" + SOID, function(res) {
+
+            baseurl = "{{ asset('storage') }}/";
+            htmlDocuments = ``
+            $.each(res.data, function(k, v) {
 
                 filetype = "";
                 sliptstr = v.file_type.split("/");
                 filetype = sliptstr[1];
 
-                html = html + `
+                htmlDocuments = htmlDocuments +
+                    `
                 <li class="media media-list">
-                    <span class="mr-3 align-self-center img-icon primary-rgba text-primary d-block block-file-header">.`+ filetype +`</span>
+                    <span class="mr-3 align-self-center img-icon primary-rgba text-primary d-block block-file-header">.` +
+                    filetype + `</span>
                     <div class="media-body block-file-body">
-                        <h5 class="font-16 mb-1">`+v.filename+`
+                        <h5 class="font-16 mb-1">` + v.filename + `
                             <span class="float-right">
-                            <a href="`+ baseurl + v.path+`" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
-                            <a onclick="rmDocument(`+v.id+`)" class="btn btn-sm btn-danger delete-pointer"><i class="fa fa-trash text-white"></i></a>
+                            <a href="` + baseurl + v.path + `" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                            <a onclick="rmDocument(` + v.id + `)" class="btn btn-sm btn-danger delete-pointer"><i class="fa fa-trash text-white"></i></a>
                             <span>
                         </h5>
-                        <p>`+v.timeago+`, `+(v.file_size/1024).toFixed(2)+` KB</p>
+                        <p>` + v.timeago + `, ` + (v.file_size / 1024).toFixed(2) + ` KB</p>
                     </div>
                 </li>
                 `;
             })
+            getOtherDocuments();
             setTimeout(() => {
-                $("#document-attachment-list").html(html);
+                $("#document-attachment-list").html(htmlDocuments);
             }, 200);
         });
     }
 
-    function rmDocument(id)
-    {
+    function getOtherDocuments(htmlDocuments) {
+        $.get("{{ route('helper.doclistother') }}?related_table=quotations&related_id=" + SOID, function(res) {
+            inquiry_id = `<h5 class="mt-4">Inquiry : ${res.data.inquiry.id}</h5>`;
+            sales_id = `<h5 class="mt-4">Sales Order : ${res.data.sales_orders.id}</h5>`;
+            sourcing_id = `<h5 class="mt-4">Sourcing Item : ${res.data.sourcings.id}</h5>`;
+
+            baseurl = "{{ asset('storage') }}/";
+            html = ``
+
+            file_inquiry = inquiry_id;
+            $.each(res.data.inquiry.files, function(k, v) {
+                file_inquiry = file_inquiry +
+                    `
+                        <li class="media media-list">
+                                <span class="mr-3 align-self-center img-icon primary-rgba text-primary d-block block-file-header">.pdf</span>
+                                <div class="media-body block-file-body">
+                                    <h5 class="font-16 mb-1">` + v.aliases + `
+                                        <span class="float-right">
+                                        <a href="` + v.url + `" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                                        <span>
+                                    </h5>
+                                </div>
+                        </li>
+                    `
+            })
+
+            file_sales = sales_id;
+            $.each(res.data.sales_orders.files, function(k, v) {
+                file_sales = file_sales +
+                    `
+                        <li class="media media-list">
+                                <span class="mr-3 align-self-center img-icon primary-rgba text-primary d-block block-file-header">.pdf</span>
+                                <div class="media-body block-file-body">
+                                    <h5 class="font-16 mb-1">` + v.aliases + `
+                                        <span class="float-right">
+                                        <a href="` + v.url + `" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                                        <span>
+                                    </h5>
+                                </div>
+                        </li>
+                    `
+            })
+
+            file_sourcing = sourcing_id;
+            $.each(res.data.sourcings.files, function(k, v) {
+                filetype = "";
+                sliptstr = v.file_type.split("/");
+                filetype = sliptstr[1];
+
+                file_sourcing = file_sourcing +
+                    `
+                        <li class="media media-list">
+                            <span class="mr-3 align-self-center img-icon primary-rgba text-primary d-block block-file-header">.` +
+                    filetype + `</span>
+                            <div class="media-body block-file-body">
+                                <h5 class="font-16 mb-1">` + v.filename + `
+                                    <span class="float-right">
+                                    <a href="` + baseurl + v.path + `" target="_blank" class="btn btn-sm btn-primary"><i class="fa fa-download"></i></a>
+                                </h5>
+                                <p>` + v.timeago + `, ` + (v.file_size / 1024).toFixed(2) + ` KB</p>
+                            </div>
+                        </li>
+                    `;
+            })
+            html = file_inquiry + file_sales + file_sourcing;
+            setTimeout(() => {
+                $('#document-attachment-list').html(htmlDocuments)
+                $("#document-attachment-list").append(html);
+            }, 200);
+        });
+    }
+
+    function rmDocument(id) {
         response = window.confirm("Apa anda yakin ingin menghapus document ini? Aksi ini tidak bisa di-rollback")
         if (response) {
             $.post("{{ route('helper.docrem') }}", {
-                _token : "{{ csrf_token() }}",
-                id : id
-            }, function(data){
+                _token: "{{ csrf_token() }}",
+                id: id
+            }, function(data) {
                 getDocuments()
             })
         } else {
