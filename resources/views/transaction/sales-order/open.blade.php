@@ -245,7 +245,7 @@
     </form>
 
     <input type="hidden" name="status_so"
-        value="{{ strtolower($so->status) == 'selection done' ? 'true' : 'false' }}">
+        value="{{ $so != null ? (strtolower($so->status) == 'selection done' ? 'true' : 'false') : 'false' }}">
 
     </div>
 
