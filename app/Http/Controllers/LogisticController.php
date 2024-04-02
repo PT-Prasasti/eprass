@@ -151,7 +151,7 @@ class LogisticController extends Controller
             ->join('inquiries', 'sales_orders.inquiry_id', '=', 'inquiries.id')
             ->join('inquiry_products', 'inquiries.id', '=', 'inquiry_products.inquiry_id')
             ->select('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty', 'inquiry_products.description')
-            ->groupBy('inquiry_products.id')
+            ->groupBy('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty', 'inquiry_products.description')
             ->get();
 
         $result = DataTablesDataTables::of($supp_items)
@@ -210,7 +210,7 @@ class LogisticController extends Controller
             ->join('inquiries', 'sales_orders.inquiry_id', '=', 'inquiries.id')
             ->join('inquiry_products', 'inquiries.id', '=', 'inquiry_products.inquiry_id')
             ->select('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty')
-            ->groupBy('inquiry_products.id')
+            ->groupBy('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty')
             ->get();
         foreach ($supp_items as $item) {
             $keys = Redis::keys('*');
