@@ -346,6 +346,24 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li class="nav-main-heading">
+                        <span class="sidebar-mini-hidden">Payment Request</span>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-book"></i>
+                            <span class="sidebar-mini-hide">Payment Request</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('payment-request.exim.add') }}">Add Payment Request</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('payment-request.exim') }}">List Payment Request</a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
                 @if (auth()->user()->hasRole('admin_sales') ||
                         auth()->user()->hasRole('manage') ||
