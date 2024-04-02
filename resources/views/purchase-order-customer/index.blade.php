@@ -41,7 +41,8 @@
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
-                            <th class="text-center">Kode Khusus</th>
+                            <th class="text-center">Quotation Number</th>
+                            <th class="text-center">PO Number</th>
                             <th class="text-center">Customer - Company Name</th>
                             <th class="text-center">Sales Name</th>
                             <th class="text-center">Date</th>
@@ -115,7 +116,11 @@
                         className: "text-center"
                     },
                     {
-                        data: 'kode_khusus',
+                        data: 'quotation.quotation_code',
+                    },
+
+                    {
+                        data: 'purchase_order_number',
                     },
                     {
                         data: 'quotation.sales_order.inquiry.visit.customer.name',
@@ -161,13 +166,12 @@
                                 </a>
                             `;
 
-                            @if(!auth() -> user() -> hasRole('purchasing'))
-                            html = `
+
+                            html += `
                                     | <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
                                         <i class="fa fa-trash-o"></i>
                                     </button>
                                 `;
-                            @endif
 
                             return `
                                 ${html}
