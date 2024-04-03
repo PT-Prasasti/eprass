@@ -160,11 +160,11 @@
                 @endif
 
                 @if (auth()->user()->hasRole('hod'))
-                    <li class="nav-main-heading">
+                <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">SALES</span>
                     </li>
                     <li>
-                        <a href="{{ route('crm.visit-schedule') }}"><i class="fa fa-calendar"></i><span
+                        <a href="{{ route('crm.visit-schedule.show') }}"><i class="fa fa-calendar"></i><span
                                 class="sidebar-mini-hide">ListVisit Schedule</span></a>
                     </li>
                     <li>
@@ -172,8 +172,9 @@
                                 class="sidebar-mini-hide">List Report</span></a>
                     </li>
                     <li>
-                        <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span
-                                class="sidebar-mini-hide" id="inquiry-nav">List Inquiry</span></a>
+                    <li>
+                        <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide"
+                                id="inquiry-nav">List Inquiry</span></a>
                     </li>
 
                     <li class="nav-main-heading">

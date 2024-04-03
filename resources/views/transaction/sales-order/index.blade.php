@@ -234,9 +234,12 @@
                                     </a>
                                     
                                     @endif
+                                    @if(auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('hod'))
                                     <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Sales Order">
                                         <i class="fa fa-trash-o"></i>
-                                    </button>`
+                                    </button>
+                                    @endif
+                                    `
                         }
                     },
                 ],

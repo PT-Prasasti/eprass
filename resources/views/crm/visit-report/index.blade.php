@@ -6,7 +6,9 @@
                 <h4><b>List Report</b></h4>
             </div>
             <div class="col-md-6 text-right">
+                @if (auth()->user()->hasRole('sales'))
                 <a type="button" href="{{ route('crm.visit-report.add') }}" class="btn btn-info min-width-125"><i class="fa fa-plus mr-2"></i>NEW REPORT</a>
+                @endif
             </div>
         </div>
         
@@ -99,7 +101,6 @@
                             @endif
                             <th class="text-center">Date</th>
                             <th class="text-center">Status</th>
-                            <th class="text-center">Report</th>
                             <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                         </tr>
                     </thead>
@@ -128,17 +129,21 @@
                         className: "text-center"
                     },
                     {
+                        className: "text-center",
                         data: "id"
                     },
                     {
+                        className: "text-center",
                         data: "customer"
                     },
                     @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
                     {
+                        className: "text-center",
                         data: "sales"
                     },
                     @endif
                     {
+                        className: "text-center",
                         data: "date"
                     },
                     {
@@ -149,21 +154,21 @@
                         data: "uuid",
                         className: "text-center",
                         render: function(data) {
-                            return `<a type="button" href="visit-report/edit/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Report">
+                            return `
+                                    @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
+                                    <a type="button" href="visit-report/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Report">
                                         <i class="fa fa-file-text-o"></i>
-                                    </a>`
-                        }
-                    },
-                    {
-                        data: "uuid",
-                        className: "text-center",
-                        render: function(data) {
-                            return `<button type="button" class="btn btn-sm btn-success" data-toggle="tooltip" title="Created Inquiry">
-                                        <i class="fa fa-arrow-circle-right"></i>
-                                    </button>
+                                    </a>
+                                    @endif
+                                    @if (auth()->user()->hasRole('sales'))
+                                    <a type="button" href="visit-report/edit/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Report">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </a>
                                     <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Visit Report">
                                         <i class="fa fa-trash-o"></i>
-                                    </button>`
+                                    </button>
+                                    @endif
+                                    `
                         }
                     },
                 ],

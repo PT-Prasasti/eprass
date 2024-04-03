@@ -210,6 +210,7 @@ Route::prefix('/crm')->name('crm')->group(function () {
         Route::get('/visit', [VisitReportController::class, 'visit'])->name('.visit');
         Route::get('/visit/{id}', [VisitReportController::class, 'visit_detail'])->name('.visit-detail');
         Route::get('/edit/{id}', [VisitReportController::class, 'edit'])->name('.edit');
+        Route::get('/view/{id}', [VisitReportController::class, 'view'])->name('.view');
         Route::get('/delete/{id}', [VisitReportController::class, 'delete'])->name('.delete');
 
         Route::post('/get_pdf', [VisitReportController::class, 'get_pdf'])->name('.get-pdf');

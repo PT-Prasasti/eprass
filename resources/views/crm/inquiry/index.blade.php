@@ -229,19 +229,23 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
-                        width: "8%",
+                        width: "5%",
                         className: "text-center"
                     },
                     {
+                        className: "text-center",
                         data: "id_visit"
                     },
                     {
+                        className: "text-center",
                         data: "id_inquiry"
                     },
                     {
+                        className: "text-center",
                         data: "customer"
                     },
                     {
+                        className: "text-center",
                         data: "date"
                     },
                     {
@@ -252,12 +256,15 @@
                         }
                     },
                     {
+                        className: "text-center",
                         data: "status"
                     },
                     {
+                        className: "text-center",
                         data: "sales"
                     },
                     {
+                        className: "text-center",
                         data: "so_number"
                     },
                     {
@@ -348,16 +355,24 @@
                         className: "text-center"
                     },
                     {
-                        data: "id_visit"
+                        data: "id_visit",
+                        className: "text-center"
+
                     },
                     {
-                        data: "id_inquiry"
+                        data: "id_inquiry",
+                        className: "text-center"
+
                     },
                     {
-                        data: "customer"
+                        data: "customer",
+                        className: "text-center"
+
                     },
                     {
-                        data: "date"
+                        data: "date",
+                        className: "text-center"
+
                     },
                     {
                         data: "grade",
@@ -367,13 +382,19 @@
                         }
                     },
                     {
-                        data: "status"
+                        data: "status",
+                        className: "text-center"
+
                     },
                     {
-                        data: "sales"
+                        data: "sales",
+                        className: "text-center"
+
                     },
                     {
-                        data: "so_number"
+                        data: "so_number",
+                        className: "text-center"
+
                     },
                     {
                         data: "uuid",
@@ -462,13 +483,19 @@
                         className: "text-center"
                     },
                     {
-                        data: "id_visit"
+                        data: "id_visit",
+                        className: "text-center"
+
                     },
                     {
-                        data: "id_inquiry"
+                        data: "id_inquiry",
+                        className: "text-center"
+
                     },
                     {
-                        data: "customer"
+                        data: "customer",
+                        className: "text-center"
+
                     },
                     {
                         data: "date"
@@ -481,13 +508,19 @@
                         }
                     },
                     {
-                        data: "status"
+                        data: "status",
+                        className: "text-center"
+
                     },
                     {
-                        data: "sales"
+                        data: "sales",
+                        className: "text-center"
+
                     },
                     {
-                        data: "so_number"
+                        data: "so_number",
+                        className: "text-center"
+
                     },
                     {
                         data: "uuid",
@@ -582,16 +615,24 @@
                         className: "text-center"
                     },
                     {
-                        data: "id_visit"
+                        data: "id_visit",
+                        className: "text-center"
+
                     },
                     {
-                        data: "id_inquiry"
+                        data: "id_inquiry",
+                        className: "text-center"
+
                     },
                     {
-                        data: "customer"
+                        data: "customer",
+                        className: "text-center"
+
                     },
                     {
-                        data: "date"
+                        data: "date",
+                        className: "text-center"
+
                     },
                     {
                         data: "grade",
@@ -601,13 +642,19 @@
                         }
                     },
                     {
-                        data: "status"
+                        data: "status",
+                        className: "text-center"
+
                     },
                     {
-                        data: "sales"
+                        data: "sales",
+                        className: "text-center"
+
                     },
                     {
-                        data: "so_number"
+                        data: "so_number",
+                        className: "text-center"
+                        
                     },
                     {
                         data: "uuid",
@@ -722,16 +769,24 @@
                         className: "text-center"
                     },
                     {
-                        data: "id_visit"
+                        data: "id_visit",
+                        className: "text-center"
+
                     },
                     {
-                        data: "id_inquiry"
+                        data: "id_inquiry",
+                        className: "text-center"
+
                     },
                     {
-                        data: "customer"
+                        data: "customer",
+                        className: "text-center"
+
                     },
                     {
-                        data: "date"
+                        data: "date",
+                        className: "text-center"
+
                     },
                     {
                         data: "grade",
@@ -741,13 +796,19 @@
                         }
                     },
                     {
-                        data: "status"
+                        data: "status",
+                        className: "text-center"
+
                     },
                     {
-                        data: "sales"
+                        data: "sales",
+                        className: "text-center"
+
                     },
                     {
-                        data: "so_number"
+                        data: "so_number",
+                        className: "text-center"
+
                     },
                     {
                         data: "uuid",
@@ -840,25 +901,35 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
-                        width: "8%",
+                        width: "5%",
                         className: "text-center"
                     },
                     {
-                        data: "id_visit"
+                        data: "id_visit",
+                        className: "text-center"
+
                     },
                     {
-                        data: "id_inquiry"
+                        data: "id_inquiry",
+                        className: "text-center"
+
                     },
                     {
-                        data: "customer"
+                        data: "customer",
+                        className: "text-center"
+
                     },
                     @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
                     {
-                        data: "sales"
+                        data: "sales",
+                        className: "text-center"
+
                     },
                     @endif
                     {
-                        data: "date"
+                        data: "date",
+                        className: "text-center"
+
                     },
                     {
                         data: "grade",
@@ -868,10 +939,14 @@
                         }
                     },
                     {
-                        data: "status"
+                        data: "status",
+                        className: "text-center"
+
                     },
                     {
-                        data: "so_number"
+                        data: "so_number",
+                        className: "text-center"
+
                     },
                     {
                         data: "uuid",
