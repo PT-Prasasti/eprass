@@ -344,7 +344,6 @@ class PaymentRequestEximController extends Controller
 
             return redirect()->route('payment-request.exim')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
-
             return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }

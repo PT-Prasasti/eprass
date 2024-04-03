@@ -407,8 +407,8 @@
                             data: "remark"
                         }, 
                         {
-                            data: "file"
-                            , render: function(data, type, full, meta) {
+                            data: "file", 
+                            render: function(data, type, full, meta) {
                                 let userId = "{{ auth()->user()->uuid }}";
                                 if (data) {
                                     // Extract the iteration from the Redis key

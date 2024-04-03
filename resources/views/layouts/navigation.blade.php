@@ -68,6 +68,20 @@
                                 class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide">Delivery
                                 Schedule</span></a>
                     </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-book"></i>
+                            <span class="sidebar-mini-hide">Payment Request</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('payment-request.exim.add') }}">Add Payment Request</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('payment-request.exim') }}">List Payment Request</a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
 
                 @if (auth()->user()->hasRole('manager'))
