@@ -197,26 +197,37 @@
                             className: "text-center"
                         },
                         {
-                            data: "id_so"
+                            data: "id_so",
+                            className: "text-center"
+
                         },
                         {
-                            data: "id_inquiry"
+                            data: "id_inquiry",
+                            className: "text-center"
+
                         },
                         {
-                            data: "customer"
+                            data: "customer",
+                            className: "text-center"
+
                         },
                         {
-                            data: "due_date"
+                            data: "due_date",
+                            className: "text-center"
+
                         },
                         {
                             data: "grade",
                             className: "text-center",
                         },
                         {
-                            data: "sales"
+                            data: "sales",
+                            className: "text-center"
+
                         },
                         {
                             data: "status",
+                            className: "text-center",
                             render: function(data) {
                                 if (data == 'ON PROCESS') {
                                     return 'ON PROGRESS'
@@ -240,9 +251,9 @@
                                     @if (auth()->user()->hasRole('manager'))
 
                                     <a href="` + (status == "ON PROCESS" || status == "SELECTION DONE" ?
-                                        "sales-order/open/" + data : "#") +
+                                        "sales-order/open/" + data : "sales-order/open/" + data) +
                                     `" class="btn btn-sm btn-` + (status == "ON PROCESS" ? "success" :
-                                        "secondary") + `" data-toggle="tooltip" title="Sourcing Item">
+                                        "info") + `" data-toggle="tooltip" title="Sourcing Item">
                                         <i class="fa fa-file"></i>
                                     </a>
                                     @endif
@@ -255,10 +266,10 @@
                                     @if (auth()->user()->hasRole('purchasing') || auth()->user()->hasRole('hod') || auth()->user()->hasRole('superadmin'))
 
                                     <a href="` + (status == "SELECTION DONE" || status == "PRICE LIST READY" ?
-                                        "sales-order/price/" + data : "#") +
+                                        "sales-order/price/" + data : "sales-order/open/" + data) +
                                     `" class="btn btn-sm btn-` + (status == "SELECTION DONE" || status ==
                                         "PRICE LIST READY" ? "success" :
-                                        "secondary") + `" data-toggle="tooltip" title="Price">
+                                        "info") + `" data-toggle="tooltip" title="Price">
                                         <i class="fa fa-dollar"></i>
                                     </a>
                                     <a href="sales-order/edit/${data}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Sourcing Item">

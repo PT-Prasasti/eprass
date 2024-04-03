@@ -143,6 +143,14 @@
                     </li>
 
                     <li class="nav-main-heading">
+                        <span class="sidebar-mini-hidden">Order Supplier</span>
+                    </li>
+                    <li>
+                        <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span
+                                class="sidebar-mini-hide">App PO Supplier</span></a>
+                    </li>
+
+                    <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">Payment Request</span>
                     </li>
                     <li>
@@ -150,13 +158,7 @@
                                 class="sidebar-mini-hide">App Payment Request</span></a>
                     </li>
 
-                    <li class="nav-main-heading">
-                        <span class="sidebar-mini-hidden">Order Supplier</span>
-                    </li>
-                    <li>
-                        <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span
-                                class="sidebar-mini-hide">App PO Supplier</span></a>
-                    </li>
+                    
                 @endif
 
                 @if (auth()->user()->hasRole('hod'))
