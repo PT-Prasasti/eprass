@@ -8,7 +8,8 @@
                     <h4><b>{{ $transactionCode }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <button type="button" class="btn btn-primary mr-5 mb-5" data-toggle="modal" data-target="#modal-slideup">
+                    <button type="button" class="btn btn-primary mr-5 mb-5" data-toggle="modal"
+                        data-target="#modal-slideup">
                         <i class="fa fa-plus mr-5"></i>Select PO Customer
                     </button>
                     <button type="submit" class="btn btn-success mr-5 mb-5">
@@ -20,25 +21,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                     @endif
 
                     @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                     @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                        <span class="d-block">
-                            {{ $loop->iteration }}. {{ $error }}
-                        </span>
-                        @endforeach
-                    </div>
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <span class="d-block">
+                                    {{ $loop->iteration }}. {{ $error }}
+                                </span>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
             </div>
@@ -53,9 +54,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#term_con">Term &amp; Condition</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="#document">Document</a>
-                            </li>
+                            </li> --}}
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#bank">Bank Information</a>
                             </li>
@@ -66,7 +67,8 @@
                         <div class="block-content tab-content">
                             <div class="tab-pane active" id="btabs-static-home" role="tabpanel">
                                 <div class="row" hidden>
-                                    <input type="text" class="form-control" name="sales_order_id" value="" readonly sales_order_id>
+                                    <input type="text" class="form-control" name="sales_order_id" value=""
+                                        readonly sales_order_id>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-8">
@@ -76,21 +78,24 @@
                                                     <label class="col-lg-3 col-form-label">PO Customer</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="" readonly kode_khusus>
+                                                        <input type="text" class="form-control" value=""
+                                                            readonly kode_khusus>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="" readonly sales_order_number>
+                                                        <input type="text" class="form-control" value=""
+                                                            readonly sales_order_number>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="" readonly sales_order_subject>
+                                                        <input type="text" class="form-control" value=""
+                                                            readonly sales_order_subject>
                                                     </div>
                                                 </div>
                                             </div>
@@ -99,8 +104,11 @@
                                     <div class="col-md-4">
                                         <div class="custom-file">
                                             <input type="hidden" name="document_list" value="">
-                                            <input type="file" id="upload-document" name="upload_document" class="custom-file-input" data-toggle="custom-file-input" accept="application/pdf">
-                                            <label id="upload-document-label" for="upload-document" class="custom-file-label">
+                                            <input type="file" id="upload-document" name="upload_document"
+                                                class="custom-file-input" data-toggle="custom-file-input"
+                                                accept="application/pdf">
+                                            <label id="upload-document-label" for="upload-document"
+                                                class="custom-file-label">
                                                 Choose file
                                             </label>
                                         </div>
@@ -112,7 +120,8 @@
                                                     <div class="mr-2">
                                                         <span>Uploading file</span>
                                                     </div>
-                                                    <div class="spinner-border spinner-border-sm text-info" role="status">
+                                                    <div class="spinner-border spinner-border-sm text-info"
+                                                        role="status">
                                                         <span class="sr-only">Loading...</span>
                                                     </div>
                                                 </div>
@@ -144,11 +153,15 @@
                                         <th class="text-center"></th>
                                         <th class="text-center"></th>
                                         <th class="text-center">
-                                            <input type="text" class="form-control" name="total_shipping_note" value="Shipping Fee (to Prasasti's Werehouse)" autocomplete="one-time-code">
+                                            <input type="text" class="form-control" name="total_shipping_note"
+                                                value="Shipping Fee (to Prasasti's Werehouse)"
+                                                autocomplete="one-time-code">
                                         </th>
                                         <th class="text-right pr-4">1</th>
                                         <th class="text-right">
-                                            <input type="text" class="form-control text-right" name="total_shipping_value" value="" autocomplete="one-time-code" number_format>
+                                            <input type="text" class="form-control text-right"
+                                                name="total_shipping_value" value=""
+                                                autocomplete="one-time-code" number_format>
                                         </th>
                                         <th class="text-right text-nowrap pt-3" total_shipping_total></th>
                                         <th class="text-center"></th>
@@ -166,21 +179,24 @@
                                                         Term
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="term" class="form-control" required="" autocomplete="one-time-code">
+                                                    <input type="text" name="term" class="form-control"
+                                                        required="" autocomplete="one-time-code">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Delivery
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="delivery" class="form-control" required="" autocomplete="one-time-code">
+                                                    <input type="text" name="delivery" class="form-control"
+                                                        required="" autocomplete="one-time-code">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Note
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" name="note" class="form-control" required="" autocomplete="one-time-code">
+                                                    <input type="text" name="note" class="form-control"
+                                                        required="" autocomplete="one-time-code">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -192,9 +208,10 @@
                                                     <select class="form-control" name="payment_term" required="">
                                                         <option value="">Select one</option>
                                                         @foreach ($paymentTerms as $itemKey => $itemValue)
-                                                        <option value="{{ $itemKey }}" {{ $itemKey === old('payment_term') ? 'selected' : '' }}>
-                                                            {{ $itemValue }}
-                                                        </option>
+                                                            <option value="{{ $itemKey }}"
+                                                                {{ $itemKey === old('payment_term') ? 'selected' : '' }}>
+                                                                {{ $itemValue }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -206,9 +223,10 @@
                                                     <select class="form-control" name="vat" required="">
                                                         <option value="">Select one</option>
                                                         @foreach ($vatTypes as $itemKey => $itemValue)
-                                                        <option value="{{ $itemKey }}" {{ $itemKey === old('vat') ? 'selected' : '' }}>
-                                                            {{ $itemValue }}
-                                                        </option>
+                                                            <option value="{{ $itemKey }}"
+                                                                {{ $itemKey === old('vat') ? 'selected' : '' }}>
+                                                                {{ $itemValue }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -217,7 +235,8 @@
                                                         Attachment
                                                         <span class="text-danger">*</span>
                                                     </label>
-                                                    <input type="text" class="form-control" name="attachment" autocomplete="one-time-code" required="">
+                                                    <input type="text" class="form-control" name="attachment"
+                                                        autocomplete="one-time-code" required="">
                                                 </div>
                                             </div>
                                         </div>
@@ -374,7 +393,8 @@
         </form>
     </div>
 
-    <div class="modal fade" id="modal-slideup" tabindex="-1" role="dialog" aria-labelledby="modal-slideup" aria-hidden="true">
+    <div class="modal fade" id="modal-slideup" tabindex="-1" role="dialog" aria-labelledby="modal-slideup"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0">
@@ -403,7 +423,8 @@
                             <div class="col-sm-12">
                                 <!-- <select class="form-control" name="selected_sales_order" required="">
                                 </select> -->
-                                <input type="text" class="form-control" value="" readonly name="selected_sales_order">
+                                <input type="text" class="form-control" value="" readonly
+                                    name="selected_sales_order">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -411,7 +432,8 @@
                                 <h5>Product List</h5>
                             </div>
                             <div class="col-sm-12">
-                                <table class="table table-bordered table-center w-100" style="font-size:11px" sales_order_selected_items>
+                                <table class="table table-bordered table-center w-100" style="font-size:11px"
+                                    sales_order_selected_items>
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
@@ -550,7 +572,8 @@
             const handleSetSalesOrder = (data) => {
                 console.log(data);
                 salesOrderSelectedItemTable.clear().draw();
-                salesOrderSelectedItemTable.rows.add(data.quotation.sales_order.sourcing.selected_sourcing_suppliers ?? []).draw(true);
+                salesOrderSelectedItemTable.rows.add(data.quotation.sales_order.sourcing.selected_sourcing_suppliers ?? [])
+                    .draw(true);
 
                 $(`[name="selected_sales_order"]`).val(data.quotation.sales_order.id);
                 console.log(data);
@@ -710,7 +733,7 @@
                 }
 
                 $(`[sales_order_id]`).val($(`[name="selected_sales_order"]`).val());
-                console.log( $(`[sales_order_id]`).val());
+                console.log($(`[sales_order_id]`).val());
                 $(`[sales_order_number]`).val($(`[selected_sales_order_number]`).val());
                 $(`[sales_order_subject]`).val($(`[selected_sales_order_subject]`).val());
 
@@ -802,16 +825,16 @@
 
             handleCalculate();
 
-            @if(session('quotation'))
-            $(`[name="quotation"]`).select2("trigger", "select", {
-                data: {
-                    id: `{{ session('quotation')->id }}`,
-                    text: `{{ session('quotation')->quotation_code }}`,
+            @if (session('quotation'))
+                $(`[name="quotation"]`).select2("trigger", "select", {
                     data: {
-                        !!session('quotation') - > toJson() !!
+                        id: `{{ session('quotation')->id }}`,
+                        text: `{{ session('quotation')->quotation_code }}`,
+                        data: {
+                            !!session('quotation') - > toJson() !!
+                        }
                     }
-                }
-            });
+                });
             @endif
         </script>
     </x-slot>

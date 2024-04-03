@@ -587,6 +587,7 @@ Route::prefix('/helper')->name('helper')->group(function () {
 Route::prefix('/helper')->name('helper')->group(function () {
     Route::get('/count-new-inquiry', [HelperController::class, 'countNewInquiry'])->name('.count-new-inquiry');
     Route::get('/attachment/list', [HelperController::class, 'doclist'])->name('.doclist');
+    Route::get('/attachment/list-other', [HelperController::class, 'doclistother'])->name('.doclistother');
     Route::post('/attachment/add', [HelperController::class, 'docadd'])->name('.docadd');
     Route::post('/attachment/delete', [HelperController::class, 'docrem'])->name('.docrem');
 });
