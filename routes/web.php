@@ -186,6 +186,7 @@ Route::prefix('/crm')->name('crm')->group(function () {
     Route::prefix('/visit-schedule')->name('.visit-schedule')->group(function () {
         Route::get('/', [VisitScheduleController::class, 'index']);
         Route::get('/add', [VisitScheduleController::class, 'add'])->name('.add');
+        Route::get('/show', [VisitScheduleController::class, 'show'])->name('.show');
         Route::get('/id', [VisitScheduleController::class, 'generate_id'])->name('.id');
         Route::get('/company', [VisitScheduleController::class, 'company'])->name('.company');
         Route::get('/company/{id}', [VisitScheduleController::class, 'company_detail'])->name('.company-detail');

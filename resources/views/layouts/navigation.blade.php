@@ -89,7 +89,7 @@
                         <span class="sidebar-mini-hidden">SALES</span>
                     </li>
                     <li>
-                        <a href="{{ route('crm.visit-schedule') }}"><i class="fa fa-calendar"></i><span
+                        <a href="{{ route('crm.visit-schedule.show') }}"><i class="fa fa-calendar"></i><span
                                 class="sidebar-mini-hide">ListVisit Schedule</span></a>
                     </li>
                     <li>

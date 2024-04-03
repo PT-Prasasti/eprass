@@ -38,6 +38,11 @@ class VisitScheduleController extends Controller
         return view('crm.visit-schedule.index');
     }
 
+    public function show(): View
+    {
+        return view('crm.visit-schedule.show');
+    }
+
     public function data(Request $request): JsonResponse
     {
         if ($request->ajax()) {
