@@ -3,12 +3,9 @@
     <div class="content">
         <div class="row">
             <div class="col-md-6">
-                <h4><b>List Report</b></h4>
+                <h4><b>List Visit Schedule</b></h4>
             </div>
             <div class="col-md-6 text-right">
-                @if (auth()->user()->hasRole('sales'))
-                <a type="button" href="{{ route('crm.visit-report.add') }}" class="btn btn-info min-width-125"><i class="fa fa-plus mr-2"></i>NEW REPORT</a>
-                @endif
             </div>
         </div>
         
@@ -19,11 +16,12 @@
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
-                            <th class="text-center">ID VISIT</th>
+                            <th class="text-center">ID Visit</th>
                             <th class="text-center">Customer - Company Name</th>
+                            <th class="text-center">Sales</th>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Time</th>
                             <th class="text-center">Status</th>
-                            <th class="text-center">Report</th>
                             <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                         </tr>
                     </thead>
@@ -36,44 +34,46 @@
         <div class="modal" id="modal-large" tabindex="-1" role="dialog" aria-labelledby="modal-large" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="block block-themed block-transparent mb-0">
-                        <div class="block-header bg-primary-dark">
-                            <h3 class="block-title">Status Visit</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                    <i class="si si-close"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="block-content">
-                            <div class="form-group row">
-                                <label class="col-12">Status Visit</label>
-                                <div class="col-md-12">
-                                    <select class="form-control" name="">
-                                        <option value="0" selected disabled>Please select</option>
-                                        <option>Loading</option>
-                                        <option>Finish</option>
-                                        <option>Cancel</option>
-                                        <option>Reschedule</option>
-                                    </select>
+                    <form action="{{ route('crm.visit-schedule.status') }}" method="POST" id="status-form">
+                        @csrf
+                        <input type="hidden" name="uuid">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Status Visit</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="si si-close"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                            <label class="col-12">Note</label>
-                            <div class="col-12">
-                                <textarea class="form-control" name="" rows="6"></textarea>
+                            <div class="block-content">
+                                <div class="form-group row">
+                                    <label class="col-12">Status Visit</label>
+                                    <div class="col-md-12">
+                                        <select class="form-control" name="status">
+                                            <option value="0" selected disabled>Please select</option>
+                                            <option>Budgeting</option>
+                                            <option>Freed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                <label class="col-12">Note</label>
+                                <div class="col-12">
+                                    <textarea class="form-control" name="note" rows="6"></textarea>
+                                </div>
+                            </div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-alt-danger" data-dismiss="modal">
+                                <i class="fa fa-trash"></i> Close
+                            </button>
+                            <button type="submit" class="btn btn-alt-primary">
+                                <i class="fa fa-check"></i> Save
+                            </button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-alt-danger" data-dismiss="modal">
-                            <i class="fa fa-trash"></i> Close
-                        </button>
-                        <button type="button" class="btn btn-alt-primary" data-dismiss="modal">
-                            <i class="fa fa-check"></i> Save
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -94,13 +94,13 @@
                     <thead>
                         <tr>
                             <th class="text-center">No.</th>
-                            <th class="text-center">ID VISIT</th>
+                            <th class="text-center">ID Visit</th>
                             <th class="text-center">Customer - Company Name</th>
                             @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
                             <th class="text-center">Sales</th>
                             @endif
                             <th class="text-center">Date</th>
-                            <th class="text-center">Status</th>
+                            <th class="text-center">Time</th>
                             <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                         </tr>
                     </thead>
@@ -114,7 +114,7 @@
                     [0, "asc"]
                 ],
                 ajax: {
-                    "url": "{{ route('crm.visit-report.data')}}",
+                    "url": "{{ route('crm.visit-schedule.data') }}",
                     "type": "POST",
                     "data": {
                         "_token": "{{ csrf_token() }}"
@@ -129,46 +129,53 @@
                         className: "text-center"
                     },
                     {
+                        data: "id",
                         className: "text-center",
-                        data: "id"
                     },
                     {
+                        data: "customer",
                         className: "text-center",
-                        data: "customer"
                     },
                     @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
                     {
+                        data: "sales",
                         className: "text-center",
-                        data: "sales"
                     },
                     @endif
                     {
+                        data: "date",
                         className: "text-center",
-                        data: "date"
                     },
                     {
-                        data: "status",
-                        className: "text-center"
+                        data: "time",
+                        className: "text-center",
                     },
+                    // {
+                    //     data: "status",
+                    //     className: "text-center",
+                    //     render: function(data) {
+                    //         var color = ``
+                    //         if(data.status == 'LOADING') {
+                    //             color = `warning`
+                    //         } else if(data.status == 'FINISH') {
+                    //             color = `success`
+                    //         } else if(data.status == 'CANCEL') {
+                    //             color = `danger`
+                    //         } else {
+                    //             color = `info`
+                    //         }
+                    //         return `<button type="button" onclick="status_data('${data.uuid}', '${data.status}')" data-toggle="modal" data-target="#modal-large" class="btn btn-sm btn-`+color+`" data-toggle="tooltip" style="width:110px;">
+                    //                     ${data.status}
+                    //                 </button>`
+                    //     }
+                    // },
                     {
                         data: "uuid",
                         className: "text-center",
                         render: function(data) {
-                            return `
-                                    @if (auth()->user()->hasRole('admin_sales') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod'))
-                                    <a type="button" href="visit-report/view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Report">
-                                        <i class="fa fa-file-text-o"></i>
-                                    </a>
-                                    @endif
-                                    @if (auth()->user()->hasRole('sales'))
-                                    <a type="button" href="visit-report/edit/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Report">
-                                        <i class="fa fa-file-text-o"></i>
-                                    </a>
-                                    <button type="button" onclick="delete_data('${data}')" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete Visit Report">
-                                        <i class="fa fa-trash-o"></i>
-                                    </button>
-                                    @endif
-                                    `
+                            return `<a type="button" href="view/${data}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Data Visit">
+                                        <i class="fa fa-file"></i>
+                                    </a>`
                         }
                     },
                 ],
@@ -179,6 +186,17 @@
                     }
                 }
             });
+        }
+
+        function status_data(id, status)
+        {
+            $('#status-form input[name=uuid]').val(id)
+            $('#status-form select[name=status]').find("option").each(function() {
+                if($(this).val().toUpperCase() === status) {
+                    $(this).prop("selected", true)
+                    return false
+                }
+            })
         }
 
         function delete_data(id)
@@ -194,7 +212,7 @@
                 }).then((result) => {
                 if (result.isConfirmed) {
                     const link = document.createElement('a');
-                    link.href = 'visit-report/delete/'+id;
+                    link.href = 'visit-schedule/delete/'+id;
                     link.click();
                 }
             })

@@ -190,6 +190,7 @@ Route::prefix('/crm')->name('crm')->group(function () {
     Route::prefix('/visit-schedule')->name('.visit-schedule')->group(function () {
         Route::get('/', [VisitScheduleController::class, 'index']);
         Route::get('/add', [VisitScheduleController::class, 'add'])->name('.add');
+        Route::get('/show', [VisitScheduleController::class, 'show'])->name('.show');
         Route::get('/id', [VisitScheduleController::class, 'generate_id'])->name('.id');
         Route::get('/company', [VisitScheduleController::class, 'company'])->name('.company');
         Route::get('/company/{id}', [VisitScheduleController::class, 'company_detail'])->name('.company-detail');
@@ -213,6 +214,7 @@ Route::prefix('/crm')->name('crm')->group(function () {
         Route::get('/visit', [VisitReportController::class, 'visit'])->name('.visit');
         Route::get('/visit/{id}', [VisitReportController::class, 'visit_detail'])->name('.visit-detail');
         Route::get('/edit/{id}', [VisitReportController::class, 'edit'])->name('.edit');
+        Route::get('/view/{id}', [VisitReportController::class, 'view'])->name('.view');
         Route::get('/delete/{id}', [VisitReportController::class, 'delete'])->name('.delete');
 
         Route::post('/get_pdf', [VisitReportController::class, 'get_pdf'])->name('.get-pdf');

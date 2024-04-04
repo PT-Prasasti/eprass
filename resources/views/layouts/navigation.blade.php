@@ -89,7 +89,7 @@
                         <span class="sidebar-mini-hidden">SALES</span>
                     </li>
                     <li>
-                        <a href="{{ route('crm.visit-schedule') }}"><i class="fa fa-calendar"></i><span
+                        <a href="{{ route('crm.visit-schedule.show') }}"><i class="fa fa-calendar"></i><span
                                 class="sidebar-mini-hide">ListVisit Schedule</span></a>
                     </li>
                     <li>
@@ -143,6 +143,14 @@
                     </li>
 
                     <li class="nav-main-heading">
+                        <span class="sidebar-mini-hidden">Order Supplier</span>
+                    </li>
+                    <li>
+                        <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span
+                                class="sidebar-mini-hide">App PO Supplier</span></a>
+                    </li>
+
+                    <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">Payment Request</span>
                     </li>
                     <li>
@@ -150,21 +158,15 @@
                                 class="sidebar-mini-hide">App Payment Request</span></a>
                     </li>
 
-                    <li class="nav-main-heading">
-                        <span class="sidebar-mini-hidden">Order Supplier</span>
-                    </li>
-                    <li>
-                        <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span
-                                class="sidebar-mini-hide">App PO Supplier</span></a>
-                    </li>
+                    
                 @endif
 
                 @if (auth()->user()->hasRole('hod'))
-                    <li class="nav-main-heading">
+                <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">SALES</span>
                     </li>
                     <li>
-                        <a href="{{ route('crm.visit-schedule') }}"><i class="fa fa-calendar"></i><span
+                        <a href="{{ route('crm.visit-schedule.show') }}"><i class="fa fa-calendar"></i><span
                                 class="sidebar-mini-hide">ListVisit Schedule</span></a>
                     </li>
                     <li>
@@ -172,8 +174,9 @@
                                 class="sidebar-mini-hide">List Report</span></a>
                     </li>
                     <li>
-                        <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span
-                                class="sidebar-mini-hide" id="inquiry-nav">List Inquiry</span></a>
+                    <li>
+                        <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide"
+                                id="inquiry-nav">List Inquiry</span></a>
                     </li>
 
                     <li class="nav-main-heading">
@@ -208,6 +211,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="{{ route('purchase-order-customer-sales') }}">
+                            <i class="fa fa-dollar"></i>
+                            <span class="sidebar-mini-hide">List PO Customer</span>
+                        </a>
+                    </li>
 
                     <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">PURCHASING</span>
@@ -227,6 +236,21 @@
                                     <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item</a>
                                 </li>
                             </ul>
+                    
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                            <i class="fa fa-book"></i>
+                            <span class="sidebar-mini-hide">PO Supplier</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('purchase-order-supplier.add') }}">Add PO Supplier</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                             <i class="fa fa-book"></i>
@@ -244,37 +268,16 @@
                 @endif
                 @if (auth()->user()->hasRole('hod'))
                     <li class="nav-main-heading">
-                        <span class="sidebar-mini-hidden">Payment Request</span>
+                        <span class="sidebar-mini-hidden">HOD</span>
                     </li>
                     <li>
                         <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span
                                 class="sidebar-mini-hide">App Payment Request</span></a>
                     </li>
+                    
 
-                    <li class="nav-main-heading">
-                        <span class="sidebar-mini-hidden">Transaction PO</span>
-                    </li>
-                    <li>
-                        <a href="{{ route('purchase-order-customer-sales') }}">
-                            <i class="fa fa-dollar"></i>
-                            <span class="sidebar-mini-hide">List PO Customer</span>
-                        </a>
-                    </li>
 
-                    <li>
-                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                            <i class="fa fa-book"></i>
-                            <span class="sidebar-mini-hide">PO Supplier</span>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="{{ route('purchase-order-supplier.add') }}">Add PO Supplier</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('purchase-order-supplier') }}">List PO Supplier</a>
-                            </li>
-                        </ul>
-                    </li>
+                    
 
 
                     <li class="nav-main-heading">
