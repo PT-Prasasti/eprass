@@ -212,6 +212,7 @@ class LogisticController extends Controller
             ->select('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty')
             ->groupBy('inquiry_products.id', 'inquiry_products.item_name', 'inquiry_products.qty')
             ->get();
+        $po_supplier_number = null;
         foreach ($supp_items as $item) {
             $keys = Redis::keys('*');
             foreach ($keys as $key) {
