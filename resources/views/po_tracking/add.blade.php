@@ -35,9 +35,6 @@
                                 <a class="nav-link" href="#pickup">Pick Up Information</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#document">Document</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="#forwarder">Selected Forwarder</a>
                             </li>
                         </ul>
@@ -153,7 +150,7 @@
                             <div class="tab-pane" id="pickup" role="tabpanel">
                                 <div class="block block-rounded">
                                     <div class="block-content block-content-full">
-                                        <div class="row">
+                                        <div class="row align-items-start">
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label for="last-name-column">Name</label>
@@ -177,68 +174,27 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group row">
-                                                    <label class="col-12">Document Pick Up Information :</label>
-                                                    <div class="col-12">
-                                                        <p>1.<a href="#"> Packing List.pdf</a></p>
-                                                        <p>2.<a href="#"> Packing List Detail.pdf</a></p>
+                                                <div class="custom-file">
+                                                    <label for="example-file-input-custom">Upload File</label>
+                                                    <input type="file" class="custom-file-input" id="example-file-input-custom" name="upload-pdf" data-toggle="custom-file-input" accept="application/pdf" disabled>
+                                                    <label class="custom-file-label" for="example-file-input-custom" id="upload-pdf-label">Choose
+                                                        file</label>
+                                                </div>
+                                                <div class="block block-rounded mt-3">
+                                                    <h5>Document Pickup Information</h5>
+                                                    <div class="d-none align-items-center" id="loading-file">
+                                                        <div class="mr-2">
+                                                            <span>Uploading file</span>
+                                                        </div>
+                                                        <div class="spinner-border spinner-border-sm text-info" role="status">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
                                                     </div>
+                                                    <ul class="list-group">
+
+                                                    </ul>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane" id="document" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <label class="custom-control-label" for="f1">INQUIRY</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <label class="custom-control-label" for="f2">SALES ORDER</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <label class="custom-control-label" for="f3">SOURCING ITEM</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <label class="custom-control-label" for="f4">PO CUSTOMER</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <label class="custom-control-label" for="f4">PO SUPPLIER</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <button type="button" class="btn" data-toggle="modal" data-target="#modal-f1">
-                                            <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                        </button>
-                                        <div class="custom-control custom-checkbox mb-5">
-                                            <label class="custom-control-label" for="f4">PURCHASING
-                                                DOCUMENT</label>
                                         </div>
                                     </div>
                                 </div>
@@ -267,6 +223,8 @@
                     </div>
                 </div>
             </div>
+
+            <input type="hidden" name="pdf">
         </form>
     </div>
     <x-slot name="js">
@@ -275,6 +233,46 @@
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+
+            $(document).ready(function() {
+                $('input[name=upload-pdf]').change(function() {
+                    $('#loading-file').removeClass('d-none')
+                    $('#loading-file').addClass('d-flex')
+                    uploadPdf($(this).prop('files')[0])
+                })
+
+                $(`[name="selected_po_supplier"]`).select2({
+                    placeholder: "Select from the list"
+                    , width: '100%'
+                    , ajax: {
+                        url: `{{ route('po-tracking.search.po_supplier') }}`
+                        , dataType: 'json'
+                        , language: "id"
+                        , type: 'GET'
+                        , delay: 450
+                        , data: function(params) {
+                            return {
+                                term: params.term
+                            };
+                        }
+                        , processResults: function(res) {
+                            return {
+                                results: $.map(res, function(object) {
+                                    return {
+                                        id: object.id
+                                        , text: object.transaction_code
+                                        , data: object
+                                    , }
+                                })
+                            };
+                        }
+                        , cache: true
+                    }
+                    , escapeMarkup: function(markup) {
+                        return markup;
+                    }
+                , });
             });
 
             const handleCurrencyFormat = (value) => {
@@ -340,41 +338,10 @@
                 }
             , });
 
-            $(`[name="selected_po_supplier"]`).select2({
-                placeholder: "Select from the list"
-                , width: '100%'
-                , ajax: {
-                    url: `{{ route('po-tracking.search.po_supplier') }}`
-                    , dataType: 'json'
-                    , language: "id"
-                    , type: 'GET'
-                    , delay: 450
-                    , data: function(params) {
-                        return {
-                            term: params.term
-                        };
-                    }
-                    , processResults: function(res) {
-                        return {
-                            results: $.map(res, function(object) {
-                                return {
-                                    id: object.id
-                                    , text: object.transaction_code
-                                    , data: object
-                                , }
-                            })
-                        };
-                    }
-                    , cache: true
-                }
-                , escapeMarkup: function(markup) {
-                    return markup;
-                }
-            , });
-
             $(document).on('select2:selecting', `[name="selected_po_supplier"]`, function(e) {
                 const data = e.params.args.data.data;
-                console.log(data);
+                $('input[name=upload-pdf]').attr('disabled', false);
+                getPdf(data.transaction_code)
                 handleSetSalesOrder(data);
             });
 
@@ -508,6 +475,91 @@
 
                     $("#product-list").append(element);
                 }
+            }
+
+            function getPdf(id) {
+                $.ajax({
+                    url: "{{ route('po-tracking.get-pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        po_supplier: id
+                    },
+                    success: function(response) {
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            function uploadPdf(file) {
+                const formData = new FormData()
+                formData.append('_token', '{{ csrf_token() }}')
+                formData.append('file', file)
+                formData.append('po_supplier', $('select[name=selected_po_supplier]').val())
+                $.ajax({
+                    url: '{{ route('po-tracking.upload-pdf') }}'
+                    , type: 'POST'
+                    , data: formData
+                    , processData: false
+                    , contentType: false
+                    , success: function(response) {
+                        console.log(response);
+                        $('#loading-file').removeClass('d-flex')
+                        $('#loading-file').addClass('d-none')
+                        listItemPdf(response.status, response.data)
+                    }
+                    , error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
+                $('#upload-pdf-label').html('Choose file')
+            }
+
+            function listItemPdf(status, data) {
+                if (status == 200) {
+                    var element = ``
+                    var number = 1
+                    var selectedPoSupplier = $('select[name=selected_po_supplier]').val(); // Get the value of selected_po_supplier
+                    $.each(data, function(index, value) {
+                        element += `<li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="/file/show/tracking/${selectedPoSupplier}/${value.filename}" target="_blank">` + // Change the URL here
+                                number + `. ` + value.aliases + `</a>
+                                            <button type="button" onclick="deletePdf('` + value.filename + `')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                                </svg>    
+                                            </button>
+                                        </div>
+                                    </li>`
+                        number++
+                    })
+                    $('.list-group').html(``)
+                    $('.list-group').html(element)
+                    $('input[name=pdf]').val(JSON.stringify(data))
+                }
+            }
+
+            function deletePdf(file) {
+                $.ajax({
+                    url: "{{ route('po-tracking.delete-pdf') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        file: file,
+                        po_supplier: $('select[name=selected_po_supplier]').val()
+                    },
+                    success: function(response) {
+                        listItemPdf(response.status, response.data)
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error)
+                    }
+                })
             }
 
         </script>

@@ -13,6 +13,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\PurchaseOrderSupplier;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
@@ -110,6 +112,24 @@ class PoTrackingController extends Controller
             $tracking->status = 'Ready Pick Up';
             $tracking->save();
 
+            $files = json_decode($request->pdf, true);
+            
+            foreach ($files as $item) {
+                $sourcePath = storage_path('app/temp/' . $tracking->po_suplier_id . '/' . $item['filename']);
+                $destinationPath = storage_path('app/public/tracking/' . $tracking->po_suplier_id . '/' . $item['filename']);
+
+                if (!Storage::exists('public/tracking/' . $tracking->po_suplier_id)) {
+                    Storage::makeDirectory('public/tracking/' . $tracking->po_suplier_id);
+                }
+
+                if (file_exists($sourcePath)) {
+                    rename($sourcePath, $destinationPath);
+                }
+            }
+
+            $tracking->files = $request->pdf;
+            $tracking->save();
+
             foreach ($par as $product_inquery_id => $items) {
                 foreach ($items as $item) {
                     $forwarderItem = new \App\Models\ForwarderItem;
@@ -123,6 +143,9 @@ class PoTrackingController extends Controller
             }
 
             DB::commit();
+
+            $key = 'tracking_pickup_pdf_' . $tracking->po_suplier_id . '_' . auth()->user()->uuid;
+            Redis::del($key);
 
             return redirect()->route('po-tracking.index')->with("success", Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
@@ -204,5 +227,92 @@ class PoTrackingController extends Controller
         $data['forwarders_item'] = $forwarders_items;
 
         return view('po_tracking.open', compact('tracking', 'data'));
+    }
+
+    public function get_pdf(Request $request): JsonResponse
+    {
+        $po_supplier = $request->po_supplier;
+        $po = PurchaseOrderSupplier::where('transaction_code', $po_supplier)->first();
+        $key = 'tracking_pickup_pdf_' . $po->uuid . '_' . auth()->user()->uuid;
+        $data = json_decode(Redis::get($key), true);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function upload_pdf(Request $request): JsonResponse
+    {
+        try {
+            if ($request->hasFile('file')) {
+                $po_supplier = $request->po_supplier;
+                $po = PurchaseOrderSupplier::where('id', $po_supplier)->first();
+                $file = $request->file('file');
+                $path = $po_supplier;
+                $upload = $this->fileController->store_temp($file, $path);
+                if ($upload->original['status'] == 200) {
+                    $key = 'tracking_pickup_pdf_' . $po_supplier . '_' . auth()->user()->uuid;
+                    $data = $upload->original['data'];
+                    $redis = $this->redisController->store($key, $data);
+
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => "error: " . $e->getMessage() . " at line " . $e->getLine(),
+            ]);
+        }
+    }
+
+    public function delete_pdf(Request $request): JsonResponse
+    {
+        try {
+            $po_supplier = $request->po_supplier;
+            $file = $request->file;
+            if ($request->has('edit')) {
+                $path = 'public/po-tracking/' . $po_supplier . '/' . $file;
+            } else {
+                $path = 'temp/' . $po_supplier . '/' . $file;
+            }
+            $exist = Storage::exists($path);
+            if ($exist) {
+                $delete = Storage::delete($path);
+
+                if ($delete) {
+                    $key = 'tracking_pickup_pdf_' . $po_supplier . '_' . auth()->user()->uuid;
+                    $redis = $this->redisController->delete_item($key, 'filename', $file);
+                    if ($redis->original['status'] == 200) {
+                        $data = json_decode(Redis::get($key), true);
+
+                        if (sizeof($data) == 0) {
+                            Redis::del($key);
+                        }
+
+                        return response()->json([
+                            'status' => 200,
+                            'message' => 'success',
+                            'data' => $data
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'error'
+            ]);
+        }
     }
 }

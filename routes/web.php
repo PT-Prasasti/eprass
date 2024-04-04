@@ -86,6 +86,10 @@ Route::prefix('/po-tracking')->name('po-tracking')->group(function () {
     Route::get('/{id}/view', [PoTrackingController::class, 'view'])->name('.view');
     Route::get('/{id}/open', [PoTrackingController::class, 'open'])->name('.open');
     Route::get('/{id}/forwarder', [PoTrackingController::class, 'get_forwarder_item'])->name('.get_forwarder_item');
+
+    Route::post('/get_pdf', [PoTrackingController::class, 'get_pdf'])->name('.get-pdf');
+    Route::post('/upload_pdf', [PoTrackingController::class, 'upload_pdf'])->name('.upload-pdf');
+    Route::post('/delete_pdf', [PoTrackingController::class, 'delete_pdf'])->name('.delete-pdf');
 });
 
 Route::prefix('/logistic')->name('logistic')->group(function () {
