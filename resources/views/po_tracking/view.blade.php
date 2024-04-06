@@ -15,9 +15,6 @@
                             <a class="nav-link" href="#pickup">Pick Up Information</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#document">Document</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="#forwarder">Selected Forwarder</a>
                         </li>
                     </ul>
@@ -168,74 +165,24 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            {{-- <div class="form-group row">
-                                                    <label class="col-12">Document Pick Up Information :</label>
-                                                    <!-- <div class="col-12">
-                                                        <p>1.<a href="#"> Packing List.pdf</a></p>
-                                                        <p>2.<a href="#"> Packing List Detail.pdf</a></p>
-                                                    </div> -->
-                                                </div> --}}
+                                            <div class="block block-rounded mt-3">
+                                                <h5>Document Pickup Information</h5>
+                                                <ul class="list-group">
+                                                    @php
+                                                    // Decode the 'files' column into an array
+                                                    $files = json_decode($tracking->files, true);
+                                                    @endphp
+                                        
+                                                    @foreach($files as $file)
+                                                    <li class="list-group-item">
+                                                        <a href="/file/show/tracking/{{ $tracking->po_suplier_id }}/{{ $file['filename'] }}" target="_blank">
+                                                            {{ $loop->iteration }}. {{ $file['aliases'] }}
+                                                        </a>
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane" id="document" role="tabpanel">
-                            <div class="row">
-                                <div class="col-md-4 text-center">
-                                    <button type="button" class="btn" data-toggle="modal"
-                                        data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <label class="custom-control-label" for="f1">INQUIRY</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <button type="button" class="btn" data-toggle="modal"
-                                        data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <label class="custom-control-label" for="f2">SALES ORDER</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <button type="button" class="btn" data-toggle="modal"
-                                        data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <label class="custom-control-label" for="f3">SOURCING ITEM</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <button type="button" class="btn" data-toggle="modal"
-                                        data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <label class="custom-control-label" for="f4">PO CUSTOMER</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <button type="button" class="btn" data-toggle="modal"
-                                        data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <label class="custom-control-label" for="f4">PO SUPPLIER</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <button type="button" class="btn" data-toggle="modal"
-                                        data-target="#modal-f1">
-                                        <i class="fa fa-folder" style="color:#2481b3; font-size: 130px;"></i>
-                                    </button>
-                                    <div class="custom-control custom-checkbox mb-5">
-                                        <label class="custom-control-label" for="f4">PURCHASING
-                                            DOCUMENT</label>
                                     </div>
                                 </div>
                             </div>
