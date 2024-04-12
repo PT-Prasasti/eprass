@@ -9,21 +9,21 @@
                     <h4><b>{{ $query->id }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    @if(auth()->user()->hasRole('exim'))
-                    <button type="submit" class="btn btn-primary mr-5 mb-5">
-                        <i class="fa fa-save mr-5"></i>Save Data
-                    </button>
+                    @if(!auth()->user()->hasAnyRole(['manager', 'hod', 'hrd']))  
+                        <button type="submit" class="btn btn-primary mr-5 mb-5">
+                            <i class="fa fa-save mr-5"></i>Save Data
+                        </button>
                     @else
-                        @if (!Str::startsWith($query->status, 'Rejected by '))
-                            <button type="submit" class="btn btn-primary mr-5 mb-5">
-                            <i class="fa fa-check mr-5"></i>Approved
-                            </button>
-                            <button type="button" class="btn btn-danger mr-5 mb-5" data-toggle="modal" data-target="#modalRejected">
-                            <i class="fa fa-close mr-5"></i>Rejected
-                            </button>
-                        @endif
+                      @if (!Str::startsWith($query->status, 'Rejected by '))
+                        <button type="submit" class="btn btn-primary mr-5 mb-5">
+                          <i class="fa fa-check mr-5"></i>Approved
+                        </button>
+                        <button type="button" class="btn btn-danger mr-5 mb-5" data-toggle="modal" data-target="#modalRejected">
+                          <i class="fa fa-close mr-5"></i>Rejected
+                        </button>
+                      @endif
                     @endif
-                </div>
+                  </div>
             </div>
 
             <div class="row">

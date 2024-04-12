@@ -80,7 +80,7 @@
                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                     <div class="col-lg-8">
                                         <input type="text" class="form-control" name="grade"
-                                            value="{{ $so->inquiry->grade }}" disabled>
+                                            value="{{ $so->inquiry->grade }}%" disabled>
                                     </div>
                                 </div>
                             </div>

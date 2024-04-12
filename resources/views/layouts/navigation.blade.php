@@ -129,7 +129,7 @@
                     </li>
                     <li>
                         <a href="{{ route('transaction.sourcing-item') }}"><i class="fa fa-fax"></i><span
-                                class="sidebar-mini-hide">List App Item</span></a>
+                                class="sidebar-mini-hide" id="sourcing-item-nav">List App Item</span></a>
                     </li>
 
                     <li class="nav-main-heading">
@@ -147,7 +147,7 @@
                     </li>
                     <li>
                         <a class="" href="{{ route('approval-po') }}"><i class="fa fa-calendar-check-o"></i><span
-                                class="sidebar-mini-hide">App PO Supplier</span></a>
+                                class="sidebar-mini-hide" id="po-supplier-nav">App PO Supplier</span></a>
                     </li>
 
                     <li class="nav-main-heading">
@@ -155,10 +155,8 @@
                     </li>
                     <li>
                         <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span
-                                class="sidebar-mini-hide">App Payment Request</span></a>
+                                class="sidebar-mini-hide" id="payment-req-nav">App Payment Request</span></a>
                     </li>
-
-                    
                 @endif
 
                 @if (auth()->user()->hasRole('hod'))
@@ -272,14 +270,8 @@
                     </li>
                     <li>
                         <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span
-                                class="sidebar-mini-hide">App Payment Request</span></a>
+                                class="sidebar-mini-hide" id="payment-req-nav">App Payment Request</span></a>
                     </li>
-                    
-
-
-                    
-
-
                     <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">PO TRACKING</span>
                     </li>
@@ -640,7 +632,7 @@
                     <li>
                         <a class="{{ request()->is('payment-request*') ? 'active' : '' }}"
                             href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span
-                                class="sidebar-mini-hide">App Payment Request</span></a>
+                                class="sidebar-mini-hide" id="payment-req-nav">App Payment Request</span></a>
                     </li>
                 @endif
 

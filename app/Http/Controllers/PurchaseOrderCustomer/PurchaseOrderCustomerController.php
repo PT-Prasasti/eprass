@@ -252,7 +252,7 @@ class PurchaseOrderCustomerController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+            return redirect()->route('purchase-order-customer')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
             dd($e);
             return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);

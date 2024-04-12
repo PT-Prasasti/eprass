@@ -26,6 +26,70 @@ class HelperController extends Controller
         ]);
     }
 
+    public function countNewSourcingItem()
+    {
+        $jum = 0;
+        $sourcing = \App\Models\Sourcing::selectRaw("count(*) as jum")->whereRaw("so_id IN (
+            SELECT id FROM sales_orders where status = 'On Process')")->where('deleted_at', '=', NULL)->first();
+        if (!empty($sourcing)) {
+            $jum = $sourcing->jum;
+        }
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
+
+    public function countAppPOSupplier()
+    {
+        $jum = 0;
+        $posupp = \App\Models\PurchaseOrderSupplier::selectRaw("count(*) as jum")->where('status', '!=', 'Approved By Manager')->where('status', '!=', 'Rejected By Manager')->where('deleted_at', '=', NULL)->first();
+        if (!empty($posupp)) {
+            $jum = $posupp->jum;
+        }
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
+
+    public function countAppPaymentReq()
+    {
+        $userRole = request()->input('userRole');
+        $pendingStatusPatterns = ["Waiting For HRD Approval", "Waiting For HOD Approval", "Waiting For Manager Approval"];
+
+        $jum = 0;
+
+        $paymentRequests = \App\Models\PaymentRequestExim::selectRaw("count(*) as jum")
+            ->whereRaw("LOWER(status) LIKE ?", ["%{$userRole}%"])
+            ->whereIn('status', $pendingStatusPatterns)
+            ->where('deleted_at', '=', NULL)
+            ->first();
+
+        if (!empty($paymentRequests)) {
+            $jum = $paymentRequests->jum;
+        }
+
+        $notificationMessage = "You have {$jum} new payment requests pending for {$userRole} approval.";
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum,
+                'userRole' => $userRole
+            ],
+            'notification' => $notificationMessage
+        ]);
+    }
+
+
+
     public function docadd(Request $request)
     {
         $post = $request->all();

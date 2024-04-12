@@ -4,6 +4,7 @@
             <div class="col-lg-6">
                 <h4><b>{{ $query->transaction_code }}</b></h4>
             </div>
+            @if($query->status !== 'Approved By Manager' && $query->status !== 'Rejected By Manager')
             <div class="col-md-6 text-right">
                 <button type="button" class="btn btn-success mr-5 mb-5">
                     <a href="{{ route('approval-po.approve', $query->id) }}" class="text-white">
@@ -15,6 +16,7 @@
                     Rejected
                 </button>
             </div>
+            @endif
         </div>
 
         <div class="row">

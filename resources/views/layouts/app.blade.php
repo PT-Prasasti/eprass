@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    
+
     <meta name="description" content="{{ config('app.name', 'Laravel') }}">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
@@ -45,21 +45,24 @@
         .select2-container .select2-selection--single {
             height: 34px;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 32px;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             top: 4px;
         }
+
     </style>
 </head>
 <body>
 
     <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-modern main-content-fullrow">
         @include('layouts.navigation')
-        
+
         @include('layouts.header')
-        
+
         <main id="main-container">
 
             {{ $slot }}
@@ -107,21 +110,36 @@
     <script src="{{ asset('assets/js/pages/be_comp_charts.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>jQuery(function(){ Codebase.helpers('easy-pie-chart'); });</script>
+    <script>
+        jQuery(function() {
+            Codebase.helpers('easy-pie-chart');
+        });
 
-    <script>jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']); });</script>
+    </script>
 
-    <script>jQuery(function(){ Codebase.helpers(['summernote', 'ckeditor', 'simplemde']); });</script>
+    <script>
+        jQuery(function() {
+            Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']);
+        });
+
+    </script>
+
+    <script>
+        jQuery(function() {
+            Codebase.helpers(['summernote', 'ckeditor', 'simplemde']);
+        });
+
+    </script>
 
     <script>
         async function fetchNotifications() {
             try {
                 const response = await fetch("{{ route('notification.get-notification') }}");
                 const data = await response.json();
-    
+
                 $('#notif-numbers').html(data.number_of_notifications);
                 $('#notif-list').html('');
-    
+
                 if (data.notification_list.length > 0) {
                     let element = '';
                     data.notification_list.forEach(value => {
@@ -150,9 +168,10 @@
                 console.log(error);
             }
         }
-    
+
         fetchNotifications();
-    </script>    
+
+    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
@@ -161,21 +180,23 @@
 
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script>
-        var pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
-            cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
-            forceTLS: true
-        });
-    
+        var pusher = new Pusher('{{ config('
+            broadcasting.connections.pusher.key ') }}', {
+                cluster: '{{ config('
+                broadcasting.connections.pusher.options.cluster ') }}'
+                , forceTLS: true
+            });
+
         var channel = pusher.subscribe('my-channel');
         channel.bind('my-event', async function(event) {
             try {
                 const response = await fetch("{{ route('notification.get-notification') }}");
                 const data = await response.json();
-    
-                if(data.notification_list.length > 0) {
+
+                if (data.notification_list.length > 0) {
                     $('#notif-numbers').html(data.number_of_notifications);
                     $('#notif-list').html('');
-        
+
                     let element = '';
                     data.notification_list.forEach(value => {
                         element += `<li>
@@ -190,23 +211,71 @@
                                         </a>
                                     </li>`;
                     });
-        
+
                     $('#notif-list').html(element);
                 }
             } catch (error) {
                 console.log(error);
             }
         });
+
     </script>
-    @if (auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod')) 
+    @if (auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod') || auth()->user()->hasRole('hrd'))
     <script>
-        $.get("{{ route('helper.count-new-inquiry') }}", function(data){
+        $.get("{{ route('helper.count-new-inquiry') }}", function(data) {
             console.log("helper data", data);
             if (data.data.jumlah > 0) {
-                $("#inquiry-nav").append(`&nbsp;<i class="badge badge-danger">`+data.data.jumlah+`<i>`)
+                $("#inquiry-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`)
             }
-            
+
         })
+
+        $.get("{{ route('helper.count-new-sourcing-item') }}", function(data) {
+            console.log("new sourcing", data);
+            if (data.data.jumlah > 0) {
+                $("#sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`)
+            }
+        })
+
+        $.get("{{ route('helper.count-app-po-supplier') }}", function(data) {
+            console.log("new po supplier", data);
+            if (data.data.jumlah > 0) {
+                $("#po-supplier-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`)
+            }
+        })
+
+        let role = "{{ auth()->user()->roles()->pluck('name')[0] }}";
+        $.ajax({
+            url: "{{ route('helper.count-app-payment-req') }}"
+            , type: "POST"
+            , data: {
+                _token: "{{ csrf_token() }}",
+                userRole: role // Send the user role data as a property within the data object
+            }
+            , success: function(data) {
+                console.log("new payment req", data);
+                if (data.data && data.data.jumlah > 0) { // Check for nested data structure and jumlah property
+                    $("#payment-req-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`);
+                } else {
+                    console.log("No new payment requests found."); // Handle successful response with no new requests
+                }
+            }
+            , error: function(xhr, status, error) {
+                console.error(xhr.responseJSON.message)
+            }
+        });
+
+        // $.ajax({
+        //     url: "{{ route('helper.count-new-sourcing-item') }}"
+        //     , type: "GET"
+        //     , success: function(response) {
+        //         console.log(response.status, response.data)
+        //     }
+        //     , error: function(xhr, status, error) {
+        //         console.error(xhr.responseJSON.message)
+        //     }
+        // })
+
     </script>
     @endif
 
