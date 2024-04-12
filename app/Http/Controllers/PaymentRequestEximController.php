@@ -50,6 +50,8 @@ class PaymentRequestEximController extends Controller
                 $statusToFilter = 'Waiting for HOD Approval';
             } elseif ($userRole === 'manager') {
                 $statusToFilter = 'Waiting for Manager Approval';
+            } else if ($userRole === 'finance') {
+                $statusToFilter = 'Waiting for Finance Approval';
             }
 
             $query = PaymentRequestExim::query()->where(function ($query) use ($statusToFilter) {
@@ -98,7 +100,7 @@ class PaymentRequestEximController extends Controller
         try {
             $paymentReqId = $request->payment_code;
             $userId = auth()->user()->uuid;
-    
+
             // Cari nomor iterasi terakhir dari key yang sesuai dengan $paymentReqId
             $iteration = 1;
             $key = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_' . $iteration;
@@ -106,33 +108,33 @@ class PaymentRequestEximController extends Controller
                 $iteration++;
                 $key = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_' . $iteration;
             }
-    
+
             $data = $request->data;
-    
+
             // Check if the request has a file
             if ($request->hasFile('file')) {
                 $tempPath = 'payment_request/' . $userId . '/' . $iteration;
-    
+
                 // Create the temp directory if it doesn't exist
                 if (!Storage::disk('public')->exists($tempPath)) {
                     Storage::disk('public')->makeDirectory($tempPath);
                 }
-    
+
                 // Store the file in the temp directory
                 $fileResponse = $this->fileController->store_temp($request->file('file'), $tempPath);
-    
+
                 if ($fileResponse->getData()->status == 200) {
                     $data['file'] = $fileResponse->getData()->data;
                 } else {
                     throw new \Exception('File upload failed');
                 }
             }
-    
+
             if ($data != null) {
                 // Simpan data ke Redis dengan key yang baru
                 $newKey = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_' . $iteration;
                 Redis::set($newKey, json_encode($data));
-    
+
                 return response()->json([
                     'status' => 200,
                     'message' => 'success',
@@ -261,26 +263,26 @@ class PaymentRequestEximController extends Controller
     public function deleteData(Request $request)
     {
         $key = $request->input('redis_key');
-    
+
         $redis = Redis::get($key);
-    
+
         if ($redis) {
             $itemData = json_decode($redis, true);
-    
+
             if (isset($itemData['file'])) {
                 $parts = explode('_', $key);
                 $iteration = end($parts);
-    
+
                 $tempPath = 'temp/payment_request/' . auth()->user()->uuid . '/' . $iteration . '/' . $itemData['file']['filename'];
-    
+
                 if (Storage::disk('local')->exists($tempPath)) {
                     Storage::disk('local')->delete($tempPath);
                 }
             }
-    
+
             Redis::del($key);
         }
-    
+
         return response()->json([
             "message" => "Successfully deleted item",
             "status" => 200,
@@ -301,7 +303,7 @@ class PaymentRequestEximController extends Controller
 
             DB::beginTransaction();
 
-            $rejectedNote = null;
+            $rejectedNote = "";
             $statusToUpdate = null; // Initialize both variables
 
             if ($request->rejected_note != null) {
@@ -316,6 +318,8 @@ class PaymentRequestEximController extends Controller
                     $statusToUpdate = 'Rejected by HOD';
                 } elseif ($userRole == 'manager') {
                     $statusToUpdate = 'Rejected by Manager';
+                } elseif ($userRole == 'finance') {
+                    $statusToUpdate = 'Rejected by Finance';
                 }
             } else {
                 if (Auth::user()->roles[0]->name == 'hrd') {
@@ -323,6 +327,8 @@ class PaymentRequestEximController extends Controller
                 } elseif (Auth::user()->roles[0]->name == 'hod') {
                     $statusToUpdate = 'Waiting for Manager Approval';
                 } elseif (Auth::user()->roles[0]->name == 'manager') {
+                    $statusToUpdate = 'Waiting for Finance Approval';
+                } else if (Auth::user()->roles[0]->name == 'finance') {
                     $statusToUpdate = 'Approved';
                 }
             }
@@ -396,6 +402,7 @@ class PaymentRequestEximController extends Controller
             $paymentRequest->bank_swift = $request->bank_swift;
             $paymentRequest->bank_account = $request->bank_account;
             $paymentRequest->bank_number = $request->bank_number;
+            $paymentRequest->rejected_note = "";
 
             if ($request->subject != 'REIMBURSE') {
                 $paymentRequest->status = 'Waiting for HOD Approval';
@@ -415,7 +422,7 @@ class PaymentRequestEximController extends Controller
                 $jsonData = Redis::get($redisKey);
                 if ($jsonData) {
                     $itemData = json_decode($jsonData, true);
-    
+
                     $paymentRequestItem = new PaymentRequestItem();
                     $paymentRequestItem->payment_request_id = $paymentRequest->id;
                     $paymentRequestItem->date = $itemData['date'];
@@ -423,16 +430,16 @@ class PaymentRequestEximController extends Controller
                     $paymentRequestItem->description = $itemData['description'];
                     $paymentRequestItem->amount = $itemData['amount'];
                     $paymentRequestItem->remark = $itemData['remark'];
-    
+
                     if (isset($itemData['file'])) {
                         // Get the file from the temp directory
                         $tempPath = 'temp/payment_request/' . $userId . '/' . $iteration . '/' . $itemData['file']['filename'];
-                    
+
                         // Check if the file exists in the temp directory
                         if (Storage::disk('local')->exists($tempPath)) {
                             // Define the new directory
                             $newPath = 'payment_request/' . $paymentRequest->uuid . '/' . $iteration . '/' . $itemData['file']['filename'];
-                    
+
                             // Create the new directory if it doesn't exist
                             if (!Storage::disk('public')->exists(dirname($newPath))) {
                                 Storage::disk('public')->makeDirectory(dirname($newPath));
@@ -442,16 +449,16 @@ class PaymentRequestEximController extends Controller
 
                             Storage::disk('public')->put($newPath, $file);
                             Storage::disk('local')->delete($tempPath);
-                    
+
                             $paymentRequestItem->file_document = $newPath;
                             $paymentRequestItem->file_aliases = $itemData['file']['aliases'];
                         } else {
                             throw new \Exception('File not found: ' . $tempPath);
                         }
                     }
-    
+
                     $paymentRequestItem->save();
-    
+
                     Redis::del($redisKey);
                 }
 

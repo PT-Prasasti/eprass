@@ -160,7 +160,7 @@
                 @endif
 
                 @if (auth()->user()->hasRole('hod'))
-                <li class="nav-main-heading">
+                    <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">SALES</span>
                     </li>
                     <li>
@@ -173,8 +173,8 @@
                     </li>
                     <li>
                     <li>
-                        <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span class="sidebar-mini-hide"
-                                id="inquiry-nav">List Inquiry</span></a>
+                        <a href="{{ route('crm.inquiry') }}"><i class="fa fa-edit"></i><span
+                                class="sidebar-mini-hide" id="inquiry-nav">List Inquiry</span></a>
                     </li>
 
                     <li class="nav-main-heading">
@@ -234,7 +234,7 @@
                                     <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item</a>
                                 </li>
                             </ul>
-                    
+
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                             <i class="fa fa-book"></i>
@@ -272,6 +272,12 @@
                         <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span
                                 class="sidebar-mini-hide" id="payment-req-nav">App Payment Request</span></a>
                     </li>
+                    
+
+
+                    
+
+
                     <li class="nav-main-heading">
                         <span class="sidebar-mini-hidden">PO TRACKING</span>
                     </li>
@@ -668,7 +674,7 @@
                         <span class="sidebar-mini-hidden">ORDER SUPPLIER</span>
                     </li>
                     <li>
-                        <a class="active" href="{{ route('list-payment') }}"><i class="fa fa-file"></i><span
+                        <a class="active" href="{{ route('payment-request.exim') }}"><i class="fa fa-file"></i><span
                                 class="sidebar-mini-hide">List Payment</span></a>
                     </li>
                 @endif
