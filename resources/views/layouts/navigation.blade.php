@@ -341,7 +341,7 @@
                     <li>
                         <a href="{{ route('transaction.quotation') }}">
                             <i class="fa fa-lock"></i>
-                            <span class="sidebar-mini-hide">Quotation</span>
+                            <span class="sidebar-mini-hide" id="quotation-nav">Quotation</span>
                         </a>
                     </li>
                 @endif

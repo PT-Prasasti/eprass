@@ -125,6 +125,18 @@ class HelperController extends Controller
         ]);
     }
 
+    public function countQuotation()
+    {
+        $jum = Quotation::where('status', '!=', 'Done')->count();
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
+
 
 
     public function docadd(Request $request)

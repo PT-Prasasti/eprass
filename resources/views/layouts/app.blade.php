@@ -183,9 +183,9 @@
     <script>
         var pusher = new Pusher(
             '{{ config('
-                                                                        broadcasting.connections.pusher.key ') }}', {
+                                                                                                broadcasting.connections.pusher.key ') }}', {
                 cluster: '{{ config('
-                                                                                                    broadcasting.connections.pusher.options.cluster ') }}',
+                                                                                                                                    broadcasting.connections.pusher.options.cluster ') }}',
                 forceTLS: true
             });
 
@@ -328,6 +328,25 @@
             //         console.error(xhr.responseJSON.message)
             //     }
             // })
+        </script>
+    @endif
+
+    @if (auth()->user()->hasRole('sales'))
+        <script>
+            $.ajax({
+                url: "{{ route('helper.count-quotation') }}",
+                type: "GET",
+                success: function(response) {
+                    console.log(response.status, response.data)
+                    if (response.data.jumlah > 0) {
+                        $("#quotation-nav").append(`&nbsp;<i class="badge badge-danger">` + response.data.jumlah +
+                            `<i>`)
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseJSON.message)
+                }
+            })
         </script>
     @endif
 
