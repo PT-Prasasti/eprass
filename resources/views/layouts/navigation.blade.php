@@ -182,7 +182,8 @@
                     </li>
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i
-                                class="fa fa-edit"></i><span class="sidebar-mini-hide">Sales Order</span></a>
+                                class="fa fa-edit"></i><span class="sidebar-mini-hide" id="sales-order-nav">Sales
+                                Order</span></a>
                         <ul>
                             <li>
                                 <a href="{{ route('transaction.sales-order.add') }}">Add SO</a>
@@ -272,10 +273,10 @@
                         <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span
                                 class="sidebar-mini-hide" id="payment-req-nav">App Payment Request</span></a>
                     </li>
-                    
 
 
-                    
+
+
 
 
                     <li class="nav-main-heading">
