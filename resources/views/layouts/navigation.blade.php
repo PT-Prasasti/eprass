@@ -226,7 +226,8 @@
                                     class="sidebar-mini-hide">List Sourcing Item</span></a>
                         @else
                             <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i
-                                    class="fa fa-fax"></i><span class="sidebar-mini-hide">Sourcing Item</span></a>
+                                    class="fa fa-fax"></i><span class="sidebar-mini-hide"
+                                    id="price-list-ready-sourcing-item-nav">Sourcing Item</span></a>
                             <ul>
                                 <li>
                                     <a href="{{ route('transaction.sourcing-item.add') }}">Add Sourcing Item</a>

@@ -113,6 +113,18 @@ class HelperController extends Controller
         ]);
     }
 
+    public function countPriceListReadyOnSalesOrder()
+    {
+        $jum = SalesOrder::where('status', 'Price List Ready')->count();
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
+
 
 
     public function docadd(Request $request)

@@ -591,6 +591,7 @@ Route::prefix('/helper')->name('helper')->group(function () {
     Route::post('/count-app-payment-req', [HelperController::class, 'countAppPaymentReq'])->name('.count-app-payment-req');
     Route::get('/count-sales-order', [HelperController::class, 'countSalesOrder'])->name('.count-sales-order');
     Route::get('/count-selection-done-on-sales-order', [HelperController::class, 'countSelectionDoneOnSalesOrder'])->name('.count-selection-done-on-sales-order');
+    ROute::get('/count-price-list-ready-on-sales-order', [HelperController::class, 'countPriceListReadyOnSalesOrder'])->name('.count-price-list-ready-on-sales-order');
 });
 
 //Helper
