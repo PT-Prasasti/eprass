@@ -143,7 +143,7 @@ class SourcingItemController extends Controller
 
             DB::commit();
 
-            return redirect(route('transaction.sourcing-item.add'))->with("success", "Data has beed successfuly submited");
+            return redirect(route('transaction.sourcing-item.index'))->with("success", "Data has beed successfuly submited");
         } catch (\Exception $e) {
             DB::rollback();
 
