@@ -181,12 +181,13 @@
 
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script>
-        var pusher = new Pusher('{{ config('
-                    broadcasting.connections.pusher.key ') }}', {
-            cluster: '{{ config('
-                            broadcasting.connections.pusher.options.cluster ') }}',
-            forceTLS: true
-        });
+        var pusher = new Pusher(
+            '{{ config('
+                                                broadcasting.connections.pusher.key ') }}', {
+                cluster: '{{ config('
+                                                                    broadcasting.connections.pusher.options.cluster ') }}',
+                forceTLS: true
+            });
 
         var channel = pusher.subscribe('my-channel');
         channel.bind('my-event', async function(event) {
@@ -259,7 +260,7 @@
                             `<i>`);
                     } else {
                         console.log(
-                        "No new payment requests found."); // Handle successful response with no new requests
+                            "No new payment requests found."); // Handle successful response with no new requests
                     }
                 },
                 error: function(xhr, status, error) {
@@ -274,6 +275,23 @@
                     console.log(response.status, response.data)
                     if (response.data.jumlah > 0) {
                         $("#sales-order-nav").append(`&nbsp;<i class="badge badge-danger">` + response.data.jumlah +
+                            `<i>`)
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseJSON.message)
+                }
+            })
+
+            $.ajax({
+                url: "{{ route('helper.count-selection-done-on-sales-order') }}",
+                type: "GET",
+                success: function(response) {
+                    console.log(response.status, response.data)
+                    if (response.data.jumlah > 0) {
+                        $("#selection-done-list-sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` +
+                            response.data
+                            .jumlah +
                             `<i>`)
                     }
                 },

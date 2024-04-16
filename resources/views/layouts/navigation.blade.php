@@ -232,7 +232,8 @@
                                     <a href="{{ route('transaction.sourcing-item.add') }}">Add Sourcing Item</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item</a>
+                                    <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item <span
+                                            id="selection-done-list-sourcing-item-nav"></span></a>
                                 </li>
                             </ul>
 
