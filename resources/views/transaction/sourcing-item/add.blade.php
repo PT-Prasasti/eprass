@@ -130,16 +130,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-md-4">
-                                    <div class="block block-rounded">
-                                        <div class="block-content block-content-full bg-pattern">
-                                            <h5>Document List</h5>
-                                            <ul class="list-group">
-                                                
-                                            </ul>
+                                    <div class="col-md-4">
+                                        <div class="block block-rounded">
+                                            <div class="block-content block-content-full bg-pattern">
+                                                <h5>Document List</h5>
+                                                <ul class="list-group">
+
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div> --}}
                                     <div class="col-md-12">
                                         <hr>
                                     </div>
