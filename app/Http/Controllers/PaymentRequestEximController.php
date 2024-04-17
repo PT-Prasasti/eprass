@@ -157,7 +157,7 @@ class PaymentRequestEximController extends Controller
         $data = [];
 
         foreach ($keys as $key) {
-            $redisKey = str_replace("eprass_database_", "", $key);
+            $redisKey = str_replace("e_prass_pt_prambanan_sarana_sejati_database_", "", $key);
             $jsonData = Redis::get($redisKey);
             $item = json_decode($jsonData, true);
 
@@ -412,7 +412,7 @@ class PaymentRequestEximController extends Controller
 
             $paymentRequest->save();
 
-            $keyPrefix = 'eprass_database_';
+            $keyPrefix = 'e_prass_pt_prambanan_sarana_sejati_database_';
             $key = 'payment_request_item_' . $paymentReqId . '_' . $userId . '_*';
             $redisKeys = Redis::keys($key);
             $iteration = 1;
