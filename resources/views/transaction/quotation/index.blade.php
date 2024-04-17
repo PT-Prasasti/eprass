@@ -184,7 +184,7 @@
                         },
                     },
                     {
-                        data: 'status',
+                        data: 'quotation_status',
                     },
                     {
                         data: 'due_date',

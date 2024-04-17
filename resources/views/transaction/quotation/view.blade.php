@@ -133,6 +133,37 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="tab-pane" id="btabs-static-doc" role="tabpanel">
+                                <div class="block block-rounded">
+                                    <div class="block-content block-content-full bg-pattern">
+                                        <div class="row">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input"
+                                                    id="example-file-input-custom" name="example-file-input-custom"
+                                                    data-toggle="custom-file-input">
+                                                <label class="custom-file-label"
+                                                    for="example-file-input-custom">Choose file</label>
+                                            </div>
+                                            <div class="block block-rounded mt-3">
+                                                <div class="block-content block-content-full bg-pattern">
+                                                    <h5>Document List</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="product-file-type">
+                                                    <ul class="list-unstyled" id="document-attachment-list">
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use App\Models\Documentes;
 use App\Models\Quotation;
+use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 
 class HelperController extends Controller
@@ -85,6 +86,54 @@ class HelperController extends Controller
                 'userRole' => $userRole
             ],
             'notification' => $notificationMessage
+        ]);
+    }
+
+    public function countSalesOrder()
+    {
+        $jum = SalesOrder::where('status', 'On Process')->count();
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
+
+    public function countSelectionDoneOnSalesOrder()
+    {
+        $jum = SalesOrder::where('status', 'Selection Done')->count();
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
+
+    public function countPriceListReadyOnSalesOrder()
+    {
+        $jum = SalesOrder::where('status', 'Price List Ready')->count();
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
+
+    public function countQuotation()
+    {
+        $jum = Quotation::where('status', '!=', 'Done')->count();
+
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
         ]);
     }
 

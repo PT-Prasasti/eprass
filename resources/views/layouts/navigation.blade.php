@@ -182,7 +182,8 @@
                     </li>
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i
-                                class="fa fa-edit"></i><span class="sidebar-mini-hide">Sales Order</span></a>
+                                class="fa fa-edit"></i><span class="sidebar-mini-hide" id="sales-order-nav">Sales
+                                Order</span></a>
                         <ul>
                             <li>
                                 <a href="{{ route('transaction.sales-order.add') }}">Add SO</a>
@@ -225,13 +226,15 @@
                                     class="sidebar-mini-hide">List Sourcing Item</span></a>
                         @else
                             <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i
-                                    class="fa fa-fax"></i><span class="sidebar-mini-hide">Sourcing Item</span></a>
+                                    class="fa fa-fax"></i><span class="sidebar-mini-hide"
+                                    id="price-list-ready-sourcing-item-nav">Sourcing Item</span></a>
                             <ul>
                                 <li>
                                     <a href="{{ route('transaction.sourcing-item.add') }}">Add Sourcing Item</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item</a>
+                                    <a href="{{ route('transaction.sourcing-item') }}">List Sourcing Item <span
+                                            id="selection-done-list-sourcing-item-nav"></span></a>
                                 </li>
                             </ul>
 
@@ -272,10 +275,10 @@
                         <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span
                                 class="sidebar-mini-hide" id="payment-req-nav">App Payment Request</span></a>
                     </li>
-                    
 
 
-                    
+
+
 
 
                     <li class="nav-main-heading">
@@ -338,7 +341,7 @@
                     <li>
                         <a href="{{ route('transaction.quotation') }}">
                             <i class="fa fa-lock"></i>
-                            <span class="sidebar-mini-hide">Quotation</span>
+                            <span class="sidebar-mini-hide" id="quotation-nav">Quotation</span>
                         </a>
                     </li>
                 @endif

@@ -62,6 +62,9 @@ class QuotationController extends Controller
                 ->editColumn('status', function ($q) {
                     return strtoupper($q->sales_order->status);
                 })
+                ->addColumn('quotation_status', function ($q) {
+                    return $q->status;
+                })
                 ->toJson();
         }
     }
@@ -321,10 +324,14 @@ class QuotationController extends Controller
             $month = (int) date('m');
             $year = date('y');
 
-            $lastData = Quotation::query()->withTrashed()->where('quotation_code', 'like', '%/Q/' . $salesOrderCodes[0] .   '/%')->orderBy('created_at', 'DESC')->first();
-            if ($lastData) {
-                return $lastData->quotation_code;
+            $lastData = Quotation::query()
+                ->withTrashed()
+                ->whereMonth('created_at', $month)
+                ->whereYear('created_at', date('Y'))
+                ->orderBy('created_at', 'DESC')
+                ->first();
 
+            if ($lastData) {
                 $codes = explode("/", $lastData->quotation_code);
                 $number = (int) $codes[0];
                 $number++;
