@@ -166,7 +166,11 @@ class PurchaseOrderCustomerController extends Controller
         $month = (int) date('m');
         $year = date('y');
 
-        $last_data = PurchaseOrderCustomer::orderBy('created_at', 'DESC')->withTrashed()->first();
+        $last_data = PurchaseOrderCustomer::orderBy('created_at', 'DESC')
+            ->withTrashed()
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', date('Y'))
+            ->first();
 
         if ($last_data) {
             $last_id = $last_data->id;
@@ -179,7 +183,7 @@ class PurchaseOrderCustomerController extends Controller
 
         $generate_id = sprintf("%04s", $number) . "/" . "POC" . "/" . $romans[$month - 1] . "/" . $year;
 
-        
+
         $quotation = Quotation::query()
             ->with([
                 'sales_order.inquiry.visit.customer',
@@ -204,7 +208,7 @@ class PurchaseOrderCustomerController extends Controller
 
 
             DB::commit();
-            
+
             return true;
         } catch (\Exception $e) {
             dd($e);
@@ -290,6 +294,4 @@ class PurchaseOrderCustomerController extends Controller
 
         return $filePath;
     }
-
-
 }

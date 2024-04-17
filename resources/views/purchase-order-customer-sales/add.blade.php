@@ -757,6 +757,7 @@
                                             </svg>    
                                         </button>
                                     </div>
+                                    <input name="document" value="${res.file_path}" hidden>
                                 </li>
                             `
                             $('.list-group').html(``);
