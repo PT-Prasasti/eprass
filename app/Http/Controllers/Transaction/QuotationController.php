@@ -62,6 +62,9 @@ class QuotationController extends Controller
                 ->editColumn('status', function ($q) {
                     return strtoupper($q->sales_order->status);
                 })
+                ->addColumn('quotation_status', function ($q) {
+                    return $q->status;
+                })
                 ->toJson();
         }
     }
