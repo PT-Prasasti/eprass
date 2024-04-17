@@ -118,7 +118,6 @@
                                                 <th class="text-center">Item Name</th>
                                                 <th class="text-center">QTY</th>
                                                 <th class="text-center">Status</th>
-                                                <th class="text-center">File</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -317,7 +316,6 @@
                                 <th class="text-center">Item Name</th>
                                 <th class="text-center">QTY</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center">File</th>
                             </tr>
                         </thead>
                     </table>
@@ -355,16 +353,6 @@
                                 } else {
                                     return `<button id="status_${full.id}" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#modal_1" onclick="inputInquiryProductId(${full.id})">-- Please select --</button>`
                                 }
-                            }
-                        },
-                        {
-                            data: 'id',
-                            name: 'id',
-                            className: 'text-center',
-                            render: function(data, type, full, meta) {
-                                return `
-                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_2" onclick="getItemFile('${data}')"> <i class="fa fa-file"></i></button>
-                                `;
                             }
                         }
                     ]
@@ -444,8 +432,9 @@
                 if (status == 200) {
                     var element = ``
                     var number = 1
-                    var po_supplier_number = $('select[name=po_supplier_number] option:selected').text()
+                    var po_supplier_number = $('select[name=po_supplier_number] option:selected').text().trim()
                     po_supplier_number = po_supplier_number.replace(/\//g, '_')
+
                     $.each(data, function(index, value) {
                         element +=
                             `<li class="list-group-item">

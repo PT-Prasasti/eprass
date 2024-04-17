@@ -17,25 +17,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                     @endif
 
                     @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                     @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                        <span class="d-block">
-                            {{ $loop->iteration }}. {{ $error }}
-                        </span>
-                        @endforeach
-                    </div>
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <span class="d-block">
+                                    {{ $loop->iteration }}. {{ $error }}
+                                </span>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
             </div>
@@ -61,7 +61,8 @@
                                                     <label class="col-lg-3 col-form-label">Quotation Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <select class="form-control" name="quotation" required="" id="quotation">
+                                                        <select class="form-control" name="quotation" required=""
+                                                            id="quotation">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -69,14 +70,16 @@
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly sales_order_number>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly sales_order_number>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Sales Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly sales_name>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly sales_name>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -85,41 +88,50 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly customer_name>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly customer_name>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly company_name>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly company_name>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Phonne & Email</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly phone_number>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly phone_number>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly email>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly email>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Telp</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly phone>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly phone>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly subject>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly subject>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">PO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="purchase_order_number" value="{{ old('purchase_order_number') }}" autocomplete="one-time-code" required po-number readonly>
+                                                        <input type="text" class="form-control"
+                                                            name="purchase_order_number"
+                                                            value="{{ old('purchase_order_number') }}"
+                                                            autocomplete="one-time-code" required po-number readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -140,7 +152,7 @@
 
                                                     <li class="list-group-item">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <a href="{{asset('js/app.js')}}" target="_blank">
+                                                            <a href="{{ asset('js/app.js') }}" target="_blank">
                                                                 Show Document
                                                             </a>
                                                         </div>
@@ -150,7 +162,7 @@
 
                                                     <li class="list-group-item">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <a  class="show_files" target="_blank">
+                                                            <a class="show_files" target="_blank">
                                                                 Show Document
                                                             </a>
                                                         </div>
@@ -166,7 +178,8 @@
                                         <h5>Product List</h5>
                                     </div>
                                 </div>
-                                <table class="table table-bordered table-center" style="font-size:13px" quotation_items>
+                                <table class="table table-bordered table-center" style="font-size:13px"
+                                    quotation_items>
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
@@ -370,7 +383,9 @@
 
                                         <div class="mt-4">
                                             <p class="mb-0">Best Regards</p>
-                                            <img src="" alt="tanda-tangan" class="mt-2 mb-2" style="width: 200px; height: 80px;" hidden span-quotation-sales-signature>
+                                            <img src="" alt="tanda-tangan" class="mt-2 mb-2"
+                                                style="width: 200px; height: 80px;" hidden
+                                                span-quotation-sales-signature>
                                             <p span-quotation-sales-name></p>
                                         </div>
                                     </div>
@@ -512,7 +527,7 @@
                 console.log(data);
 
 
-                showFile.attr('href',"{{asset("storage")}}/"+data.purchase_order_customer.document_url);
+                // showFile.attr('href',"{{ asset('storage') }}/"+data.purchase_order_customer.document_url);
                 salesOrderNumberElement.val(data.sales_order.id);
                 salesNameElement.val(data.sales_order?.inquiry?.sales?.name ?? '');
                 customerNameElement.val(data.sales_order?.inquiry?.visit.customer?.name ?? '');
@@ -526,10 +541,10 @@
                 quotationItemTable.clear().draw();
                 quotationItemTable.rows.add(data.quotation_items ?? []).draw(true);
 
-                @if(session('quotation') && is_array(old('item')))
-                @foreach(old('item') as $itemId => $itemValue)
-                $(`[name="item[{{ $itemId }}][delivery_time]"]`).val(`{{ $itemValue['delivery_time'] }}`);
-                @endforeach
+                @if (session('quotation') && is_array(old('item')))
+                    @foreach (old('item') as $itemId => $itemValue)
+                        $(`[name="item[{{ $itemId }}][delivery_time]"]`).val(`{{ $itemValue['delivery_time'] }}`);
+                    @endforeach
                 @endif
 
                 // quotation print
@@ -697,16 +712,16 @@
                 });
             });
 
-            @if(session('quotation'))
-            $(`[name="quotation"]`).select2("trigger", "select", {
-                data: {
-                    id: `{{ session('quotation')->id }}`,
-                    text: `{{ session('quotation')->quotation_code }}`,
+            @if (session('quotation'))
+                $(`[name="quotation"]`).select2("trigger", "select", {
                     data: {
-                        !!session('quotation') - > toJson() !!
+                        id: `{{ session('quotation')->id }}`,
+                        text: `{{ session('quotation')->quotation_code }}`,
+                        data: {
+                            !!session('quotation') - > toJson() !!
+                        }
                     }
-                }
-            });
+                });
             @endif
         </script>
     </x-slot>
