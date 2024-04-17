@@ -23,7 +23,6 @@
                                 <th class="text-center">PO Supp Number</th>
                                 <th class="text-center">Supp Name</th>
                                 <th class="text-center">Date</th>
-                                <th class="text-center">Status</th>
                                 <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                             </tr>
                         </thead>
@@ -52,7 +51,6 @@
                                 <th class="text-center">PO Supp Number</th>
                                 <th class="text-center">Supp Name</th>
                                 <th class="text-center">Date</th>
-                                <th class="text-center">Status</th>
                                 <th class="text-center"><i class="fa fa-ellipsis-h"></th>
                             </tr>
                         </thead>
@@ -84,11 +82,6 @@
                         {
                             data: 'date',
                             name: 'date',
-                            className: 'text-center'
-                        },
-                        {
-                            data: 'id',
-                            name: 'id',
                             className: 'text-center'
                         },
                         {
