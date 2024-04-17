@@ -17,25 +17,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                     @endif
 
                     @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                     @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                        <span class="d-block">
-                            {{ $loop->iteration }}. {{ $error }}
-                        </span>
-                        @endforeach
-                    </div>
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <span class="d-block">
+                                    {{ $loop->iteration }}. {{ $error }}
+                                </span>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
             </div>
@@ -69,14 +69,16 @@
                                                     <label class="col-lg-3 col-form-label">SO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly sales_order_number>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly sales_order_number>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Sales Name</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly sales_name>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly sales_name>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -85,41 +87,50 @@
                                                     </label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly customer_name>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly customer_name>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly company_name>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly company_name>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Phonne & Email</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly phone_number>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly phone_number>
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <input type="text" class="form-control" name="" value="" readonly email>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly email>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Telp</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly phone>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly phone>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">Subject</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="" value="" readonly subject>
+                                                        <input type="text" class="form-control" name=""
+                                                            value="" readonly subject>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-lg-3 col-form-label">PO Number</label>
                                                     <label class="col-lg-1 col-form-label text-right">:</label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control" name="purchase_order_number" value="{{ old('purchase_order_number') }}" autocomplete="one-time-code" required>
+                                                        <input type="text" class="form-control"
+                                                            name="purchase_order_number"
+                                                            value="{{ old('purchase_order_number') }}"
+                                                            autocomplete="one-time-code" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -127,7 +138,10 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="example-file-input-custom" data-toggle="custom-file-input">
+                                            <input type="file"
+                                                class="custom-file-input js-custom-file-input-enabled"
+                                                id="example-file-input-custom" name="example-file-input-custom"
+                                                data-toggle="custom-file-input">
                                             <label class="custom-file-label" for="example-file-input-custom">
                                                 Choose file
                                             </label>
@@ -135,7 +149,7 @@
                                         <div class="block block-rounded">
                                             <div class="block-content block-content-full bg-pattern">
                                                 <h5>Document List</h5>
-                                                <ul class="list-group" {{ old('document') ? '' : 'hidden' }} document-show>
+                                                {{-- <ul class="list-group" {{ old('document') ? '' : 'hidden' }} document-show>
                                                     <input type="hidden" name="document" value="{{ old('document') }}" required>
 
                                                     <li class="list-group-item">
@@ -145,6 +159,18 @@
                                                             </a>
                                                         </div>
                                                     </li>
+                                                </ul> --}}
+                                                <div class="d-none align-items-center" id="loading-file">
+                                                    <div class="mr-2">
+                                                        <span>Uploading file</span>
+                                                    </div>
+                                                    <div class="spinner-border spinner-border-sm text-info"
+                                                        role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <ul class="list-group" id="file-upload-container">
+                                                    <!-- file upload -->
                                                 </ul>
                                             </div>
                                         </div>
@@ -156,7 +182,8 @@
                                         <h5>Product List</h5>
                                     </div>
                                 </div>
-                                <table class="table table-bordered table-center" style="font-size:13px" quotation_items>
+                                <table class="table table-bordered table-center" style="font-size:13px"
+                                    quotation_items>
                                     <thead>
                                         <tr>
                                             <th class="text-center">No.</th>
@@ -361,7 +388,9 @@
 
                                         <div class="mt-4">
                                             <p class="mb-0">Best Regards</p>
-                                            <img src="" alt="tanda-tangan" class="mt-2 mb-2" style="width: 200px; height: 80px;" hidden span-quotation-sales-signature>
+                                            <img src="" alt="tanda-tangan" class="mt-2 mb-2"
+                                                style="width: 200px; height: 80px;" hidden
+                                                span-quotation-sales-signature>
                                             <p span-quotation-sales-name></p>
                                         </div>
                                     </div>
@@ -551,10 +580,10 @@
                 quotationItemTable.clear().draw();
                 quotationItemTable.rows.add(data.quotation_items ?? []).draw(true);
 
-                @if(session('quotation') && is_array(old('item')))
-                @foreach(old('item') as $itemId => $itemValue)
-                $(`[name="item[{{ $itemId }}][delivery_time]"]`).val(`{{ $itemValue['delivery_time'] }}`);
-                @endforeach
+                @if (session('quotation') && is_array(old('item')))
+                    @foreach (old('item') as $itemId => $itemValue)
+                        $(`[name="item[{{ $itemId }}][delivery_time]"]`).val(`{{ $itemValue['delivery_time'] }}`);
+                    @endforeach
                 @endif
 
                 // quotation print
@@ -713,9 +742,26 @@
                     processData: false,
                     success: function(res) {
                         if (res != '') {
-                            $(`[document-show]`).prop('hidden', false);
-                            $(`[document-show]`).find('a').attr('href', `{{ asset('storage') }}/${res}`);
-                            $(`[name="document"]`).val(res);
+                            // $(`[document-show]`).prop('hidden', false);
+                            // $(`[document-show]`).find('a').attr('href', `{{ asset('storage') }}/${res}`);
+                            // $(`[name="document"]`).val(res);
+
+                            var element = `
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="/storage/${res.file_path}" target="_blank" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${res.file_name}</a>
+                                        <button type="button" onclick="deletePdf('${res.file_path}')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                            </svg>    
+                                        </button>
+                                    </div>
+                                </li>
+                            `
+                            $('.list-group').html(``);
+                            $('.list-group').append(element);
+                            $('#example-file-input-custom').attr('disabled', true);
                         } else {
                             alert('file not uploaded');
                         }
@@ -726,17 +772,35 @@
                 });
             });
 
-            @if(session('quotation'))
-            $(`[name="quotation"]`).select2("trigger", "select", {
-                data: {
-                    id: `{{ session('quotation')->id }}`,
-                    text: `{{ session('quotation')->quotation_code }}`,
+            @if (session('quotation'))
+                $(`[name="quotation"]`).select2("trigger", "select", {
                     data: {
-                        !!session('quotation') - > toJson() !!
+                        id: `{{ session('quotation')->id }}`,
+                        text: `{{ session('quotation')->quotation_code }}`,
+                        data: {
+                            !!session('quotation') - > toJson() !!
+                        }
                     }
-                }
-            });
+                });
             @endif
+
+            function deletePdf(file_path) {
+                $.ajax({
+                    url: `{{ route('purchase-order-customer-sales.delete-document') }}`,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        file_path: file_path
+                    },
+                    success: function(res) {
+                        $('#example-file-input-custom').attr('disabled', false);
+                        $('#file-upload-container').html(``);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('File not uploaded');
+                    }
+                })
+            }
         </script>
     </x-slot>
 </x-app-layout>

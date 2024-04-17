@@ -25,6 +25,8 @@ use App\Models\PurchaseOrderCustomer;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
 use App\Models\Sales;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PurchaseOrderCustomerSalesController extends Controller
 {
@@ -90,10 +92,10 @@ class PurchaseOrderCustomerSalesController extends Controller
             ->orderBy('quotation_code')
             ->get()
             ->take(20);
-             
+
         return response()->json($query);
     }
-    
+
     public function store(AddPurchaseOrderCustomerRequest $request): RedirectResponse
     {
         $quotation = Quotation::query()
@@ -211,24 +213,45 @@ class PurchaseOrderCustomerSalesController extends Controller
             $fileDirectory = 'purchase-order-customers';
             $file = $request->file('file');
             $filePath = $this->fileController->store($fileDirectory, $file);
+            if (preg_match("/(?<=purchase-order-customers\/).*/", $filePath, $matches)) {
+                $fileName = $matches[0];
+            } else {
+                $fileName = null;
+            }
         }
 
-        return $filePath;
+        return response()->json([
+            'file_path' => $filePath,
+            'file_name' => $fileName,
+        ]);
+    }
+
+    public function deleteDocument(Request $request)
+    {
+        $filePath = $request->file_path;
+
+        if (File::exists(storage_path('app/public/' . $filePath))) {
+            unlink(storage_path('app/public/' . $filePath));
+        }
+
+        return response()->json([
+            'status' => 200,
+        ]);
     }
 
     public function deleteProduct($id)
     {
         try {
             $query = QuotationItem::find($id);
-            
+
             DB::beginTransaction();
-           
+
             $query->delete();
 
             DB::commit();
 
 
-           return response()->json($query);
+            return response()->json($query);
         } catch (\Exception $e) {
             return response()->json($e);
         }
