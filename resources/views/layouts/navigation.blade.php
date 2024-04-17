@@ -237,7 +237,6 @@
                                             id="selection-done-list-sourcing-item-nav"></span></a>
                                 </li>
                             </ul>
-
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                             <i class="fa fa-book"></i>
