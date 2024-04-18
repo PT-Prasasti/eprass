@@ -422,7 +422,7 @@
                                     let parts = full.redis_key.split('_');
                                     let iteration = parts.pop(); // Get the last part of the key
 
-                                    return `<a href="payment-request/exim/download/${userId}/${iteration}/${data.filename}" target="_blank">${data.aliases}</a>`;
+                                    return `<a href="show/${userId}/${iteration}/${data.filename}" target="_blank">${data.aliases}</a>`;
                                 } else {
                                     return '';
                                 }
