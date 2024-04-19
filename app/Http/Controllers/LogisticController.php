@@ -216,7 +216,7 @@ class LogisticController extends Controller
         foreach ($supp_items as $item) {
             $keys = Redis::keys('*');
             foreach ($keys as $key) {
-                if (preg_match('/eprass_database_good_received_status_(.*?)_(\d+)/', $key, $matches)) {
+                if (preg_match('/good_received_status_(.*?)_(\d+)/', $key, $matches)) {
                     $po_supplier_number = $matches[1];
                     $inquiry_product_id = $matches[2];
                 }

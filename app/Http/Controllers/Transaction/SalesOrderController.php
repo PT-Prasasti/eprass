@@ -26,6 +26,7 @@ use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Transaction\AddSalesOrderRequest;
 use App\Http\Requests\Transaction\EditSalesOrderRequest;
 use App\Http\Requests\Transaction\Price\AddPriceRequest;
+use App\Models\Quotation;
 use App\Models\SelectedSourcingSupplier;
 use App\Models\SourcingItem;
 use App\Models\SourcingSupplier;
@@ -92,6 +93,14 @@ class SalesOrderController extends Controller
                         return true;
                     } else {
                         return false;
+                    }
+                })
+                ->addColumn('status_quotation', function ($q) {
+                    $quotation = Quotation::where('sales_order_id', $q->uuid)->first();
+                    if ($quotation) {
+                        return strtoupper($quotation->status);
+                    } else {
+                        return strtoupper($q->status);
                     }
                 })
                 ->make(true);
@@ -849,7 +858,7 @@ class SalesOrderController extends Controller
     {
         $so = SalesOrder::where('uuid', $id)->first();
         $suppliyers = \App\Models\Supplier::get();
-        return view('transaction.sales-order.edit', compact('so','suppliyers'));
+        return view('transaction.sales-order.edit', compact('so', 'suppliyers'));
     }
 
     public function store_edit(EditSalesOrderRequest $request): RedirectResponse
@@ -1163,7 +1172,7 @@ class SalesOrderController extends Controller
             // $r->cost
             // $r->total_cost
 
-            
+
 
             return $r;
         });
