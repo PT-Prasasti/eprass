@@ -150,6 +150,9 @@
                                 case 'ON PROGRESS':
                                     badgeColor = `warning`;
                                     break;
+                                case 'Waiting Approval For Manager':
+                                    badgeColor = `danger`;
+                                    break;
                                 default:
                                     badgeColor = `secondary`;
                             }
