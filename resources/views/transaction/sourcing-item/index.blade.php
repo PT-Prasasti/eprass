@@ -226,7 +226,7 @@
 
                         },
                         {
-                            data: "status",
+                            data: "status_quotation",
                             className: "text-center",
                             render: function(data) {
                                 if (data == 'ON PROCESS') {
