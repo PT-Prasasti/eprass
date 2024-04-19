@@ -337,6 +337,7 @@
 
     <x-slot name="js">
         <script>
+            let totalAmount = 0;
             var paymentCode;
             $(document).ready(function() {
                 generateId();
@@ -367,6 +368,12 @@
                                                     <th><i class="fa fa-ellipsis-h"></th>
                                                 </tr>
                                             </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="text-right" colspan="4"><span class="fw-bold"><strong>TOTAL :</strong></span></td>
+                                                    <td class="text-left" colspan="3"><span id="total-amount" class="fw-bold">0.00</span></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>`);
                 $('#dataTable').DataTable({
                     processing: true
@@ -405,17 +412,17 @@
                         }
                         , {
                             data: "remark"
-                        }, 
-                        {
-                            data: "file", 
-                            render: function(data, type, full, meta) {
+                        }
+                        , {
+                            data: "file"
+                            , render: function(data, type, full, meta) {
                                 let userId = "{{ auth()->user()->uuid }}";
                                 if (data) {
                                     // Extract the iteration from the Redis key
                                     let parts = full.redis_key.split('_');
                                     let iteration = parts.pop(); // Get the last part of the key
 
-                                    return `<a href="payment-request/exim/download/${userId}/${iteration}/${data.filename}" target="_blank">${data.aliases}</a>`;
+                                    return `<a href="show/${userId}/${iteration}/${data.filename}" target="_blank">${data.aliases}</a>`;
                                 } else {
                                     return '';
                                 }
@@ -441,8 +448,33 @@
                             "previous": '<i class="fa fa-angle-left"></i>'
                             , "next": '<i class="fa fa-angle-right"></i>'
                         }
-                    }
-                });
+                    },
+                    "footerCallback": function(row, data, start, end, display) {
+                            let api = this.api();
+
+                            // Hitung total amount
+                            let totalAmount = api
+                                .column(4, {
+                                    search: 'applied'
+                                })
+                                .data()
+                                .reduce(function(acc, val) {
+                                    // Hilangkan karakter 'Rp' dan spasi, serta titik (.) sebagai pemisah ribuan
+                                    let numericVal = parseFloat(val.replace(/[^0-9]/g, ''));
+                                    // Periksa apakah nilai numerikVal adalah angka valid
+                                    if (!isNaN(numericVal)) {
+                                        return acc + numericVal;
+                                    } else {
+                                        return acc; // Kembalikan nilai sebelumnya jika tidak valid
+                                    }
+                                }, 0);
+
+                            // Update nilai total-amount
+                            let formattedAmount = handleCurrencyFormat(totalAmount);
+                            $('#total-amount').html('<strong>' + formattedAmount + '</strong>');
+                        }
+
+                , });
             }
 
             const handleCurrencyFormat = (value) => {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documentes;
+use App\Models\PurchaseOrderCustomer;
 use App\Models\Quotation;
 use App\Models\SalesOrder;
 use Illuminate\Http\Request;
@@ -137,7 +138,17 @@ class HelperController extends Controller
         ]);
     }
 
+    public function countPOCustomer()
+    {
+        $jum = PurchaseOrderCustomer::where('status', 'ON PROGRESS')->count();
 
+        return response()->json([
+            'code' => 200,
+            'data' => [
+                'jumlah' => $jum
+            ]
+        ]);
+    }
 
     public function docadd(Request $request)
     {

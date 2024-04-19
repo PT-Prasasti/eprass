@@ -443,15 +443,15 @@ Route::prefix('/payment-request')->name('payment-request')->group(function () {
         Route::get('/{uuid}/view', [PaymentRequestEximController::class, 'view'])->name('.view');
         Route::patch('/{uuid}/update', [PaymentRequestEximController::class, 'update'])->name('.update');
         Route::delete('/delete/{uuid}', [PaymentRequestEximController::class, 'delete'])->name('.delete');
-        Route::get('/download/{userId}/{iteration}/{filename}', function ($userId, $iteration, $filename) {
-            $path = storage_path('temp/payment_request/' . $userId . '/' . $iteration . '/' . $filename);
+        Route::get('/show/{userId}/{iteration}/{filename}', function ($userId, $iteration, $filename) {
+            $filePath = 'temp' . '/' . 'payment_request' . '/' . $userId . '/' . $iteration . '/' . $filename;
 
-            if (file_exists($path)) {
-                return response()->download($path);
+            if (Storage::exists($filePath)) {
+                return response()->file(storage_path('app/' . $filePath));
             }
 
             abort(404);
-        })->name('.document');
+        })->name('.show-temp');
 
         Route::get('/id', [PaymentRequestEximController::class, 'generate_id'])->name('.id');
     });
@@ -594,6 +594,7 @@ Route::prefix('/helper')->name('helper')->group(function () {
     Route::get('/count-selection-done-on-sales-order', [HelperController::class, 'countSelectionDoneOnSalesOrder'])->name('.count-selection-done-on-sales-order');
     Route::get('/count-price-list-ready-on-sales-order', [HelperController::class, 'countPriceListReadyOnSalesOrder'])->name('.count-price-list-ready-on-sales-order');
     Route::get('/count-quotation', [HelperController::class, 'countQuotation'])->name('.count-quotation');
+    Route::get('/count-po-customer', [HelperController::class, 'countPOCustomer'])->name('.count-po-customer');
 });
 
 //Helper

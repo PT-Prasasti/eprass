@@ -221,7 +221,7 @@
             }
         });
     </script>
-    @if (auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod') || auth()->user()->hasRole('hrd'))
+    @if (auth()->user()->hasRole('manager') || auth()->user()->hasRole('hod') || auth()->user()->hasRole('hrd') || auth()->user()->hasRole('exim'))
         <script>
             $.get("{{ route('helper.count-new-inquiry') }}", function(data) {
                 console.log("helper data", data);
@@ -242,6 +242,13 @@
                 console.log("new po supplier", data);
                 if (data.data.jumlah > 0) {
                     $("#po-supplier-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`)
+                }
+            })
+
+            $.get("{{ route('helper.count-po-customer') }}", function(data) {
+                console.log("new po customer", data);
+                if (data.data.jumlah > 0) {
+                    $("#poc-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`)
                 }
             })
 
