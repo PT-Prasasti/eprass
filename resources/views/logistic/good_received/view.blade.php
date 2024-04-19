@@ -236,7 +236,6 @@
                                 <th class="text-center">Item Name</th>
                                 <th class="text-center">QTY</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center">File</th>
                             </tr>
                         </thead>
                     </table>
@@ -278,16 +277,6 @@
                                 }
                             }
                         },
-                        {
-                            data: 'id',
-                            name: 'id',
-                            className: 'text-center',
-                            render: function(data, type, full, meta) {
-                                return `
-                                    <button id="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_2"> <i class="fa fa-file"></i></button>
-                                `;
-                            }
-                        }
                     ]
                 });
             }
@@ -367,7 +356,7 @@
                         element +=
                             `<li class="list-group-item">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <a href="/file/show/good_received/${po_supplier_number}/${value.filename}" target="_blank">` +
+                                            <a href="/file/show/good-received/${po_supplier_number}/${value.filename}" target="_blank">` +
                             number + `. ` + value.aliases + `</a>
                                             <button type="button" onclick="deletePdf('` + value.filename + `')" class="btn btn-link text-danger" style="padding: 0; width: auto; height: auto;">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
