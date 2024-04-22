@@ -40,7 +40,7 @@ class PaymentRequestEximController extends Controller
     {
         $userRole = Auth::user()->roles[0]->name;
 
-        if ($userRole === 'exim' || $userRole === 'sales') {
+        if ($userRole === 'exim' || $userRole === 'sales' || $userRole === 'logistic') {
             $query = PaymentRequestExim::query();
         } else {
             $statusToFilter = null;
