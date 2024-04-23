@@ -116,7 +116,11 @@ class HelperController extends Controller
 
     public function countPriceListReadyOnSalesOrder()
     {
-        $jum = SalesOrder::where('status', 'Price List Ready')->count();
+        $jum = SalesOrder::with(['quotations' => function ($q) {
+            $q->where('status', '!=', 'Done');
+        }])
+            ->where('status', 'Price List Ready')
+            ->count();
 
         return response()->json([
             'code' => 200,
