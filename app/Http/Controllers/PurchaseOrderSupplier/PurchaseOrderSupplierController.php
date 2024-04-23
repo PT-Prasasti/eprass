@@ -192,6 +192,15 @@ class PurchaseOrderSupplierController extends Controller
 
             $query->save();
 
+            // mengubah status pada poc ketika po supp di buat
+            if ($query->sales_order && $query->sales_order->quotations->isNotEmpty()) {
+                $purchase_order_customer = $query->sales_order->quotations[0]->purchase_order_customer;
+                if ($purchase_order_customer) {
+                    $purchase_order_customer->status = 'Waiting Approval For Manager';
+                    $purchase_order_customer->save();
+                }
+            }
+
             foreach ($request->item as $selectedSourcingSupplierId => $item) {
                 $selectedSourcingSupplier = SelectedSourcingSupplier::query()->whereUuid($selectedSourcingSupplierId)->first();
                 if ($selectedSourcingSupplier) {
