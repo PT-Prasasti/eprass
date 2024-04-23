@@ -11,7 +11,7 @@
                 <div class="col-md-6 text-right">
                     <button type="button" class="btn btn-success mr-5 mb-5">
                         <a href="{{ route('approval-payment.approve', $query->id) }}" class="text-white">
-                        <i class="fa fa-save mr-5"></i>Approve
+                            <i class="fa fa-save mr-5"></i>Approve
 
                         </a>
                     </button>

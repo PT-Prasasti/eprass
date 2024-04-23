@@ -49,6 +49,20 @@ class FilesController extends Controller
 
         abort(404);
     }
+    public function showSingleFolder($folder1, $filename)
+    {
+        if ($folder1 == 'temp') {
+            $filePath = $folder1 . '/' . $filename;
+        } else {
+            $filePath = 'public/' . $folder1 . '/' . $filename;
+        }
+
+        if (Storage::exists($filePath)) {
+            return response()->file(storage_path('app/' . $filePath));
+        }
+
+        abort(404);
+    }
 
     public function store($fileDirectory = 'others', $file)
     {

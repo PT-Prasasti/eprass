@@ -71,6 +71,7 @@ Route::prefix('/notification')->name('notification')->group(function () {
 
 // route file 
 Route::prefix('/file')->name('file')->group(function () {
+    Route::get('/show/{folder1}/{file}', [FilesController::class, 'showSingleFolder'])->name('.showSingleFolder');
     Route::get('/show/{folder1}/{folder2}/{file}', [FilesController::class, 'show'])->name('.show');
     Route::get('/docs/uploads/attachment/{folder}/{file}', [FilesController::class, 'docs'])->name('.docs');
 });
@@ -603,6 +604,7 @@ Route::prefix('/helper')->name('helper')->group(function () {
     Route::get('/count-new-inquiry', [HelperController::class, 'countNewInquiry'])->name('.count-new-inquiry');
     Route::get('/attachment/list', [HelperController::class, 'doclist'])->name('.doclist');
     Route::get('/attachment/list-other', [HelperController::class, 'doclistother'])->name('.doclistother');
+    Route::get('/attachment/list-po-supplier', [HelperController::class, 'doclistPOSupplier'])->name('.doclistposupplier');
     Route::post('/attachment/add', [HelperController::class, 'docadd'])->name('.docadd');
     Route::post('/attachment/delete', [HelperController::class, 'docrem'])->name('.docrem');
 });
