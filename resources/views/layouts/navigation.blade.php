@@ -403,9 +403,11 @@
                         <span class="sidebar-mini-hide">PO Customer</span>
                     </a>
                     <ul>
+                        @if (!auth()->user()->hasRole('admin_sales'))
                         <li>
                             <a href="{{ route('purchase-order-customer.add') }}">Add PO Customer</a>
                         </li>
+                        @endif
                         <li>
                             <a href="{{ route('purchase-order-customer') }}">List PO Customer</a>
                         </li>
