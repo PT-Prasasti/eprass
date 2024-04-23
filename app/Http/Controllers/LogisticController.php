@@ -121,7 +121,10 @@ class LogisticController extends Controller
 
     public function gr_data()
     {
-        $btb = BTB::all();
+        $btb = BTB::whereHas('purchase_order_supplier.tracking', function ($query) {
+            $query->where('status', '=', 'Done');
+        })->get();
+
         $result = DataTables::of($btb)
             ->addIndexColumn()
             ->make(true);

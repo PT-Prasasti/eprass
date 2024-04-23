@@ -19,4 +19,9 @@ class BTB extends Model
             $model->uuid = Uuid::uuid4()->toString();
         });
     }
+
+    public function purchase_order_supplier()
+    {
+        return $this->belongsTo(PurchaseOrderSupplier::class, 'purchase_order_supplier_id');
+    }
 }

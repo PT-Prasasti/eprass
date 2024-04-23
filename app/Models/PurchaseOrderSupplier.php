@@ -61,15 +61,19 @@ class PurchaseOrderSupplier extends Model
     {
         return $this->hasMany(PurchaseOrderSupplierItem::class);
     }
-    
+
     public function tracking()
     {
-        return $this->hasOne(Tracking::class);
+        return $this->hasOne(Tracking::class, 'po_suplier_id', 'id');
     }
 
     public function delivery_schedule()
     {
         return $this->belongsTo(DeliverySchedule::class);
     }
-    
+
+    public function btbs()
+    {
+        return $this->hasMany(BTB::class, 'purchase_order_supplier_id');
+    }
 }
