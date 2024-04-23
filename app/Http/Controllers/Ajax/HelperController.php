@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use App\Models\Documentes;
 use App\Models\PurchaseOrderCustomer;
+use App\Models\PurchaseOrderSupplier;
 use App\Models\Quotation;
 use App\Models\SalesOrder;
 use Illuminate\Http\Request;
@@ -249,6 +250,85 @@ class HelperController extends Controller
                 }),
             ]
         ];
+
+        return response()->json([
+            'code' => 200,
+            'data' => $documents
+        ]);
+    }
+
+    public function doclistPOSupplier(Request $request)
+    {
+        $files = PurchaseOrderSupplier::where('purchase_order_suppliers.id', $request->po_supplier)
+            ->join('sales_orders', 'purchase_order_suppliers.sales_order_id', '=', 'sales_orders.id')
+            ->join('quotations', 'sales_orders.uuid', '=', 'quotations.sales_order_id')
+            ->join('inquiries', 'sales_orders.inquiry_id', '=', 'inquiries.id')
+            ->join('inquiry_products', 'inquiries.id', '=', 'inquiry_products.inquiry_id')
+            ->join('sourcing_items', 'inquiry_products.id', '=', 'sourcing_items.inquiry_product_id')
+            ->join('purchase_order_customers', 'quotations.id', '=', 'purchase_order_customers.quotation_id')
+            ->join('visit_schedules', 'inquiries.visit_schedule_id', '=', 'visit_schedules.id')
+            ->select('purchase_order_suppliers.document_list as po_supplier_files', 'inquiries.files as inquiry_files', 'purchase_order_customers.document_url as po_customer_files', 'visit_schedules.uuid as visit_schedule_uuid', 'inquiries.id as inquiry_id', 'sales_orders.id as sales_order_id', 'purchase_order_customers.kode_khusus as po_customer_kode_khusus', 'purchase_order_suppliers.transaction_code as po_supplier_id')
+            ->first();
+
+        $inquiry_files = json_decode($files->inquiry_files) ?? [];
+        $po_supplier_files = json_decode(json_decode($files->po_supplier_files)) ?? [];
+
+        $documents = [];
+        $newFiles = [];
+        if (count($inquiry_files) > 0) {
+            foreach ($inquiry_files as $file) {
+                $file->url = url('/file/show/inquiry', $files->visit_schedule_uuid) . '/' . $file->filename;
+                $newFiles['inquiry_files'] = $file;
+            }
+            $documents['inquiry'][] = [
+                'id' => $files->inquiry_id,
+                'files' => $newFiles['inquiry_files'],
+            ];
+        } else {
+            $documents['inquiry'] = [
+                'id' => $files->inquiry_id,
+                'files' => [],
+            ];
+        }
+
+        if (count($po_supplier_files) > 0) {
+            foreach ($po_supplier_files as $file) {
+                $file->url = url('/file/show/purchase-order-suppliers') . '/' . $file->filename;
+                $newFiles['po_supplier_files'][] = $file;
+            }
+            $documents['po_supplier'] = [
+                'id' => $files->po_supplier_id,
+                'files' => $newFiles['po_supplier_files'],
+            ];
+        } else {
+            $documents['po_supplier'] = [
+                'id' => $files->po_supplier_id,
+                'files' => [],
+            ];
+        }
+
+        if ($files->po_customer_files) {
+
+            if (preg_match('~purchase-order-customers/(.*)$~', $files->po_customer_files, $matches)) {
+                $filename = $matches[1];
+            }
+
+            $newFiles['po_customer_files'][] = (object)[
+                'url' => url('/file/show') . '/' . $files->po_customer_files,
+                'aliases' => $filename,
+                'filename' => $filename
+            ];
+
+            $documents['po_customer'] = [
+                'id' => $files->po_customer_kode_khusus,
+                'files' => $newFiles['po_customer_files'],
+            ];
+        } else {
+            $documents['po_customer'] = [
+                'id' => $files->po_customer_kode_khusus,
+                'files' => [],
+            ];
+        }
 
         return response()->json([
             'code' => 200,
