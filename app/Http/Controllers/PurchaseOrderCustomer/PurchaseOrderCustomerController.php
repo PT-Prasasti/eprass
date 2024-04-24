@@ -161,6 +161,7 @@ class PurchaseOrderCustomerController extends Controller
 
     public function savePOCustomer($id, Request $request)
     {
+        // dd($id);
         $romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
         $code = 'VI';
         $month = (int) date('m');
@@ -173,7 +174,7 @@ class PurchaseOrderCustomerController extends Controller
             ->first();
 
         if ($last_data) {
-            $last_id = $last_data->id;
+            $last_id = $last_data->kode_khusus;
             $idx = explode("/", $last_id);
             $number = (int) $idx[0];
             $number++;
@@ -209,7 +210,7 @@ class PurchaseOrderCustomerController extends Controller
 
             DB::commit();
 
-            return true;
+            return redirect()->route('purchase-order-customer')->with('Successfully approve po customer');
         } catch (\Exception $e) {
             dd($e);
             return redirect()->back()->withInput($request->input())->with('error', Constants::ERROR_MSG);
