@@ -97,7 +97,7 @@
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                         <i class="fa fa-lock"></i>
-                        <span class="sidebar-mini-hide">Quotatin</span>
+                        <span class="sidebar-mini-hide">Quotation</span>
                     </a>
                     <ul>
                         <li>

@@ -83,7 +83,6 @@ class SourcingItemController extends Controller
 
     public function store(Request $re)
     {
-
         ini_set('max_input_vars', 2000);
         ini_set('max_multipart_body_parts', 2000);
 
@@ -116,6 +115,10 @@ class SourcingItemController extends Controller
             $sourching->so_id = $inquery_id;
             $sourching->save();
 
+            $sales_order = SalesOrder::whereUuid($re->so)->first();
+            $sales_order->status = 'waiting approval';
+            $sales_order->save();
+
             /* sourching supliyer */
             foreach ($par as $product_inquery_id => $items) {
                 foreach ($items as $item) {
@@ -143,7 +146,7 @@ class SourcingItemController extends Controller
 
             DB::commit();
 
-            return redirect(route('transaction.sourcing-item'))->with("success", "Data has beed successfuly submited");
+            return redirect(route('transaction.sourcing-item'))->with("success", "Data has been successfuly submited");
         } catch (\Exception $e) {
             DB::rollback();
 
