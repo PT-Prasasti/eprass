@@ -226,7 +226,7 @@
             $.get("{{ route('helper.count-new-inquiry') }}", function(data) {
                 console.log("helper data", data);
                 if (data.data.jumlah > 0) {
-                    $("#inquiry-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`)
+                    $("#sales-order-nav").append(`&nbsp;<i class="badge badge-danger">` + data.data.jumlah + `<i>`)
                 }
 
             })
@@ -281,7 +281,7 @@
                 success: function(response) {
                     console.log(response.status, response.data)
                     if (response.data.jumlah > 0) {
-                        $("#sales-order-nav").append(`&nbsp;<i class="badge badge-danger">` + response.data.jumlah +
+                        $("#price-list-ready-sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` + response.data.jumlah +
                             `<i>`)
                     }
                 },
@@ -307,23 +307,23 @@
                 }
             })
 
-            $.ajax({
-                url: "{{ route('helper.count-price-list-ready-on-sales-order') }}",
-                type: "GET",
-                success: function(response) {
-                    console.log(response.status, response.data)
-                    if (response.data.jumlah > 0) {
-                        $("#price-list-ready-sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` +
-                            response.data
-                            .jumlah +
-                            `<i>`)
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseJSON.message)
-                }
+            // $.ajax({
+            //     url: "{{ route('helper.count-price-list-ready-on-sales-order') }}",
+            //     type: "GET",
+            //     success: function(response) {
+            //         console.log(response.status, response.data)
+            //         if (response.data.jumlah > 0) {
+            //             $("#price-list-ready-sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` +
+            //                 response.data
+            //                 .jumlah +
+            //                 `<i>`)
+            //         }
+            //     },
+            //     error: function(xhr, status, error) {
+            //         console.error(xhr.responseJSON.message)
+            //     }
 
-            })
+            // })
 
             // $.ajax({
             //     url: "{{ route('helper.count-new-sourcing-item') }}"
