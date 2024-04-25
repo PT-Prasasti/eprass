@@ -105,13 +105,16 @@
                             var badgeColor = ``;
                             switch (row.status) {
                                 case 'Waiting Approval For Manager':
-                                    badgeColor = `danger`;
+                                    badgeColor = `warning`;
                                     break;
                                 case 'Sent PO':
                                     badgeColor = `primary`;
                                     break;
                                 case 'Approved By Manager':
                                     badgeColor = `success`;
+                                    break;
+                                case 'Rejected By Manager':
+                                    badgeColor = `danger`;
                                     break;
                                 default:
                                     badgeColor = `warning`;
