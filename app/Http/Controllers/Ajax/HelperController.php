@@ -33,7 +33,7 @@ class HelperController extends Controller
     {
         $jum = 0;
         $sourcing = \App\Models\Sourcing::selectRaw("count(*) as jum")->whereRaw("so_id IN (
-            SELECT id FROM sales_orders where status = 'On Process')")->where('deleted_at', '=', NULL)->first();
+            SELECT id FROM sales_orders where status = 'waiting approval')")->where('deleted_at', '=', NULL)->first();
         if (!empty($sourcing)) {
             $jum = $sourcing->jum;
         }
@@ -117,11 +117,17 @@ class HelperController extends Controller
 
     public function countPriceListReadyOnSalesOrder()
     {
-        $jum = SalesOrder::with(['quotations' => function ($q) {
-            $q->where('status', '!=', 'Done');
-        }])
+        $sales_orders = SalesOrder::with(['quotations'])
             ->where('status', 'Price List Ready')
-            ->count();
+            ->get();
+
+        $jum = 0;
+        foreach ($sales_orders as $sales_order) {
+            if ($sales_order->quotations->count() > 0) {
+                continue;
+            }
+            $jum++;
+        }
 
         return response()->json([
             'code' => 200,
