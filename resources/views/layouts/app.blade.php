@@ -307,23 +307,23 @@
                 }
             })
 
-            // $.ajax({
-            //     url: "{{ route('helper.count-price-list-ready-on-sales-order') }}",
-            //     type: "GET",
-            //     success: function(response) {
-            //         console.log(response.status, response.data)
-            //         if (response.data.jumlah > 0) {
-            //             $("#price-list-ready-sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` +
-            //                 response.data
-            //                 .jumlah +
-            //                 `<i>`)
-            //         }
-            //     },
-            //     error: function(xhr, status, error) {
-            //         console.error(xhr.responseJSON.message)
-            //     }
+            $.ajax({
+                url: "{{ route('helper.count-price-list-ready-on-sales-order') }}",
+                type: "GET",
+                success: function(response) {
+                    console.log(response.status, response.data)
+                    if (response.data.jumlah > 0) {
+                        $("#price-list-ready-sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` +
+                            response.data
+                            .jumlah +
+                            `<i>`)
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseJSON.message)
+                }
 
-            // })
+            })
 
             // $.ajax({
             //     url: "{{ route('helper.count-new-sourcing-item') }}"

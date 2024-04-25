@@ -97,7 +97,7 @@
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                         <i class="fa fa-lock"></i>
-                        <span class="sidebar-mini-hide">Quotation</span>
+                        <span class="sidebar-mini-hide">Quotatin</span>
                     </a>
                     <ul>
                         <li>
@@ -174,7 +174,7 @@
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                         <i class="fa fa-lock"></i>
-                        <span class="sidebar-mini-hide">Quotation</span>
+                        <span class="sidebar-mini-hide" id="price-list-ready-sourcing-item-nav">Quotation</span>
                     </a>
                     <ul>
                         <li>
@@ -202,7 +202,7 @@
                     @if (auth()->user()->hasRole('manage'))
                     <a href="{{ route('transaction.sourcing-item') }}"><i class="fa fa-fax"></i><span class="sidebar-mini-hide">List Sourcing Item</span></a>
                     @else
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-fax"></i><span class="sidebar-mini-hide" id="price-list-ready-sourcing-item-nav">Sourcing Item</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-fax"></i><span class="sidebar-mini-hide">Sourcing Item</span></a>
                     <ul>
                         <li>
                             <a href="{{ route('transaction.sourcing-item.add') }}">Add Sourcing Item</a>
