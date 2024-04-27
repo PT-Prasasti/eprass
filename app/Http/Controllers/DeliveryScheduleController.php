@@ -12,9 +12,25 @@ use App\Models\DeliveryScheduleItem;
 use App\Models\PurchaseOrderCustomer;
 use Illuminate\Http\RedirectResponse;
 use App\Models\SelectedSourcingSupplier;
+use App\Http\Controllers\Helper\FilesController;
+use App\Http\Controllers\Helper\RedisController;
 
 class DeliveryScheduleController extends Controller
 {
+    protected $fileController, $redisController, $hosting;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->fileController = new FilesController();
+        $this->redisController = new RedisController();
+
+        if (env('HOSTING')) {
+            $this->hosting = env('HOSTING');
+        } else {
+            $this->hosting = false;
+        }
+    }
     public function index()
     {
         $deliverySchedule = DeliverySchedule::all();
@@ -146,6 +162,13 @@ class DeliveryScheduleController extends Controller
             $deliverySchedule = DeliverySchedule::where('id', $id)->first();
             if ($deliverySchedule) {
                 $deliverySchedule->status = $request->status;
+
+                if ($request->hasFile('file')) {
+                    $file = $request->file('file');
+                    $filePath = $this->fileController->store('delivery-schedules', $file);
+                    $deliverySchedule->file_path = $filePath;
+                }
+
                 $deliverySchedule->save();
             }
 
