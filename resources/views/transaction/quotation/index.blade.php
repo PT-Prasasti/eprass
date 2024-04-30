@@ -9,45 +9,6 @@
                     </b>
                 </h4>
             </div>
-            {{-- <div class="col-md-6 text-right">
-                <div class="push">
-                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" id="btnGroupDrop1"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Grade</button>
-                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start"
-                                style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    1-50 %
-                                </a>
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    51 - 100%
-                                </a>
-                            </div>
-                        </div>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" id="btnGroupDrop1"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Status</button>
-                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start"
-                                style="position: absolute; transform: translate3d(0px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    Waiting
-                                </a>
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    SO Ready
-                                </a>
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    Waiting Approval
-                                </a>
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    Done
-                                </a>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-primary">Customer</button>
-                    </div>
-                </div>
-            </div> --}}
         </div>
 
         <div class="row">
@@ -214,7 +175,7 @@
                                 `;
                             }
 
-                            @if (auth()->user()->hasRole('admin_sales'))
+                            @if (auth()->user()->hasRole('hod'))
                                 if (row.can_be_recreated == true) {
                                     html += `
                                         <a class="btn btn-sm btn-success" data-toggle="tooltip" title="Revision" href="{{ route('transaction.quotation') }}/${row.id}/re-create">
@@ -224,14 +185,13 @@
                                 }
                             @endif
 
-                            if (row.status === 'Rejected') {
+                            if (row.quotation_status === 'Rejected') {
                                 html += `
-                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Reason" button-reason>
-                                        <i class="fa fa-user"></i>
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Rejected Note" button-reason>
+                                        <i class="fa fa-comment"></i>
                                     </button> |
                                 `;
                             }
-
                             return `
                                 ${html}
                                 <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">

@@ -176,6 +176,7 @@ public function add(): View
 
     public function reCreateStore($id, AddQuotationRequest $request): RedirectResponse
     {
+        // dd($request->all());
         $quotation = Quotation::query()
             ->with([
                 'sales_order.inquiry.visit.customer',
@@ -198,7 +199,8 @@ public function add(): View
 
             $quotation = Quotation::query()->create([
                 'sales_order_id' => $quotation->sales_order_id,
-                'quotation_code' =>  $this->handleGenerateQuotationCode($quotation->sales_order_id),
+                // 'quotation_code' =>  $this->handleGenerateQuotationCode($quotation->sales_order_id),
+                'quotation_code' =>  $quotation->quotation_code,
                 'status' => 'Waiting for Approval',
                 'due_date' => $request->due_date,
                 'payment_term' => $request->payment_term,
