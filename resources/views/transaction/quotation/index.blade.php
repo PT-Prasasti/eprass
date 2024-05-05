@@ -4,9 +4,8 @@
             <div class="col-md-6">
                 <h4>
                     <b>
-                        List
-                        {{ (request()->query('filter') === 'reject' ? 'Rejected' : '') . ' Quotation' }}
-                    </b>
+                        List {{ (request()->query('filter') === 'reject' ? 'Rejected' : '') . (request()->query('filter') === 'revision' ? ' Revision' : '') . ' Quotation' }}
+                    </b>                    
                 </h4>
             </div>
         </div>
@@ -98,7 +97,7 @@
     <x-slot name="js">
         <script>
             const quotationTable = $('#table-quotation').DataTable({
-                ajax: `{{ route('transaction.quotation.data') . (request()->query('filter') === 'reject' ? '?filter=reject' : '') }}`,
+                ajax: `{{ route('transaction.quotation.data') . (request()->query('filter') === 'reject' ? '?filter=reject' : '') . (request()->query('filter') === 'revision' ? '?filter=revision' : '') }}`,
                 processing: true,
                 serverSide: true,
                 responsive: true,
@@ -153,32 +152,14 @@
                     },
                     {
                         data: 'status',
-                        // render: function(data, type, row, meta) {
-                        //     return `
-                //         <a href="{{ route('transaction.quotation') }}/${row.id}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View">
-                //             <i class="fa fa-file-text-o"></i>
-                //         </a> |
-                //         <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" button-delete>
-                //             <i class="fa fa-trash-o"></i>
-                //         </button>
-                //     `
-                        // },
                         className: 'text-center text-nowrap',
                         render: function(data, type, row, meta) {
                             var html = ``;
 
-                            if (row.status === 'Done') {
-                                html += `
-                                    <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">
-                                        <i class="fa fa-print"></i>
-                                    </a> |
-                                `;
-                            }
-
                             @if (auth()->user()->hasRole('hod'))
                                 if (row.can_be_recreated == true) {
                                     html += `
-                                        <a class="btn btn-sm btn-success" data-toggle="tooltip" title="Revision" href="{{ route('transaction.quotation') }}/${row.id}/re-create">
+                                        <a class="btn btn-sm btn-success" data-toggle="tooltip" title="Recreate" href="{{ route('transaction.quotation') }}/${row.id}/re-create">
                                             <i class="fa fa-mail-forward"></i>
                                         </a> |
                                     `;

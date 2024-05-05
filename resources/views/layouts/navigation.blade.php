@@ -186,6 +186,9 @@
                         <li>
                             <a href="{{ route('transaction.quotation') }}?filter=reject">Rejected Quotation</a>
                         </li>
+                        <li>
+                            <a href="{{ route('transaction.quotation') }}?filter=revision">Revision Quotation</a>
+                        </li>
                     </ul>
                 </li>
                 <li>

@@ -55,7 +55,7 @@ class Quotation extends Model
     {
         $lastQuotation = Quotation::query()->whereSalesOrderId($this->sales_order_id)->latest('created_at')->first();
         if ($lastQuotation->id === $this->id) {
-            if ($this->status === 'Done' || $this->status === 'Waiting for Approval') {
+            if ($this->status === 'Done' || $this->status === 'Waiting for Approval' || $this->status === 'Revision') {
                 return false;
             } else {
                 return true;

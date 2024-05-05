@@ -7,7 +7,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <h4><b>Revision Quotation: {{ $query->quotation_code }}</b></h4>
+                    <h4><b>Recreate Quotation: {{ $query->quotation_code }}</b></h4>
                 </div>
                 <div class="col-md-6 text-right">
                     <button type="submit" class="btn btn-success mr-5 mb-5">

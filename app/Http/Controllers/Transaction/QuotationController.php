@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Transaction;
 
+use Exception;
 use App\Constants;
-use App\Constants\PaymentTermConstant;
-use App\Constants\VatTypeConstant;
+use App\Models\Quotation;
 use Illuminate\View\View;
 use App\Models\SalesOrder;
 use Illuminate\Http\Request;
+use App\Models\QuotationItem;
 use Illuminate\Http\JsonResponse;
+use App\Constants\VatTypeConstant;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use App\Constants\PaymentTermConstant;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Helper\FilesController;
 use App\Http\Controllers\Helper\RedisController;
 use App\Http\Requests\Transaction\Quotation\AddQuotationRequest;
 use App\Http\Requests\Transaction\Quotation\UpdateQuotationRequest;
-use App\Models\Quotation;
-use App\Models\QuotationItem;
 
 class QuotationController extends Controller
 {
@@ -52,10 +53,15 @@ class QuotationController extends Controller
                 ]);
 
             if ($request->filter === 'reject') {
-                $data->whereIn('status', ['Rejected']);
-            } else {
+                $data->where('status', 'Rejected');
+            } elseif ($request->filter === 'revision') {
+                $data->where('status', 'Revision');
+            }
+
+            if (!$request->filter || !in_array($request->filter, ['reject', 'revision'])) {
                 $data->whereIn('status', ['Waiting for Approval', 'Done']);
             }
+
 
             return DataTables::eloquent($data)
                 ->addIndexColumn()
@@ -69,7 +75,7 @@ class QuotationController extends Controller
         }
     }
 
-public function add(): View
+    public function add(): View
     {
         $paymentTerms = PaymentTermConstant::texts();
         $vatTypes = VatTypeConstant::texts();
@@ -273,6 +279,25 @@ public function add(): View
             return redirect()->route('transaction.quotation')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
         } catch (\Exception $e) {
             return redirect()->back()->withInput($request->input())->with('salesOrder', $salesOrder)->with('error', Constants::ERROR_MSG);
+        }
+    }
+
+    public function revisionComment($id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $query = Quotation::query()->findOrFail($id);
+
+            if ($query) {
+                $query->revision_note = $request->revision_note;
+                $query->status = 'Revision';
+                $query->save();
+            }
+            DB::commit();
+
+            return redirect()->route('transaction.quotation')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', Constants::ERROR_MSG);
         }
     }
 

@@ -361,6 +361,7 @@ Route::prefix('/transaction')->name('transaction')->group(function () {
         Route::post('/store', [QuotationController::class, 'store'])->name('.store');
         Route::get('/{id}/re-create', [QuotationController::class, 'reCreate'])->name('.re-create');
         Route::post('/{id}/re-create', [QuotationController::class, 'reCreateStore'])->name('.re-create-store');
+        Route::patch('/{id}/revision-comment', [QuotationController::class, 'revisionComment'])->name('.revision-comment');
         Route::get('/{id}', [QuotationController::class, 'view'])->name('.view');
         Route::get('/{id}/print', [QuotationController::class, 'print'])->name('.print');
         Route::patch('/{id}', [QuotationController::class, 'update'])->name('.update');
