@@ -74,6 +74,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#btabs-static-doc">Document</a>
                         </li>
+                        @if($query->revision_note !== null)
+                        <li class="nav-item">
+                            <a class="nav-link" href="#btabs-static-revision">Revision Note</a>
+                        </li>
+                        @endif
                     </ul>
 
                     <div class="block-content tab-content">

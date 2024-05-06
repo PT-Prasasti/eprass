@@ -279,7 +279,7 @@
                 url: "{{ route('helper.count-sales-order') }}",
                 type: "GET",
                 success: function(response) {
-                    console.log(response.status, response.data)
+                    // console.log(response.status, response.data)
                     if (response.data.jumlah > 0) {
                         $("#price-list-ready-sourcing-item-nav").append(`&nbsp;<i class="badge badge-danger">` + response.data.jumlah +
                             `<i>`)

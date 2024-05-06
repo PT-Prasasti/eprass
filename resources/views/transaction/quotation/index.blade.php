@@ -164,6 +164,14 @@
                                         </a> |
                                     `;
                                 }
+
+                                if (row.quotation_status == 'Revision') {
+                                    html += `
+                                        <a class="btn btn-sm btn-success" data-toggle="tooltip" title="Revision" href="{{ route('transaction.quotation') }}/${row.id}/revision">
+                                            <i class="fa fa-refresh"></i>
+                                        </a> |
+                                    `;
+                                }
                             @endif
 
                             if (row.quotation_status === 'Rejected') {
