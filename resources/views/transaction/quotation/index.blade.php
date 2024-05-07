@@ -172,15 +172,15 @@
                                         </a> |
                                     `;
                                 }
-                            @endif
-
-                            if (row.quotation_status === 'Rejected') {
-                                html += `
+                                
+                                if (row.quotation_status === 'Rejected') {
+                                    html += `
                                     <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Rejected Note" button-reason>
                                         <i class="fa fa-comment"></i>
                                     </button> |
-                                `;
-                            }
+                                    `;
+                                }
+                            @endif
                             return `
                                 ${html}
                                 <a href="{{ route('transaction.quotation') }}/${row.id}/print" class="btn btn-sm btn-primary" target="_blank" data-toggle="tooltip" title="Print">

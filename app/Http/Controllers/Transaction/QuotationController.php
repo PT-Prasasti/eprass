@@ -237,6 +237,82 @@ class QuotationController extends Controller
         }
     }
 
+    public function revision($id): View
+    {
+        $query = Quotation::query()
+            ->with([
+                'sales_order.inquiry.visit.customer',
+                'sales_order.inquiry.sales',
+                'sales_order.inquiry.products',
+            ])
+            ->findOrFail($id);
+        $paymentTerms = PaymentTermConstant::texts();
+        $vatTypes = VatTypeConstant::texts();
+        $revCode = $this->handleGenerateRevisionCode($query->quotation_code);
+
+        return view('transaction.quotation.revision', [
+            'query' => $query,
+            'paymentTerms' => $paymentTerms,
+            'vatTypes' => $vatTypes,
+            'revCode' => $revCode
+        ]);
+    }
+
+    public function revisionStore($id, Request $request): RedirectResponse
+    {
+        $quotation = Quotation::query()
+            ->with([
+                'sales_order.inquiry.visit.customer',
+                'sales_order.inquiry.sales',
+                'sales_order.inquiry.products',
+            ])
+            ->findOrFail($id);
+
+        try {
+            $cost = [];
+            foreach ($request->item as $key => $item) {
+                $cost[$key] = str_replace(',', '.', str_replace('.', '', $item['cost']));
+                if ($item['original_cost'] > $cost[$key]) {
+
+                    return redirect()->back()->withInput($request->input())->with('error', 'Nilai up price tidak boleh kurang dari unit price yang sudah ditentukan');
+                }
+            }
+
+            DB::beginTransaction();
+
+            $quotation = Quotation::query()->create([
+                'sales_order_id' => $quotation->sales_order_id,
+                'quotation_code' =>  $this->handleGenerateRevisionCode($quotation->quotation_code),
+                'status' => 'Waiting for Approval',
+                'due_date' => $request->due_date,
+                'payment_term' => $request->payment_term,
+                'delivery_term' => $request->delivery_term,
+                'vat' => $request->vat,
+                'validity' => $request->validity,
+                'attachment' => $request->attachment,
+            ]);
+
+            $quotation->quotation_items()->delete();
+            foreach ($request->item as $inquiryProductId => $item) {
+                $quotationItem = QuotationItem::query()->updateOrCreate([
+                    'quotation_id' => $quotation->id,
+                    'inquiry_product_id' => $inquiryProductId,
+                ], [
+                    'cost' =>  $cost[$inquiryProductId],
+                ]);
+
+                $quotationItem->total_cost = number_format($quotationItem->inquiry_product->sourcing_qty * $quotationItem->cost, 2, '.', '');
+                $quotationItem->save();
+            }
+
+            DB::commit();
+
+            return redirect()->route('transaction.quotation')->with('success', Constants::STORE_DATA_SUCCESS_MSG);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput($request->input())->with('error', $e->getMessage());
+        }
+    }
+
     public function view($id): View
     {
         $query = Quotation::query()
@@ -370,5 +446,27 @@ class QuotationController extends Controller
         }
 
         return $code;
+    }
+
+    public function handleGenerateRevisionCode($quotationCode): string
+    {
+        $baseParts = explode('/', preg_replace('/\/Rev-\d+/', '', $quotationCode));
+        $revisionNumber = $this->getRevisionNumber($quotationCode);
+    
+        $newRevisionNumber = $revisionNumber + 1;
+    
+        $revisedQuotationCode = implode('/', $baseParts) . "/Rev-" . $newRevisionNumber;
+    
+        return $revisedQuotationCode;
+    }
+
+    private function getRevisionNumber($quotationCode): int
+    {
+        $parts = explode('/Rev-', $quotationCode);
+        if (count($parts) > 1) {
+            return (int) $parts[1];
+        }
+
+        return 0;
     }
 }

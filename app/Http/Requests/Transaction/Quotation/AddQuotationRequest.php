@@ -32,6 +32,7 @@ class AddQuotationRequest extends FormRequest
             "validity"  => "required|string",
             "attachment"  => "required|string",
             "item.*.cost"  => "required|string",
+            "quotation_code" => "string|nullable",
         ];
     }
 

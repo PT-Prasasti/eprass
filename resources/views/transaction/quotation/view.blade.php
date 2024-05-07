@@ -17,11 +17,12 @@
                         <i class="fa fa-check mr-5"></i>
                         Approval
                     </button>
-
+                    @if($query->quotation_code && !Str::contains($query->quotation_code, '/Rev'))
                     <button type="button" class="btn btn-danger mr-5 mb-5" data-toggle="modal" data-target="#modal-reject">
                         <i class="fa fa-ban mr-5"></i>
                         Rejected
                     </button>
+                    @endif
                 </form>
                 @else
                 <a href="{{ route('transaction.quotation') }}" class="btn btn-danger mr-5 mb-5">
@@ -190,7 +191,7 @@
                         <div class="block-content">
                             <div class="form-group">
                                 <label>Revision Note</label>
-                                <textarea class="form-control" name="revision_note" required></textarea>
+                                <textarea class="form-control" name="revision_note" rows="5" required></textarea>
                             </div>
                         </div>
                     </div>
