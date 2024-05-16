@@ -215,6 +215,12 @@
                         </li>
                     </ul>
                 <li>
+                <li>
+                    <a href="{{ route('transaction.sourcing-item') }}">
+                        <i class="fa fa-dollar"></i>
+                        <span class="sidebar-mini-hide" id="selection-done-list-sourcing-item-nav">Set Price List</span>
+                    </a>
+                </li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                         <i class="fa fa-book"></i>
                         <span class="sidebar-mini-hide">PO Supplier</span>
