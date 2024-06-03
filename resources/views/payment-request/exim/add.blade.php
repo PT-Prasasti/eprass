@@ -207,7 +207,7 @@
                                                             <label class="col-lg-2 col-form-label">File</label>
                                                             <label class="col-lg-1 col-form-label text-right">:</label>
                                                             <div class="col-lg-9">
-                                                                <input type="file" class="form-control" id="file">
+                                                                <input type="text" class="form-control" id="file">
                                                             </div>
                                                         </div>
                                                     </div>
