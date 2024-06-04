@@ -244,8 +244,8 @@
                                 data = r.uuid
                                 status = r.status
 
-                                console.log('status', r.status);
-                                console.log('id', r.id);
+                                // console.log('status', r.status);
+                                // console.log('id', r.id);
 
                                 return `
                                     @if (auth()->user()->hasRole('manager'))
