@@ -215,6 +215,12 @@
                         </li>
                     </ul>
                 <li>
+                <li>
+                    <a href="{{ route('transaction.sourcing-item') }}">
+                        <i class="fa fa-dollar"></i>
+                        <span class="sidebar-mini-hide" id="selection-done-list-sourcing-item-nav">Set Price List</span>
+                    </a>
+                </li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                         <i class="fa fa-book"></i>
                         <span class="sidebar-mini-hide">PO Supplier</span>
@@ -251,11 +257,6 @@
                     <a href="{{ route('payment-request.exim') }}"><i class="fa fa-calendar-check-o"></i><span class="sidebar-mini-hide" id="payment-req-nav">App Payment Request</span></a>
                 </li>
 
-
-
-
-
-
                 <li class="nav-main-heading">
                     <span class="sidebar-mini-hidden">PO TRACKING</span>
                 </li>
@@ -265,6 +266,21 @@
                         <i class="fa fa-truck"></i>
                         <span class="sidebar-mini-hide">List PO Tracking</span>
                     </a>
+                </li>
+
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Data Master</span>
+                </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-user-secret"></i><span class="sidebar-mini-hide">Supplier</span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('data-master.supplier.add') }}">Add Supplier</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('data-master.supplier') }}">List Supplier</a>
+                        </li>
+                    </ul>
                 </li>
                 @endif
                 </li>
@@ -508,6 +524,20 @@
                         </li>
                         <li>
                             <a href="{{ route('payment-request.exim') }}">List Payment Request</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-main-heading">
+                    <span class="sidebar-mini-hidden">Data Master</span>
+                </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-user-secret"></i><span class="sidebar-mini-hide">Supplier</span></a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('data-master.supplier.add') }}">Add Supplier</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('data-master.supplier') }}">List Supplier</a>
                         </li>
                     </ul>
                 </li>
